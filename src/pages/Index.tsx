@@ -9,7 +9,7 @@ const SECTORS = [
 
 const HERO_LINES = [
   "Cultural Strategy",
-  "Connecting labor, energy, and culture at the seams",
+  "Cross-Sector Intelligence",
   "Turning networks into organized power",
 ];
 
