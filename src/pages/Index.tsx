@@ -8,7 +8,7 @@ const SECTORS = [
 ];
 
 const HERO_LINES = [
-  "Building coalitions that move capital and policy",
+  "Cultural Strategy",
   "Connecting labor, energy, and culture at the seams",
   "Turning networks into organized power",
 ];
