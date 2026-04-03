@@ -53,7 +53,7 @@ const Index = () => {
         className="fixed top-6 right-6 z-30 font-mono text-[10px] tracking-[0.2em] uppercase"
         style={{ color: "hsl(0 0% 100% / 0.18)", fontFamily: "'JetBrains Mono', monospace" }}
       >
-        Strategic Advisory
+        Van Gelder Co.
       </span>
 
       {/* Corner brackets */}
