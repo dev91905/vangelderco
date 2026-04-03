@@ -81,7 +81,7 @@ const Index = () => {
             animation: "fade-up 0.6s ease-out 0.3s both",
           }}
         >
-          StratComm Advisors
+          VGC StratComm Advisors
         </span>
 
         {/* Hero lines */}
