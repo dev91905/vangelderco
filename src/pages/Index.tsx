@@ -81,7 +81,7 @@ const Index = () => {
             animation: "fade-up 0.6s ease-out 0.3s both",
           }}
         >
-          Van Gelder Co.
+          StratComm Advisors
         </span>
 
         {/* Hero lines */}
