@@ -10,7 +10,7 @@ const SECTORS = [
 const HERO_LINES = [
   "Cultural Strategy",
   "Cross-Sector Intelligence",
-  "Turning networks into organized power",
+  "Deep Organizing",
 ];
 
 const Index = () => {
