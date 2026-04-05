@@ -20,6 +20,7 @@ const AdminEditor = () => {
   const deletePost = useDeletePost();
 
   const [title, setTitle] = useState("");
+  const [excerpt, setExcerpt] = useState("");
   const [slug, setSlug] = useState("");
   const [type, setType] = useState("blog-post");
   const [capability, setCapability] = useState("cultural-strategy");
