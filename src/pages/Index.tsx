@@ -53,22 +53,11 @@ const Index = () => {
                   animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.8 + i * 0.4}s both`,
                 }}
               >
-                {/* Caret */}
-                <span className="hero-nav-caret absolute left-0 md:-left-8 text-[14px] md:text-[18px]"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    color: "hsl(0 80% 48% / 0)",
-                    transition: "color 0.3s ease, transform 0.3s ease",
-                  }}
-                >
-                  &gt;
-                </span>
-
                 {/* Glow behind text on hover */}
                 <span
                   className="hero-nav-glow absolute inset-0 pointer-events-none"
                   style={{
-                    background: "radial-gradient(ellipse at center, hsl(0 80% 48% / 0) 0%, transparent 70%)",
+                    background: "radial-gradient(ellipse 60% 80% at center, hsl(0 80% 48% / 0) 0%, transparent 70%)",
                     transition: "background 0.4s ease",
                   }}
                 />
@@ -78,22 +67,51 @@ const Index = () => {
                   <span
                     className="absolute top-0 left-0 h-full"
                     style={{
-                      width: "2px",
+                      width: "3px",
                       background: "hsl(0 80% 48% / 0)",
-                      boxShadow: "0 0 8px 2px hsl(0 80% 48% / 0)",
-                      transition: "left 0.4s ease, background 0.3s ease, box-shadow 0.3s ease",
+                      boxShadow: "0 0 12px 4px hsl(0 80% 48% / 0)",
+                      transition: "left 0.5s ease, background 0.3s ease, box-shadow 0.3s ease",
                     }}
                   />
                 </span>
 
-                <span
-                  className="text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] relative z-10 transition-transform duration-300"
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    color: "hsl(0 0% 100% / 0.9)",
-                  }}
-                >
-                  {link.label}
+                {/* Inline-flex wrapper: caret + text together */}
+                <span className="hero-nav-inner inline-flex items-center gap-2 md:gap-3 relative z-10">
+                  {/* Caret */}
+                  <span
+                    className="hero-nav-caret text-[14px] md:text-[18px]"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color: "hsl(0 80% 48% / 0.8)",
+                      opacity: 0,
+                      transform: "translateX(-8px)",
+                      transition: "opacity 0.3s ease, transform 0.3s ease",
+                    }}
+                  >
+                    &gt;
+                  </span>
+
+                  {/* Text + underline */}
+                  <span className="relative">
+                    <span
+                      className="hero-nav-text text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-300"
+                      style={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        color: "hsl(0 0% 100% / 0.9)",
+                      }}
+                    >
+                      {link.label}
+                    </span>
+                    {/* Underline */}
+                    <span
+                      className="hero-nav-underline absolute bottom-0 left-0 w-full h-px"
+                      style={{
+                        background: "hsl(0 80% 48% / 0.4)",
+                        transform: "scaleX(0)",
+                        transition: "transform 0.4s ease",
+                      }}
+                    />
+                  </span>
                 </span>
               </Link>
             ))}
