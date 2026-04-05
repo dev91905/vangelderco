@@ -99,7 +99,7 @@ export const PasswordGateWrapper = ({
   const [shake, setShake] = useState(false);
   const [password, setPassword] = useState("");
   const [verifying, setVerifying] = useState(false);
-  const { playClickGlitch, playChitter } = useGlitchSFX();
+  const { playClickGlitch, playUnlockSuccess } = useGlitchSFX();
 
   if (unlocked || !requiresPassword) return <>{children}</>;
 
