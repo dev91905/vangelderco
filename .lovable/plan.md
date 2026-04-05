@@ -1,36 +1,49 @@
 
+# Restore SFX to Simple, Immediate First-Hover Playback
 
-# Fix SFX Not Playing on First Hover
+## Diagnosis
+The regression is in `src/hooks/useGlitchSFX.ts`, not any backend. The current version `await`s `ctx.resume()` before scheduling sound. On refresh, that stalls the hover path until the browser grants activation, which in your session is only happening after a click. That is the jank.
 
-## Root cause
+There’s a second structural problem: `useGlitchSFX()` is a component hook with its own ref, so the app is treating SFX like disposable component state instead of one shared sound engine.
 
-When `AudioContext` is first created, it's `suspended`. The code calls `.resume()` but **doesn't wait for it to resolve** before scheduling oscillators. The oscillators get scheduled at `currentTime = 0` on a still-suspended context — by the time the context actually resumes, those scheduled sounds are in the past and get silently skipped.
+## Fix
+Rip out the promise-gated audio flow and rebuild the SFX path to be simple and immediate again:
 
-The first click works because by then the context is already resumed from the earlier hover attempt, so subsequent calls find it in `running` state.
+1. **Rewrite `useGlitchSFX.ts` as a shared singleton engine**
+   - One module-scoped `AudioContext`
+   - One module-scoped master gain
+   - No per-component audio lifecycle
+   - No async play path
 
-## Fix — `src/hooks/useGlitchSFX.ts`
+2. **Remove `await resume()` from playback**
+   - Create/reuse the context synchronously
+   - Call `resume()` opportunistically, but do not block sound scheduling on it
+   - Schedule sounds a few milliseconds in the future so first-hover playback survives context startup timing
 
-Make `getCtx()` return a `Promise<AudioContext>` that resolves after `.resume()` completes. Make all three play functions `async` — they `await getCtx()`, then schedule oscillators using the now-accurate `ctx.currentTime`.
+3. **Keep the darker tonal sound character, but simplify the generators**
+   - Hover: short low sine ping
+   - Click: deeper triangle/sine pulse
+   - Load: restrained tonal pip sequence
+   - No extra unlock logic, no global click hacks, no event gymnastics
 
-```typescript
-const getCtx = useCallback(async () => {
-  if (!ctxRef.current) {
-    ctxRef.current = new AudioContext();
-  }
-  if (ctxRef.current.state === "suspended") {
-    await ctxRef.current.resume();
-  }
-  return ctxRef.current;
-}, []);
+4. **Tighten event wiring**
+   - `src/pages/Index.tsx`: trigger hover SFX on `pointerenter` instead of relying only on `mouseenter`
+   - Add `focus` support so keyboard navigation gets the same behavior
+   - Keep click SFX on activation
+   - `src/components/CapabilityLayout.tsx`: keep load chitter, but make sure it only fires once per completed load cycle
 
-const playHoverGlitch = useCallback(async () => {
-  const ctx = await getCtx();
-  const now = ctx.currentTime;
-  // ... rest unchanged
-}, [getCtx]);
-```
+## Files
+- `src/hooks/useGlitchSFX.ts` — full playback-path rewrite
+- `src/pages/Index.tsx` — cleaner trigger events
+- `src/components/CapabilityLayout.tsx` — keep load trigger disciplined
 
-Same pattern for `playClickGlitch` and `playChitter`. The callers (`onMouseEnter`, `onClick`) don't need to change — calling an async function without `await` is fine here since we don't need the return value.
+## Result
+This restores the original behavior you were asking for: hover/click SFX behave like normal UI sounds again on reload, without the current async/resume bottleneck and without any fake “backend” workaround layer.
 
-One file, minimal change — just add `async/await` to ensure the context is actually running before scheduling audio.
-
+## QA
+After implementation I’ll specifically verify:
+- first hover on homepage after refresh
+- first click after refresh
+- route transition to each sub-page
+- load chitter firing once, not duplicating
+- repeated hovers not stuttering or stacking weirdly
