@@ -112,6 +112,7 @@ export interface PasswordGateWrapperProps {
   slug: string;
   title: string;
   heroImageUrl: string | null;
+  capability: string;
   children: React.ReactNode;
 }
 

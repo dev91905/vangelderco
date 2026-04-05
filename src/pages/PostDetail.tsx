@@ -48,6 +48,7 @@ const PostDetail = () => {
       slug={slug || ""}
       title={post.title}
       heroImageUrl={post.hero_image_url}
+      capability={post.capability}
     >
       {articleContent}
     </PasswordGateWrapper>
