@@ -1,40 +1,36 @@
 
 
-# Standardize Back Navigation Indicators
+# Match Password Gate to Standard Site Chrome
 
-## Current State — 4 Different Patterns
+## Problem
 
-| Location | Current | Type |
-|---|---|---|
-| Blog post view | `< Return` (angle bracket entity) | Text |
-| Case study view | `< Return` (angle bracket entity) | Text |
-| Password gate | `← Go back` (Unicode left arrow) | Text |
-| Admin content manager | `← Site` (Unicode left arrow) | Text |
-| Admin editor toolbar | Lucide `ArrowLeft` icon | Icon button |
+The password gate is a completely custom full-screen layout — centered content, no site header elements. Every other page on the site has the same fixed HUD: "Van Gelder Co." top-right, "← Return" top-left. The password gate has neither — just a floating "← Go back" button wedged between the lock icon and the form. It feels like a different site.
 
-The carousel prev/next buttons (`ChevronLeft`/`ChevronRight`) are navigation *within* content, not "go back" — those stay as-is.
+## Fix
 
-## Decision: Standardize on `← ` (Unicode left arrow)
+Give the `PasswordGateWrapper` the same top-bar chrome as BlogPostView and CaseStudyView:
 
-The `< Return` pattern using an HTML angle bracket looks like broken markup. The Lucide `ArrowLeft` icon in the editor toolbar is fine for a compact icon-only button context. The inconsistency is in the **text-based back links** — three different labels and two different arrow styles.
+- **Top-left**: `← Return` link (using `post.capability` to route back to the correct capability page, same as the article views do)
+- **Top-right**: `Van Gelder Co.` HUD label
 
-**Standard**: All text-based back links use `←` (Unicode) as the prefix character. Labels stay contextual but consistent in format:
-
-| Location | New text |
-|---|---|
-| Blog post view | `← Return` |
-| Case study view | `← Return` |
-| Password gate | `← Go back` (already correct) |
-| Admin content manager | `← Site` (already correct) |
-| Admin editor toolbar | Lucide `ArrowLeft` icon (keep — icon-only context) |
+Remove the current `← Go back` button from the centered content area. The password gate content (title, lock icon, form) stays centered as-is.
 
 ## Changes
 
-### `src/components/blog/BlogPostView.tsx`
-- Line 47: Replace `&lt; Return` with `← Return`
+### `src/components/PasswordGate.tsx` — `PasswordGateWrapper`
 
-### `src/components/casestudy/CaseStudyView.tsx`
-- Line 67: Replace `&lt; Return` with `← Return`
+1. Accept `capability` as a new prop (needed to build the correct return route)
+2. Add the same fixed top-left `← Return` link that BlogPostView uses, routing to the capability page
+3. Add the same fixed top-right `Van Gelder Co.` label
+4. Remove the `← Go back` button from the centered content
 
-Two lines, two files. Password gate and admin pages are already using the correct pattern.
+### `src/pages/PostDetail.tsx`
+
+Pass `capability={post.capability}` to `PasswordGateWrapper`.
+
+### `src/components/PasswordGate.tsx` — top-level `PasswordGate` export
+
+Same treatment if it's still used anywhere, but the `PasswordGateWrapper` is the active one.
+
+Two files, minimal diff. The password page will now look like it belongs to the site.
 
