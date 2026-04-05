@@ -1,8 +1,9 @@
 import { useCallback, useRef } from "react";
 
+let unlocked = false;
+
 const useGlitchSFX = () => {
   const ctxRef = useRef<AudioContext | null>(null);
-  const unlockedRef = useRef(false);
 
   const getCtx = useCallback(async () => {
     if (!ctxRef.current) {
