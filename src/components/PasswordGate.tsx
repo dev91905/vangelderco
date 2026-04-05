@@ -116,6 +116,7 @@ export const PasswordGateWrapper = ({
       if (data?.valid) {
         sessionStorage.setItem(sessionKey, "1");
         setUnlocked(true);
+        onUnlockProp?.();
       } else {
         setError(true);
         setShake(true);
