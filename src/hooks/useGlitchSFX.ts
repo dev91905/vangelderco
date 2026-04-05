@@ -114,9 +114,40 @@ function playChitter() {
   });
 }
 
+function playUnlockSuccess() {
+  const c = getCtx();
+  const dest = getMaster();
+  const now = c.currentTime + 0.005;
+
+  // Tone 1 — low "click"
+  const osc1 = c.createOscillator();
+  osc1.type = "sine";
+  osc1.frequency.value = 220;
+  const gain1 = c.createGain();
+  gain1.gain.setValueAtTime(0.001, now);
+  gain1.gain.linearRampToValueAtTime(0.04, now + 0.01);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+  osc1.connect(gain1).connect(dest);
+  osc1.start(now);
+  osc1.stop(now + 0.12);
+
+  // Tone 2 — higher "resolve", overlaps slightly
+  const osc2 = c.createOscillator();
+  osc2.type = "sine";
+  osc2.frequency.value = 440;
+  const gain2 = c.createGain();
+  const t2 = now + 0.08;
+  gain2.gain.setValueAtTime(0.001, t2);
+  gain2.gain.linearRampToValueAtTime(0.05, t2 + 0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.15);
+  osc2.connect(gain2).connect(dest);
+  osc2.start(t2);
+  osc2.stop(t2 + 0.15);
+}
+
 // Hook is now just a stable reference wrapper
 const useGlitchSFX = () => {
-  return { playHoverGlitch, playClickGlitch, playChitter };
+  return { playHoverGlitch, playClickGlitch, playChitter, playUnlockSuccess };
 };
 
 export default useGlitchSFX;
