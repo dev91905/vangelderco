@@ -145,7 +145,12 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
         </div>
         {/* DEK */}
         <div className="mt-3">
-          <label className="text-[10px] uppercase tracking-[0.12em] mb-1 block" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>DEK</label>
+          <label className="text-[10px] uppercase tracking-[0.12em] mb-1 flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>
+            DEK
+            {!props.excerpt?.trim() && props.isPublished && (
+              <span style={{ color: "hsl(0 80% 48% / 0.6)", fontSize: "9px", letterSpacing: "0.1em" }}>MISSING</span>
+            )}
+          </label>
           <textarea
             value={props.excerpt}
             onChange={(e) => props.onExcerptChange(e.target.value)}
