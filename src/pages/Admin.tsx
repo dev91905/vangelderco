@@ -69,6 +69,7 @@ const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: str
 
 const Admin = () => {
   const navigate = useNavigate();
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const [typeFilter, setTypeFilter] = useState("all");
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
