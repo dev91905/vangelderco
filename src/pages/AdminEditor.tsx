@@ -68,9 +68,10 @@ const AdminEditor = () => {
     hero_image_url: heroImageUrl,
     content_blocks: contentBlocks,
     stats: type === "case-study" ? stats : null,
+    password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
-  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, isPublished, publishedAt]);
+  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
