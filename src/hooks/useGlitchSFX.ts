@@ -5,14 +5,13 @@ let unlocked = false;
 const useGlitchSFX = () => {
   const ctxRef = useRef<AudioContext | null>(null);
 
-  const getCtx = useCallback(async () => {
+  const getCtx = useCallback(() => {
     if (!ctxRef.current) {
       ctxRef.current = new AudioContext();
     }
     if (ctxRef.current.state === "suspended") {
-      await ctxRef.current.resume();
+      ctxRef.current.resume();
     }
-    // iOS unlock: play a silent buffer on first interaction
     if (!unlocked) {
       const buf = ctxRef.current.createBuffer(1, 1, ctxRef.current.sampleRate);
       const src = ctxRef.current.createBufferSource();
@@ -24,8 +23,8 @@ const useGlitchSFX = () => {
     return ctxRef.current;
   }, []);
 
-  const playHoverGlitch = useCallback(async () => {
-    const ctx = await getCtx();
+  const playHoverGlitch = useCallback(() => {
+    const ctx = getCtx();
     const duration = 0.08;
     const now = ctx.currentTime;
 
@@ -56,8 +55,8 @@ const useGlitchSFX = () => {
     osc2.stop(now + duration);
   }, [getCtx]);
 
-  const playClickGlitch = useCallback(async () => {
-    const ctx = await getCtx();
+  const playClickGlitch = useCallback(() => {
+    const ctx = getCtx();
     const duration = 0.15;
     const now = ctx.currentTime;
 
@@ -90,8 +89,8 @@ const useGlitchSFX = () => {
     osc2.stop(now + duration);
   }, [getCtx]);
 
-  const playChitter = useCallback(async () => {
-    const ctx = await getCtx();
+  const playChitter = useCallback(() => {
+    const ctx = getCtx();
     const now = ctx.currentTime;
     const pitches = [300, 320, 280, 340];
     const pipDuration = 0.04;
