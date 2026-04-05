@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
@@ -68,6 +69,7 @@ const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: str
 
 const Admin = () => {
   const navigate = useNavigate();
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const [typeFilter, setTypeFilter] = useState("all");
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -100,10 +102,30 @@ const Admin = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
         <div className="flex items-center gap-4">
-          <Link to="/" className="text-[10px] tracking-[0.2em] uppercase transition-colors hover:opacity-70" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
-            &lt; Site
+          <Link
+            to="/"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] tracking-[0.15em] uppercase transition-all rounded-sm"
+            style={{
+              ...mono,
+              color: "hsl(0 0% 100% / 0.35)",
+              border: "1px solid hsl(0 0% 15%)",
+              transition: "color 300ms, border-color 300ms, background 300ms",
+            }}
+            onMouseEnter={(e) => {
+              playHoverGlitch();
+              e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)";
+              e.currentTarget.style.borderColor = "hsl(0 80% 48% / 0.3)";
+              e.currentTarget.style.background = "hsl(0 80% 48% / 0.06)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "hsl(0 0% 100% / 0.35)";
+              e.currentTarget.style.borderColor = "hsl(0 0% 15%)";
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <ArrowLeft className="w-3 h-3" /> Back to Site
           </Link>
-          <h1 className="text-sm font-medium tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.8)" }}>
+          <h1 className="text-sm font-semibold tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.85)" }}>
             Content Manager
           </h1>
         </div>
@@ -169,7 +191,8 @@ const Admin = () => {
           <button
             key={c.value}
             onClick={() => setTypeFilter(c.value)}
-            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-colors"
+            onPointerEnter={() => playHoverGlitch()}
+            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-all"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: typeFilter === c.value ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.35)",
@@ -185,7 +208,8 @@ const Admin = () => {
           <button
             key={c.value}
             onClick={() => setCapFilter(c.value)}
-            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-colors"
+            onPointerEnter={() => playHoverGlitch()}
+            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-all"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: capFilter === c.value ? "hsl(0 0% 100% / 0.7)" : "hsl(0 0% 100% / 0.25)",

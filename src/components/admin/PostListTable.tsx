@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useTogglePublish } from "@/hooks/usePostMutations";
 import { useState } from "react";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 interface PostListTableProps {
   filter: { type: string; capability: string };
@@ -12,6 +13,7 @@ interface PostListTableProps {
 
 const PostListTable = ({ filter }: PostListTableProps) => {
   const togglePublish = useTogglePublish();
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["admin-posts"],
@@ -48,11 +50,25 @@ const PostListTable = ({ filter }: PostListTableProps) => {
         <Link
           key={post.id}
           to={`/admin/edit/${post.id}`}
-          className="flex items-center gap-4 p-4 transition-colors hover:bg-[hsl(0_0%_6%)] group"
-          style={{ background: "hsl(0 0% 4%)", borderBottom: "1px solid hsl(0 0% 8%)" }}
+          className="flex items-center gap-4 p-4 transition-all group"
+          style={{
+            background: "hsl(0 0% 4%)",
+            borderBottom: "1px solid hsl(0 0% 8%)",
+            borderLeft: "2px solid transparent",
+            transition: "background 200ms, border-left-color 200ms",
+          }}
+          onPointerEnter={(e) => {
+            playHoverGlitch();
+            e.currentTarget.style.background = "hsl(0 0% 6%)";
+            e.currentTarget.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
+          }}
+          onPointerLeave={(e) => {
+            e.currentTarget.style.background = "hsl(0 0% 4%)";
+            e.currentTarget.style.borderLeftColor = "transparent";
+          }}
         >
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium truncate flex items-center gap-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
+            <h3 className="text-sm font-medium truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
               {post.title}
               {(post as any).password && <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(0 0% 100% / 0.15)" }} />}
             </h3>
@@ -79,9 +95,10 @@ const PostListTable = ({ filter }: PostListTableProps) => {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              playClickGlitch();
               togglePublish.mutate({ id: post.id, is_published: !post.is_published });
             }}
-            className="p-2 rounded transition-colors hover:bg-[hsl(0_0%_10%)]"
+            className="p-2 rounded transition-all hover:bg-[hsl(0_0%_12%)]"
             title={post.is_published ? "Unpublish" : "Publish"}
           >
             {post.is_published ? (
