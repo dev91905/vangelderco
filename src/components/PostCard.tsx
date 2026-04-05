@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { CapabilityPost } from "@/hooks/useCapabilityPosts";
 import { format } from "date-fns";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 interface PostCardProps {
   post: CapabilityPost;
@@ -8,6 +9,8 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, index }: PostCardProps) => {
+  const { playHoverGlitch } = useGlitchSFX();
+
   return (
     <Link
       to={post.slug ? `/post/${post.slug}` : "#"}
@@ -17,28 +20,53 @@ const PostCard = ({ post, index }: PostCardProps) => {
       }}
     >
       <div
-        className="p-4 md:p-5 transition-all duration-300 hover:bg-[hsl(0_0%_6%)]"
+        className="p-4 md:p-5 transition-all duration-300"
         style={{
           background: "hsl(0 0% 4%)",
           borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
           borderTop: "1px solid hsl(0 0% 100% / 0.05)",
           borderRight: "1px solid hsl(0 0% 100% / 0.05)",
           borderBottom: "1px solid hsl(0 0% 100% / 0.05)",
-          transition: "background 0.3s ease, border-left-color 0.3s ease",
+          transition: "background 300ms, border-left-color 300ms, border-top-color 300ms, border-right-color 300ms, border-bottom-color 300ms, transform 300ms",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.borderLeftColor = "hsl(0 80% 48% / 0.9)";
+          playHoverGlitch();
+          const el = e.currentTarget;
+          el.style.background = "hsl(0 0% 7%)";
+          el.style.borderLeftColor = "hsl(0 80% 48% / 0.9)";
+          el.style.borderTopColor = "hsl(0 0% 100% / 0.1)";
+          el.style.borderRightColor = "hsl(0 0% 100% / 0.1)";
+          el.style.borderBottomColor = "hsl(0 0% 100% / 0.1)";
+          el.style.transform = "translateX(2px)";
+          // Brighten title
+          const title = el.querySelector("[data-title]") as HTMLElement;
+          if (title) title.style.color = "hsl(0 0% 100% / 1)";
+          // Brighten type label
+          const label = el.querySelector("[data-label]") as HTMLElement;
+          if (label) label.style.color = "hsl(0 80% 48% / 1)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
+          const el = e.currentTarget;
+          el.style.background = "hsl(0 0% 4%)";
+          el.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
+          el.style.borderTopColor = "hsl(0 0% 100% / 0.05)";
+          el.style.borderRightColor = "hsl(0 0% 100% / 0.05)";
+          el.style.borderBottomColor = "hsl(0 0% 100% / 0.05)";
+          el.style.transform = "translateX(0)";
+          const title = el.querySelector("[data-title]") as HTMLElement;
+          if (title) title.style.color = "hsl(0 0% 100% / 0.85)";
+          const label = el.querySelector("[data-label]") as HTMLElement;
+          if (label) label.style.color = "hsl(0 80% 48% / 0.7)";
         }}
       >
         <div className="flex items-baseline justify-between gap-4 mb-2">
           <span
+            data-label
             className="text-[10px] tracking-[0.15em] uppercase"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 80% 48% / 0.7)",
+              transition: "color 300ms",
             }}
           >
             {post.type === "case-study" ? "Case Study" : "Blog Post"}
@@ -57,10 +85,12 @@ const PostCard = ({ post, index }: PostCardProps) => {
         </div>
 
         <h3
-          className="text-[14px] md:text-[16px] font-medium mb-2 transition-transform duration-300 group-hover:translate-x-0.5"
+          data-title
+          className="text-[14px] md:text-[16px] font-medium mb-2"
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             color: "hsl(0 0% 100% / 0.85)",
+            transition: "color 300ms",
           }}
         >
           {post.title}
