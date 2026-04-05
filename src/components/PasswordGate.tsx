@@ -143,7 +143,7 @@ export const PasswordGateWrapper = ({
       )}
 
       {/* Breathing red glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0" style={{ width: "min(80vw, 700px)", height: "min(80vh, 600px)", borderRadius: "50%", background: "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.25) 0%, transparent 70%)", animation: "breathe 8s ease-in-out infinite", transform: "translate(-50%, -50%)" }} />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0" style={{ width: "min(80vw, 700px)", height: "min(80vh, 600px)", borderRadius: "50%", background: "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.18) 0%, hsl(0 80% 48% / 0.10) 30%, hsl(0 80% 48% / 0.03) 55%, transparent 80%)", animation: "breathe 8s ease-in-out infinite", transform: "translate(-50%, -50%)" }} />
       {/* Scan beam */}
       <div className="pointer-events-none fixed left-0 z-20 w-full" style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)", animation: "scan-beam 7s linear infinite", position: "fixed" }} />
 
@@ -168,9 +168,9 @@ export const PasswordGateWrapper = ({
       </Link>
 
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 px-5 sm:px-6 py-8 max-w-sm sm:max-w-md w-full max-h-screen">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>{title}</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>{title}</h1>
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
+          <div className="w-10 h-10 flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(0 80% 48% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />

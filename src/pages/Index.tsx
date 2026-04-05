@@ -50,7 +50,7 @@ const Index = () => {
                 to={link.to}
                 className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6"
                 style={{
-                  animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.8 + i * 0.4}s both`,
+                  animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.4 + i * 0.35}s both`,
                 }}
               >
                 {/* Background wash */}
@@ -90,7 +90,7 @@ const Index = () => {
           {/* Sector tags */}
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
-            style={{ animation: "fade-up 0.7s ease-out 2.4s both" }}
+            style={{ animation: "fade-up 0.7s ease-out 1.6s both" }}
           >
             {SECTORS.map((sector) => (
               <span
@@ -114,7 +114,7 @@ const Index = () => {
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.25)",
-              animation: "fade-up 0.6s ease-out 3.0s both",
+              animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
             By Referral Only
