@@ -159,17 +159,17 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
           baseY: positions[i].y,
           targetX: positions[i].x,
           targetY: positions[i].y,
-          orbitRadius: tier === "field" ? 3 + rng2() * 5 : 2 + rng2() * 3,
+          orbitRadius: tier === "field" ? 6 + rng2() * 8 : 4 + rng2() * 4,
           orbitSpeed:
             tier === "field"
-              ? 0.00015 + rng2() * 0.00025
-              : 0.00005 + rng2() * 0.0001,
+              ? 0.0003 + rng2() * 0.0004
+              : 0.0001 + rng2() * 0.0002,
           orbitPhase: rng2() * Math.PI * 2,
-          driftFreqX: 0.000015 + rng2() * 0.000025,
-          driftFreqY: 0.000015 + rng2() * 0.000025,
+          driftFreqX: 0.00003 + rng2() * 0.00005,
+          driftFreqY: 0.00003 + rng2() * 0.00005,
           driftPhaseX: rng2() * Math.PI * 2,
           driftPhaseY: rng2() * Math.PI * 2,
-          driftAmp: 8 + rng2() * 10,
+          driftAmp: 15 + rng2() * 15,
           tier,
         });
       }
