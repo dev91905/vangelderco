@@ -115,7 +115,6 @@ export const PasswordGateWrapper = ({
     }
 
     setVerifying(true);
-    playClickGlitch();
     
     try {
       const { data, error: fnError } = await supabase.functions.invoke("verify-post-password", {
@@ -130,11 +129,13 @@ export const PasswordGateWrapper = ({
         setUnlocked(true);
         onUnlockProp?.();
       } else {
+        playClickGlitch();
         setError(true);
         setShake(true);
         setPassword("");
       }
     } catch {
+      playClickGlitch();
       setError(true);
       setShake(true);
       setPassword("");
