@@ -30,14 +30,14 @@ interface Node {
 
 const COLS = 6;
 const ROWS = 6;
-const MAX_EDGE_DIST = 0.25;
-const MOUSE_RADIUS = 150;
-const MOUSE_FORCE = 3;
+const MAX_EDGE_DIST = 0.18;
+const MOUSE_RADIUS = 120;
+const MOUSE_FORCE = 1.5;
 const ANCHOR_INDICES = new Set([0, 7, 14, 21, 28]);
 const NORTH_STAR_COL = Math.round(COLS * 0.618);
 const NORTH_STAR_ROW = Math.round(ROWS * 0.382);
 const NORTH_STAR_INDEX = NORTH_STAR_ROW * COLS + NORTH_STAR_COL;
-const LERP_SPEED = 0.025; // ease-out per frame
+const LERP_SPEED = 0.025;
 
 function getLayoutPositions(
   mode: ConstellationMode,
@@ -53,57 +53,38 @@ function getLayoutPositions(
       const jitterY = (rng() - 0.5) * (h / ROWS) * 0.3 * 2;
 
       let bx: number, by: number;
+      const cellW = w / COLS;
+      const cellH = h / ROWS;
+      const baseX = (col + 0.5) * cellW;
+      const baseY = (row + 0.5) * cellH;
 
       switch (mode) {
         case "cultural-strategy": {
-          // Left-weighted: compress x toward left third
-          const nx = col / (COLS - 1); // 0..1
-          const ny = row / (ROWS - 1);
-          const skewedX = Math.pow(nx, 1.8); // pulls left
-          bx = w * 0.08 + skewedX * w * 0.75 + jitterX;
-          by = h * 0.08 + ny * h * 0.84 + jitterY;
+          const nx = col / (COLS - 1);
+          const skewedX = Math.pow(nx, 1.3);
+          bx = w * 0.06 + skewedX * w * 0.88 + jitterX;
+          by = baseY + jitterY;
           break;
         }
         case "cross-sector": {
-          // Three clusters: left, center-top, right
           const nx = col / (COLS - 1);
-          const ny = row / (ROWS - 1);
-          let cx: number, cy: number;
-
-          if (col < 2) {
-            // Left cluster
-            cx = 0.12 + nx * 0.18;
-            cy = 0.3 + ny * 0.5;
-          } else if (col > 3) {
-            // Right cluster
-            cx = 0.7 + (nx - 0.67) * 0.18;
-            cy = 0.3 + ny * 0.5;
-          } else {
-            // Center bridge
-            cx = 0.35 + (nx - 0.33) * 0.3;
-            cy = 0.15 + ny * 0.7;
-          }
-
-          bx = cx * w + jitterX;
-          by = cy * h + jitterY;
+          const stretchX = 0.5 + (nx - 0.5) * 1.15;
+          bx = stretchX * w + jitterX;
+          by = baseY + jitterY;
           break;
         }
         case "deep-organizing": {
-          // Dense core, sparse halo
-          const nx = (col + 0.5) / COLS - 0.5; // -0.5..0.5
+          const nx = (col + 0.5) / COLS - 0.5;
           const ny = (row + 0.5) / ROWS - 0.5;
           const dist = Math.sqrt(nx * nx + ny * ny);
-          const compression = 0.4 + 0.6 * Math.pow(dist / 0.7, 0.5); // compress toward center
-          bx = w * 0.5 + nx * compression * w * 0.85 + jitterX;
-          by = h * 0.5 + ny * compression * h * 0.85 + jitterY;
+          const pull = 0.85 + 0.15 * (1 - dist / 0.7);
+          bx = w * 0.5 + nx * pull * w * 0.95 + jitterX;
+          by = h * 0.5 + ny * pull * h * 0.95 + jitterY;
           break;
         }
         default: {
-          // Home: balanced grid
-          const cellW = w / COLS;
-          const cellH = h / ROWS;
-          bx = (col + 0.5) * cellW + jitterX;
-          by = (row + 0.5) * cellH + jitterY;
+          bx = baseX + jitterX;
+          by = baseY + jitterY;
           break;
         }
       }
@@ -127,7 +108,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const modeRef = useRef<ConstellationMode>(mode);
 
-  // Update targets when mode changes
   useEffect(() => {
     modeRef.current = mode;
     const nodes = nodesRef.current;
@@ -161,7 +141,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       const rng = seededRandom(42);
       const positions = getLayoutPositions(modeRef.current, w, h, rng);
-      const rng2 = seededRandom(99); // separate seed for node properties
+      const rng2 = seededRandom(99);
 
       const nodes: Node[] = [];
       for (let i = 0; i < COLS * ROWS; i++) {
@@ -179,17 +159,17 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
           baseY: positions[i].y,
           targetX: positions[i].x,
           targetY: positions[i].y,
-          orbitRadius: tier === "field" ? 6 + rng2() * 14 : 4 + rng2() * 8,
+          orbitRadius: tier === "field" ? 3 + rng2() * 5 : 2 + rng2() * 3,
           orbitSpeed:
             tier === "field"
-              ? 0.0003 + rng2() * 0.0005
-              : 0.0001 + rng2() * 0.0002,
+              ? 0.00015 + rng2() * 0.00025
+              : 0.00005 + rng2() * 0.0001,
           orbitPhase: rng2() * Math.PI * 2,
-          driftFreqX: 0.00003 + rng2() * 0.00005,
-          driftFreqY: 0.00003 + rng2() * 0.00005,
+          driftFreqX: 0.000015 + rng2() * 0.000025,
+          driftFreqY: 0.000015 + rng2() * 0.000025,
           driftPhaseX: rng2() * Math.PI * 2,
           driftPhaseY: rng2() * Math.PI * 2,
-          driftAmp: 20 + rng2() * 30,
+          driftAmp: 8 + rng2() * 10,
           tier,
         });
       }
@@ -212,9 +192,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
       ctx.clearRect(0, 0, w, h);
       const nodes = nodesRef.current;
 
-      // Lerp base positions toward targets + evolving drift + orbit + mouse repulsion
       for (const n of nodes) {
-        // Smooth lerp toward target
         n.baseX += (n.targetX - n.baseX) * LERP_SPEED;
         n.baseY += (n.targetY - n.baseY) * LERP_SPEED;
 
@@ -225,7 +203,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         let nx = n.baseX + driftX + Math.cos(angle) * n.orbitRadius;
         let ny = n.baseY + driftY + Math.sin(angle * 0.7) * n.orbitRadius;
 
-        // Mouse repulsion
         const mdx = nx - mouse.x;
         const mdy = ny - mouse.y;
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -239,12 +216,10 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         n.y = ny;
       }
 
-      // Build adjacency for triangle detection
       const connected: boolean[][] = Array.from({ length: nodes.length }, () =>
         new Array(nodes.length).fill(false)
       );
 
-      // Draw edges
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
@@ -260,10 +235,10 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               (edgeMidX - mouse.x) ** 2 + (edgeMidY - mouse.y) ** 2
             );
             const boost = eDist < MOUSE_RADIUS * 1.5
-              ? 0.03 * (1 - eDist / (MOUSE_RADIUS * 1.5))
+              ? 0.015 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.03 + 0.02 * (1 - dist / maxDist) + boost;
+            const alpha = 0.015 + 0.015 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -274,7 +249,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         }
       }
 
-      // Draw triangle fills
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           if (!connected[i][j]) continue;
@@ -285,34 +259,33 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.008)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.004)`;
               ctx.fill();
             }
           }
         }
       }
 
-      // Draw nodes
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.10 + 0.08 * Math.sin(t * 0.0008);
+          const pulse = 0.06 + 0.04 * Math.sin(t * 0.0008);
           ctx.beginPath();
-          ctx.arc(n.x, n.y, 2.5, 0, Math.PI * 2);
+          ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
           ctx.fill();
           ctx.beginPath();
-          ctx.arc(n.x, n.y, 6, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.3})`;
+          ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.25})`;
           ctx.fill();
         } else if (n.tier === "anchor") {
           ctx.beginPath();
-          ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.10)`;
+          ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.05)`;
           ctx.fill();
         } else {
           ctx.beginPath();
-          ctx.arc(n.x, n.y, 1.0, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.06)`;
+          ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
           ctx.fill();
         }
       }
@@ -324,7 +297,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
     const onResize = () => {
       initNodes();
-      // Re-apply current mode targets after resize
       const rng = seededRandom(42);
       const positions = getLayoutPositions(modeRef.current, sizeRef.current.w, sizeRef.current.h, rng);
       const nodes = nodesRef.current;
