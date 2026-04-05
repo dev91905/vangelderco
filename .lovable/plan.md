@@ -1,39 +1,39 @@
 
 
-# Add Admin Authentication (Email & Password)
+# Geometric Constellation Background — Animated Triangular Network
 
-## Summary
-Protect all `/admin` routes behind email/password login. One account is created via signup, then used to log in. No profile table needed — just Supabase auth.
+## Concept
 
-## Changes
+A full-viewport SVG canvas of slowly drifting triangular constellations — faint interconnected nodes forming triangular geometries that pulse and shift. Think the Oldest House from CONTROL: barely-there geometric structures hovering in darkness, hinting at something vast and unknowable. The three-sided forms reference the three domains. Nodes connected by hair-thin lines evoke network constellations and the north star motif.
 
-### 1. `src/pages/AdminLogin.tsx` — New file
-Login page matching the site's brutalist aesthetic:
-- Email + password inputs, "Sign In" button
-- Small "Create account" toggle that reveals a signup form (same page, not a separate route)
-- After successful auth, redirect to `/admin`
-- Uses `supabase.auth.signInWithPassword()` and `supabase.auth.signUp()`
-- Error states inline, no modals
-- Same near-black background, JetBrains Mono, red accent as the rest of admin
+## Design
 
-### 2. `src/components/admin/RequireAuth.tsx` — New file
-Wrapper component that:
-- Listens to `supabase.auth.onAuthStateChange()` + calls `getSession()` on mount
-- If authenticated → renders children
-- If not → redirects to `/admin/login`
-- Shows a minimal loading state while checking session
+- **Geometry**: ~20–30 nodes scattered across the viewport, connected into triangular clusters by thin lines. Not a uniform grid — organic, slightly asymmetric placement that feels like a star chart.
+- **Animation**: Nodes drift slowly (CSS or requestAnimationFrame), each on its own subtle orbit. Lines stretch and contract as nodes move. One node slightly brighter than the rest — the north star.
+- **Opacity**: Extremely faint. Node dots at `0.06–0.10` opacity, connecting lines at `0.03–0.05`. The "north star" node pulses gently between `0.10–0.18`. Should feel subliminal — noticed after 10 seconds of looking, not on first glance.
+- **Color**: White lines/dots with a very faint red tint on the north star pulse (`hsl(0 80% 48% / 0.08)`).
+- **No interaction**: Pure `pointer-events-none` decoration.
 
-### 3. `src/App.tsx` — Route updates
-- Add `/admin/login` route → `AdminLogin`
-- Wrap the three admin routes (`/admin`, `/admin/new`, `/admin/edit/:id`) with `RequireAuth`
+## Implementation
 
-### 4. `src/pages/Admin.tsx` — Add sign-out
-- Add a "Sign Out" button in the header bar (next to the Settings gear)
-- Calls `supabase.auth.signOut()` then navigates to `/admin/login`
+### New component: `src/components/ConstellationField.tsx`
 
-### 5. Security scan findings
-- The two scan findings about exposed passwords in `capability_posts` and `site_settings` are already addressed by the earlier security fix (edge function verification, column exclusion from public queries). The RLS policies already restrict write access to authenticated users. Adding auth completes the picture — only logged-in admins can reach the management UI.
+A self-contained canvas/SVG component:
+- Generates node positions on mount (deterministic seed so it's consistent)
+- Uses `requestAnimationFrame` for smooth, GPU-friendly drift animation
+- Canvas-based (not DOM nodes) for performance — draws dots and lines each frame
+- Responsive: fills parent container, recalculates on resize
+- North star node: one designated node with a slow `sin()`-based brightness pulse
 
-### No database changes
-Supabase auth is built-in. No profiles table needed (user confirmed). No new migrations.
+### `src/components/AtmosphericLayout.tsx`
+
+Add `<ConstellationField />` as a new layer between the breathing glow and the vignette, at `z-[1]`, `pointer-events-none`, `fixed inset-0`.
+
+### `src/components/PasswordGate.tsx`
+
+Add the same `<ConstellationField />` inside the gate wrapper so the password page gets it too.
+
+### No other changes
+
+No new dependencies. Pure HTML Canvas + RAF. No Three.js needed for this level of subtlety.
 
