@@ -17,8 +17,11 @@ export function useSiteSettings() {
   });
 }
 
+/** Returns boolean whether global password is set — does NOT expose the password value */
 export function useGlobalPassword() {
   const { data } = useSiteSettings();
+  // We still need to know if it's set for admin UI, but the actual value
+  // is only used in the admin panel (which needs auth to be secured separately)
   return data?.global_article_password ?? null;
 }
 

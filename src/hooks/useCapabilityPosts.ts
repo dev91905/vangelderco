@@ -22,7 +22,7 @@ export function useCapabilityPosts(capability: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("capability_posts")
-        .select("*")
+        .select("id, title, slug, type, capability, excerpt, content, hero_image_url, content_blocks, stats, is_published, published_at, created_at")
         .eq("capability", capability)
         .eq("is_published", true)
         .order("published_at", { ascending: false });

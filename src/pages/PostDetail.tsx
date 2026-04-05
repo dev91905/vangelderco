@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
-import { usePostBySlug } from "@/hooks/usePostBySlug";
-import { useGlobalPassword } from "@/hooks/useSiteSettings";
+import { usePostBySlug, usePostHasPassword } from "@/hooks/usePostBySlug";
 import { PasswordGateWrapper } from "@/components/PasswordGate";
 import BlogPostView from "@/components/blog/BlogPostView";
 import CaseStudyView from "@/components/casestudy/CaseStudyView";
@@ -9,7 +8,7 @@ import AtmosphericLayout from "@/components/AtmosphericLayout";
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug);
-  const globalPassword = useGlobalPassword();
+  const { data: passwordInfo } = usePostHasPassword(slug);
 
   if (isLoading) {
     return (
@@ -33,7 +32,8 @@ const PostDetail = () => {
 
   const contentBlocks = post.content_blocks as any[] | null;
   const stats = post.stats as { label: string; description: string; visible?: boolean }[] | null;
-  const postPassword = (post as any).password as string | null;
+
+  const requiresPassword = !!(passwordInfo?.hasPostPassword || passwordInfo?.hasGlobalPassword);
 
   const articleContent = post.type === "case-study" ? (
     <CaseStudyView post={{ title: post.title, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks, stats }} />
@@ -43,12 +43,11 @@ const PostDetail = () => {
 
   return (
     <PasswordGateWrapper
-      postPassword={postPassword}
-      globalPassword={globalPassword}
       slug={slug || ""}
       title={post.title}
       heroImageUrl={post.hero_image_url}
       capability={post.capability}
+      requiresPassword={requiresPassword}
     >
       {articleContent}
     </PasswordGateWrapper>
