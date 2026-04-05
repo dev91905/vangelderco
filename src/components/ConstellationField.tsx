@@ -251,7 +251,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ? 0.012 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.012 + 0.012 * (1 - dist / maxDist) + boost;
+            const alpha = 0.025 + 0.02 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -262,43 +262,28 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         }
       }
 
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          if (!connected[i][j]) continue;
-          for (let k = j + 1; k < nodes.length; k++) {
-            if (connected[i][k] && connected[j][k]) {
-              ctx.beginPath();
-              ctx.moveTo(nodes[i].x, nodes[i].y);
-              ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.lineTo(nodes[k].x, nodes[k].y);
-              ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
-              ctx.fill();
-            }
-          }
-        }
-      }
+      // Triangle fills removed — edges only
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.045 + 0.03 * Math.sin(t * 0.0008);
+          const pulse = 0.07 + 0.04 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.25})`;
+          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.3})`;
           ctx.fill();
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.04)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.07)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.025)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.045)`;
           ctx.fill();
         }
       }
