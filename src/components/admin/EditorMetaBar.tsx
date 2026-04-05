@@ -46,7 +46,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
   return (
     <>
       {/* Title — always visible at top of canvas */}
-      <div className="px-4 md:px-8 pt-6 pb-2">
+      <div className="px-4 md:px-8 pt-4 pb-2">
         <input
           value={props.title}
           onChange={(e) => props.onTitleChange(e.target.value)}

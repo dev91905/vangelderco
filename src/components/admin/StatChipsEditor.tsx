@@ -20,10 +20,13 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <label className="text-[10px] tracking-[0.15em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.4)" }}>
-          Stat Chips
-        </label>
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-3 flex-1">
+          <label className="text-[10px] tracking-[0.15em] uppercase flex-shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.2)" }}>
+            Stat Chips
+          </label>
+          <div className="flex-1 h-px" style={{ background: "hsl(0 0% 100% / 0.05)" }} />
+        </div>
         <button
           onClick={() => onChange([...stats, { label: "", description: "", visible: true }])}
           className="text-[10px] flex items-center gap-1 px-2 py-1 transition-colors hover:bg-[hsl(0_80%_48%_/_0.1)]"

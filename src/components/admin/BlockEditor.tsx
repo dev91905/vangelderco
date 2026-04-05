@@ -42,7 +42,6 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const isMobile = useIsMobile();
-  const showActions = hovered || focused || isMobile;
   const update = (patch: any) => onChange({ ...block, ...patch });
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -52,34 +51,44 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
   };
 
   return (
-    <div className="group relative flex items-start gap-0 py-1 transition-all"
+    <div
+      className="group relative flex items-start gap-0 transition-all rounded-lg"
+      style={{
+        padding: "4px 4px 4px 0",
+        background: focused ? "hsl(0 0% 100% / 0.02)" : "transparent",
+      }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
-      <div className="flex items-center gap-0 w-10 flex-shrink-0 pt-1">
-        <div className="w-0.5 h-full min-h-[24px] rounded-full transition-opacity duration-200"
-          style={{ background: focused ? "hsl(0 80% 48% / 0.5)" : "hsl(0 80% 48% / 0.15)", opacity: showActions ? 1 : 0 }} />
-        {!isMobile && <div {...(dragHandleProps || {})} className="cursor-grab active:cursor-grabbing p-1 transition-opacity duration-200" style={{ opacity: showActions ? 0.4 : 0 }}>
-          <GripVertical className="w-3.5 h-3.5" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
-        </div>}
+      onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+    >
+      {/* Minimal left gutter — grip only */}
+      <div className="flex items-center w-6 flex-shrink-0 pt-1 justify-center">
+        {!isMobile && (
+          <div {...(dragHandleProps || {})} className="cursor-grab active:cursor-grabbing p-0.5 transition-opacity duration-200" style={{ opacity: hovered ? 0.2 : 0 }}>
+            <GripVertical className="w-3 h-3" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
+          </div>
+        )}
       </div>
 
       <div className="flex-1 min-w-0">
         {block.type === "heading" && (
-          <div className="flex items-center gap-2">
-            <select value={block.level || 2} onChange={(e) => update({ level: Number(e.target.value) })}
-              className="bg-transparent outline-none text-[10px] uppercase tracking-wider cursor-pointer opacity-0 group-hover:opacity-60 transition-opacity"
-              style={{ ...mono, color: "hsl(0 0% 100% / 0.3)", width: "36px" }}>
-              {[1, 2, 3].map((l) => <option key={l} value={l} style={{ background: "hsl(0 0% 6%)" }}>H{l}</option>)}
-            </select>
+          <div className="relative">
             <AutoTextarea value={block.text || ""} onChange={(v) => update({ text: v })} onKeyDown={handleKeyDown} placeholder="Heading..."
               className={block.level === 1 ? "text-2xl font-bold" : block.level === 3 ? "text-base font-semibold" : "text-xl font-semibold"}
               style={{ ...grotesk, color: "hsl(0 0% 100% / 0.9)" }} />
+            {/* Level chip — appears on hover */}
+            <button
+              onClick={() => update({ level: ((block.level || 2) % 3) + 1 })}
+              className="absolute right-0 top-1 text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded transition-opacity duration-200 hover:bg-[hsl(0_0%_10%)]"
+              style={{ ...mono, color: "hsl(0 0% 100% / 0.25)", opacity: hovered ? 1 : 0 }}
+            >
+              H{block.level || 2}
+            </button>
           </div>
         )}
 
         {block.type === "paragraph" && (
           <AutoTextarea value={block.text || ""} onChange={(v) => update({ text: v })} onKeyDown={handleKeyDown}
-            placeholder="Start writing, or type / for commands..." style={{ ...mono, color: "hsl(0 0% 100% / 0.7)", fontSize: "13px" }} />
+            placeholder="Type / for commands" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.7)", fontSize: "14px" }} />
         )}
 
         {block.type === "image" && (
@@ -144,7 +153,7 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
               {(block.blocks || []).map((inner: any, idx: number) => (
                 <AutoTextarea key={idx} value={inner.text || ""} onChange={(v) => {
                   const newBlocks = [...(block.blocks || [])]; newBlocks[idx] = { ...inner, text: v }; update({ blocks: newBlocks });
-                }} placeholder="Content..." className="text-xs" style={{ ...mono, color: "hsl(0 0% 100% / 0.6)" }} />
+                }} placeholder="Content..." className="text-xs" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.6)" }} />
               ))}
               <button onClick={() => update({ blocks: [...(block.blocks || []), { type: "paragraph", text: "" }] })}
                 className="text-[10px] flex items-center gap-1 py-1" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
@@ -201,8 +210,17 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
         )}
       </div>
 
-      <button onClick={onDelete} className="p-1.5 flex-shrink-0 transition-opacity duration-200 self-start mt-1" style={{ opacity: showActions ? 0.4 : 0 }} title="Delete block">
-        <Trash2 className="w-3.5 h-3.5" style={{ color: "hsl(0 80% 48% / 0.6)" }} />
+      {/* Floating delete pill — top-right on hover */}
+      <button
+        onClick={onDelete}
+        className="absolute top-1 right-1 p-1.5 rounded-full transition-opacity duration-200"
+        style={{
+          opacity: hovered || isMobile ? 0.6 : 0,
+          background: "hsl(0 0% 8%)",
+        }}
+        title="Delete block"
+      >
+        <Trash2 className="w-3 h-3" style={{ color: "hsl(0 80% 48% / 0.7)" }} />
       </button>
     </div>
   );
