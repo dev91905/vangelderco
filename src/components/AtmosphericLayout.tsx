@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 interface AtmosphericLayoutProps {
   children: ReactNode;
@@ -47,6 +48,24 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
       <svg className="fixed bottom-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1">
         <path d="M23 16v7h-7" />
       </svg>
+
+      <Link
+        to="/admin"
+        className="fixed bottom-6 right-6 z-30"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "hsl(0 0% 100% / 0.18)",
+          transition: "color 300ms",
+          textDecoration: "none",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.18)")}
+      >
+        Admin
+      </Link>
 
       {children}
     </div>
