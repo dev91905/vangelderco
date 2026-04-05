@@ -21,14 +21,6 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
         }}
       />
 
-      {/* Vignette */}
-      <div
-        className="pointer-events-none fixed inset-0 z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 30%, hsl(0 0% 0% / 0.15) 50%, hsl(0 0% 0% / 0.4) 75%, hsl(0 0% 0% / 0.6) 100%)",
-        }}
-      />
 
       {/* Scan beam */}
       <div
