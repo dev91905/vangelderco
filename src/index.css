@@ -145,6 +145,7 @@ body::after {
 }
 
 @keyframes hero-scan-down {
-  0% { top: -1px; }
-  100% { top: 100%; }
+  0% { top: -1px; opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }
