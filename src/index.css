@@ -121,31 +121,20 @@ body::after {
   100% { opacity: 1; }
 }
 
-/* Hero nav link hover effects */
+/* Hero nav link hover effects — CONTROL style */
 .hero-nav-link {
   cursor: pointer;
   text-decoration: none;
 }
 
-.hero-nav-link:hover .hero-nav-caret {
+.hero-nav-link:hover .hero-nav-wash {
+  background: hsl(0 80% 48% / 0.04) !important;
+}
+
+.hero-nav-link:hover .hero-nav-bar {
   opacity: 1 !important;
-  transform: translateX(0) !important;
 }
 
 .hero-nav-link:hover .hero-nav-text {
-  color: hsl(0 0% 100% / 0.95) !important;
-}
-
-.hero-nav-link:hover .hero-nav-glow {
-  background: radial-gradient(ellipse 60% 80% at center, hsl(0 80% 48% / 0.12) 0%, transparent 70%) !important;
-}
-
-.hero-nav-link:hover .hero-nav-scan > span {
-  left: 100% !important;
-  background: hsl(0 80% 48% / 0.8) !important;
-  box-shadow: 0 0 16px 6px hsl(0 80% 48% / 0.4) !important;
-}
-
-.hero-nav-link:hover .hero-nav-underline {
-  transform: scaleX(1) !important;
+  color: hsl(0 0% 100% / 1) !important;
 }

@@ -42,76 +42,46 @@ const Index = () => {
             VGC StratComm Advisors
           </span>
 
-          {/* Hero lines — now links */}
+          {/* Hero lines — nav links */}
           <h1 className="flex flex-col gap-2 md:gap-3">
             {HERO_LINKS.map((link, i) => (
               <Link
                 key={i}
                 to={link.to}
-                className="hero-nav-link group relative flex items-center justify-center"
+                className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6"
                 style={{
                   animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.8 + i * 0.4}s both`,
                 }}
               >
-                {/* Glow behind text on hover */}
+                {/* Background wash */}
                 <span
-                  className="hero-nav-glow absolute inset-0 pointer-events-none"
+                  className="hero-nav-wash absolute inset-0 pointer-events-none"
                   style={{
-                    background: "radial-gradient(ellipse 60% 80% at center, hsl(0 80% 48% / 0) 0%, transparent 70%)",
-                    transition: "background 0.4s ease",
+                    background: "hsl(0 80% 48% / 0)",
+                    transition: "background 0.15s ease",
                   }}
                 />
 
-                {/* Scan line overlay */}
-                <span className="hero-nav-scan absolute inset-0 pointer-events-none overflow-hidden">
-                  <span
-                    className="absolute top-0 left-0 h-full"
-                    style={{
-                      width: "3px",
-                      background: "hsl(0 80% 48% / 0)",
-                      boxShadow: "0 0 12px 4px hsl(0 80% 48% / 0)",
-                      transition: "left 0.5s ease, background 0.3s ease, box-shadow 0.3s ease",
-                    }}
-                  />
-                </span>
+                {/* Left bar */}
+                <span
+                  className="hero-nav-bar absolute left-0 top-0 bottom-0 pointer-events-none"
+                  style={{
+                    width: "2px",
+                    background: "hsl(0 80% 48% / 0.8)",
+                    opacity: 0,
+                    transition: "opacity 0.1s ease",
+                  }}
+                />
 
-                {/* Inline-flex wrapper: caret + text together */}
-                <span className="hero-nav-inner inline-flex items-center gap-2 md:gap-3 relative z-10">
-                  {/* Caret */}
-                  <span
-                    className="hero-nav-caret text-[14px] md:text-[18px]"
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color: "hsl(0 80% 48% / 0.8)",
-                      opacity: 0,
-                      transform: "translateX(-8px)",
-                      transition: "opacity 0.3s ease, transform 0.3s ease",
-                    }}
-                  >
-                    &gt;
-                  </span>
-
-                  {/* Text + underline */}
-                  <span className="relative">
-                    <span
-                      className="hero-nav-text text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-300"
-                      style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        color: "hsl(0 0% 100% / 0.9)",
-                      }}
-                    >
-                      {link.label}
-                    </span>
-                    {/* Underline */}
-                    <span
-                      className="hero-nav-underline absolute bottom-0 left-0 w-full h-px"
-                      style={{
-                        background: "hsl(0 80% 48% / 0.4)",
-                        transform: "scaleX(0)",
-                        transition: "transform 0.4s ease",
-                      }}
-                    />
-                  </span>
+                {/* Text */}
+                <span
+                  className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-150"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    color: "hsl(0 0% 100% / 0.9)",
+                  }}
+                >
+                  {link.label}
                 </span>
               </Link>
             ))}
