@@ -24,7 +24,7 @@ const PasswordGate = ({ title, heroImageUrl, onUnlock }: PasswordGateProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center" style={{ background: "hsl(0 0% 2.5%)" }}>
-      <ConstellationField />
+      
       {heroImageUrl && (
         <div className="absolute inset-0 overflow-hidden">
           <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={{ filter: "blur(40px) brightness(0.15)", transform: "scale(1.2)" }} />
