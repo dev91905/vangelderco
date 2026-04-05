@@ -1,66 +1,38 @@
 
 
-# Admin Editor Design Polish — Premium WYSIWYG
+# Stat Chips Editor — Premium Overhaul
 
-## Audit Findings
+## What's Wrong Now
 
-### Typography mismatch
-Paragraph blocks render in JetBrains Mono (monospace). A WYSIWYG editor should mirror the front-end — body text should use Space Grotesk so authors see what readers see. Monospace should only appear on meta labels and code.
+The editor is a flat list of cramped rows — two tiny inputs jammed next to icon buttons. It looks like a form table, not a WYSIWYG editor. There's no visual relationship between what you're editing and what renders on the front-end. The grip handle doesn't actually drag. The whole thing feels like an afterthought.
 
-### Too much block chrome
-Every block has a 40px left gutter with an accent bar + grip handle + a right-side delete button. All three elements fade in/out on hover, creating a jittery, cluttered feel — especially with 10+ blocks. The accent bar (a thin red line) doesn't communicate anything useful.
+## Design Direction
 
-### Insert points are too tall
-28px between every block. With 15 blocks that's 420px of dead space. The plus button requires hover to discover — fine on desktop, invisible on mobile.
-
-### Paragraph placeholder is noisy
-"Start writing, or type / for commands..." is too long. Notion uses just "Type '/' for commands" — shorter, quieter.
-
-### Keyboard hints overlap content
-`fixed bottom-4 left-4` floats over the scroll area. On short viewports or mobile, it covers content.
-
-### No selected/active block state
-No visual indicator of which block you're currently editing. The red accent bar tries to do this but it's too subtle and appears on hover too, diluting its meaning.
-
-### Stat chips section breaks flow
-Hard border separator between stat chips and content canvas fragments the editing experience. Should feel like part of the same document flow.
-
----
+Make the editor mirror the front-end stat chip rendering — each stat is a mini-card with a red left border, the metric value rendered large, and the description below it. Editing happens inline on the card itself, not in a spreadsheet row. The editor *is* the preview.
 
 ## Changes
 
-### `src/components/admin/BlockEditor.tsx` — Minimal block chrome
-- Remove the left accent bar entirely
-- Reduce left gutter from `w-10` to `w-6` — grip handle only, tighter to content
-- Grip handle: invisible by default, 20% opacity on block hover (not 40%)
-- Delete button: move into a small floating pill that appears on hover at top-right of block, not as a persistent right-column element
-- Add a subtle `background: hsl(0 0% 100% / 0.02)` + `border-radius: 8px` on the focused block only — a gentle "selection" highlight that replaces the accent bar
-- **Paragraph font**: Change from `mono` to `grotesk` with `fontSize: "14px"` — matches front-end body text
-- Shorten placeholder to `"Type / for commands"`
-- Heading blocks: remove the H1/H2/H3 dropdown selector from the left. Move it to a subtle inline chip that appears on hover to the right of the text
+### `src/components/admin/StatChipsEditor.tsx` — Full rewrite
 
-### `src/components/admin/BlockCanvas.tsx` — Tighter insert points
-- Reduce insert point height from 28px to 12px
-- Plus button: 12×12px, appears centered on hover at 30% opacity instead of current scale animation
-- On mobile: add a persistent thin "+" bar at the bottom of the block list (always visible, no hover needed)
-- Empty state: larger, warmer — centered "Start writing" with a single plus button, no secondary text
+**Layout**: Replace the row-per-stat layout with a horizontal flex-wrap grid of card-shaped editors that visually match the front-end `StatChips` component.
 
-### `src/pages/AdminEditor.tsx` — Cleaner toolbar + hints
-- Toolbar: reduce vertical padding from `py-2.5` to `py-2`
-- Move keyboard hints from `fixed` to the bottom of the scroll container (inside the scrollable div), with generous top margin so they sit below content
-- Remove the `hidden md:flex` — show hints on all viewports as a subtle reference (they're small enough)
+**Each stat card**:
+- Red left border (`2px solid hsl(0 80% 48% / 0.6)`) — matches front-end exactly
+- Background `hsl(0 0% 4%)`, subtle border `hsl(0 0% 100% / 0.06)`
+- **Label input**: Large (`text-lg`), JetBrains Mono, red color — editable inline, no visible input border until focus
+- **Description input**: Small (`text-[9px]`), uppercase, tracking-wide — same as front-end rendering
+- Visibility toggle + delete as small icons in the top-right corner, 0 opacity by default, visible on card hover
+- Dimmed card (50% opacity + strikethrough on label) when `visible === false`
 
-### `src/components/admin/EditorMetaBar.tsx` — Tighter title area
-- Reduce top padding from `pt-6` to `pt-4`
-- Slug line: slightly more compact, reduce gap
+**Empty state**: A dashed-border card with a centered "+" icon — click to add. No separate "Add" button in the header.
 
-### `src/components/admin/StatChipsEditor.tsx` — Inline with document flow
-- Remove the wrapping border separator in AdminEditor (`borderBottom` on the stat chips container)
-- Add a subtle label divider inline instead — just the "STAT CHIPS" label with a faint horizontal rule, same as a content section header
+**Add flow**: Clicking the empty-state card or a persistent "+" card at the end of the row adds a new stat and auto-focuses the label input.
 
-### `src/components/admin/BlockTypePicker.tsx` — Add search input
-- Add a text input at the top of the picker that auto-focuses on open
-- Filter types as user types (already supported via `filter` prop, but no visible input exists for click-to-add flow — only slash command has filtering)
+**Header**: Keep the "STAT CHIPS" label with the horizontal rule, but remove the separate "Add" button (the "+" card replaces it).
 
-**No new dependencies. No structural changes. Pure visual/UX refinement across 6 files.**
+No drag-and-drop for now (the grip handle was non-functional anyway) — keeps it clean.
+
+### No other files change
+
+This is a self-contained component rewrite. The props interface (`stats`, `onChange`) stays identical.
 
