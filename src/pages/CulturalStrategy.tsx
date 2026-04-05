@@ -5,7 +5,7 @@ const CulturalStrategy = () => (
     capability="cultural-strategy"
     label="VGC Domain // 001"
     title="Cultural Strategy"
-    description="Working with partners to engage cultural sectors — arts, media, faith, education — around shared objectives. We identify leverage points where cultural influence intersects with institutional power, then design coordinated interventions that shift narratives and norms at scale."
+    description="Culture sets the terms before policy ever reaches the table. We shape what populations believe is possible — then architect the cultural conditions that make political victory inevitable."
   />
 );
 
