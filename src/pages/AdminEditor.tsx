@@ -199,7 +199,8 @@ const AdminEditor = () => {
         </div>
       </div>
 
-      {/* Metadata — title is inline, settings in drawer */}
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto">
       <EditorMetaBar
         title={title}
         slug={slug}
