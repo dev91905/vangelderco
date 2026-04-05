@@ -1,34 +1,21 @@
 
 
-# Premium Password Management System
+# Restore Missing Excerpt for "The Institutional Blind Spot in Cultural Engagement"
 
-## Summary
-Upgrade the password UX across both the per-post editor and global site settings with generate, copy, show/hide, and at-a-glance password status across the post list.
+## Problem
+The PostCard component correctly renders excerpts via `{post.excerpt && ...}`. The excerpt for this post is `NULL` in the database — either the earlier restoration migration didn't match the title, or a subsequent auto-save in the editor cleared it (the editor doesn't expose an excerpt field, so any save would preserve `NULL`).
 
-## Changes
+## Fix
+Single SQL update to restore the excerpt:
 
-### 1. `src/components/admin/EditorMetaBar.tsx` — Per-post password section overhaul
-Replace the plain text input with a premium password management card:
-- **Show/hide toggle** (eye icon) to reveal the password
-- **Generate button** — creates a random 12-char alphanumeric password and fills the field
-- **Copy button** — copies to clipboard with a brief "Copied" confirmation tooltip
-- **Clear button** — removes protection
-- All four actions as small icon buttons in a row next to the input
-- Password input uses `type="password"` by default, toggleable to `type="text"`
+```sql
+UPDATE capability_posts
+SET excerpt = 'Why most institutional cultural strategies fail to move opinion — and what a generation of political infrastructure builders got right.'
+WHERE title = 'The Institutional Blind Spot in Cultural Engagement';
+```
 
-### 2. `src/pages/Admin.tsx` — Global password dialog overhaul
-Same premium treatment for the global password modal:
-- Show/hide, generate, copy buttons alongside the input
-- Current status indicator: "Active" with red dot or "Not set" with dim dot
-- When a global password is active, show it (masked) with one-click copy
+One migration, no code changes.
 
-### 3. `src/components/admin/PostListTable.tsx` — Password indicator on post rows
-- Add a small lock icon next to each post title that has a per-post password set
-- Subtle, dim — just enough to see at a glance which posts are individually gated
-
-### Password generation
-Simple inline utility — `crypto.getRandomValues` to produce a 12-character string from `A-Za-z0-9`. No external dependency.
-
-### No database or schema changes
-All UI-only. The `password` column on `capability_posts` and `site_settings` table already exist.
+## Bonus: Prevent Future Loss
+The admin editor currently has no excerpt field — so every save keeps excerpt as whatever it already is (which is correct). But if a post is created via the editor, it'll never get an excerpt. Consider adding an excerpt textarea to `EditorMetaBar.tsx` in a future pass.
 
