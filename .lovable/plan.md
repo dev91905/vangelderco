@@ -1,36 +1,61 @@
 
 
-# Add Excerpt/Dek Field to Admin Editor & Case Study View
+# Fix Global Password Not Gating Articles
 
-## Problem
-The "Reframing Climate" case study has no dek because:
-1. The admin editor hardcodes `excerpt: null` on save (line 67 of `AdminEditor.tsx`)
-2. There's no excerpt input field anywhere in the editor UI
-3. `CaseStudyView` doesn't render an excerpt even if one existed
+## Root Causes
 
-The `PostCard` on the capability listing page already renders `post.excerpt` — but the field is always empty because there's no way to enter it.
+1. **Content loads before gate**: `usePostBySlug` fetches the full post (including `content_blocks`) in parallel with `usePostHasPassword`. The article content is in the browser before the gate renders — it flashes, and a user can read it via dev tools.
+
+2. **Silent bypass on error**: If the edge function call fails, `usePostHasPassword` returns `requiresPassword: false` — any network hiccup disables the gate entirely.
+
+3. **Listing pages leak content**: `useCapabilityPosts` fetches `content_blocks` for every post on the listing page. Not a gate bypass, but unnecessary data exposure.
 
 ## Changes
 
-### 1. `src/pages/AdminEditor.tsx`
-- Add `excerpt` state (`useState("")`)
-- Load it from `post.excerpt` on edit
-- Include it in `formData()` instead of hardcoded `null`
+### 1. `src/pages/PostDetail.tsx` — Gate before content fetch
 
-### 2. `src/components/admin/EditorMetaBar.tsx`
-- Add `excerpt` and `onExcerptChange` props
-- Add a textarea field below the title/slug area (always visible, not buried in the settings drawer) — labeled "DEK" in mono caps
-- Compact, 2-3 line textarea with placeholder "Short description shown on listing cards and below the title"
+Restructure the component so the password check happens first. Don't render the article content (or even fetch it) until the gate is resolved:
 
-### 3. `src/components/casestudy/CaseStudyView.tsx`
-- Accept `excerpt` in the post prop interface
-- Render it below the title and above the date, styled as a subtitle: `text-[13px]` JetBrains Mono, `color: hsl(0 0% 100% / 0.5)`, centered, `max-w-2xl`
+- Fetch `usePostHasPassword` first
+- If `requiresPassword` is true and not yet unlocked, show only the `PasswordGateWrapper` (with title and hero from a lightweight metadata-only query)
+- Only call `usePostBySlug` (full content) after unlock
 
-### 4. `src/components/blog/BlogPostView.tsx`
-- Same treatment: accept `excerpt`, render below title if present
+This means splitting into two queries: a metadata query (title, slug, capability, hero_image_url, excerpt — no content_blocks) and the full content query gated behind unlock state.
 
-### 5. `src/pages/PostDetail.tsx`
-- Pass `excerpt: post.excerpt` to both `CaseStudyView` and `BlogPostView`
+### 2. `src/hooks/usePostBySlug.ts` — Add metadata-only hook
 
-Five files, small edits each. After this, you can type a dek in the editor and it'll appear on both the listing card and the article page.
+Add `usePostMeta(slug)` that selects only: `id, title, slug, type, capability, excerpt, hero_image_url, published_at`. No `content_blocks`, no `content`, no `stats`.
+
+Keep `usePostBySlug` as-is but add an `enabled` option so PostDetail can delay it.
+
+### 3. `src/hooks/usePostBySlug.ts` — Fail closed on error
+
+Change `usePostHasPassword` so that on error it returns `requiresPassword: true` instead of `false`. Gate stays up if anything goes wrong.
+
+### 4. `src/hooks/useCapabilityPosts.ts` — Stop fetching content_blocks on listings
+
+Remove `content_blocks, stats, content` from the select query on listing pages. Cards only need `id, title, slug, type, capability, excerpt, hero_image_url, published_at, created_at`.
+
+### 5. `src/components/PasswordGate.tsx` — Lift unlock state
+
+The `PasswordGateWrapper` needs to expose its unlock state so `PostDetail` can use it to enable the full content query. Add an `onUnlock` callback prop (already partially there) that PostDetail uses to set a local `unlocked` state, which then enables `usePostBySlug`.
+
+## Technical detail
+
+```
+Page load flow (current — broken):
+  usePostBySlug ──→ full content in browser ──→ render article
+  usePostHasPassword ──→ requiresPassword ──→ overlay gate on top
+  (content already visible in DOM/devtools)
+
+Page load flow (fixed):
+  usePostMeta ──→ title, hero only
+  usePostHasPassword ──→ requiresPassword?
+    YES → show PasswordGateWrapper (no content fetched)
+           user enters password → onUnlock → set unlocked=true
+           usePostBySlug(enabled: unlocked) → fetch content → render
+    NO  → usePostBySlug(enabled: true) → fetch content → render
+```
+
+Six small edits across three files. No database or edge function changes needed.
 
