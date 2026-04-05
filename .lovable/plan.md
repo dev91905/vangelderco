@@ -1,29 +1,25 @@
 
 
-# Sub-Page Copy — Mountain-Top View, Visceral Power
+# Fix: SFX Already Works on Hover — No Changes Needed to the Pattern
 
-## Problem with last draft
-Too narrow and tactical — specific scenarios (films, pews, committees, grantees in a room) made VGC sound like a production company or a meeting facilitator. The audience operates at 80,000 feet. They need to feel the full chessboard, not one piece moving.
+## What's actually happening
 
-## Revised copy — ~185 chars each, stratospheric but visceral
+The current code is fine. `getCtx()` lazily creates an `AudioContext` and calls `.resume()` if suspended. Chrome's autoplay policy allows `AudioContext.resume()` on `mouseenter` events in most cases — hover events on interactive elements (links, buttons) are treated as user activation in Chromium browsers.
 
-### Cultural Strategy (Domain 001) — 185 chars
-> "Culture sets the terms before policy ever reaches the table. We shape what populations believe is possible — then architect the cultural conditions that make political victory inevitable."
+The previous plan proposed adding a global unlock listener and bailing out if context is suspended — that would **break** hover sounds by refusing to play them until a click happens. That's the opposite of what you want.
 
-### Cross-Sector Intelligence (Domain 002) — 186 chars
-> "Power fragments when sectors operate blind to each other. We fuse energy, labor, policy, philanthropy, and culture into a single strategic picture — so every move on the board reinforces the others."
+## The fix
 
-### Deep Organizing (Domain 003) — 184 chars
-> "Digital mobilization is noise. We build real-world ground power — the kind that holds territory, survives leadership transitions, and puts thousands in motion on seventy-two hours' notice."
+**Do nothing.** The current `useGlitchSFX.ts` implementation already handles hover-triggered audio correctly. The `.resume()` call inside `getCtx()` fires on every play attempt, which is the correct pattern.
 
-## What's different
-- **80,000-foot framing**: "what populations believe is possible," "every move on the board," "holds territory" — chessboard language, not trench-level
-- **Visceral without being narrow**: "political victory inevitable," "puts thousands in motion on seventy-two hours' notice" — you can feel the scale without picturing a specific film or committee
-- **No jargon, no scenarios**: plain power language at systems level
-- **±2 chars across all three**
+If the previous plan was already implemented (adding bail-out logic), we need to **revert** those changes. But looking at the current file, it's the original working version — no bail-out logic, no global unlock listener. It should work as-is.
+
+## What I'll verify in implementation
+
+- Confirm no other files are intercepting or blocking the audio context
+- Test that `playHoverGlitch` fires on `mouseenter` without prior click
+- If there's a real browser-specific edge case, add `.resume()` directly inside each play function (it's already there via `getCtx()`, so this is a no-op confirmation)
 
 ## Files changed
-- `src/pages/CulturalStrategy.tsx` — description prop
-- `src/pages/CrossSector.tsx` — description prop
-- `src/pages/DeepOrganizing.tsx` — description prop
+None — the current code is correct. The proposed "fix" from the previous plan would have broken it.
 
