@@ -28,83 +28,74 @@ interface Node {
   tier: "northstar" | "anchor" | "field";
 }
 
-const MAX_EDGE_DIST = 0.24;
+// Hand-composed normalized positions (0–1 range)
+// Designed for asymmetric balance, golden-ratio spacing
+const BASE_NODES: { nx: number; ny: number; tier: Node["tier"] }[] = [
+  // North star — golden ratio position
+  { nx: 0.62, ny: 0.38, tier: "northstar" },
+  // Anchors — loose asymmetric diamond
+  { nx: 0.18, ny: 0.22, tier: "anchor" },
+  { nx: 0.82, ny: 0.18, tier: "anchor" },
+  { nx: 0.28, ny: 0.72, tier: "anchor" },
+  { nx: 0.78, ny: 0.82, tier: "anchor" },
+  // Field nodes — scattered with intent
+  { nx: 0.10, ny: 0.48, tier: "field" },
+  { nx: 0.42, ny: 0.12, tier: "field" },
+  { nx: 0.88, ny: 0.45, tier: "field" },
+  { nx: 0.35, ny: 0.52, tier: "field" },
+  { nx: 0.55, ny: 0.65, tier: "field" },
+  { nx: 0.72, ny: 0.55, tier: "field" },
+  { nx: 0.15, ny: 0.88, tier: "field" },
+  { nx: 0.50, ny: 0.28, tier: "field" },
+  { nx: 0.92, ny: 0.72, tier: "field" },
+  { nx: 0.38, ny: 0.88, tier: "field" },
+  { nx: 0.68, ny: 0.15, tier: "field" },
+];
+
+// Extra nodes for tall mobile viewports
+const MOBILE_EXTRA: { nx: number; ny: number; tier: Node["tier"] }[] = [
+  { nx: 0.25, ny: 0.42, tier: "field" },
+  { nx: 0.75, ny: 0.35, tier: "field" },
+  { nx: 0.55, ny: 0.78, tier: "field" },
+  { nx: 0.20, ny: 0.62, tier: "field" },
+];
+
+const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
 const LERP_SPEED = 0.025;
 
-function getGridConfig(w: number, h: number) {
+function getNodeDefs(w: number, h: number) {
   const isTallMobile = w < 640 && h / w > 1.5;
-  const cols = 4;
-  const rows = isTallMobile ? 5 : 4;
-  const anchorIndices = new Set(
-    isTallMobile
-      ? [0, cols + 1, cols * 2 + 2, cols * 3 + 1, cols * rows - 1]
-      : [0, cols + 1, cols * 2 + 2, cols * rows - 1]
-  );
-  const northStarCol = Math.round(cols * 0.618);
-  const northStarRow = Math.round(rows * 0.382);
-  const northStarIndex = northStarRow * cols + northStarCol;
-
-  return { cols, rows, anchorIndices, northStarIndex };
+  return isTallMobile ? [...BASE_NODES, ...MOBILE_EXTRA] : BASE_NODES;
 }
 
 function getLayoutPositions(
   mode: ConstellationMode,
   w: number,
   h: number,
-  rng: () => number
-): { x: number; y: number }[] {
-  const { cols, rows } = getGridConfig(w, h);
-  const positions: { x: number; y: number }[] = [];
+): { x: number; y: number; tier: Node["tier"] }[] {
+  const defs = getNodeDefs(w, h);
 
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      const cellW = w / cols;
-      const cellH = h / rows;
-      const jitterX = (rng() - 0.5) * cellW * 0.6;
-      const jitterY = (rng() - 0.5) * cellH * 0.6;
+  return defs.map(({ nx, ny, tier }) => {
+    let x = nx;
+    let y = ny;
 
-      let bx: number, by: number;
-      const baseX = (col + 0.5) * cellW;
-      const baseY = (row + 0.5) * cellH;
-
-      switch (mode) {
-        case "cultural-strategy": {
-          const nx = col / (cols - 1);
-          const skewedX = Math.pow(nx, 1.3);
-          bx = w * 0.06 + skewedX * w * 0.88 + jitterX;
-          by = baseY + jitterY;
-          break;
-        }
-        case "cross-sector": {
-          const nx = col / (cols - 1);
-          const stretchX = 0.5 + (nx - 0.5) * 1.15;
-          bx = stretchX * w + jitterX;
-          by = baseY + jitterY;
-          break;
-        }
-        case "deep-organizing": {
-          const nx = (col + 0.5) / cols - 0.5;
-          const ny = (row + 0.5) / rows - 0.5;
-          const dist = Math.sqrt(nx * nx + ny * ny);
-          const pull = 0.85 + 0.15 * (1 - dist / 0.7);
-          bx = w * 0.5 + nx * pull * w * 0.95 + jitterX;
-          by = h * 0.5 + ny * pull * h * 0.95 + jitterY;
-          break;
-        }
-        default: {
-          bx = baseX + jitterX;
-          by = baseY + jitterY;
-          break;
-        }
-      }
-
-      positions.push({ x: bx, y: by });
+    switch (mode) {
+      case "cultural-strategy":
+        x = Math.pow(nx, 1.15);
+        break;
+      case "cross-sector":
+        x = (nx - 0.5) * 1.08 + 0.5;
+        break;
+      case "deep-organizing":
+        x = 0.5 + (nx - 0.5) * 0.95;
+        y = 0.5 + (ny - 0.5) * 0.95;
+        break;
     }
-  }
 
-  return positions;
+    return { x: x * w, y: y * h, tier };
+  });
 }
 
 interface ConstellationFieldProps {
@@ -126,9 +117,10 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
     const { w, h } = sizeRef.current;
     if (w === 0) return;
 
-    const rng = seededRandom(42);
-    const positions = getLayoutPositions(mode, w, h, rng);
-    for (let i = 0; i < nodes.length; i++) {
+    const positions = getLayoutPositions(mode, w, h);
+    // Node count may differ if viewport changed between mobile/desktop
+    // but mode changes don't change viewport, so lengths match
+    for (let i = 0; i < Math.min(nodes.length, positions.length); i++) {
       nodes[i].targetX = positions[i].x;
       nodes[i].targetY = positions[i].y;
     }
@@ -151,41 +143,29 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sizeRef.current = { w, h };
 
-      const { cols, rows, anchorIndices, northStarIndex } = getGridConfig(w, h);
-      const rng = seededRandom(42);
-      const positions = getLayoutPositions(modeRef.current, w, h, rng);
-      const rng2 = seededRandom(99);
+      const positions = getLayoutPositions(modeRef.current, w, h);
+      const rng = seededRandom(99);
 
-      const nodes: Node[] = [];
-      for (let i = 0; i < cols * rows; i++) {
-        const tier: Node["tier"] =
-          i === northStarIndex
-            ? "northstar"
-            : anchorIndices.has(i)
-              ? "anchor"
-              : "field";
-
-        nodes.push({
-          x: positions[i].x,
-          y: positions[i].y,
-          baseX: positions[i].x,
-          baseY: positions[i].y,
-          targetX: positions[i].x,
-          targetY: positions[i].y,
-          orbitRadius: tier === "field" ? 6 + rng2() * 8 : 4 + rng2() * 4,
-          orbitSpeed:
-            tier === "field"
-              ? 0.0003 + rng2() * 0.0004
-              : 0.0001 + rng2() * 0.0002,
-          orbitPhase: rng2() * Math.PI * 2,
-          driftFreqX: 0.00003 + rng2() * 0.00005,
-          driftFreqY: 0.00003 + rng2() * 0.00005,
-          driftPhaseX: rng2() * Math.PI * 2,
-          driftPhaseY: rng2() * Math.PI * 2,
-          driftAmp: 15 + rng2() * 15,
-          tier,
-        });
-      }
+      const nodes: Node[] = positions.map(({ x, y, tier }) => ({
+        x,
+        y,
+        baseX: x,
+        baseY: y,
+        targetX: x,
+        targetY: y,
+        orbitRadius: tier === "field" ? 6 + rng() * 8 : 4 + rng() * 4,
+        orbitSpeed:
+          tier === "field"
+            ? 0.0003 + rng() * 0.0004
+            : 0.0001 + rng() * 0.0002,
+        orbitPhase: rng() * Math.PI * 2,
+        driftFreqX: 0.00006 + rng() * 0.0001,
+        driftFreqY: 0.00006 + rng() * 0.0001,
+        driftPhaseX: rng() * Math.PI * 2,
+        driftPhaseY: rng() * Math.PI * 2,
+        driftAmp: 15 + rng() * 30,
+        tier,
+      }));
       nodesRef.current = nodes;
     };
 
@@ -310,15 +290,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
     const onResize = () => {
       initNodes();
-      const rng = seededRandom(42);
-      const positions = getLayoutPositions(modeRef.current, sizeRef.current.w, sizeRef.current.h, rng);
-      const nodes = nodesRef.current;
-      for (let i = 0; i < nodes.length; i++) {
-        nodes[i].targetX = positions[i].x;
-        nodes[i].targetY = positions[i].y;
-        nodes[i].baseX = positions[i].x;
-        nodes[i].baseY = positions[i].y;
-      }
     };
     window.addEventListener("resize", onResize);
 
