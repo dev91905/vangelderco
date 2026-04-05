@@ -125,7 +125,7 @@ export const PasswordGateWrapper = ({
       if (fnError) throw fnError;
 
       if (data?.valid) {
-        playChitter();
+        playUnlockSuccess();
         sessionStorage.setItem(sessionKey, "1");
         setUnlocked(true);
         onUnlockProp?.();
