@@ -99,6 +99,7 @@ const AdminEditor = () => {
   // Auto-save: 3s after last change (only for existing posts)
   useEffect(() => {
     if (!dirty || isNew) return;
+    if (!hasLoadedRef.current) return;
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
     autoSaveTimer.current = setTimeout(() => {
       handleSave();
