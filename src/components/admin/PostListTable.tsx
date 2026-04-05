@@ -95,9 +95,10 @@ const PostListTable = ({ filter }: PostListTableProps) => {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              playClickGlitch();
               togglePublish.mutate({ id: post.id, is_published: !post.is_published });
             }}
-            className="p-2 rounded transition-colors hover:bg-[hsl(0_0%_10%)]"
+            className="p-2 rounded transition-all hover:bg-[hsl(0_0%_12%)]"
             title={post.is_published ? "Unpublish" : "Publish"}
           >
             {post.is_published ? (

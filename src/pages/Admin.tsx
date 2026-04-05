@@ -191,7 +191,8 @@ const Admin = () => {
           <button
             key={c.value}
             onClick={() => setTypeFilter(c.value)}
-            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-colors"
+            onPointerEnter={() => playHoverGlitch()}
+            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-all"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: typeFilter === c.value ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.35)",
@@ -207,7 +208,8 @@ const Admin = () => {
           <button
             key={c.value}
             onClick={() => setCapFilter(c.value)}
-            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-colors"
+            onPointerEnter={() => playHoverGlitch()}
+            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-all"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: capFilter === c.value ? "hsl(0 0% 100% / 0.7)" : "hsl(0 0% 100% / 0.25)",
