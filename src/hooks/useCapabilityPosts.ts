@@ -8,12 +8,9 @@ export type CapabilityPost = {
   title: string;
   slug: string | null;
   excerpt: string | null;
-  content: string | null;
   published_at: string | null;
   created_at: string;
   hero_image_url: string | null;
-  content_blocks: unknown | null;
-  stats: unknown | null;
 };
 
 export function useCapabilityPosts(capability: string) {
@@ -22,7 +19,7 @@ export function useCapabilityPosts(capability: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("capability_posts")
-        .select("id, title, slug, type, capability, excerpt, content, hero_image_url, content_blocks, stats, is_published, published_at, created_at")
+        .select("id, title, slug, type, capability, excerpt, hero_image_url, is_published, published_at, created_at")
         .eq("capability", capability)
         .eq("is_published", true)
         .order("published_at", { ascending: false });

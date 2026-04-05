@@ -1,7 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export function usePostBySlug(slug: string | undefined) {
+/** Lightweight metadata-only query — no content_blocks, content, or stats */
+export function usePostMeta(slug: string | undefined) {
+  return useQuery({
+    queryKey: ["post-meta", slug],
+    queryFn: async () => {
+      if (!slug) throw new Error("No slug");
+      const { data, error } = await supabase
+        .from("capability_posts")
+        .select("id, title, slug, type, capability, excerpt, hero_image_url, published_at")
+        .eq("slug", slug)
+        .eq("is_published", true)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) throw new Error("Post not found");
+      return data;
+    },
+    enabled: !!slug,
+  });
+}
+
+/** Full content query — use with enabled flag to gate behind password */
+export function usePostBySlug(slug: string | undefined, enabled: boolean = true) {
   return useQuery({
     queryKey: ["post", slug],
     queryFn: async () => {
@@ -17,11 +39,11 @@ export function usePostBySlug(slug: string | undefined) {
       if (!data) throw new Error("Post not found");
       return data;
     },
-    enabled: !!slug,
+    enabled: !!slug && enabled,
   });
 }
 
-/** Check if a post requires a password — uses server-side edge function, never exposes the password */
+/** Check if a post requires a password — fails CLOSED (assumes password required on error) */
 export function usePostHasPassword(slug: string | undefined) {
   return useQuery({
     queryKey: ["post-has-password", slug],
@@ -32,7 +54,8 @@ export function usePostHasPassword(slug: string | undefined) {
         body: { slug, action: "check" },
       });
 
-      if (error) return { requiresPassword: false };
+      // Fail closed: if anything goes wrong, assume password is required
+      if (error) return { requiresPassword: true };
       return { requiresPassword: !!data?.requiresPassword };
     },
     enabled: !!slug,
