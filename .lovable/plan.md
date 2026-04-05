@@ -1,44 +1,40 @@
 
 
-# Add Subtle Glitch/Electric Sound Effects
+# Redesign Glitch SFX — From Noise Bursts to Tonal UI Sounds
 
-## Approach
+## What's wrong
 
-Generate tiny audio clips programmatically using the Web Audio API — no files to bundle, no network latency, fully deterministic. This fits the brutalist aesthetic perfectly: raw synthesized clicks and crackles rather than polished samples.
+The current sounds are all **filtered white noise** — random static bursts. That's why they sound like rubber bands snapping. They have no pitch, no tone, no musicality. Real game UI sounds (Control, Halo) use **low-frequency sine/triangle tones** with gentle amplitude envelopes — soft, warm, resonant pulses that feel like the interface is alive.
 
-## What gets sounds
+## New sound design — `src/hooks/useGlitchSFX.ts`
 
-1. **Hero link hover** — short electric crackle (~50ms)
-2. **Hero link click** — slightly longer signal chirp (~100ms)
-3. **Loading text appearance** — faint digital chitter when "Loading..." text mounts on capability pages
+### Hover: Soft tonal ping
+- **Single sine wave** at ~220Hz (low A), very short (~80ms)
+- Gentle fade-in over 10ms, slow exponential decay
+- Gain: `0.03` — barely there
+- Optional: layer a second sine at ~330Hz (fifth above) at half volume for harmonic richness
+- No noise, no filters. Pure tone.
 
-## Implementation
+### Click: Deeper resonant pulse
+- **Triangle wave** at ~110Hz (low, feels weighty) for ~150ms
+- Layer a sine at ~165Hz at lower volume
+- Slight pitch bend downward (110→90Hz) over the duration — gives it that "settling" feel like Control's menu sounds
+- Gain: `0.04`
+- No noise component at all
 
-### 1. New hook: `src/hooks/useGlitchSFX.ts`
+### Chitter (loading): Sequence of soft tonal pips
+- 4 quick sine pips at ~300Hz, 40ms each, 50ms apart
+- Each pip slightly different pitch (300, 320, 280, 340) — feels like data processing
+- Very low gain: `0.02`
+- Smooth envelope, no hard edges
 
-A custom hook that creates an `AudioContext` on first interaction and exposes three functions:
-
-- **`playHoverGlitch()`** — generates a ~50ms burst of filtered white noise with a sharp high-pass filter and rapid volume decay. Sounds like a tiny static pop.
-- **`playClickGlitch()`** — a ~100ms oscillator sweep (saw wave, 800Hz→200Hz) mixed with a noise burst. Sounds like a short electronic chirp/signal.
-- **`playChitter()`** — a ~200ms series of 4-5 rapid micro-pops (noise bursts at 30ms intervals). Sounds like digital data transmission.
-
-All sounds play at very low volume (~0.06-0.1 gain) to stay subtle. AudioContext is created lazily on first user gesture to comply with browser autoplay policies.
-
-### 2. Wire into `src/pages/Index.tsx`
-
-- Import `useGlitchSFX`
-- Add `onMouseEnter={() => playHoverGlitch()}` to each hero `<Link>`
-- Add `onClick={() => playClickGlitch()}` to each hero `<Link>`
-
-### 3. Wire into `src/components/CapabilityLayout.tsx`
-
-- Import `useGlitchSFX`
-- When `isLoading` transitions from `true` to `false` (posts loaded), call `playChitter()` via a `useEffect`
+## Key differences from current
+- **No white noise anywhere** — removes all the "bright crackle" character
+- **Low frequencies** (110-330Hz) instead of high-pass filtered noise (3000Hz+)
+- **Sine/triangle waves** instead of random buffers — gives actual pitch/tone
+- **Longer, gentler envelopes** — no sharp attack, gradual decay
+- **Much lower gain** across the board
 
 ## Files
-- **New**: `src/hooks/useGlitchSFX.ts`
-- **Edit**: `src/pages/Index.tsx` — add hover/click handlers
-- **Edit**: `src/components/CapabilityLayout.tsx` — add loading chitter
-
-No external dependencies, no audio files, no API keys.
+- `src/hooks/useGlitchSFX.ts` — full rewrite of the three sound functions
 
