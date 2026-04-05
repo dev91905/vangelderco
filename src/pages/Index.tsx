@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 const SECTORS = [
   "Energy",
