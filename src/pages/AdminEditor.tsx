@@ -149,7 +149,7 @@ const AdminEditor = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "hsl(0 0% 2.5%)" }}>
+    <div className="h-screen flex flex-col" style={{ background: "hsl(0 0% 2.5%)" }}>
       {/* Floating toolbar */}
       <div className="flex items-center justify-between px-4 md:px-6 py-2.5 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(0 0% 3% / 0.9)", borderBottom: "1px solid hsl(0 0% 8%)" }}>
         <div className="flex items-center gap-3">
