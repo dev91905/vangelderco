@@ -109,6 +109,13 @@ const Admin = () => {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
+            className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg"
+            title="Sign out"
+          >
+            <LogOut className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+          </button>
+          <button
             onClick={() => setSettingsOpen(true)}
             className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg relative"
             title="Site settings"
