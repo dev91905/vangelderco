@@ -6,6 +6,7 @@ import ContentBlockRenderer, { ContentBlock } from "@/components/content/Content
 interface BlogPostViewProps {
   post: {
     title: string;
+    excerpt: string | null;
     capability: string;
     published_at: string | null;
     hero_image_url: string | null;
@@ -114,6 +115,19 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
           >
             {post.title}
           </h1>
+
+          {post.excerpt && (
+            <p
+              className="text-[13px] leading-[1.7] text-center max-w-2xl mb-4"
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                color: "hsl(0 0% 100% / 0.5)",
+                animation: "fade-up 0.5s ease-out 0.35s both",
+              }}
+            >
+              {post.excerpt}
+            </p>
+          )}
 
           {/* Date */}
           {post.published_at && (

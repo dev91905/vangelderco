@@ -36,9 +36,9 @@ const PostDetail = () => {
   const requiresPassword = !!passwordInfo?.requiresPassword;
 
   const articleContent = post.type === "case-study" ? (
-    <CaseStudyView post={{ title: post.title, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks, stats }} />
+    <CaseStudyView post={{ title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks, stats }} />
   ) : (
-    <BlogPostView post={{ title: post.title, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks }} />
+    <BlogPostView post={{ title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks }} />
   );
 
   return (

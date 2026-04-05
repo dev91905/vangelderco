@@ -20,6 +20,7 @@ const AdminEditor = () => {
   const deletePost = useDeletePost();
 
   const [title, setTitle] = useState("");
+  const [excerpt, setExcerpt] = useState("");
   const [slug, setSlug] = useState("");
   const [type, setType] = useState("blog-post");
   const [capability, setCapability] = useState("cultural-strategy");
@@ -50,6 +51,7 @@ const AdminEditor = () => {
       hasLoadedRef.current = true;
       setTitle(post.title);
       setSlug(post.slug || "");
+      setExcerpt(post.excerpt || "");
       setType(post.type);
       setCapability(post.capability);
       setHeroImageUrl(post.hero_image_url);
@@ -64,14 +66,14 @@ const AdminEditor = () => {
 
   const formData = useCallback((): PostFormData => ({
     title, slug, type, capability,
-    excerpt: null, content: null,
+    excerpt: excerpt || null, content: null,
     hero_image_url: heroImageUrl,
     content_blocks: contentBlocks,
     stats: type === "case-study" ? stats : null,
     password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
-  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
+  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
@@ -170,9 +172,9 @@ const AdminEditor = () => {
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <EditorMetaBar
-          title={title} slug={slug} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
+          title={title} slug={slug} excerpt={excerpt} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
           password={password}
-          onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
+          onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onExcerptChange={markDirty(setExcerpt)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
           onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
           onPasswordChange={markDirty(setPassword)}
         />
