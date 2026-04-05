@@ -1,25 +1,36 @@
 
 
-# Fix: SFX Already Works on Hover — No Changes Needed to the Pattern
+# Fix SFX Not Playing on First Hover
 
-## What's actually happening
+## Root cause
 
-The current code is fine. `getCtx()` lazily creates an `AudioContext` and calls `.resume()` if suspended. Chrome's autoplay policy allows `AudioContext.resume()` on `mouseenter` events in most cases — hover events on interactive elements (links, buttons) are treated as user activation in Chromium browsers.
+When `AudioContext` is first created, it's `suspended`. The code calls `.resume()` but **doesn't wait for it to resolve** before scheduling oscillators. The oscillators get scheduled at `currentTime = 0` on a still-suspended context — by the time the context actually resumes, those scheduled sounds are in the past and get silently skipped.
 
-The previous plan proposed adding a global unlock listener and bailing out if context is suspended — that would **break** hover sounds by refusing to play them until a click happens. That's the opposite of what you want.
+The first click works because by then the context is already resumed from the earlier hover attempt, so subsequent calls find it in `running` state.
 
-## The fix
+## Fix — `src/hooks/useGlitchSFX.ts`
 
-**Do nothing.** The current `useGlitchSFX.ts` implementation already handles hover-triggered audio correctly. The `.resume()` call inside `getCtx()` fires on every play attempt, which is the correct pattern.
+Make `getCtx()` return a `Promise<AudioContext>` that resolves after `.resume()` completes. Make all three play functions `async` — they `await getCtx()`, then schedule oscillators using the now-accurate `ctx.currentTime`.
 
-If the previous plan was already implemented (adding bail-out logic), we need to **revert** those changes. But looking at the current file, it's the original working version — no bail-out logic, no global unlock listener. It should work as-is.
+```typescript
+const getCtx = useCallback(async () => {
+  if (!ctxRef.current) {
+    ctxRef.current = new AudioContext();
+  }
+  if (ctxRef.current.state === "suspended") {
+    await ctxRef.current.resume();
+  }
+  return ctxRef.current;
+}, []);
 
-## What I'll verify in implementation
+const playHoverGlitch = useCallback(async () => {
+  const ctx = await getCtx();
+  const now = ctx.currentTime;
+  // ... rest unchanged
+}, [getCtx]);
+```
 
-- Confirm no other files are intercepting or blocking the audio context
-- Test that `playHoverGlitch` fires on `mouseenter` without prior click
-- If there's a real browser-specific edge case, add `.resume()` directly inside each play function (it's already there via `getCtx()`, so this is a no-op confirmation)
+Same pattern for `playClickGlitch` and `playChitter`. The callers (`onMouseEnter`, `onClick`) don't need to change — calling an async function without `await` is fine here since we don't need the return value.
 
-## Files changed
-None — the current code is correct. The proposed "fix" from the previous plan would have broken it.
+One file, minimal change — just add `async/await` to ensure the context is actually running before scheduling audio.
 
