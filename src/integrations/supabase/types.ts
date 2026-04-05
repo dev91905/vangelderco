@@ -24,6 +24,7 @@ export type Database = {
           hero_image_url: string | null
           id: string
           is_published: boolean
+          password: string | null
           published_at: string | null
           slug: string | null
           stats: Json | null
@@ -39,6 +40,7 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_published?: boolean
+          password?: string | null
           published_at?: string | null
           slug?: string | null
           stats?: Json | null
@@ -54,11 +56,30 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_published?: boolean
+          password?: string | null
           published_at?: string | null
           slug?: string | null
           stats?: Json | null
           title?: string
           type?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          id: string
+          key: string
+          value: string | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          value?: string | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          value?: string | null
         }
         Relationships: []
       }
