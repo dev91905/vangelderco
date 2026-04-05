@@ -172,9 +172,9 @@ const AdminEditor = () => {
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         <EditorMetaBar
-          title={title} slug={slug} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
+          title={title} slug={slug} excerpt={excerpt} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
           password={password}
-          onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
+          onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onExcerptChange={markDirty(setExcerpt)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
           onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
           onPasswordChange={markDirty(setPassword)}
         />

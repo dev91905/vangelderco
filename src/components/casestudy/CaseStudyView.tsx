@@ -116,6 +116,19 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
             {post.title}
           </h1>
 
+          {post.excerpt && (
+            <p
+              className="text-[13px] leading-[1.7] text-center max-w-2xl mb-4"
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                color: "hsl(0 0% 100% / 0.5)",
+                animation: "fade-up 0.5s ease-out 0.35s both",
+              }}
+            >
+              {post.excerpt}
+            </p>
+          )}
+
           {post.published_at && (
             <span
               className="text-[10px] tracking-[0.15em]"

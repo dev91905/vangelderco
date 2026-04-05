@@ -143,6 +143,18 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
             <Settings className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
           </button>
         </div>
+        {/* DEK */}
+        <div className="mt-3">
+          <label className="text-[10px] uppercase tracking-[0.12em] mb-1 block" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>DEK</label>
+          <textarea
+            value={props.excerpt}
+            onChange={(e) => props.onExcerptChange(e.target.value)}
+            placeholder="Short description shown on listing cards and below the title"
+            rows={2}
+            className="w-full bg-transparent outline-none text-xs resize-none"
+            style={{ ...mono, color: "hsl(0 0% 100% / 0.5)", lineHeight: "1.6" }}
+          />
+        </div>
       </div>
 
       {/* Settings drawer overlay */}
