@@ -1,49 +1,36 @@
 
 
-# Constellation Field — Dial Back to Truly Subtle
+# Add Excerpt/Dek Field to Admin Editor & Case Study View
 
-## Problems
+## Problem
+The "Reframing Climate" case study has no dek because:
+1. The admin editor hardcodes `excerpt: null` on save (line 67 of `AdminEditor.tsx`)
+2. There's no excerpt input field anywhere in the editor UI
+3. `CaseStudyView` doesn't render an excerpt even if one existed
 
-1. **Too visible**: Node sizes, edge opacities, and triangle fills are all too prominent. This should be barely perceptible — noticed after staring, not on arrival.
-2. **Odd composition on sub-pages**: The layout presets (left-weighted, three clusters, dense core) create awkward, unbalanced arrangements that look broken rather than intentional. The differences are too dramatic.
-3. **Too much motion**: Drift amplitude of 20–50px and orbit radii of 6–20px create jittery, distracting movement instead of glacial drift.
-4. **Too many connections**: `MAX_EDGE_DIST` at 0.25 of the diagonal creates a dense web of lines — reads as a mesh, not a constellation.
+The `PostCard` on the capability listing page already renders `post.excerpt` — but the field is always empty because there's no way to enter it.
 
-## Fix — One File
+## Changes
 
-### `src/components/ConstellationField.tsx`
+### 1. `src/pages/AdminEditor.tsx`
+- Add `excerpt` state (`useState("")`)
+- Load it from `post.excerpt` on edit
+- Include it in `formData()` instead of hardcoded `null`
 
-**Reduce opacity across the board:**
-- Edge lines: `0.03–0.05` → `0.015–0.03`
-- Field nodes: `0.06` → `0.03`
-- Anchor nodes: `0.10` → `0.05`
-- North star pulse: `0.10–0.18` → `0.06–0.10`
-- North star glow: reduce accordingly
-- Triangle fills: `0.008` → `0.004`
+### 2. `src/components/admin/EditorMetaBar.tsx`
+- Add `excerpt` and `onExcerptChange` props
+- Add a textarea field below the title/slug area (always visible, not buried in the settings drawer) — labeled "DEK" in mono caps
+- Compact, 2-3 line textarea with placeholder "Short description shown on listing cards and below the title"
 
-**Shrink node sizes:**
-- North star: `2.5px` → `1.8px`, glow `6px` → `4px`
-- Anchors: `1.6px` → `1.2px`
-- Field: `1.0px` → `0.7px`
+### 3. `src/components/casestudy/CaseStudyView.tsx`
+- Accept `excerpt` in the post prop interface
+- Render it below the title and above the date, styled as a subtitle: `text-[13px]` JetBrains Mono, `color: hsl(0 0% 100% / 0.5)`, centered, `max-w-2xl`
 
-**Reduce motion:**
-- Drift amplitude: `20–50` → `8–18`
-- Orbit radius: field `6–20` → `3–8`, anchors `4–12` → `2–5`
-- Orbit/drift speeds: halve them
+### 4. `src/components/blog/BlogPostView.tsx`
+- Same treatment: accept `excerpt`, render below title if present
 
-**Reduce connection density:**
-- `MAX_EDGE_DIST`: `0.25` → `0.18`
+### 5. `src/pages/PostDetail.tsx`
+- Pass `excerpt: post.excerpt` to both `CaseStudyView` and `BlogPostView`
 
-**Soften sub-page layouts** — make them gentle variations, not dramatic rearrangements:
-- Cultural strategy: mild leftward bias (`pow(nx, 1.3)` instead of `1.8`)
-- Cross-sector: slightly wider spacing, not three isolated clusters — keep the grid but stretch horizontally
-- Deep organizing: gentle center-pull, not dramatic compression
-- All layouts should still read as a full-screen balanced field with a subtle personality shift
-
-**Reduce mouse interaction:**
-- `MOUSE_FORCE`: `3` → `1.5`
-- `MOUSE_RADIUS`: `150` → `120`
-- Edge brightness boost near cursor: halve it
-
-No other files change.
+Five files, small edits each. After this, you can type a dek in the editor and it'll appear on both the listing card and the article page.
 
