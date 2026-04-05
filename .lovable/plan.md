@@ -1,22 +1,44 @@
 
 
-# Fix Deep Organizing — Spread Instead of Squeeze
+# Add Subtle Glitch/Electric Sound Effects
 
-## Problem
-The `deep-organizing` mode compresses nodes toward center (`0.82` factor), which on a 390px mobile viewport clusters everything into a visible blob. The other modes work because they *reshape* the field (shift left, stretch wide) rather than compressing it.
+## Approach
 
-## Fix — `src/components/ConstellationField.tsx`
+Generate tiny audio clips programmatically using the Web Audio API — no files to bundle, no network latency, fully deterministic. This fits the brutalist aesthetic perfectly: raw synthesized clicks and crackles rather than polished samples.
 
-Replace the deep-organizing transform with a **vertical stretch + slight horizontal shift** — a distinct reshaping like the other modes, not a compression:
+## What gets sounds
 
-```typescript
-case "deep-organizing":
-  x = 0.5 + (nx - 0.5) * 1.1;
-  y = Math.pow(ny, 1.4);
-  break;
-```
+1. **Hero link hover** — short electric crackle (~50ms)
+2. **Hero link click** — slightly longer signal chirp (~100ms)
+3. **Loading text appearance** — faint digital chitter when "Loading..." text mounts on capability pages
 
-This pushes nodes slightly wider horizontally (1.1× from center) and compresses them toward the top via the power curve — creating a "pulled upward" feel that's visually distinct from cultural-strategy (right-weighted) and cross-sector (wide-spread). Nodes near the bottom get pulled up, nodes near the top stay put. No clustering, no blob.
+## Implementation
 
-One file, two lines changed.
+### 1. New hook: `src/hooks/useGlitchSFX.ts`
+
+A custom hook that creates an `AudioContext` on first interaction and exposes three functions:
+
+- **`playHoverGlitch()`** — generates a ~50ms burst of filtered white noise with a sharp high-pass filter and rapid volume decay. Sounds like a tiny static pop.
+- **`playClickGlitch()`** — a ~100ms oscillator sweep (saw wave, 800Hz→200Hz) mixed with a noise burst. Sounds like a short electronic chirp/signal.
+- **`playChitter()`** — a ~200ms series of 4-5 rapid micro-pops (noise bursts at 30ms intervals). Sounds like digital data transmission.
+
+All sounds play at very low volume (~0.06-0.1 gain) to stay subtle. AudioContext is created lazily on first user gesture to comply with browser autoplay policies.
+
+### 2. Wire into `src/pages/Index.tsx`
+
+- Import `useGlitchSFX`
+- Add `onMouseEnter={() => playHoverGlitch()}` to each hero `<Link>`
+- Add `onClick={() => playClickGlitch()}` to each hero `<Link>`
+
+### 3. Wire into `src/components/CapabilityLayout.tsx`
+
+- Import `useGlitchSFX`
+- When `isLoading` transitions from `true` to `false` (posts loaded), call `playChitter()` via a `useEffect`
+
+## Files
+- **New**: `src/hooks/useGlitchSFX.ts`
+- **Edit**: `src/pages/Index.tsx` — add hover/click handlers
+- **Edit**: `src/components/CapabilityLayout.tsx` — add loading chitter
+
+No external dependencies, no audio files, no API keys.
 
