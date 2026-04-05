@@ -1,20 +1,40 @@
 
 
-# Fix Hover SFX After Page Refresh
+# Redesign Glitch SFX — From Noise Bursts to Tonal UI Sounds
 
-## Problem
+## What's wrong
 
-`playHoverGlitch` calls `getReadyCtx()` which checks `unlocked === true`. But `unlocked` only becomes `true` after `ensureAudioReady()` is called — which only happens on **click**. So after a fresh page load, every hover silently no-ops because audio was never initialized.
+The current sounds are all **filtered white noise** — random static bursts. That's why they sound like rubber bands snapping. They have no pitch, no tone, no musicality. Real game UI sounds (Control, Halo) use **low-frequency sine/triangle tones** with gentle amplitude envelopes — soft, warm, resonant pulses that feel like the interface is alive.
 
-## Fix — `src/hooks/useGlitchSFX.ts`
+## New sound design — `src/hooks/useGlitchSFX.ts`
 
-Change `playHoverGlitch` (and the other play functions) to self-initialize the AudioContext synchronously when called. On desktop, `mouseenter` is a valid user gesture that can create/resume an AudioContext.
+### Hover: Soft tonal ping
+- **Single sine wave** at ~220Hz (low A), very short (~80ms)
+- Gentle fade-in over 10ms, slow exponential decay
+- Gain: `0.03` — barely there
+- Optional: layer a second sine at ~330Hz (fifth above) at half volume for harmonic richness
+- No noise, no filters. Pure tone.
 
-Replace the `getReadyCtx` guard pattern: instead of bailing when not unlocked, have each play function call a synchronous init that creates the context, resumes it (fire-and-forget is fine on desktop), and plays the silent unlock buffer on first call. This is the same logic as `ensureAudioReady` but synchronous — which works on desktop browsers (only iOS requires the async await).
+### Click: Deeper resonant pulse
+- **Triangle wave** at ~110Hz (low, feels weighty) for ~150ms
+- Layer a sine at ~165Hz at lower volume
+- Slight pitch bend downward (110→90Hz) over the duration — gives it that "settling" feel like Control's menu sounds
+- Gain: `0.04`
+- No noise component at all
 
-Specifically:
-- Add a `syncInit()` helper that creates the context, calls `.resume()` (no await), primes with silent buffer, sets `unlocked = true`
-- `playHoverGlitch`, `playClickGlitch`, `playChitter` call `syncInit()` instead of `getReadyCtx()`
-- `ensureAudioReady` stays async for the iOS click path
-- One file changed, ~10 lines
+### Chitter (loading): Sequence of soft tonal pips
+- 4 quick sine pips at ~300Hz, 40ms each, 50ms apart
+- Each pip slightly different pitch (300, 320, 280, 340) — feels like data processing
+- Very low gain: `0.02`
+- Smooth envelope, no hard edges
+
+## Key differences from current
+- **No white noise anywhere** — removes all the "bright crackle" character
+- **Low frequencies** (110-330Hz) instead of high-pass filtered noise (3000Hz+)
+- **Sine/triangle waves** instead of random buffers — gives actual pitch/tone
+- **Longer, gentler envelopes** — no sharp attack, gradual decay
+- **Much lower gain** across the board
+
+## Files
+- `src/hooks/useGlitchSFX.ts` — full rewrite of the three sound functions
 

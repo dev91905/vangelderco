@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 
@@ -18,16 +18,7 @@ const HERO_LINKS = [
 ];
 
 const Index = () => {
-  const navigate = useNavigate();
-  const { playHoverGlitch, playClickGlitch, ensureAudioReady } = useGlitchSFX();
-
-  const handleHeroActivate = async (e: React.MouseEvent | React.PointerEvent, to: string) => {
-    e.preventDefault();
-    await ensureAudioReady();
-    playClickGlitch();
-    setTimeout(() => navigate(to), 80);
-  };
-
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   return (
     <AtmosphericLayout>
       <div className="flex items-center justify-center h-full w-full">
@@ -56,17 +47,12 @@ const Index = () => {
           {/* Hero lines — nav links */}
           <h1 className="flex flex-col gap-2 md:gap-3">
             {HERO_LINKS.map((link, i) => (
-              <a
+              <Link
                 key={i}
-                href={link.to}
+                to={link.to}
                 className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6"
                 onMouseEnter={() => playHoverGlitch()}
-                onClick={(e) => handleHeroActivate(e, link.to)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleHeroActivate(e as unknown as React.MouseEvent, link.to);
-                  }
-                }}
+                onClick={() => playClickGlitch()}
                 style={{
                   animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.4 + i * 0.35}s both`,
                 }}
@@ -101,7 +87,7 @@ const Index = () => {
                 >
                   {link.label}
                 </span>
-              </a>
+              </Link>
             ))}
           </h1>
 

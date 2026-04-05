@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
@@ -19,15 +19,15 @@ const CapabilityLayout = ({
   description,
 }: CapabilityLayoutProps) => {
   const { data: posts, isLoading } = useCapabilityPosts(capability);
-  const { playChitter, canPlayAudio } = useGlitchSFX();
+  const { playChitter } = useGlitchSFX();
   const wasLoading = useRef(true);
 
   useEffect(() => {
-    if (wasLoading.current && !isLoading && canPlayAudio()) {
+    if (wasLoading.current && !isLoading) {
       playChitter();
     }
     wasLoading.current = isLoading;
-  }, [isLoading, playChitter, canPlayAudio]);
+  }, [isLoading, playChitter]);
 
   return (
     <AtmosphericLayout>
