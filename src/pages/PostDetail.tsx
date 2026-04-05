@@ -33,7 +33,7 @@ const PostDetail = () => {
   const contentBlocks = post.content_blocks as any[] | null;
   const stats = post.stats as { label: string; description: string; visible?: boolean }[] | null;
 
-  const requiresPassword = !!(passwordInfo?.hasPostPassword || passwordInfo?.hasGlobalPassword);
+  const requiresPassword = !!passwordInfo?.requiresPassword;
 
   const articleContent = post.type === "case-study" ? (
     <CaseStudyView post={{ title: post.title, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks, stats }} />
