@@ -70,7 +70,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
       <div
         className="relative z-20 h-dvh overflow-y-auto"
-        style={{ animation: "crt-boot 0.5s ease-out both" }}
+        style={{ animation: "fade-up 0.5s ease-out both" }}
       >
         {/* Hero */}
         <div

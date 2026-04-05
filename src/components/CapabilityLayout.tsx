@@ -82,7 +82,7 @@ const CapabilityLayout = ({
 
           {/* Description */}
           <p
-            className="text-[12px] md:text-[13px] leading-[1.8] text-center max-w-xl"
+            className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.45)",

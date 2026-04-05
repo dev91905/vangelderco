@@ -68,7 +68,7 @@ body::after {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.015;
   background: repeating-linear-gradient(
     0deg,
     transparent,

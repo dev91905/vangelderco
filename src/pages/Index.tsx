@@ -114,7 +114,7 @@ const Index = () => {
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.25)",
-              animation: "fade-up 0.6s ease-out 3.0s both",
+              animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
             By Referral Only

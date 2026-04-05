@@ -170,7 +170,7 @@ export const PasswordGateWrapper = ({
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 px-5 sm:px-6 py-8 max-w-sm sm:max-w-md w-full max-h-screen">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>{title}</h1>
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
+          <div className="w-10 h-10 flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(0 80% 48% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />

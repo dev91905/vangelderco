@@ -50,7 +50,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return (
               <p
                 key={i}
-                className="text-[13px] md:text-[14px] leading-[1.9]"
+                className="text-[14px] md:text-[15px] leading-[2]"
                 style={{
                   fontFamily: "'Space Grotesk', sans-serif",
                   color: "hsl(0 0% 100% / 0.6)",
