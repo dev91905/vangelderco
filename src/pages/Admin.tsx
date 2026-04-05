@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
+import { supabase } from "@/integrations/supabase/client";
 
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
