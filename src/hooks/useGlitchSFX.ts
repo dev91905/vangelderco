@@ -6,26 +6,20 @@ let sharedCtx: AudioContext | null = null;
 let unlocked = false;
 
 const getAudioContextCtor = () => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
+  if (typeof window === "undefined") return null;
   return window.AudioContext ?? (window as AudioContextWindow).webkitAudioContext ?? null;
 };
 
-const getCtx = () => {
-  const AudioContextCtor = getAudioContextCtor();
-
-  if (!AudioContextCtor) {
-    return null;
-  }
+const ensureAudioReady = async (): Promise<AudioContext | null> => {
+  const Ctor = getAudioContextCtor();
+  if (!Ctor) return null;
 
   if (!sharedCtx) {
-    sharedCtx = new AudioContextCtor();
+    sharedCtx = new Ctor();
   }
 
   if (sharedCtx.state === "suspended") {
-    void sharedCtx.resume();
+    await sharedCtx.resume();
   }
 
   if (!unlocked) {
@@ -40,12 +34,16 @@ const getCtx = () => {
   return sharedCtx;
 };
 
-const playHoverGlitch = () => {
-  const ctx = getCtx();
+const canPlayAudio = () => unlocked && sharedCtx && sharedCtx.state === "running";
 
-  if (!ctx) {
-    return;
-  }
+const getReadyCtx = (): AudioContext | null => {
+  if (!canPlayAudio()) return null;
+  return sharedCtx;
+};
+
+const playHoverGlitch = () => {
+  const ctx = getReadyCtx();
+  if (!ctx) return;
 
   const duration = 0.08;
   const now = ctx.currentTime;
@@ -78,11 +76,8 @@ const playHoverGlitch = () => {
 };
 
 const playClickGlitch = () => {
-  const ctx = getCtx();
-
-  if (!ctx) {
-    return;
-  }
+  const ctx = getReadyCtx();
+  if (!ctx) return;
 
   const duration = 0.15;
   const now = ctx.currentTime;
@@ -117,11 +112,8 @@ const playClickGlitch = () => {
 };
 
 const playChitter = () => {
-  const ctx = getCtx();
-
-  if (!ctx) {
-    return;
-  }
+  const ctx = getReadyCtx();
+  if (!ctx) return;
 
   const now = ctx.currentTime;
   const pitches = [300, 320, 280, 340];
@@ -146,6 +138,8 @@ const playChitter = () => {
 };
 
 const useGlitchSFX = () => ({
+  ensureAudioReady,
+  canPlayAudio,
   playHoverGlitch,
   playClickGlitch,
   playChitter,
