@@ -29,16 +29,12 @@ interface Node {
 }
 
 // Hand-composed normalized positions (0–1 range)
-// Designed for asymmetric balance, golden-ratio spacing
 const BASE_NODES: { nx: number; ny: number; tier: Node["tier"] }[] = [
-  // North star — golden ratio position
   { nx: 0.62, ny: 0.38, tier: "northstar" },
-  // Anchors — loose asymmetric diamond
   { nx: 0.18, ny: 0.22, tier: "anchor" },
   { nx: 0.82, ny: 0.18, tier: "anchor" },
   { nx: 0.28, ny: 0.72, tier: "anchor" },
   { nx: 0.78, ny: 0.82, tier: "anchor" },
-  // Field nodes — scattered with intent
   { nx: 0.10, ny: 0.48, tier: "field" },
   { nx: 0.42, ny: 0.12, tier: "field" },
   { nx: 0.88, ny: 0.45, tier: "field" },
@@ -52,7 +48,6 @@ const BASE_NODES: { nx: number; ny: number; tier: Node["tier"] }[] = [
   { nx: 0.68, ny: 0.15, tier: "field" },
 ];
 
-// Extra nodes for tall mobile viewports
 const MOBILE_EXTRA: { nx: number; ny: number; tier: Node["tier"] }[] = [
   { nx: 0.25, ny: 0.42, tier: "field" },
   { nx: 0.75, ny: 0.35, tier: "field" },
@@ -65,6 +60,10 @@ const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
 const LERP_SPEED = 0.025;
 
+// Oversize factor: canvas extends 20% beyond viewport in each direction
+const BLEED = 0.2;
+const SCALE = 1 + BLEED * 2; // 1.4
+
 function getNodeDefs(w: number, h: number) {
   const isTallMobile = w < 640 && h / w > 1.5;
   return isTallMobile ? [...BASE_NODES, ...MOBILE_EXTRA] : BASE_NODES;
@@ -76,6 +75,9 @@ function getLayoutPositions(
   h: number,
 ): { x: number; y: number; tier: Node["tier"] }[] {
   const defs = getNodeDefs(w, h);
+  // Map to oversized canvas space
+  const cw = w * SCALE;
+  const ch = h * SCALE;
 
   return defs.map(({ nx, ny, tier }) => {
     let x = nx;
@@ -96,7 +98,7 @@ function getLayoutPositions(
         break;
     }
 
-    return { x: x * w, y: y * h, tier };
+    return { x: x * cw, y: y * ch, tier };
   });
 }
 
@@ -108,7 +110,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodesRef = useRef<Node[]>([]);
   const rafRef = useRef<number>(0);
-  const sizeRef = useRef({ w: 0, h: 0 });
+  const sizeRef = useRef({ w: 0, h: 0, cw: 0, ch: 0 });
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const modeRef = useRef<ConstellationMode>(mode);
 
@@ -120,8 +122,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
     if (w === 0) return;
 
     const positions = getLayoutPositions(mode, w, h);
-    // Node count may differ if viewport changed between mobile/desktop
-    // but mode changes don't change viewport, so lengths match
     for (let i = 0; i < Math.min(nodes.length, positions.length); i++) {
       nodes[i].targetX = positions[i].x;
       nodes[i].targetY = positions[i].y;
@@ -137,13 +137,15 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
     const initNodes = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
+      const cw = w * SCALE;
+      const ch = h * SCALE;
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
+      canvas.style.width = `${cw}px`;
+      canvas.style.height = `${ch}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      sizeRef.current = { w, h };
+      sizeRef.current = { w, h, cw, ch };
 
       const positions = getLayoutPositions(modeRef.current, w, h);
       const rng = seededRandom(99);
@@ -173,18 +175,24 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
     initNodes();
 
+    // Mouse position needs to be offset into canvas space (canvas is shifted by -BLEED)
     const onPointerMove = (e: PointerEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+      const w = sizeRef.current.w;
+      const h = sizeRef.current.h;
+      mouseRef.current = {
+        x: e.clientX + w * BLEED,
+        y: e.clientY + h * BLEED,
+      };
     };
     window.addEventListener("pointermove", onPointerMove);
 
     const draw = (t: number) => {
-      const { w, h } = sizeRef.current;
-      const diag = Math.sqrt(w * w + h * h);
+      const { cw, ch } = sizeRef.current;
+      const diag = Math.sqrt(cw * cw + ch * ch);
       const maxDist = diag * MAX_EDGE_DIST;
       const mouse = mouseRef.current;
 
-      ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, cw, ch);
       const nodes = nodesRef.current;
 
       for (const n of nodes) {
@@ -233,7 +241,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ? 0.012 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.012 + 0.012 * (1 - dist / maxDist) + boost;
+            const alpha = 0.018 + 0.015 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -254,7 +262,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.005)`;
               ctx.fill();
             }
           }
@@ -263,7 +271,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.045 + 0.03 * Math.sin(t * 0.0008);
+          const pulse = 0.06 + 0.03 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
@@ -275,12 +283,12 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.04)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.055)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.025)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.035)`;
           ctx.fill();
         }
       }
@@ -305,7 +313,11 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[1]"
+      className="pointer-events-none fixed z-[1]"
+      style={{
+        top: `-${BLEED * 100}%`,
+        left: `-${BLEED * 100}%`,
+      }}
       aria-hidden="true"
     />
   );

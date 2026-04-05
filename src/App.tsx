@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ConstellationField from "./components/ConstellationField";
+import type { ConstellationMode } from "./components/ConstellationField";
 import Index from "./pages/Index.tsx";
 import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
@@ -16,20 +18,33 @@ import RequireAuth from "./components/admin/RequireAuth.tsx";
 
 const queryClient = new QueryClient();
 
+const ROUTE_MODE_MAP: Record<string, ConstellationMode> = {
+  "/": "home",
+  "/cultural-strategy": "cultural-strategy",
+  "/cross-sector": "cross-sector",
+  "/deep-organizing": "deep-organizing",
+};
+
 function AppRoutes() {
+  const location = useLocation();
+  const mode = ROUTE_MODE_MAP[location.pathname] || "home";
+
   return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/cultural-strategy" element={<CulturalStrategy />} />
-      <Route path="/cross-sector" element={<CrossSector />} />
-      <Route path="/deep-organizing" element={<DeepOrganizing />} />
-      <Route path="/post/:slug" element={<PostDetail />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
-      <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
-      <Route path="/admin/edit/:id" element={<RequireAuth><AdminEditor /></RequireAuth>} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <ConstellationField mode={mode} />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/cultural-strategy" element={<CulturalStrategy />} />
+        <Route path="/cross-sector" element={<CrossSector />} />
+        <Route path="/deep-organizing" element={<DeepOrganizing />} />
+        <Route path="/post/:slug" element={<PostDetail />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
+        <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
+        <Route path="/admin/edit/:id" element={<RequireAuth><AdminEditor /></RequireAuth>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
