@@ -5,7 +5,7 @@ const CrossSector = () => (
     capability="cross-sector"
     label="VGC Domain // 002"
     title="Cross-Sector Intelligence"
-    description="Developing strategies and coordinating across energy, labor, philanthropy, culture, policy, and national security to solve issues in the public interest. We map the interstitial spaces between sectors where alignment creates outsized impact, and build the connective tissue to sustain it."
+    description="Developing strategies and coordinating across energy, labor, philanthropy, culture, policy, and national security to solve issues in the public interest. We map the liminal spaces between sectors where alignment creates outsized impact, and build the connective tissue to sustain it."
   />
 );
 
