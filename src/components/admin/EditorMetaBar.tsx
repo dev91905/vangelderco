@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
+import { Settings, X } from "lucide-react";
 import ImageUploader from "./ImageUploader";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface EditorMetaBarProps {
   title: string;
@@ -27,8 +29,13 @@ const CAPABILITIES = [
 const slugify = (text: string) =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
+const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+const grotesk: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
+
 const EditorMetaBar = (props: EditorMetaBarProps) => {
   const [slugManual, setSlugManual] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!slugManual && props.title) {
@@ -37,90 +44,137 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
   }, [props.title, slugManual]);
 
   return (
-    <div className="space-y-4 p-4 md:p-6" style={{ background: "hsl(0 0% 4%)", borderBottom: "1px solid hsl(0 0% 12%)" }}>
-      {/* Type + Capability row */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1" style={{ border: "1px solid hsl(0 0% 15%)" }}>
-          {["blog-post", "case-study"].map((t) => (
-            <button
-              key={t}
-              onClick={() => props.onTypeChange(t)}
-              className="px-3 py-1.5 text-[10px] tracking-[0.12em] uppercase transition-colors"
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                background: props.type === t ? "hsl(0 80% 48% / 0.15)" : "transparent",
-                color: props.type === t ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.4)",
-                borderRight: t === "blog-post" ? "1px solid hsl(0 0% 15%)" : undefined,
-              }}
-            >
-              {t === "blog-post" ? "Blog Post" : "Case Study"}
-            </button>
-          ))}
-        </div>
-
-        <select
-          value={props.capability}
-          onChange={(e) => props.onCapabilityChange(e.target.value)}
-          className="text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 bg-transparent outline-none cursor-pointer"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.5)", border: "1px solid hsl(0 0% 15%)" }}
-        >
-          {CAPABILITIES.map((c) => (
-            <option key={c.value} value={c.value} style={{ background: "hsl(0 0% 6%)" }}>{c.label}</option>
-          ))}
-        </select>
-
-        <div className="ml-auto flex items-center gap-3">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <span className="text-[10px] tracking-[0.1em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.4)" }}>
-              {props.isPublished ? "Published" : "Draft"}
-            </span>
-            <button
-              onClick={() => {
-                const next = !props.isPublished;
-                props.onPublishedChange(next);
-                if (next && !props.publishedAt) props.onPublishedAtChange(new Date().toISOString());
-              }}
-              className="w-9 h-5 rounded-full relative transition-colors"
-              style={{ background: props.isPublished ? "hsl(0 80% 48%)" : "hsl(0 0% 20%)" }}
-            >
-              <div
-                className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
-                style={{
-                  background: "hsl(0 0% 100%)",
-                  left: "2px",
-                  transform: props.isPublished ? "translateX(16px)" : "translateX(0)",
-                }}
-              />
-            </button>
-          </label>
-        </div>
-      </div>
-
-      {/* Title */}
-      <input
-        value={props.title}
-        onChange={(e) => props.onTitleChange(e.target.value)}
-        placeholder="Post title..."
-        className="w-full bg-transparent outline-none text-2xl md:text-3xl font-semibold"
-        style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.95)" }}
-      />
-
-      {/* Slug */}
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] tracking-[0.1em]" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.25)" }}>
-          /post/
-        </span>
+    <>
+      {/* Title — always visible at top of canvas */}
+      <div className="px-4 md:px-8 pt-6 pb-2">
         <input
-          value={props.slug}
-          onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
-          className="flex-1 bg-transparent outline-none text-xs"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.5)" }}
+          value={props.title}
+          onChange={(e) => props.onTitleChange(e.target.value)}
+          placeholder="Untitled"
+          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-bold tracking-tight"
+          style={{ ...grotesk, color: "hsl(0 0% 100% / 0.95)" }}
         />
+        <div className="flex items-center gap-2 mt-2">
+          <span className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>/post/</span>
+          <input
+            value={props.slug}
+            onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
+            className="bg-transparent outline-none text-xs flex-1"
+            style={{ ...mono, color: "hsl(0 0% 100% / 0.4)" }}
+          />
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="p-2 rounded-lg transition-colors hover:bg-[hsl(0_0%_10%)]"
+            title="Post settings"
+          >
+            <Settings className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+          </button>
+        </div>
       </div>
 
-      {/* Hero image */}
-      <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="Hero Image" />
-    </div>
+      {/* Settings drawer overlay */}
+      {drawerOpen && (
+        <>
+          <div className="fixed inset-0 z-50" style={{ background: "hsl(0 0% 0% / 0.5)" }} onClick={() => setDrawerOpen(false)} />
+          <div
+            className={`fixed z-50 overflow-y-auto ${isMobile ? "inset-x-0 bottom-0 rounded-t-2xl max-h-[85vh]" : "top-0 right-0 h-full w-96"}`}
+            style={{ background: "hsl(0 0% 5%)", borderLeft: isMobile ? undefined : "1px solid hsl(0 0% 12%)", borderTop: isMobile ? "1px solid hsl(0 0% 12%)" : undefined }}
+          >
+            {/* Drawer header */}
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
+              <span className="text-[10px] uppercase tracking-[0.15em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+                Post Settings
+              </span>
+              <button onClick={() => setDrawerOpen(false)} className="p-1.5 rounded hover:bg-[hsl(0_0%_10%)] transition-colors">
+                <X className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-6">
+              {/* Type */}
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Type</label>
+                <div className="flex gap-1" style={{ border: "1px solid hsl(0 0% 15%)" }}>
+                  {["blog-post", "case-study"].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => props.onTypeChange(t)}
+                      className="flex-1 px-3 py-2.5 text-[11px] tracking-[0.1em] uppercase transition-colors"
+                      style={{
+                        ...mono,
+                        background: props.type === t ? "hsl(0 80% 48% / 0.12)" : "transparent",
+                        color: props.type === t ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.35)",
+                      }}
+                    >
+                      {t === "blog-post" ? "Blog Post" : "Case Study"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Capability */}
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Capability</label>
+                <div className="space-y-1">
+                  {CAPABILITIES.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => props.onCapabilityChange(c.value)}
+                      className="w-full text-left px-3 py-2 text-xs transition-colors"
+                      style={{
+                        ...mono,
+                        background: props.capability === c.value ? "hsl(0 80% 48% / 0.08)" : "transparent",
+                        color: props.capability === c.value ? "hsl(0 0% 100% / 0.8)" : "hsl(0 0% 100% / 0.35)",
+                        borderLeft: props.capability === c.value ? "2px solid hsl(0 80% 48% / 0.5)" : "2px solid transparent",
+                      }}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Publish toggle */}
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Status</label>
+                <button
+                  onClick={() => {
+                    const next = !props.isPublished;
+                    props.onPublishedChange(next);
+                    if (next && !props.publishedAt) props.onPublishedAtChange(new Date().toISOString());
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 transition-colors"
+                  style={{ border: "1px solid hsl(0 0% 15%)" }}
+                >
+                  <span className="text-xs" style={{ ...mono, color: props.isPublished ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.4)" }}>
+                    {props.isPublished ? "Published" : "Draft"}
+                  </span>
+                  <div
+                    className="w-9 h-5 rounded-full relative transition-colors"
+                    style={{ background: props.isPublished ? "hsl(0 80% 48%)" : "hsl(0 0% 20%)" }}
+                  >
+                    <div
+                      className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
+                      style={{
+                        background: "hsl(0 0% 100%)",
+                        left: "2px",
+                        transform: props.isPublished ? "translateX(16px)" : "translateX(0)",
+                      }}
+                    />
+                  </div>
+                </button>
+              </div>
+
+              {/* Hero image */}
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Hero Image</label>
+                <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
