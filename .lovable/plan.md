@@ -1,36 +1,25 @@
 
 
-# Hover Effect Redesign — CONTROL / HALO Style
+# Generate Filler Content for Capability Pages
 
-## What's Wrong Now
-- Glow is too bright/wide (you want it reverted)
-- Scan line sweeps to `left: 100%` of the full-width container, not the text — so it overshoots on shorter labels and stops exactly at the edge on longer ones
-- The overall effect feels more "cyberpunk terminal" than CONTROL/HALO
+Insert sample case studies and blog posts into the `capability_posts` table for all three capabilities. 6 posts total — 2 per capability (one case study, one blog post), all published.
 
-## CONTROL's Menu Language
-CONTROL's UI is bureaucratic and paranormal. Menu items don't have flashy sweeps. They have:
-- A quiet **red tint wash** that fills behind the selected item — like a classified document being highlighted
-- A solid **red left-edge bar** (2-3px) that appears instantly
-- Text brightens slightly
-- Everything else stays still. The power is in the restraint.
+## Content
 
-## New Hover Effect
-On hover, each link gets:
-1. **Red left bar**: 2px solid red accent appears at the left edge of the text (not the container), `opacity 0→1`, no animation delay — instant like a selection indicator
-2. **Background wash**: A very faint horizontal band of red (`hsl(0 80% 48% / 0.04)`) fills behind the text area — like a row being selected in a classified system
-3. **Text brightens**: White goes from `0.9` to `1.0` opacity
-4. **No caret, no scan line, no underline, no glow orb** — remove all of those
+**Cultural Strategy:**
+1. Case Study — "Reframing Climate Through Cultural Infrastructure" — How a coalition of museums, theaters, and faith institutions shifted public narrative on energy transition in the Rust Belt.
+2. Blog Post — "The Institutional Blind Spot in Cultural Engagement" — Why most policy organizations fail to treat culture as a strategic lever, and what changes when they do.
 
-This is simpler, more CONTROL, and eliminates the scan-line-width inconsistency entirely.
+**Cross-Sector Intelligence:**
+1. Case Study — "Mapping the Seams: Energy, Labor, and National Security Alignment" — A coordinated strategy across three sectors that unlocked $200M in aligned capital deployment.
+2. Blog Post — "Why Cross-Sector Work Fails (And What the Exceptions Have in Common)" — The structural reasons most coalition efforts collapse, and the connective tissue that sustains the ones that don't.
 
-## Files to Modify
+**Deep Organizing:**
+1. Case Study — "Building Power in the Permian Basin" — A three-year organizing campaign that constructed durable field infrastructure across five counties.
+2. Blog Post — "Beyond Mobilization: The Case for Organizing Infrastructure" — Why turnout-based strategies plateau, and how leadership pipelines and accountability systems compound over time.
 
-### `src/pages/Index.tsx`
-- Remove: glow span, scan-line span, caret span, underline span
-- Simplify link internals to just the text with a left-border that appears on hover
-- Add a background wash element (single span, `absolute inset-0`)
-
-### `src/index.css`
-- Rewrite `.hero-nav-link:hover` rules: left-border opacity, background wash, text color
-- Remove all scan/glow/caret/underline hover rules
+## Technical
+- Single `psql` INSERT of 6 rows into `capability_posts`
+- All with `is_published = true` and staggered `published_at` dates
+- Excerpts ~1-2 sentences, content ~2-3 paragraphs each
 
