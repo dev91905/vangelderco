@@ -1,40 +1,29 @@
 
 
-# Redesign Glitch SFX — From Noise Bursts to Tonal UI Sounds
+# Sub-Page Copy — Mountain-Top View, Visceral Power
 
-## What's wrong
+## Problem with last draft
+Too narrow and tactical — specific scenarios (films, pews, committees, grantees in a room) made VGC sound like a production company or a meeting facilitator. The audience operates at 80,000 feet. They need to feel the full chessboard, not one piece moving.
 
-The current sounds are all **filtered white noise** — random static bursts. That's why they sound like rubber bands snapping. They have no pitch, no tone, no musicality. Real game UI sounds (Control, Halo) use **low-frequency sine/triangle tones** with gentle amplitude envelopes — soft, warm, resonant pulses that feel like the interface is alive.
+## Revised copy — ~185 chars each, stratospheric but visceral
 
-## New sound design — `src/hooks/useGlitchSFX.ts`
+### Cultural Strategy (Domain 001) — 185 chars
+> "Culture sets the terms before policy ever reaches the table. We shape what populations believe is possible — then architect the cultural conditions that make political victory inevitable."
 
-### Hover: Soft tonal ping
-- **Single sine wave** at ~220Hz (low A), very short (~80ms)
-- Gentle fade-in over 10ms, slow exponential decay
-- Gain: `0.03` — barely there
-- Optional: layer a second sine at ~330Hz (fifth above) at half volume for harmonic richness
-- No noise, no filters. Pure tone.
+### Cross-Sector Intelligence (Domain 002) — 186 chars
+> "Power fragments when sectors operate blind to each other. We fuse energy, labor, policy, philanthropy, and culture into a single strategic picture — so every move on the board reinforces the others."
 
-### Click: Deeper resonant pulse
-- **Triangle wave** at ~110Hz (low, feels weighty) for ~150ms
-- Layer a sine at ~165Hz at lower volume
-- Slight pitch bend downward (110→90Hz) over the duration — gives it that "settling" feel like Control's menu sounds
-- Gain: `0.04`
-- No noise component at all
+### Deep Organizing (Domain 003) — 184 chars
+> "Digital mobilization is noise. We build real-world ground power — the kind that holds territory, survives leadership transitions, and puts thousands in motion on seventy-two hours' notice."
 
-### Chitter (loading): Sequence of soft tonal pips
-- 4 quick sine pips at ~300Hz, 40ms each, 50ms apart
-- Each pip slightly different pitch (300, 320, 280, 340) — feels like data processing
-- Very low gain: `0.02`
-- Smooth envelope, no hard edges
+## What's different
+- **80,000-foot framing**: "what populations believe is possible," "every move on the board," "holds territory" — chessboard language, not trench-level
+- **Visceral without being narrow**: "political victory inevitable," "puts thousands in motion on seventy-two hours' notice" — you can feel the scale without picturing a specific film or committee
+- **No jargon, no scenarios**: plain power language at systems level
+- **±2 chars across all three**
 
-## Key differences from current
-- **No white noise anywhere** — removes all the "bright crackle" character
-- **Low frequencies** (110-330Hz) instead of high-pass filtered noise (3000Hz+)
-- **Sine/triangle waves** instead of random buffers — gives actual pitch/tone
-- **Longer, gentler envelopes** — no sharp attack, gradual decay
-- **Much lower gain** across the board
-
-## Files
-- `src/hooks/useGlitchSFX.ts` — full rewrite of the three sound functions
+## Files changed
+- `src/pages/CulturalStrategy.tsx` — description prop
+- `src/pages/CrossSector.tsx` — description prop
+- `src/pages/DeepOrganizing.tsx` — description prop
 
