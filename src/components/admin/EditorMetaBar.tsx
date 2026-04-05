@@ -71,7 +71,6 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
   );
 };
 
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 interface EditorMetaBarProps {
   title: string;
