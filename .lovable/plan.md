@@ -1,43 +1,39 @@
 
 
-# Evolve Constellation Field — Organic, Dynamic, Elegant
+# Geometric Constellation Background — Animated Triangular Network
 
-## Problem with Current Version
-Right now nodes are scattered purely randomly across the viewport, connected by simple distance-threshold lines. The result is a uniform mesh — functional but geometrically static and predictable. It reads more like a generic particle network than an intentional constellation.
+## Concept
 
-## What Changes
+A full-viewport SVG canvas of slowly drifting triangular constellations — faint interconnected nodes forming triangular geometries that pulse and shift. Think the Oldest House from CONTROL: barely-there geometric structures hovering in darkness, hinting at something vast and unknowable. The three-sided forms reference the three domains. Nodes connected by hair-thin lines evoke network constellations and the north star motif.
 
-### 1. Organic Node Placement — Clustered, Not Uniform
-Instead of `rng() * w, rng() * h`, place nodes in **3 loose clusters** (one per domain) using Gaussian-distributed offsets around 3 anchor points. This creates organic groupings with natural density variation — dense cores with trailing outlier nodes, like actual star clusters. The three clusters echo the three domains without being literal.
+## Design
 
-### 2. Curved Connections — Quadratic Bezier, Not Straight Lines
-Replace `lineTo` with `quadraticCurveTo`. Each edge gets a slight arc (control point offset perpendicular to the midpoint). This single change transforms the entire feel from rigid wireframe to something organic and flowing — like tendons or mycorrhizal networks.
+- **Geometry**: ~20–30 nodes scattered across the viewport, connected into triangular clusters by thin lines. Not a uniform grid — organic, slightly asymmetric placement that feels like a star chart.
+- **Animation**: Nodes drift slowly (CSS or requestAnimationFrame), each on its own subtle orbit. Lines stretch and contract as nodes move. One node slightly brighter than the rest — the north star.
+- **Opacity**: Extremely faint. Node dots at `0.06–0.10` opacity, connecting lines at `0.03–0.05`. The "north star" node pulses gently between `0.10–0.18`. Should feel subliminal — noticed after 10 seconds of looking, not on first glance.
+- **Color**: White lines/dots with a very faint red tint on the north star pulse (`hsl(0 80% 48% / 0.08)`).
+- **No interaction**: Pure `pointer-events-none` decoration.
 
-### 3. Varied Orbit Motion — Lissajous Figures, Not Circles
-Current orbit: `cos(angle)` / `sin(angle * 0.7)` — basically an ellipse. Replace with proper Lissajous curves using per-node frequency ratios (e.g., `cos(a * 1.0)` / `sin(a * 1.3)`). Nodes trace figure-eights and complex loops instead of predictable ovals. More dynamic, more alive.
+## Implementation
 
-### 4. Breathing Edge Opacity — Time-Modulated Alpha
-Add a slow `sin(t)` modulation to each edge's alpha so connections gently breathe in and out of visibility. Different edges phase differently. The network feels like it's alive — some connections strengthening while others fade.
+### New component: `src/components/ConstellationField.tsx`
 
-### 5. Delaunay Triangulation Instead of Distance Threshold
-Replace the brute-force distance check with proper Delaunay triangulation. This produces elegant, non-overlapping triangular cells that shift as nodes drift — actual geometric triangles rather than a tangled web. Draw only the triangle edges, creating clean triangular tessellation that morphs organically. This is the biggest visual upgrade.
+A self-contained canvas/SVG component:
+- Generates node positions on mount (deterministic seed so it's consistent)
+- Uses `requestAnimationFrame` for smooth, GPU-friendly drift animation
+- Canvas-based (not DOM nodes) for performance — draws dots and lines each frame
+- Responsive: fills parent container, recalculates on resize
+- North star node: one designated node with a slow `sin()`-based brightness pulse
 
-### 6. Faint Triangle Fills
-For a subset of the Delaunay triangles (every 3rd or 4th), draw an extremely faint filled triangle (`alpha ~0.008`) to add depth and suggest surfaces rather than just edges.
+### `src/components/AtmosphericLayout.tsx`
 
-## Technical Approach
+Add `<ConstellationField />` as a new layer between the breathing glow and the vignette, at `z-[1]`, `pointer-events-none`, `fixed inset-0`.
 
-All changes in **one file**: `src/components/ConstellationField.tsx`
+### `src/components/PasswordGate.tsx`
 
-- Inline Delaunay implementation (~40 lines, Bowyer-Watson algorithm) — no external dependency
-- Recalculate triangulation each frame (24 nodes = trivial, <0.1ms)
-- Bezier curves use triangle circumcenters as natural control points
-- Node count stays at 24, performance unchanged
+Add the same `<ConstellationField />` inside the gate wrapper so the password page gets it too.
 
-## What Stays the Same
-- Canvas-based, `requestAnimationFrame`, `pointer-events-none`
-- North star node with red pulse
-- Deterministic seeded random
-- Faint opacity levels (still subliminal)
-- Responsive resize handling
+### No other changes
+
+No new dependencies. Pure HTML Canvas + RAF. No Three.js needed for this level of subtlety.
 
