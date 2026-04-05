@@ -171,6 +171,14 @@ export const PasswordGateWrapper = ({
           </div>
           <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
         </div>
+        <button
+          onClick={() => window.history.back()}
+          className="text-[10px] tracking-[0.15em] uppercase transition-colors hover:opacity-60"
+          style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}
+          type="button"
+        >
+          ← Go back
+        </button>
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
           <div className={`w-full transition-transform ${shake ? "animate-shake" : ""}`} onAnimationEnd={() => setShake(false)}>
             <input
