@@ -21,33 +21,19 @@ export function usePostBySlug(slug: string | undefined) {
   });
 }
 
-/** Check if a post requires a password (without revealing the password) */
+/** Check if a post requires a password — uses server-side edge function, never exposes the password */
 export function usePostHasPassword(slug: string | undefined) {
   return useQuery({
     queryKey: ["post-has-password", slug],
     queryFn: async () => {
-      if (!slug) return { hasPostPassword: false, hasGlobalPassword: false };
+      if (!slug) return { requiresPassword: false };
       
-      // Check if post has a password set (just boolean, not the value)
-      const { data: post } = await supabase
-        .from("capability_posts")
-        .select("password")
-        .eq("slug", slug)
-        .eq("is_published", true)
-        .maybeSingle();
+      const { data, error } = await supabase.functions.invoke("verify-post-password", {
+        body: { slug, action: "check" },
+      });
 
-      const hasPostPassword = !!post?.password;
-
-      // Check if global password is set
-      const { data: setting } = await supabase
-        .from("site_settings")
-        .select("value")
-        .eq("key", "global_article_password")
-        .maybeSingle();
-
-      const hasGlobalPassword = !!setting?.value;
-
-      return { hasPostPassword, hasGlobalPassword };
+      if (error) return { requiresPassword: false };
+      return { requiresPassword: !!data?.requiresPassword };
     },
     enabled: !!slug,
   });

@@ -12,7 +12,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { slug, password } = await req.json();
+    const body = await req.json();
+    const { slug, password, action } = body;
 
     if (!slug || typeof slug !== "string") {
       return new Response(
@@ -21,6 +22,36 @@ Deno.serve(async (req) => {
       );
     }
 
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+    // "check" mode: just return whether a password is required (no secrets exposed)
+    if (action === "check") {
+      const { data: post } = await supabase
+        .from("capability_posts")
+        .select("password")
+        .eq("slug", slug)
+        .eq("is_published", true)
+        .maybeSingle();
+
+      const hasPostPassword = !!post?.password;
+
+      const { data: setting } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "global_article_password")
+        .maybeSingle();
+
+      const hasGlobalPassword = !!setting?.value;
+
+      return new Response(
+        JSON.stringify({ requiresPassword: hasPostPassword || hasGlobalPassword }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // "verify" mode (default): check the supplied password
     if (!password || typeof password !== "string") {
       return new Response(
         JSON.stringify({ error: "password is required" }),
@@ -28,11 +59,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
-
-    // Get post password
     const { data: post, error: postError } = await supabase
       .from("capability_posts")
       .select("password")
