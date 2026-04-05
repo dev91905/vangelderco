@@ -15,107 +15,96 @@ const useGlitchSFX = () => {
 
   const playHoverGlitch = useCallback(() => {
     const ctx = getCtx();
-    const duration = 0.05;
+    const duration = 0.08;
     const now = ctx.currentTime;
 
-    const bufferSize = Math.ceil(ctx.sampleRate * duration);
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    // Primary sine — low A
+    const osc1 = ctx.createOscillator();
+    osc1.type = "sine";
+    osc1.frequency.value = 220;
 
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
+    const gain1 = ctx.createGain();
+    gain1.gain.setValueAtTime(0.001, now);
+    gain1.gain.linearRampToValueAtTime(0.03, now + 0.01);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-    const filter = ctx.createBiquadFilter();
-    filter.type = "highpass";
-    filter.frequency.value = 3000;
+    osc1.connect(gain1).connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + duration);
 
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.06, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    // Harmonic fifth layer
+    const osc2 = ctx.createOscillator();
+    osc2.type = "sine";
+    osc2.frequency.value = 330;
 
-    source.connect(filter).connect(gain).connect(ctx.destination);
-    source.start(now);
-    source.stop(now + duration);
+    const gain2 = ctx.createGain();
+    gain2.gain.setValueAtTime(0.001, now);
+    gain2.gain.linearRampToValueAtTime(0.015, now + 0.01);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc2.connect(gain2).connect(ctx.destination);
+    osc2.start(now);
+    osc2.stop(now + duration);
   }, [getCtx]);
 
   const playClickGlitch = useCallback(() => {
     const ctx = getCtx();
-    const duration = 0.1;
+    const duration = 0.15;
     const now = ctx.currentTime;
 
-    // Saw wave sweep
-    const osc = ctx.createOscillator();
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(800, now);
-    osc.frequency.exponentialRampToValueAtTime(200, now + duration);
+    // Deep triangle wave with pitch bend
+    const osc1 = ctx.createOscillator();
+    osc1.type = "triangle";
+    osc1.frequency.setValueAtTime(110, now);
+    osc1.frequency.exponentialRampToValueAtTime(90, now + duration);
 
-    const oscGain = ctx.createGain();
-    oscGain.gain.setValueAtTime(0.04, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    const gain1 = ctx.createGain();
+    gain1.gain.setValueAtTime(0.001, now);
+    gain1.gain.linearRampToValueAtTime(0.04, now + 0.01);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-    osc.connect(oscGain).connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + duration);
+    osc1.connect(gain1).connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + duration);
 
-    // Noise burst layered on top
-    const bufferSize = Math.ceil(ctx.sampleRate * duration * 0.6);
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    // Harmonic layer
+    const osc2 = ctx.createOscillator();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(165, now);
+    osc2.frequency.exponentialRampToValueAtTime(135, now + duration);
 
-    const noiseSource = ctx.createBufferSource();
-    noiseSource.buffer = buffer;
+    const gain2 = ctx.createGain();
+    gain2.gain.setValueAtTime(0.001, now);
+    gain2.gain.linearRampToValueAtTime(0.02, now + 0.01);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-    const filter = ctx.createBiquadFilter();
-    filter.type = "bandpass";
-    filter.frequency.value = 2000;
-    filter.Q.value = 2;
-
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.03, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.6);
-
-    noiseSource.connect(filter).connect(noiseGain).connect(ctx.destination);
-    noiseSource.start(now);
-    noiseSource.stop(now + duration * 0.6);
+    osc2.connect(gain2).connect(ctx.destination);
+    osc2.start(now);
+    osc2.stop(now + duration);
   }, [getCtx]);
 
   const playChitter = useCallback(() => {
     const ctx = getCtx();
     const now = ctx.currentTime;
-    const popCount = 5;
-    const interval = 0.03;
-    const popDuration = 0.02;
+    const pitches = [300, 320, 280, 340];
+    const pipDuration = 0.04;
+    const interval = 0.05;
 
-    for (let i = 0; i < popCount; i++) {
+    pitches.forEach((freq, i) => {
       const t = now + i * interval;
-      const bufferSize = Math.ceil(ctx.sampleRate * popDuration);
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let j = 0; j < bufferSize; j++) {
-        data[j] = Math.random() * 2 - 1;
-      }
-
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = "highpass";
-      filter.frequency.value = 4000 + Math.random() * 2000;
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq;
 
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.05, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + popDuration);
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.02, t + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + pipDuration);
 
-      source.connect(filter).connect(gain).connect(ctx.destination);
-      source.start(t);
-      source.stop(t + popDuration);
-    }
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + pipDuration);
+    });
   }, [getCtx]);
 
   return { playHoverGlitch, playClickGlitch, playChitter };
