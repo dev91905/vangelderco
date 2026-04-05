@@ -93,8 +93,8 @@ function getLayoutPositions(
         y = Math.pow(ny, 0.85);
         break;
       case "deep-organizing":
-        x = 0.5 + (nx - 0.5) * 0.72;
-        y = 0.5 + (ny - 0.5) * 0.72;
+        x = 0.5 + (nx - 0.5) * 0.82;
+        y = 0.5 + (ny - 0.5) * 0.82;
         break;
     }
 
@@ -262,7 +262,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.005)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
               ctx.fill();
             }
           }
