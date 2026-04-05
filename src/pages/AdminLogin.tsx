@@ -35,7 +35,7 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center relative" style={{ background: "hsl(0 0% 2.5%)" }}>
       <Link
         to="/"
-        className="fixed bottom-6 left-6 z-30 flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] rounded-sm transition-all duration-300"
+        className="fixed top-4 left-4 md:left-8 z-30 flex items-center gap-1.5 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] rounded-sm transition-all duration-300"
         style={{ ...mono, color: "hsl(0 0% 100% / 0.3)", border: "1px solid hsl(0 0% 100% / 0.06)" }}
         onMouseEnter={(e) => { e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)"; e.currentTarget.style.borderColor = "hsl(0 80% 48% / 0.3)"; e.currentTarget.style.background = "hsl(0 0% 6%)"; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)"; e.currentTarget.style.borderColor = "hsl(0 0% 100% / 0.06)"; e.currentTarget.style.background = "transparent"; }}
