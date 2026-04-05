@@ -1,50 +1,35 @@
 
 
-# Constellation Node Positioning — From Grid Jitter to Composed Layout
+# Make Password Gate Mobile-Responsive
 
-## Problem
+## Problems
 
-Nodes are placed on a regular 4×4 (or 4×5 mobile) grid with random jitter applied uniformly. This produces visibly grid-like arrangements where some nodes clump together while others leave awkward gaps. It reads as "randomized spreadsheet" rather than a purposeful constellation.
+1. **Title overflows on small screens**: `text-2xl md:text-3xl` with long titles can overflow or feel cramped with only `px-6` padding
+2. **Fixed corner brackets and HUD text overlap content on small viewports**: `fixed top-6 left-6` / `right-6` positioning doesn't account for narrow screens where "< Return" and "Van Gelder Co." crowd the top
+3. **Content container uses `max-w-md` (28rem) with `px-6`** — fine on desktop but leaves almost no breathing room on 320px screens
+4. **No viewport height awareness**: The centered flex column with `gap-8` can push the form below the fold on short mobile screens (e.g. landscape or with keyboard open)
+5. **Input and button sizing** not optimized for touch — `py-3` input is okay but the unlock button at `py-2.5` is small for thumb targets
 
-## Approach
+## Changes — `src/components/PasswordGate.tsx` only
 
-Replace the grid+jitter system with hand-composed normalized coordinates (0–1 range) that create an intentionally asymmetric, balanced constellation — like actual star maps. The positions are designed using golden-ratio spacing and triangular groupings that feel organic but composed.
+### Responsive spacing
+- Reduce `gap-8` to `gap-6 sm:gap-8` on the content column
+- Add `py-8` to the content wrapper so it doesn't butt against screen edges vertically
+- Change container to `max-w-sm sm:max-w-md` for tighter small screens
 
-## Changes — `src/components/ConstellationField.tsx` only
+### Title sizing
+- `text-xl sm:text-2xl md:text-3xl` — step down one size on mobile
 
-### Replace `getGridConfig` and `getLayoutPositions`
+### HUD elements
+- Hide "Van Gelder Co." on small screens: add `hidden sm:block`
+- Reduce top/left offsets on mobile: `top-4 left-4 sm:top-6 sm:left-6`
 
-Instead of computing a grid and adding jitter, define a fixed set of 16 normalized `(nx, ny)` positions that form a pleasing asymmetric constellation:
+### Touch targets
+- Bump button padding to `py-3` on mobile
+- Input `py-3` stays (already fine)
 
-- 1 north star placed at roughly golden-ratio position (~0.62, ~0.38)
-- 4 anchors forming a loose diamond that avoids symmetry
-- 11 field nodes scattered to create varied triangle densities — some tight clusters of 3, some lone outliers with long edges
+### Scroll safety
+- Wrap the content area in `overflow-y-auto` with `max-h-screen` so on very short viewports (keyboard open), the form is still reachable via scroll
 
-The positions are designed so that:
-- No two nodes are closer than ~0.12 normalized distance (prevents clumping)
-- No node is closer than ~0.08 from any edge (prevents edge-hugging)
-- The overall center of mass sits slightly off-center (avoids static symmetry)
-- Triangles form naturally at 2–3 locations without blanketing the whole field
-
-### Mobile adaptation
-
-For tall mobile (w < 640, aspect > 1.5), add 4 extra field nodes in the vertical gaps to prevent the middle and bottom from feeling empty. These use the same hand-composed approach, not grid math.
-
-### Mode variants
-
-Each mode applies a subtle transform to the base positions:
-- **Home**: Use positions as-is
-- **Cultural strategy**: Shift all x-coords through a mild power curve (`pow(nx, 1.15)`) — barely perceptible leftward bias
-- **Cross-sector**: Scale x-coords slightly outward from center (`(nx - 0.5) * 1.08 + 0.5`)
-- **Deep organizing**: Pull all nodes ~5% toward center
-
-Same logic as before, just applied to better base positions.
-
-### What stays the same
-- All animation code (orbit, drift, mouse repulsion, edges, triangles)
-- All opacity/size constants
-- The `ConstellationMode` type and transitions
-- Canvas setup and resize handling
-
-One file, replacing ~50 lines of grid math with ~50 lines of composed coordinates.
+One file, CSS/class adjustments only.
 
