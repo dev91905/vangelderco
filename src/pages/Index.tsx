@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 const SECTORS = [
   "Energy",
@@ -17,6 +18,7 @@ const HERO_LINKS = [
 ];
 
 const Index = () => {
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   return (
     <AtmosphericLayout>
       <div className="flex items-center justify-center h-full w-full">
@@ -49,6 +51,8 @@ const Index = () => {
                 key={i}
                 to={link.to}
                 className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6"
+                onMouseEnter={() => playHoverGlitch()}
+                onClick={() => playClickGlitch()}
                 style={{
                   animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.4 + i * 0.35}s both`,
                 }}

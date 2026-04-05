@@ -1,8 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
 import PostCard from "./PostCard";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 interface CapabilityLayoutProps {
   capability: string;
@@ -18,6 +19,15 @@ const CapabilityLayout = ({
   description,
 }: CapabilityLayoutProps) => {
   const { data: posts, isLoading } = useCapabilityPosts(capability);
+  const { playChitter } = useGlitchSFX();
+  const wasLoading = useRef(true);
+
+  useEffect(() => {
+    if (wasLoading.current && !isLoading) {
+      playChitter();
+    }
+    wasLoading.current = isLoading;
+  }, [isLoading, playChitter]);
 
   return (
     <AtmosphericLayout>
