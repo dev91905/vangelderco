@@ -1,92 +1,98 @@
 
 
-# Premium Content Editor — No Auth
+# Blog Post & Case Study Full-Page Experiences
 
 ## Summary
-Build a commercial-grade WYSIWYG block editor at `/admin` with no authentication. Dashboard to manage posts, full block editor with live preview, drag-and-drop reordering. Same brutalist aesthetic as the public site.
+Transform posts from inline-expandable cards into full-page storytelling experiences. Blog posts get clean editorial layouts with hero images and embedded media. Case studies get interactive data-driven layouts with stat chips, expandable sections, and carousels. Both use a structured JSON content block system.
 
 ## Database Changes
 
-**Migration**: Add RLS policies allowing anonymous insert/update/delete on `capability_posts` (temporary, until auth is added later):
+**Migration**: Add columns to `capability_posts`:
+- `slug` (text, unique) — URL-friendly identifier
+- `hero_image_url` (text, nullable) — hero/cover image
+- `content_blocks` (jsonb, nullable) — structured rich content array
+- `stats` (jsonb, nullable) — case study stat chips (e.g. `[{"label": "$200M", "description": "Capital Deployed", "visible": true}]`)
 
-```sql
-CREATE POLICY "Temp: anyone can insert" ON public.capability_posts FOR INSERT WITH CHECK (true);
-CREATE POLICY "Temp: anyone can update" ON public.capability_posts FOR UPDATE USING (true);
-CREATE POLICY "Temp: anyone can delete" ON public.capability_posts FOR DELETE USING (true);
--- Also allow reading drafts for admin
-CREATE POLICY "All posts visible for editing" ON public.capability_posts FOR SELECT USING (true);
+**Data**: Update all 6 existing posts with slugs, content blocks, and stats (for case studies). Content blocks follow a typed schema:
+
+```text
+Block types:
+  heading    → { type, level, text }
+  paragraph  → { type, text }
+  image      → { type, src, alt, caption }
+  video      → { type, src, provider }
+  embed      → { type, html }
+  quote      → { type, text, attribution }
+  callout    → { type, text }
+  expandable → { type, title, blocks[] }      ← case study
+  carousel   → { type, slides[] }             ← case study
+  stat-grid  → { type, stats[] }              ← case study inline
 ```
 
 ## Routing
 
-| Route | Page |
-|-------|------|
-| `/admin` | Dashboard — post list, filters, new post |
-| `/admin/edit/:id` | Block editor for existing post |
-| `/admin/new` | Block editor for new post |
+Add to `App.tsx`:
+- `/post/:slug` → `PostDetail` page (dispatches to blog or case study renderer based on `type`)
 
-## Pages & Components
+## Components
 
-### `src/pages/admin/AdminDashboard.tsx`
-- Table of all posts (including drafts): title, type badge, capability, status toggle, date
-- Filter by capability and type
-- "New Post" button → type picker (Blog / Case Study) → navigates to `/admin/new?type=...&capability=...`
-- Click row → `/admin/edit/:id`
-- Delete with confirmation dialog
-- Inline publish/unpublish toggle
+### `src/pages/PostDetail.tsx`
+- Fetches post by slug from `capability_posts`
+- Renders `BlogPostView` or `CaseStudyView` based on `post.type`
 
-### `src/pages/admin/AdminEditor.tsx`
-- **Two-panel layout**: editor left, live preview right (collapses to tabs on mobile)
-- **Top bar**: back to dashboard, save button (with auto-save every 30s + indicator), publish toggle
-- **Settings panel** (collapsible drawer): title, slug (auto-gen from title, editable), capability dropdown, excerpt textarea, hero image URL with preview, published date picker
-- **For Case Studies**: stat chips editor — add/remove/edit chips with label + description fields
-- Save writes to `capability_posts` via Supabase client
+### `src/components/blog/BlogPostView.tsx`
+- Optional hero image (full-width, 60vh) or styled color-fill header matching site aesthetic
+- Title, date, capability tag
+- Content block renderer: paragraphs in Space Grotesk at comfortable reading width (~680px), images full-bleed with captions, embedded video/iframes responsive, pull quotes with red left border
+- Back link to capability page
 
-### `src/components/admin/BlockEditor.tsx`
-- Vertical stack of content blocks
-- Each block: type pill, inline text editing, drag handle, hover toolbar (move up/down, duplicate, delete, change type)
-- "+" button between blocks opens `BlockTypePicker`
-- Blocks: heading (H1-H3), paragraph, image, video, embed, quote, callout
-- Case Study extra blocks: expandable section, carousel, stat-grid
-- Drag-and-drop via `@dnd-kit/core` + `@dnd-kit/sortable`
+### `src/components/casestudy/CaseStudyView.tsx`
+- Hero section with title and stat chip bar (toggleable on/off with a master switch)
+- Stat chips: monospaced, red-accented, pill-shaped — show key metrics
+- Content block renderer (same base as blog, plus):
+  - **Expandable sections**: Collapsible regions with heading + chevron, CONTROL-style red bar on open state
+  - **Carousels**: Horizontal scroll with dot indicators, images or content cards
+  - **Stat grids**: Inline metric displays within the article body
+- Back link to capability page
 
-### `src/components/admin/BlockTypePicker.tsx`
-- Popover grid of block types with icons
-- Grouped: Text, Media, Editorial, Case Study (only shown for case study type)
+### `src/components/content/ContentBlockRenderer.tsx`
+- Shared renderer that maps `content_blocks` JSON array to React components
+- Handles: heading, paragraph, image, video, embed, quote, callout
+- Case study blocks (expandable, carousel, stat-grid) handled by CaseStudyView
 
-### `src/components/admin/PostSettingsDrawer.tsx`
-- Slide-out panel for post metadata
-- Auto-slug from title (slugify on blur)
-- Hero image URL input with thumbnail preview
+### `src/components/PostCard.tsx` (modify)
+- Change from expandable button to a `Link` pointing to `/post/{slug}`
+- Keep existing card styling, remove expand state
 
-### `src/components/admin/LivePreview.tsx`
-- Renders the actual `BlogPostView` or `CaseStudyView` components with current editor state
-- Updates in real-time as blocks are edited
-- Scrollable, contained in right panel
+## Filler Content
 
-### `src/components/admin/StatChipsEditor.tsx`
-- For case studies: list of stat chip rows (label + description inputs)
-- Add/remove/reorder chips
+**Blog posts** get 4-5 content blocks each (paragraphs, a quote, an image placeholder, a callout).
 
-## Dependencies
+**Case studies** get 8-10 content blocks each including:
+- 3-4 stat chips (e.g. "$200M Capital Deployed", "5 Counties", "3-Year Campaign")
+- Expandable sections ("Methodology", "Key Findings")
+- A carousel with 3 slides
+- Paragraphs, headings, images, a quote
 
-- `@dnd-kit/core` + `@dnd-kit/sortable` — block drag-and-drop
+## Visual Design
 
-## Files
+All pages use `AtmosphericLayout` as the shell. Content areas scroll vertically (`overflow-y-auto`). Typography, colors, and spacing follow the existing brutalist system — JetBrains Mono for labels/metadata, Space Grotesk for headings and body text. Red accent (`hsl(0 80% 48%)`) for interactive elements, borders, and highlights.
+
+## Files to Create/Modify
 
 | Action | File |
 |--------|------|
-| Create | `src/pages/admin/AdminDashboard.tsx` |
-| Create | `src/pages/admin/AdminEditor.tsx` |
-| Create | `src/components/admin/BlockEditor.tsx` |
-| Create | `src/components/admin/BlockTypePicker.tsx` |
-| Create | `src/components/admin/PostSettingsDrawer.tsx` |
-| Create | `src/components/admin/LivePreview.tsx` |
-| Create | `src/components/admin/StatChipsEditor.tsx` |
-| Modify | `src/App.tsx` — add `/admin` routes |
-| Migration | Temporary open RLS policies for CRUD |
-
-## Design Notes
-
-Same brutalist dark system as public site. Red accents on active/focused blocks. JetBrains Mono for metadata labels, Space Grotesk for content editing. Focused block gets a red left-border (CONTROL style). Auto-save timestamp in top bar as subtle monospaced text. Minimal chrome — the content is the interface.
+| Create | `src/pages/PostDetail.tsx` |
+| Create | `src/components/blog/BlogPostView.tsx` |
+| Create | `src/components/casestudy/CaseStudyView.tsx` |
+| Create | `src/components/casestudy/StatChips.tsx` |
+| Create | `src/components/casestudy/ExpandableSection.tsx` |
+| Create | `src/components/casestudy/ContentCarousel.tsx` |
+| Create | `src/components/content/ContentBlockRenderer.tsx` |
+| Modify | `src/components/PostCard.tsx` — link to `/post/:slug` |
+| Modify | `src/App.tsx` — add `/post/:slug` route |
+| Modify | `src/hooks/useCapabilityPosts.ts` — add slug to type |
+| Create | `src/hooks/usePostBySlug.ts` — fetch single post |
+| Migration | Add `slug`, `hero_image_url`, `content_blocks`, `stats` columns |
+| Data | Update 6 existing posts with rich filler content |
 
