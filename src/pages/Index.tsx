@@ -18,6 +18,7 @@ const HERO_LINKS = [
 ];
 
 const Index = () => {
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   return (
     <AtmosphericLayout>
       <div className="flex items-center justify-center h-full w-full">
