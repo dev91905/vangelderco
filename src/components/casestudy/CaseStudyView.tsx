@@ -64,7 +64,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
         onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
       >
-        ← Return
+        &lt; Return
       </Link>
 
       <div
