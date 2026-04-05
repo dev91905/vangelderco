@@ -49,6 +49,24 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
         <path d="M23 16v7h-7" />
       </svg>
 
+      <Link
+        to="/admin"
+        className="fixed bottom-6 right-6 z-30"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "hsl(0 0% 100% / 0.18)",
+          transition: "color 300ms",
+          textDecoration: "none",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.18)")}
+      >
+        Admin
+      </Link>
+
       {children}
     </div>
   );
