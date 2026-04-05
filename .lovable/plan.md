@@ -1,81 +1,34 @@
 
 
-# Van Gelder Co. — Capability Pages + Content System
+# Hover Effect Audit & Fix
 
-## Summary
-Turn the three hero lines into navigable links with video-game-inspired hover effects and transitions. Create three capability sub-pages with a brutalist-institutional design. Set up Supabase tables for case studies and blog posts.
+## Problems Found
 
-## Architecture
+1. **Caret (`>`) is mispositioned**: It's `absolute left-0` relative to the full-width link container (which spans the entire row). Since the text is centered, the caret appears at the far-left edge of the viewport area — disconnected from the text it's supposed to lead.
 
-```text
-/                    → Landing (existing, hero lines become nav links)
-/cultural-strategy   → Capability page
-/cross-sector        → Capability page
-/deep-organizing     → Capability page
-```
+2. **Text shifts right, caret stays far left**: On hover, the text gets `translateX(4px)` but the caret is anchored to the container edge, not the text. The spatial relationship is broken.
 
-## What Changes
+3. **Scan line sweep is barely visible**: The 2px red bar sweeping left-to-right is too subtle at the current opacity and size to register as a deliberate effect.
 
-### 1. Landing Page — Hero Lines Become Links
-- Wrap each hero line in a `<Link>` to its capability route
-- Add a video-game hover effect: on hover, a red scan-line sweeps across the text left-to-right, text shifts slightly right (~4px translate), and a faint red glow pulses behind it. A small `>` caret fades in at left. All via CSS transitions (~300ms).
-- Cursor changes to `pointer`. No other style changes — same font, size, color, animation on load.
+4. **Glow is too faint**: The radial glow at `0.08` opacity is nearly invisible against the dark background.
 
-### 2. Three Capability Pages (new components)
-Each page shares a common layout component (`CapabilityLayout`) with:
-- Same atmospheric effects as landing (grain, scanlines, vignette, breathing glow)
-- A "back" indicator top-left: `< RETURN` in JetBrains Mono, clicking returns to `/`
-- Page entry animation: content glitches/flickers in like a CRT boot sequence (2-3 rapid opacity flickers over ~400ms, then settles)
-- **Header section**: Capability name in Space Grotesk (~36px desktop), red classification label above it, one-paragraph description below in JetBrains Mono at 50% white opacity
-- **Case Studies / Posts section**: Grid of cards below, each card has a red left-border accent, title, date, excerpt. Cards fade-up stagger on load. Clicking a card expands it inline (no new route) with full content.
-- HUD corner brackets persist from landing page (shared layout)
+## Fix
 
-Content descriptions per page:
-- **Cultural Strategy**: Engaging cultural sectors around shared objectives with partners
-- **Cross-Sector Intelligence**: Developing strategies and coordinating across sectors around common issues  
-- **Deep Organizing**: Deeply organizing key constituencies and building durable field power
+**Restructure the link internals** so the caret is positioned relative to the text, not the container:
 
-### 3. Supabase Setup — Content Tables
+- Wrap the caret + text in an `inline-flex` container so they sit next to each other naturally
+- Remove `absolute` positioning from the caret — use `opacity: 0 → 1` and a small negative margin or gap instead
+- Keep the link itself as `flex justify-center` so the group stays centered
 
-**Table: `capability_posts`**
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid PK | default gen_random_uuid() |
-| capability | text | enum-like: 'cultural-strategy', 'cross-sector', 'deep-organizing' |
-| type | text | 'case-study' or 'blog-post' |
-| title | text | required |
-| excerpt | text | short preview |
-| content | text | full markdown content |
-| published_at | timestamptz | display date |
-| is_published | boolean | default false |
-| created_at | timestamptz | default now() |
+**Improve the hover effects**:
 
-RLS: Public read for published posts (`is_published = true`). No write via client — content managed via Supabase dashboard or future admin.
+- Caret: `opacity 0→0.8`, slight `translateX` from -8px to 0 (slides in from left of text)
+- Text: subtle color shift to slightly warmer white (`hsl(0 0% 100% / 0.95)`) instead of translateX (shifting centered text looks off-balance)
+- Glow: increase to `0.12` opacity, tighten the ellipse so it concentrates behind the text
+- Scan line: widen to 3px, increase opacity to `0.8`, add a longer trailing glow (`box-shadow` spread)
+- Add a faint red underline that scales in from center (`scaleX(0) → scaleX(1)`) — 1px, red at 40% opacity
 
-### 4. Data Layer
-- React Query hook `useCapabilityPosts(capability)` fetches posts filtered by capability and `is_published = true`, ordered by `published_at desc`
-- Supabase client integration via `@supabase/supabase-js`
-
-### 5. Shared Layout Refactor
-Extract atmospheric effects (grain, scanlines, vignette, glow, scan beam, corner brackets) into a shared `AtmosphericLayout` wrapper used by both landing and capability pages.
-
-### 6. New CSS
-- Hover effect keyframes for hero links (scan-sweep, glow pulse)
-- CRT boot-in animation for capability pages
-- Card fade-up stagger animation
-- Transition classes for link hover states
-
-## Files to Create/Modify
-- `src/index.css` — add hover and page-transition keyframes
-- `src/pages/Index.tsx` — wrap hero lines in Links, add hover classes
-- `src/components/AtmosphericLayout.tsx` — shared atmospheric wrapper
-- `src/components/CapabilityLayout.tsx` — shared capability page layout
-- `src/pages/CulturalStrategy.tsx` — capability page
-- `src/pages/CrossSector.tsx` — capability page  
-- `src/pages/DeepOrganizing.tsx` — capability page
-- `src/components/PostCard.tsx` — case study/blog card component
-- `src/integrations/supabase/client.ts` — Supabase client (via Lovable Cloud)
-- `src/hooks/useCapabilityPosts.ts` — data fetching hook
-- `src/App.tsx` — add routes
-- Migration: create `capability_posts` table with RLS
+**Files to modify**:
+- `src/pages/Index.tsx` — restructure link markup (inline-flex wrapper for caret + text)
+- `src/index.css` — rewrite `.hero-nav-link:hover` rules with corrected selectors and improved values
 
