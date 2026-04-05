@@ -57,6 +57,7 @@ const AdminEditor = () => {
       setPublishedAt(post.published_at);
       setContentBlocks(Array.isArray(post.content_blocks) ? post.content_blocks as any[] : []);
       setStats(Array.isArray(post.stats) ? post.stats as any[] : []);
+      setPassword((post as any).password || null);
       setDirty(false);
     }
   }, [post]);
