@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useTogglePublish } from "@/hooks/usePostMutations";
 import { useState } from "react";
+import useGlitchSFX from "@/hooks/useGlitchSFX";
 
 interface PostListTableProps {
   filter: { type: string; capability: string };
