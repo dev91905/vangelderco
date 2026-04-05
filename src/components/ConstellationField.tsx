@@ -83,14 +83,16 @@ function getLayoutPositions(
 
     switch (mode) {
       case "cultural-strategy":
-        x = Math.pow(nx, 1.15);
+        x = Math.pow(nx, 1.6);
+        y = 0.5 + (ny - 0.5) * 0.85;
         break;
       case "cross-sector":
-        x = (nx - 0.5) * 1.08 + 0.5;
+        x = (nx - 0.5) * 1.35 + 0.5;
+        y = Math.pow(ny, 0.85);
         break;
       case "deep-organizing":
-        x = 0.5 + (nx - 0.5) * 0.95;
-        y = 0.5 + (ny - 0.5) * 0.95;
+        x = 0.5 + (nx - 0.5) * 0.72;
+        y = 0.5 + (ny - 0.5) * 0.72;
         break;
     }
 
