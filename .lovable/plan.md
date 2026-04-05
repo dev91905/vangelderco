@@ -1,23 +1,34 @@
 
 
-# Restore Excerpts to Feed Cards
+# Premium Password Management System
 
-## Problem
-All 6 posts have `excerpt = NULL` in the database. The PostCard component correctly renders excerpts when present, but there's nothing to render.
+## Summary
+Upgrade the password UX across both the per-post editor and global site settings with generate, copy, show/hide, and at-a-glance password status across the post list.
 
-## Fix
-Single database migration to `UPDATE` all 6 rows with their original excerpts:
+## Changes
 
-| Post | Excerpt |
-|------|---------|
-| Reframing Climate Through Cultural Infrastructure | How a coalition of museums, theaters, and civic institutions reshaped public understanding of energy transition in the Mountain West. |
-| The Institutional Blind Spot in Cultural Engagement | Why most institutional cultural strategies fail to move opinion — and what a generation of political infrastructure builders got right. |
-| Mapping the Seams: Energy, Labor, and National Security Alignment | Identifying the structural points where energy policy, organized labor, and national security interests converge — and where they fracture. |
-| Why Cross-Sector Work Fails (And What the Exceptions Have in Common) | Most cross-sector coalitions collapse within 18 months. The ones that survive share three structural traits. |
-| Building Power in the Permian Basin | A three-year organizing campaign that constructed durable field infrastructure across five counties in West Texas. |
-| Beyond Mobilization: The Case for Organizing Infrastructure | Why turnout-based strategies plateau, and how leadership pipelines and accountability systems compound over time. |
+### 1. `src/components/admin/EditorMetaBar.tsx` — Per-post password section overhaul
+Replace the plain text input with a premium password management card:
+- **Show/hide toggle** (eye icon) to reveal the password
+- **Generate button** — creates a random 12-char alphanumeric password and fills the field
+- **Copy button** — copies to clipboard with a brief "Copied" confirmation tooltip
+- **Clear button** — removes protection
+- All four actions as small icon buttons in a row next to the input
+- Password input uses `type="password"` by default, toggleable to `type="text"`
 
-## Technical
-- One SQL `UPDATE` statement per row, matched by title
-- No schema changes, no code changes
+### 2. `src/pages/Admin.tsx` — Global password dialog overhaul
+Same premium treatment for the global password modal:
+- Show/hide, generate, copy buttons alongside the input
+- Current status indicator: "Active" with red dot or "Not set" with dim dot
+- When a global password is active, show it (masked) with one-click copy
+
+### 3. `src/components/admin/PostListTable.tsx` — Password indicator on post rows
+- Add a small lock icon next to each post title that has a per-post password set
+- Subtle, dim — just enough to see at a glance which posts are individually gated
+
+### Password generation
+Simple inline utility — `crypto.getRandomValues` to produce a 12-character string from `A-Za-z0-9`. No external dependency.
+
+### No database or schema changes
+All UI-only. The `password` column on `capability_posts` and `site_settings` table already exist.
 
