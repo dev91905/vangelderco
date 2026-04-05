@@ -28,6 +28,7 @@ const AdminEditor = () => {
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [contentBlocks, setContentBlocks] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
+  const [password, setPassword] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

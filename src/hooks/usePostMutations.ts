@@ -12,6 +12,7 @@ export type PostFormData = {
   hero_image_url: string | null;
   content_blocks: unknown[] | null;
   stats: unknown[] | null;
+  password: string | null;
   is_published: boolean;
   published_at: string | null;
 };
