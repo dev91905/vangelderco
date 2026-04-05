@@ -1,41 +1,74 @@
 
 
-# Constellation Field — Intentional, Dynamic, Alive
+# Constellation Field — Animated Page Transitions
 
-## Problems with current version
-- Nodes are purely random scatter — no compositional intent
-- Static orbit patterns — no evolution over time
-- No cursor awareness — feels dead
-- Sparse coverage — doesn't fill the viewport evenly
-- All nodes behave identically (except north star)
+## Problem
+Currently, each page mounts its own `AtmosphericLayout` → its own `ConstellationField`. On navigation the canvas is destroyed and recreated — no transition, no visual continuity.
 
-## Design approach
+## Approach
 
-**Intentional layout**: Place nodes on a structured grid with jitter — 6×5 grid across viewport with ~30% positional noise. Ensures even full-screen coverage while avoiding mechanical regularity. North star stays near golden-ratio center (~0.618, 0.382).
+Lift `ConstellationField` above the router so it's a single persistent instance. Give it a `mode` prop (`"home" | "cultural-strategy" | "cross-sector" | "deep-organizing"`) driven by the current route. When the mode changes, nodes smoothly lerp to new target positions over ~1.5 seconds.
 
-**Evolving behavior**: Nodes slowly migrate their base positions over time using low-frequency sine waves on different axes. Connections form and dissolve as distances shift. The constellation is never the same twice across a 60-second window.
-
-**Cursor responsiveness**: Track mouse position (via `pointermove` on `window`). Nodes within a radius of the cursor gently drift away — subtle repulsion field. Lines near cursor gain a faint brightness boost. `pointer-events-none` stays on the canvas; listener goes on `window`.
-
-**Tiered node hierarchy**: Three tiers instead of binary:
-- **North star** (1): Larger, red pulse, outer glow — unchanged
-- **Anchor nodes** (5): Slightly larger dots (1.6px), faintly brighter (0.10 opacity), slower drift — structural landmarks
-- **Field nodes** (remaining ~30): Small (1.0px), standard opacity (0.06), faster drift
-
-**More nodes**: Increase to ~36 for denser coverage.
-
-**Triangle rendering**: When three mutually-connected nodes form a triangle, fill it with an extremely faint wash (`0.008` opacity) — gives depth without adding noise.
+Each mode defines a distinct constellation personality:
+- **Home**: Balanced 6×6 grid, north star at golden-ratio center — the current default
+- **Cultural Strategy**: Nodes cluster toward the left third, denser connections — cultural network gravity
+- **Cross-Sector**: Nodes spread into three distinct clusters (left, center-top, right) with bridging connections between them — cross-sector bridges
+- **Deep Organizing**: Nodes pull tighter toward center in a dense core with sparse outer ring — deep infrastructure concentration
 
 ## Changes
 
-### `src/components/ConstellationField.tsx` — Full rewrite
+### 1. `src/components/ConstellationField.tsx`
+- Accept `mode` prop (default `"home"`)
+- Define four layout presets — each returns target `baseX`/`baseY` for the 36 nodes using the same seeded jitter but different spatial distributions
+- On mode change: store new targets, lerp each node's `baseX`/`baseY` toward target over ~90 frames (~1.5s at 60fps) using ease-out interpolation
+- Animation loop already runs — just add the lerp step before the existing drift/orbit/repulsion logic
 
-1. **Grid-based placement**: 6 columns × 6 rows = 36 base positions, each jittered by ±15% of cell size
-2. **Mouse tracking**: `useRef` for cursor position, `pointermove` listener on `window`, repulsion force within 150px radius
-3. **Evolving base drift**: Each node's `baseX`/`baseY` shifts slowly via `sin(t * drift_freq + phase)` — the whole field breathes
-4. **Tiered rendering**: Anchor nodes at indices 0,7,14,21,28 — slightly larger, brighter
-5. **Triangle fills**: After drawing edges, detect triangles (three mutual connections) and fill with near-invisible white
-6. **Smoother edges**: Increase `MAX_EDGE_DIST` slightly to `0.25` for more connections
+### 2. `src/App.tsx`
+- Add `ConstellationField` as a sibling above `<Routes>`, outside any layout component
+- Use `useLocation()` to derive the mode from the current pathname
+- Pass mode as prop
 
-No other files change. Same canvas, same z-index, same integration points.
+### 3. `src/components/AtmosphericLayout.tsx`
+- Remove `<ConstellationField />` from here (it now lives in App)
+- Keep all other atmospheric layers (glow, vignette, scan beam, brackets)
+
+### 4. `src/components/PasswordGate.tsx`
+- Remove its `<ConstellationField />` import — the global instance covers it
+
+### No other files change. No new dependencies.
+
+## Layout Presets (spatial logic)
+
+```text
+HOME:          Even 6×6 grid
+               ·  ·  ·  ·  ·  ·
+               ·  ·  ·  ·  ·  ·
+               ·  ·  ·  ★  ·  ·
+               ·  ·  ·  ·  ·  ·
+               ·  ·  ·  ·  ·  ·
+               ·  ·  ·  ·  ·  ·
+
+CULTURAL:      Left-weighted cluster
+               ··· ·     ·
+               ····  ·      ·
+               ···★·    ·
+               ····  ·
+               ··· ·        ·
+               ··       ·
+
+CROSS-SECTOR:  Three bridged clusters
+               ···      ···
+               ···  ··  ···
+                  ·★··
+               ·    ··    ·
+               ···      ···
+
+DEEP-ORG:      Dense core, sparse halo
+                    ·
+                 ·     ·
+               · ····· ·
+                 ·★··
+               · ····· ·
+                 ·     ·
+```
 
