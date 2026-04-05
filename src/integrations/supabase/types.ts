@@ -18,33 +18,45 @@ export type Database = {
         Row: {
           capability: string
           content: string | null
+          content_blocks: Json | null
           created_at: string
           excerpt: string | null
+          hero_image_url: string | null
           id: string
           is_published: boolean
           published_at: string | null
+          slug: string | null
+          stats: Json | null
           title: string
           type: string
         }
         Insert: {
           capability: string
           content?: string | null
+          content_blocks?: Json | null
           created_at?: string
           excerpt?: string | null
+          hero_image_url?: string | null
           id?: string
           is_published?: boolean
           published_at?: string | null
+          slug?: string | null
+          stats?: Json | null
           title: string
           type: string
         }
         Update: {
           capability?: string
           content?: string | null
+          content_blocks?: Json | null
           created_at?: string
           excerpt?: string | null
+          hero_image_url?: string | null
           id?: string
           is_published?: boolean
           published_at?: string | null
+          slug?: string | null
+          stats?: Json | null
           title?: string
           type?: string
         }
