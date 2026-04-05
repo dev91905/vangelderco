@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import ConstellationField from "./components/ConstellationField";
-import type { ConstellationMode } from "./components/ConstellationField";
 import Index from "./pages/Index.tsx";
 import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
