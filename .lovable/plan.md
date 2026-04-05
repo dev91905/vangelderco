@@ -1,27 +1,30 @@
 
 
-# Add Admin Link to Bottom of Site
+# Admin Page Design Polish
 
-## What
-Add a fixed-position "Admin" link at the bottom of every page, matching the exact style of the "Van Gelder Co." top-right label and "< Return" back link — JetBrains Mono, 10px, uppercase, 0.2em tracking, subtle white at 0.18–0.3 opacity, red hover.
+## Changes
 
-## Where
-- **`src/components/AtmosphericLayout.tsx`** — add a `<Link to="/admin">` fixed at `bottom-6 right-6`, using the same font/color/tracking as the "Van Gelder Co." span. On hover, shift color to the red accent (`hsl(0 80% 48% / 0.9)`). This puts it on every page automatically since all pages use this layout.
+### 1. Top bar redesign — `src/pages/Admin.tsx`
+- Replace `< Site` with a proper back button: `← Back to Site` using `ArrowLeft` icon from lucide, styled as a pill/button with subtle border matching the filter chips
+- Better visual hierarchy: site title "Content Manager" gets slightly more weight
+- Tighten spacing, add subtle hover states to all header buttons (sign out, settings, new post)
 
-## Style spec
-```
-font-family: 'JetBrains Mono', monospace
-font-size: 10px
-letter-spacing: 0.2em
-text-transform: uppercase
-color: hsl(0 0% 100% / 0.18)
-hover color: hsl(0 80% 48% / 0.9)
-position: fixed bottom-6 right-6 z-30
-transition: color 300ms
-```
+### 2. Back button specifically
+Current: `< Site` — cryptic, looks like code
+New: `ArrowLeft` icon + "Back to Site" label, same JetBrains Mono 10px uppercase tracking, but wrapped in a hover-interactive container with `hover:bg-[hsl(0_0%_8%)]` and red accent shift on hover — matching the existing admin aesthetic
 
-Text: `Admin` (single word, no arrows or decorators — matches the understated HUD aesthetic).
+### 3. Post list hover effects + SFX — `src/components/admin/PostListTable.tsx`
+- Import `useGlitchSFX` and wire `playHoverGlitch` to `onPointerEnter` on each post row
+- Wire `playClickGlitch` to `onClick` on the publish toggle button
+- Add a left-border accent on hover (like the public PostCard): `2px solid transparent` → `2px solid hsl(0 80% 48% / 0.5)` on hover
+- Title shifts right slightly on hover (`group-hover:translate-x-0.5`)
+- Publish toggle button gets a more visible hover background
+
+### 4. Filter chips — minor polish
+- Add `playHoverGlitch` on pointer enter for filter chips
+- Slight scale/brightness bump on active state
 
 ## Files
-- `src/components/AtmosphericLayout.tsx` — add Link import + admin link element before `{children}`
+- `src/pages/Admin.tsx` — back button, header polish, SFX on filters
+- `src/components/admin/PostListTable.tsx` — hover effects, SFX on post rows and publish toggle
 
