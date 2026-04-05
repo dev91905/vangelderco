@@ -11,6 +11,8 @@ import NotFound from "./pages/NotFound.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
 import AdminEditor from "./pages/AdminEditor.tsx";
+import AdminLogin from "./pages/AdminLogin.tsx";
+import RequireAuth from "./components/admin/RequireAuth.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,9 +28,10 @@ const App = () => (
           <Route path="/cross-sector" element={<CrossSector />} />
           <Route path="/deep-organizing" element={<DeepOrganizing />} />
           <Route path="/post/:slug" element={<PostDetail />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/new" element={<AdminEditor />} />
-          <Route path="/admin/edit/:id" element={<AdminEditor />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
+          <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
+          <Route path="/admin/edit/:id" element={<RequireAuth><AdminEditor /></RequireAuth>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

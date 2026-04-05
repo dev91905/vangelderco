@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
+import { supabase } from "@/integrations/supabase/client";
 
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
@@ -66,6 +67,7 @@ const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: str
 };
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [typeFilter, setTypeFilter] = useState("all");
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -106,6 +108,13 @@ const Admin = () => {
           </h1>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
+            className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg"
+            title="Sign out"
+          >
+            <LogOut className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+          </button>
           <button
             onClick={() => setSettingsOpen(true)}
             className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg relative"
