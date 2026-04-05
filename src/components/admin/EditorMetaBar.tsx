@@ -75,6 +75,7 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
 interface EditorMetaBarProps {
   title: string;
   slug: string;
+  excerpt: string;
   type: string;
   capability: string;
   heroImageUrl: string | null;
