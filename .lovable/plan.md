@@ -1,102 +1,93 @@
 
 
-# Premium CMS & Content Editor
+# Admin Editor Deep Overhaul — Next-Gen Content Editor
 
-A Notion/Squarespace-inspired block editor at `/admin` — no auth for now. Full WYSIWYG editing for Blog Posts and Case Studies with drag-to-reorder blocks, inline editing, slash commands, and image uploads via Lovable Cloud storage.
+## Problems with Current Editor
 
-## Architecture
+1. **Cluttered top bar** — metadata, type toggle, capability selector, slug, hero image all crammed into one dense region before any content appears
+2. **No auto-resize on text fields** — paragraph blocks use fixed `rows={3}` textareas regardless of content length
+3. **Block chrome is heavy** — every block has a visible border, header bar with type label, and explicit drag handle. Feels like editing a spreadsheet, not writing
+4. **No keyboard shortcuts** — no Cmd+S, no `/` slash commands, no Enter-to-add-paragraph
+5. **No auto-save** — users must manually click Save every time
+6. **Mobile unfriendly** — drag handles, tiny text, fixed layouts don't work on touch
+7. **Block insertion UX is clunky** — hover-to-reveal `+` button in a 24px tall gap between blocks is hard to hit
+8. **No content preview** — user has to save, publish, and open a new tab to see what it looks like
 
-```text
-/admin              → Post list (all posts, filterable by capability/type)
-/admin/new          → New post editor
-/admin/edit/:id     → Edit existing post
-```
+## Design Direction
 
-## Database Changes
+Notion-meets-CONTROL: clean writing surface where blocks feel invisible until interacted with. Dark, minimal, fluid.
 
-**Storage bucket**: Create a `post-images` bucket (public, for hero images and inline content images).
+## Changes
 
-No schema changes needed — the existing `capability_posts` table already has all required columns (`slug`, `hero_image_url`, `content_blocks`, `stats`, etc.).
+### 1. Auto-Expanding Textareas
+Replace all fixed-row textareas with auto-resizing ones. Paragraphs grow as you type — no scroll bars inside blocks. Single `useAutoResize` hook.
 
-## Editor Design
+### 2. Invisible Block Chrome
+- Remove block header bars (the `PARAGRAPH`, `HEADING` type label strips)
+- Blocks sit directly on the canvas with no visible border by default
+- On hover: show a faint left border accent + ghost drag handle + delete icon
+- On focus: subtle red left-border glow
+- Result: the editor looks like a clean document, not a form
 
-### Post List (`/admin`)
-- Dark theme matching the site aesthetic (near-black bg, red accents)
-- Table/list of all posts with title, type badge, capability, published status, date
-- Filter chips: All / Blog Post / Case Study, and by capability
-- "+ New Post" button top-right
-- Click any row → edit that post
-- Quick-action: toggle publish/unpublish inline
+### 3. Slash Command Menu
+- Typing `/` in any empty paragraph opens the block type picker inline (positioned below cursor)
+- Keyboard navigable (arrow keys + Enter to select)
+- Filters as you type after `/` (e.g. `/hea` filters to Heading)
+- Replaces the current paragraph block with the selected type
 
-### Post Editor (`/admin/new` and `/admin/edit/:id`)
-Split into a top metadata bar and the main block canvas:
+### 4. Smart Block Insertion
+- Pressing Enter at the end of a paragraph auto-creates a new empty paragraph below
+- The between-block `+` button becomes a more visible, persistent thin line with centered `+` on hover (larger hit target, 40px tall)
+- Block type picker appears as a floating popover anchored to the insertion point
 
-**Metadata Bar** (top, collapsible):
-- Post type toggle: Blog Post ↔ Case Study (switches available block types and stat chips section)
-- Capability selector: Cultural Strategy / Cross-Sector / Deep Organizing
-- Title field: large, inline-editable, Notion-style (just type, no label)
-- Slug: auto-generated from title, manually editable
-- Hero image: drag-and-drop upload zone or URL input, with preview
-- Publish toggle + published date picker
-- Save / Delete buttons
+### 5. Collapsible Metadata Drawer
+- Title field sits at the very top of the canvas (large, clean, Notion-style — just type)
+- All other metadata (type, capability, slug, hero image, publish toggle, stats) moves into a collapsible side drawer or top panel toggled via a gear icon in the toolbar
+- This keeps the writing surface clean and distraction-free
 
-**Block Canvas** (main area, scrollable):
-- Each content block renders as an editable card
-- Hover a block → shows drag handle (left) and delete button (right)
-- Click between blocks → shows a "+" insertion point
-- Slash command (`/`) or "+" button opens block type picker:
-  - Heading (H1, H2, H3)
-  - Paragraph
-  - Image (upload or URL)
-  - Video (YouTube/Vimeo URL)
-  - Embed (raw HTML/iframe)
-  - Quote (with attribution)
-  - Callout
-  - **Case Study only**: Expandable Section, Carousel, Stat Grid
+### 6. Sticky Floating Toolbar
+- Compact sticky toolbar at top: Back arrow | Post title (truncated) | Unsaved indicator | Preview | Save
+- Save button fills red when there are unsaved changes (visual urgency)
+- Cmd+S keyboard shortcut to save
+- Preview opens in a slide-over panel (not a new tab)
 
-**Stat Chips Editor** (Case Study only, below metadata):
-- Add/remove/edit stat chips (label + description)
-- Drag to reorder
-- Toggle individual chip visibility
+### 7. Auto-Save with Debounce
+- Auto-save 3 seconds after the user stops typing
+- Small "Saved" / "Saving..." status indicator in the toolbar
+- Manual save still available via button/shortcut
+- Dirty state tracked but no nagging — it just saves
 
-**Live Preview**: A "Preview" button opens the post in a new tab at `/post/:slug` (for published) or shows a modal preview.
+### 8. Mobile-First Touch Interactions
+- Blocks get a long-press to reveal actions (move up/down/delete) instead of drag handles on mobile
+- Block type picker becomes a bottom sheet on mobile
+- Metadata drawer is a full-screen slide-up on mobile
+- All touch targets minimum 44px
 
-### Block Editing UX
-- **Paragraph/Heading**: Click to edit text inline. Heading level selector dropdown.
-- **Image**: Click to upload or paste URL. Shows preview. Caption field below.
-- **Quote**: Two fields — quote text and attribution.
-- **Callout**: Single text field with red-bordered preview.
-- **Expandable Section**: Title field + nested block editor for inner content.
-- **Carousel**: Add/remove slides with image upload + caption per slide.
-- **Stat Grid**: Inline mini stat chip editor.
-- **Drag & Drop**: Blocks reorderable via drag handles using `@dnd-kit/core`.
+### 9. Better Block Editors
+- **Image blocks**: Show a large drop zone with preview, remove the separate URL input (keep it as a link icon toggle)
+- **Quote blocks**: Show the red left border in the editor matching the front-end preview
+- **Expandable sections**: Nested content rendered with the same block canvas (recursive), with a visual indent
+- **Carousel**: Horizontal scrollable thumbnails with add/remove, not a vertical stack
 
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `src/pages/Admin.tsx` | Post list dashboard |
-| `src/pages/AdminEditor.tsx` | New/edit post editor |
-| `src/components/admin/PostListTable.tsx` | Filterable post list |
-| `src/components/admin/EditorMetaBar.tsx` | Title, slug, type, capability, hero image, publish controls |
-| `src/components/admin/BlockCanvas.tsx` | Block editor canvas with insertion points and drag-drop |
-| `src/components/admin/BlockEditor.tsx` | Individual block editor (switches on block type) |
-| `src/components/admin/BlockTypePicker.tsx` | Slash command / "+" menu for adding blocks |
-| `src/components/admin/StatChipsEditor.tsx` | Editable stat chips for case studies |
-| `src/components/admin/ImageUploader.tsx` | Drag-and-drop image upload component (Lovable Cloud storage) |
-| `src/hooks/usePostMutations.ts` | Create, update, delete post hooks |
+### 10. Keyboard Shortcuts
+- `Cmd+S` — Save
+- `/` — Open block picker (in empty paragraph)
+- `Backspace` on empty block — Delete block, focus previous
+- `Enter` at end of paragraph — New paragraph below
+- `Cmd+Shift+P` — Toggle publish
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `src/App.tsx` | Add `/admin`, `/admin/new`, `/admin/edit/:id` routes |
+| File | Changes |
+|------|---------|
+| `src/pages/AdminEditor.tsx` | Restructure layout: floating toolbar, collapsible metadata drawer, auto-save logic, keyboard shortcuts |
+| `src/components/admin/BlockEditor.tsx` | Remove block chrome (header bar, borders), add auto-resize textareas, slash command detection, Enter/Backspace handlers |
+| `src/components/admin/BlockCanvas.tsx` | Improved insertion points (larger targets), Enter-to-add-paragraph propagation, mobile long-press actions |
+| `src/components/admin/BlockTypePicker.tsx` | Keyboard navigation, filter-as-you-type, floating positioning, bottom-sheet on mobile |
+| `src/components/admin/EditorMetaBar.tsx` | Convert to collapsible drawer/panel, gear-icon toggle, cleaner layout |
+| `src/components/admin/ImageUploader.tsx` | Larger drop zone, inline preview improvements |
+| `src/components/admin/StatChipsEditor.tsx` | Move inside metadata drawer, cleaner inline editing |
 
-## Dependencies
-
-- `@dnd-kit/core` + `@dnd-kit/sortable` — drag-and-drop block reordering
-
-## Visual Design
-
-Matches the existing brutalist aesthetic — dark background, red accent borders, JetBrains Mono for labels, Space Grotesk for content. The editor itself uses slightly elevated surface colors (`hsl(0 0% 6%)`) for block cards against the near-black canvas. Block insertion points pulse with a subtle red glow. The metadata bar uses the same monospaced label style as the front-end. Buttons are minimal — outlined with red accent on hover.
+## No New Dependencies
+All achievable with existing packages (`@dnd-kit`, React, Tailwind). Auto-resize uses a simple `useEffect` on `scrollHeight`.
 
