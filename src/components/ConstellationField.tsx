@@ -8,11 +8,15 @@ function seededRandom(seed: number) {
   };
 }
 
+export type ConstellationMode = "home" | "cultural-strategy" | "cross-sector" | "deep-organizing";
+
 interface Node {
   x: number;
   y: number;
   baseX: number;
   baseY: number;
+  targetX: number;
+  targetY: number;
   orbitRadius: number;
   orbitSpeed: number;
   orbitPhase: number;
@@ -26,7 +30,6 @@ interface Node {
 
 const COLS = 6;
 const ROWS = 6;
-const NODE_COUNT = COLS * ROWS;
 const MAX_EDGE_DIST = 0.25;
 const MOUSE_RADIUS = 150;
 const MOUSE_FORCE = 3;
@@ -34,13 +37,111 @@ const ANCHOR_INDICES = new Set([0, 7, 14, 21, 28]);
 const NORTH_STAR_COL = Math.round(COLS * 0.618);
 const NORTH_STAR_ROW = Math.round(ROWS * 0.382);
 const NORTH_STAR_INDEX = NORTH_STAR_ROW * COLS + NORTH_STAR_COL;
+const LERP_SPEED = 0.025; // ease-out per frame
 
-const ConstellationField = () => {
+function getLayoutPositions(
+  mode: ConstellationMode,
+  w: number,
+  h: number,
+  rng: () => number
+): { x: number; y: number }[] {
+  const positions: { x: number; y: number }[] = [];
+
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      const jitterX = (rng() - 0.5) * (w / COLS) * 0.3 * 2;
+      const jitterY = (rng() - 0.5) * (h / ROWS) * 0.3 * 2;
+
+      let bx: number, by: number;
+
+      switch (mode) {
+        case "cultural-strategy": {
+          // Left-weighted: compress x toward left third
+          const nx = col / (COLS - 1); // 0..1
+          const ny = row / (ROWS - 1);
+          const skewedX = Math.pow(nx, 1.8); // pulls left
+          bx = w * 0.08 + skewedX * w * 0.75 + jitterX;
+          by = h * 0.08 + ny * h * 0.84 + jitterY;
+          break;
+        }
+        case "cross-sector": {
+          // Three clusters: left, center-top, right
+          const nx = col / (COLS - 1);
+          const ny = row / (ROWS - 1);
+          let cx: number, cy: number;
+
+          if (col < 2) {
+            // Left cluster
+            cx = 0.12 + nx * 0.18;
+            cy = 0.3 + ny * 0.5;
+          } else if (col > 3) {
+            // Right cluster
+            cx = 0.7 + (nx - 0.67) * 0.18;
+            cy = 0.3 + ny * 0.5;
+          } else {
+            // Center bridge
+            cx = 0.35 + (nx - 0.33) * 0.3;
+            cy = 0.15 + ny * 0.7;
+          }
+
+          bx = cx * w + jitterX;
+          by = cy * h + jitterY;
+          break;
+        }
+        case "deep-organizing": {
+          // Dense core, sparse halo
+          const nx = (col + 0.5) / COLS - 0.5; // -0.5..0.5
+          const ny = (row + 0.5) / ROWS - 0.5;
+          const dist = Math.sqrt(nx * nx + ny * ny);
+          const compression = 0.4 + 0.6 * Math.pow(dist / 0.7, 0.5); // compress toward center
+          bx = w * 0.5 + nx * compression * w * 0.85 + jitterX;
+          by = h * 0.5 + ny * compression * h * 0.85 + jitterY;
+          break;
+        }
+        default: {
+          // Home: balanced grid
+          const cellW = w / COLS;
+          const cellH = h / ROWS;
+          bx = (col + 0.5) * cellW + jitterX;
+          by = (row + 0.5) * cellH + jitterY;
+          break;
+        }
+      }
+
+      positions.push({ x: bx, y: by });
+    }
+  }
+
+  return positions;
+}
+
+interface ConstellationFieldProps {
+  mode?: ConstellationMode;
+}
+
+const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodesRef = useRef<Node[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
   const mouseRef = useRef({ x: -9999, y: -9999 });
+  const modeRef = useRef<ConstellationMode>(mode);
+
+  // Update targets when mode changes
+  useEffect(() => {
+    modeRef.current = mode;
+    const nodes = nodesRef.current;
+    if (nodes.length === 0) return;
+    const { w, h } = sizeRef.current;
+    if (w === 0) return;
+
+    const rng = seededRandom(42);
+    const positions = getLayoutPositions(mode, w, h, rng);
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].targetX = positions[i].x;
+      nodes[i].targetY = positions[i].y;
+    }
+  }, [mode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,43 +160,38 @@ const ConstellationField = () => {
       sizeRef.current = { w, h };
 
       const rng = seededRandom(42);
-      const cellW = w / COLS;
-      const cellH = h / ROWS;
-      const jitterX = cellW * 0.3;
-      const jitterY = cellH * 0.3;
+      const positions = getLayoutPositions(modeRef.current, w, h, rng);
+      const rng2 = seededRandom(99); // separate seed for node properties
 
       const nodes: Node[] = [];
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          const i = row * COLS + col;
-          const bx = (col + 0.5) * cellW + (rng() - 0.5) * jitterX * 2;
-          const by = (row + 0.5) * cellH + (rng() - 0.5) * jitterY * 2;
-          const tier: Node["tier"] =
-            i === NORTH_STAR_INDEX
-              ? "northstar"
-              : ANCHOR_INDICES.has(i)
-              ? "anchor"
-              : "field";
+      for (let i = 0; i < COLS * ROWS; i++) {
+        const tier: Node["tier"] =
+          i === NORTH_STAR_INDEX
+            ? "northstar"
+            : ANCHOR_INDICES.has(i)
+            ? "anchor"
+            : "field";
 
-          nodes.push({
-            x: bx,
-            y: by,
-            baseX: bx,
-            baseY: by,
-            orbitRadius: tier === "field" ? 6 + rng() * 14 : 4 + rng() * 8,
-            orbitSpeed:
-              tier === "field"
-                ? 0.0003 + rng() * 0.0005
-                : 0.0001 + rng() * 0.0002,
-            orbitPhase: rng() * Math.PI * 2,
-            driftFreqX: 0.00003 + rng() * 0.00005,
-            driftFreqY: 0.00003 + rng() * 0.00005,
-            driftPhaseX: rng() * Math.PI * 2,
-            driftPhaseY: rng() * Math.PI * 2,
-            driftAmp: 20 + rng() * 30,
-            tier,
-          });
-        }
+        nodes.push({
+          x: positions[i].x,
+          y: positions[i].y,
+          baseX: positions[i].x,
+          baseY: positions[i].y,
+          targetX: positions[i].x,
+          targetY: positions[i].y,
+          orbitRadius: tier === "field" ? 6 + rng2() * 14 : 4 + rng2() * 8,
+          orbitSpeed:
+            tier === "field"
+              ? 0.0003 + rng2() * 0.0005
+              : 0.0001 + rng2() * 0.0002,
+          orbitPhase: rng2() * Math.PI * 2,
+          driftFreqX: 0.00003 + rng2() * 0.00005,
+          driftFreqY: 0.00003 + rng2() * 0.00005,
+          driftPhaseX: rng2() * Math.PI * 2,
+          driftPhaseY: rng2() * Math.PI * 2,
+          driftAmp: 20 + rng2() * 30,
+          tier,
+        });
       }
       nodesRef.current = nodes;
     };
@@ -116,8 +212,12 @@ const ConstellationField = () => {
       ctx.clearRect(0, 0, w, h);
       const nodes = nodesRef.current;
 
-      // Update positions — evolving drift + orbit + mouse repulsion
+      // Lerp base positions toward targets + evolving drift + orbit + mouse repulsion
       for (const n of nodes) {
+        // Smooth lerp toward target
+        n.baseX += (n.targetX - n.baseX) * LERP_SPEED;
+        n.baseY += (n.targetY - n.baseY) * LERP_SPEED;
+
         const angle = n.orbitPhase + t * n.orbitSpeed;
         const driftX = Math.sin(t * n.driftFreqX + n.driftPhaseX) * n.driftAmp;
         const driftY = Math.sin(t * n.driftFreqY + n.driftPhaseY) * n.driftAmp;
@@ -154,7 +254,6 @@ const ConstellationField = () => {
             connected[i][j] = true;
             connected[j][i] = true;
 
-            // Brightness boost near cursor
             const edgeMidX = (nodes[i].x + nodes[j].x) / 2;
             const edgeMidY = (nodes[i].y + nodes[j].y) / 2;
             const eDist = Math.sqrt(
@@ -223,7 +322,19 @@ const ConstellationField = () => {
 
     rafRef.current = requestAnimationFrame(draw);
 
-    const onResize = () => initNodes();
+    const onResize = () => {
+      initNodes();
+      // Re-apply current mode targets after resize
+      const rng = seededRandom(42);
+      const positions = getLayoutPositions(modeRef.current, sizeRef.current.w, sizeRef.current.h, rng);
+      const nodes = nodesRef.current;
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].targetX = positions[i].x;
+        nodes[i].targetY = positions[i].y;
+        nodes[i].baseX = positions[i].x;
+        nodes[i].baseY = positions[i].y;
+      }
+    };
     window.addEventListener("resize", onResize);
 
     return () => {
