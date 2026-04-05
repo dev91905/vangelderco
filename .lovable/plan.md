@@ -1,79 +1,81 @@
 
 
-# Van Gelder Co. — Landing Page
+# Van Gelder Co. — Capability Pages + Content System
 
-Single-viewport brutalist landing page. Dark, atmospheric, no scroll, no interactivity.
+## Summary
+Turn the three hero lines into navigable links with video-game-inspired hover effects and transitions. Create three capability sub-pages with a brutalist-institutional design. Set up Supabase tables for case studies and blog posts.
+
+## Architecture
+
+```text
+/                    → Landing (existing, hero lines become nav links)
+/cultural-strategy   → Capability page
+/cross-sector        → Capability page
+/deep-organizing     → Capability page
+```
+
+## What Changes
+
+### 1. Landing Page — Hero Lines Become Links
+- Wrap each hero line in a `<Link>` to its capability route
+- Add a video-game hover effect: on hover, a red scan-line sweeps across the text left-to-right, text shifts slightly right (~4px translate), and a faint red glow pulses behind it. A small `>` caret fades in at left. All via CSS transitions (~300ms).
+- Cursor changes to `pointer`. No other style changes — same font, size, color, animation on load.
+
+### 2. Three Capability Pages (new components)
+Each page shares a common layout component (`CapabilityLayout`) with:
+- Same atmospheric effects as landing (grain, scanlines, vignette, breathing glow)
+- A "back" indicator top-left: `< RETURN` in JetBrains Mono, clicking returns to `/`
+- Page entry animation: content glitches/flickers in like a CRT boot sequence (2-3 rapid opacity flickers over ~400ms, then settles)
+- **Header section**: Capability name in Space Grotesk (~36px desktop), red classification label above it, one-paragraph description below in JetBrains Mono at 50% white opacity
+- **Case Studies / Posts section**: Grid of cards below, each card has a red left-border accent, title, date, excerpt. Cards fade-up stagger on load. Clicking a card expands it inline (no new route) with full content.
+- HUD corner brackets persist from landing page (shared layout)
+
+Content descriptions per page:
+- **Cultural Strategy**: Engaging cultural sectors around shared objectives with partners
+- **Cross-Sector Intelligence**: Developing strategies and coordinating across sectors around common issues  
+- **Deep Organizing**: Deeply organizing key constituencies and building durable field power
+
+### 3. Supabase Setup — Content Tables
+
+**Table: `capability_posts`**
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | default gen_random_uuid() |
+| capability | text | enum-like: 'cultural-strategy', 'cross-sector', 'deep-organizing' |
+| type | text | 'case-study' or 'blog-post' |
+| title | text | required |
+| excerpt | text | short preview |
+| content | text | full markdown content |
+| published_at | timestamptz | display date |
+| is_published | boolean | default false |
+| created_at | timestamptz | default now() |
+
+RLS: Public read for published posts (`is_published = true`). No write via client — content managed via Supabase dashboard or future admin.
+
+### 4. Data Layer
+- React Query hook `useCapabilityPosts(capability)` fetches posts filtered by capability and `is_published = true`, ordered by `published_at desc`
+- Supabase client integration via `@supabase/supabase-js`
+
+### 5. Shared Layout Refactor
+Extract atmospheric effects (grain, scanlines, vignette, glow, scan beam, corner brackets) into a shared `AtmosphericLayout` wrapper used by both landing and capability pages.
+
+### 6. New CSS
+- Hover effect keyframes for hero links (scan-sweep, glow pulse)
+- CRT boot-in animation for capability pages
+- Card fade-up stagger animation
+- Transition classes for link hover states
 
 ## Files to Create/Modify
-
-### 1. `index.html` — Add Google Fonts
-Add Space Grotesk and JetBrains Mono via Google Fonts link tags in `<head>`.
-
-### 2. `src/index.css` — Complete Overhaul
-- Set CSS custom properties for the design system (near-black bg `hsl(0 0% 2.5%)`, accent red `hsl(0 80% 48%)`)
-- Define font families (Space Grotesk, JetBrains Mono)
-- Film grain overlay via `body::before` with CSS noise/animation
-- CRT scanlines via `body::after` with repeating-linear-gradient
-- Breathing red glow keyframes (slow pulse on opacity/scale, ~8s cycle)
-- Hero clip-reveal keyframes (clip-path from left)
-- Fade-up keyframes for tags and closing line
-- Vignette as a fixed radial gradient overlay
-- All animations infinite where atmospheric, forwards fill for reveals
-
-### 3. `src/pages/Index.tsx` — Full Replacement
-Single component, no scroll (`h-dvh overflow-hidden`), everything centered with flexbox.
-
-**Layout structure:**
-```
-<div class="full-viewport relative">
-  <!-- Atmospheric layers (grain, scanlines, glow, vignette) -->
-  <div class="breathing-glow" />  <!-- radial red gradient, pulsing -->
-  <div class="vignette" />
-  
-  <!-- HUD: top-right -->
-  <span class="fixed top-right faint mono">STRATEGIC ADVISORY</span>
-  
-  <!-- Center content -->
-  <main class="centered-stack">
-    <span class="classification-label">Van Gelder Co.</span>
-    
-    <h1 class="hero-lines">
-      <!-- 3 lines, each with staggered clip-reveal -->
-      Building coalitions that move capital and policy
-      Connecting labor, energy, and culture at the seams
-      Turning networks into organized power
-    </h1>
-    
-    <div class="sector-tags">
-      <!-- 6 tags: Energy, Labor, Philanthropy, Culture, Policy, National Security -->
-      <!-- Each: uppercase JetBrains Mono, subtle border, red left-accent -->
-    </div>
-    
-    <span class="access-gate">BY REFERRAL ONLY</span>
-  </main>
-</div>
-```
-
-**Animation timing:**
-- Hero line 1: 0.8s delay, line 2: 1.2s, line 3: 1.6s (clip-path reveal)
-- Sector tags: fade-up starting at ~2.2s with stagger
-- Access gate: fade-in at ~3.0s
-- Atmospheric effects: infinite loops from page load
-
-### 4. `src/App.css` — Clear
-Remove all default Vite styles (logo spin, card padding, etc.).
-
-### 5. `tailwind.config.ts` — Extend
-Add custom keyframes for `clip-reveal`, `breathe`, `grain`, `scanline-scroll` and corresponding animation utilities. Add font family entries for Space Grotesk and JetBrains Mono.
-
-## Typography Scale
-- Classification label: JetBrains Mono, ~11px, tracking-[0.3em], red accent color, opacity 90%
-- Hero lines: Space Grotesk, ~20px mobile / ~48px desktop, white at 90% opacity, font-weight 500
-- Sector tags: JetBrains Mono, ~10px mobile / ~12px desktop, uppercase, white at 50% opacity
-- HUD text: JetBrains Mono, ~10px, white at 20% opacity
-- Access gate: JetBrains Mono, ~10px, white at 30% opacity, tracking wide
-
-## Responsive
-- Mobile: tighter spacing, hero ~20-26px, tags in 2-col grid
-- Desktop: generous whitespace, hero ~48px, tags in single row
+- `src/index.css` — add hover and page-transition keyframes
+- `src/pages/Index.tsx` — wrap hero lines in Links, add hover classes
+- `src/components/AtmosphericLayout.tsx` — shared atmospheric wrapper
+- `src/components/CapabilityLayout.tsx` — shared capability page layout
+- `src/pages/CulturalStrategy.tsx` — capability page
+- `src/pages/CrossSector.tsx` — capability page  
+- `src/pages/DeepOrganizing.tsx` — capability page
+- `src/components/PostCard.tsx` — case study/blog card component
+- `src/integrations/supabase/client.ts` — Supabase client (via Lovable Cloud)
+- `src/hooks/useCapabilityPosts.ts` — data fetching hook
+- `src/App.tsx` — add routes
+- Migration: create `capability_posts` table with RLS
 
