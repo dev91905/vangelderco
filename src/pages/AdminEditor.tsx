@@ -56,6 +56,7 @@ const AdminEditor = () => {
       setPublishedAt(post.published_at);
       setContentBlocks(Array.isArray(post.content_blocks) ? post.content_blocks as any[] : []);
       setStats(Array.isArray(post.stats) ? post.stats as any[] : []);
+      setDirty(false);
     }
   }, [post]);
 
@@ -98,6 +99,7 @@ const AdminEditor = () => {
   // Auto-save: 3s after last change (only for existing posts)
   useEffect(() => {
     if (!dirty || isNew) return;
+    if (!hasLoadedRef.current) return;
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
     autoSaveTimer.current = setTimeout(() => {
       handleSave();
