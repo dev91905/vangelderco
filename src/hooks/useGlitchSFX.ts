@@ -13,13 +13,13 @@ const useGlitchSFX = () => {
       await ctxRef.current.resume();
     }
     // iOS unlock: play a silent buffer on first interaction
-    if (!unlockedRef.current) {
+    if (!unlocked) {
       const buf = ctxRef.current.createBuffer(1, 1, ctxRef.current.sampleRate);
       const src = ctxRef.current.createBufferSource();
       src.buffer = buf;
       src.connect(ctxRef.current.destination);
       src.start(0);
-      unlockedRef.current = true;
+      unlocked = true;
     }
     return ctxRef.current;
   }, []);
