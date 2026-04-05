@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Plus } from "lucide-react";
 import BlockEditor from "./BlockEditor";
 import BlockTypePicker, { BlockType } from "./BlockTypePicker";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BlockCanvasProps {
   blocks: any[];
@@ -29,32 +30,13 @@ const defaultBlock = (type: BlockType): any => {
 };
 
 function SortableBlock({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, onSlashCommand, isCaseStudy }: {
-  block: any;
-  onChange: (b: any) => void;
-  onDelete: () => void;
-  onInsertAfter: () => void;
-  onDeleteEmpty: () => void;
-  onSlashCommand: () => void;
-  isCaseStudy: boolean;
+  block: any; onChange: (b: any) => void; onDelete: () => void; onInsertAfter: () => void; onDeleteEmpty: () => void; onSlashCommand: () => void; isCaseStudy: boolean;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,
-  };
+  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
-      <BlockEditor
-        block={block}
-        onChange={onChange}
-        onDelete={onDelete}
-        onInsertAfter={onInsertAfter}
-        onDeleteEmpty={onDeleteEmpty}
-        onSlashCommand={onSlashCommand}
-        isCaseStudy={isCaseStudy}
-        dragHandleProps={listeners}
-      />
+      <BlockEditor block={block} onChange={onChange} onDelete={onDelete} onInsertAfter={onInsertAfter} onDeleteEmpty={onDeleteEmpty} onSlashCommand={onSlashCommand} isCaseStudy={isCaseStudy} dragHandleProps={listeners} />
     </div>
   );
 }
@@ -63,6 +45,7 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
   const [pickerIndex, setPickerIndex] = useState<number | null>(null);
   const [slashIndex, setSlashIndex] = useState<number | null>(null);
   const [slashFilter, setSlashFilter] = useState("");
+  const isMobile = useIsMobile();
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   const ensureIds = (bs: any[]) => bs.map((b) => b.id ? b : { ...b, id: crypto.randomUUID() });
@@ -111,7 +94,7 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
     if (slashIndex !== null) {
       const newBlocks = [...safeBlocks];
       const newBlock = defaultBlock(type);
-      newBlock.id = newBlocks[slashIndex].id; // keep same id to avoid flicker
+      newBlock.id = newBlocks[slashIndex].id;
       newBlocks[slashIndex] = newBlock;
       onChange(newBlocks);
       setSlashIndex(null);
@@ -138,15 +121,9 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
                 onSlashCommand={() => handleSlashCommand(i)}
                 isCaseStudy={isCaseStudy}
               />
-              {/* Slash command picker */}
               {slashIndex === i && (
                 <div className="absolute left-10 top-full z-50 mt-1">
-                  <BlockTypePicker
-                    onSelect={handleSlashSelect}
-                    onClose={() => { setSlashIndex(null); setSlashFilter(""); }}
-                    isCaseStudy={isCaseStudy}
-                    filter={slashFilter}
-                  />
+                  <BlockTypePicker onSelect={handleSlashSelect} onClose={() => { setSlashIndex(null); setSlashFilter(""); }} isCaseStudy={isCaseStudy} filter={slashFilter} />
                 </div>
               )}
               <InsertPoint index={i + 1} pickerIndex={pickerIndex} setPickerIndex={setPickerIndex} onInsert={insertBlock} isCaseStudy={isCaseStudy} />
@@ -156,25 +133,35 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
       </DndContext>
 
       {safeBlocks.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
-          <p className="text-xs" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
-            No content blocks yet
-          </p>
-          <p className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.15)" }}>
-            Click + to add your first block
-          </p>
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <p className="text-sm" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Start writing</p>
+          <button
+            onClick={() => setPickerIndex(0)}
+            className="p-3 rounded-full transition-all hover:scale-105"
+            style={{ background: "hsl(0 0% 8%)", border: "1px solid hsl(0 0% 15%)" }}
+          >
+            <Plus className="w-5 h-5" style={{ color: "hsl(0 80% 48% / 0.5)" }} />
+          </button>
         </div>
+      )}
+
+      {/* Mobile: persistent add button at bottom */}
+      {isMobile && safeBlocks.length > 0 && (
+        <button
+          onClick={() => setPickerIndex(safeBlocks.length)}
+          className="w-full py-3 flex items-center justify-center gap-2 mt-2 rounded-lg transition-colors"
+          style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 0% 12%)" }}
+        >
+          <Plus className="w-4 h-4" style={{ color: "hsl(0 80% 48% / 0.4)" }} />
+          <span className="text-[10px] uppercase tracking-widest" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Add block</span>
+        </button>
       )}
     </div>
   );
 };
 
 function InsertPoint({ index, pickerIndex, setPickerIndex, onInsert, isCaseStudy }: {
-  index: number;
-  pickerIndex: number | null;
-  setPickerIndex: (i: number | null) => void;
-  onInsert: (type: BlockType, index: number) => void;
-  isCaseStudy: boolean;
+  index: number; pickerIndex: number | null; setPickerIndex: (i: number | null) => void; onInsert: (type: BlockType, index: number) => void; isCaseStudy: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isOpen = pickerIndex === index;
@@ -189,14 +176,14 @@ function InsertPoint({ index, pickerIndex, setPickerIndex, onInsert, isCaseStudy
   }, [isOpen, setPickerIndex]);
 
   return (
-    <div ref={ref} className="relative group flex items-center justify-center" style={{ height: "28px" }}>
-      <div className="absolute inset-x-10 top-1/2 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "hsl(0 80% 48% / 0.12)" }} />
+    <div ref={ref} className="relative group flex items-center justify-center" style={{ height: "12px" }}>
+      <div className="absolute inset-x-6 top-1/2 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "hsl(0 80% 48% / 0.08)" }} />
       <button
         onClick={() => setPickerIndex(isOpen ? null : index)}
-        className="relative z-10 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+        className="relative z-10 p-0.5 rounded-full opacity-0 group-hover:opacity-30 transition-all duration-200"
         style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 80% 48% / 0.2)" }}
       >
-        <Plus className="w-3.5 h-3.5" style={{ color: "hsl(0 80% 48% / 0.5)" }} />
+        <Plus className="w-3 h-3" style={{ color: "hsl(0 80% 48% / 0.6)" }} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-50">

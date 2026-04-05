@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Type, AlignLeft, Image, Video, Code, Quote, AlertCircle, ChevronDown, LayoutGrid, Layers } from "lucide-react";
+import { Type, AlignLeft, Image, Video, Code, Quote, AlertCircle, ChevronDown, LayoutGrid, Layers, Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type BlockType = "heading" | "paragraph" | "image" | "video" | "embed" | "quote" | "callout" | "expandable" | "carousel" | "stat-grid";
@@ -26,14 +26,18 @@ const ALL_TYPES: { type: BlockType; label: string; icon: any; caseStudyOnly?: bo
 
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
-const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter = "" }: BlockTypePickerProps) => {
+const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter: externalFilter = "" }: BlockTypePickerProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [localFilter, setLocalFilter] = useState("");
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
 
-  const types = ALL_TYPES.filter((t) => !t.caseStudyOnly || isCaseStudy).filter((t) => !filter || t.label.toLowerCase().includes(filter.toLowerCase()));
+  const activeFilter = externalFilter || localFilter;
+  const types = ALL_TYPES.filter((t) => !t.caseStudyOnly || isCaseStudy).filter((t) => !activeFilter || t.label.toLowerCase().includes(activeFilter.toLowerCase()));
 
-  useEffect(() => { setSelectedIndex(0); }, [filter]);
+  useEffect(() => { setSelectedIndex(0); }, [activeFilter]);
+  useEffect(() => { inputRef.current?.focus(); }, []);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "ArrowDown") { e.preventDefault(); setSelectedIndex((i) => Math.min(i + 1, types.length - 1)); }
@@ -49,8 +53,22 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter = "" }: BlockT
     document.addEventListener("mousedown", handler); return () => document.removeEventListener("mousedown", handler);
   }, [onClose]);
 
-  const content = (
-    <div className="py-1.5 space-y-0.5" style={{ maxHeight: isMobile ? "60vh" : "320px", overflowY: "auto" }}>
+  const searchInput = !externalFilter && (
+    <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: "1px solid hsl(0 0% 12%)" }}>
+      <Search className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(0 0% 100% / 0.2)" }} />
+      <input
+        ref={inputRef}
+        value={localFilter}
+        onChange={(e) => setLocalFilter(e.target.value)}
+        placeholder="Filter..."
+        className="w-full bg-transparent outline-none text-xs"
+        style={{ ...mono, color: "hsl(0 0% 100% / 0.6)" }}
+      />
+    </div>
+  );
+
+  const list = (
+    <div className="py-1 space-y-0.5" style={{ maxHeight: isMobile ? "60vh" : "280px", overflowY: "auto" }}>
       {types.length === 0 && <div className="px-3 py-2 text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>No matching blocks</div>}
       {types.map((t, i) => (
         <button key={t.type} onClick={() => onSelect(t.type)} onMouseEnter={() => setSelectedIndex(i)}
@@ -69,8 +87,8 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter = "" }: BlockT
         <div className="fixed inset-0 z-50" style={{ background: "hsl(0 0% 0% / 0.6)" }} onClick={onClose} />
         <div ref={ref} className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl pb-safe" style={{ background: "hsl(0 0% 6%)", borderTop: "1px solid hsl(0 0% 15%)" }}>
           <div className="w-10 h-1 rounded-full mx-auto mt-3 mb-2" style={{ background: "hsl(0 0% 25%)" }} />
-          <div className="px-3 py-2 text-[10px] uppercase tracking-widest" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Add block</div>
-          {content}
+          {searchInput}
+          {list}
         </div>
       </>
     );
@@ -78,8 +96,8 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter = "" }: BlockT
 
   return (
     <div ref={ref} className="w-52 rounded-lg shadow-2xl overflow-hidden" style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 0% 15%)" }}>
-      <div className="px-3 py-2 text-[10px] uppercase tracking-widest" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)", borderBottom: "1px solid hsl(0 0% 12%)" }}>Add block</div>
-      {content}
+      {searchInput}
+      {list}
     </div>
   );
 };
