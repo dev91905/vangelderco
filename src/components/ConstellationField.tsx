@@ -259,7 +259,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.004)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.002)`;
               ctx.fill();
             }
           }
