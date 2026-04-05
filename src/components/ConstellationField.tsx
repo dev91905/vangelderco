@@ -28,12 +28,12 @@ interface Node {
   tier: "northstar" | "anchor" | "field";
 }
 
-const COLS = 6;
-const ROWS = 6;
-const MAX_EDGE_DIST = 0.18;
+const COLS = 4;
+const ROWS = 4;
+const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
-const ANCHOR_INDICES = new Set([0, 7, 14, 21, 28]);
+const ANCHOR_INDICES = new Set([0, 5, 10, 15]);
 const NORTH_STAR_COL = Math.round(COLS * 0.618);
 const NORTH_STAR_ROW = Math.round(ROWS * 0.382);
 const NORTH_STAR_INDEX = NORTH_STAR_ROW * COLS + NORTH_STAR_COL;
@@ -159,17 +159,17 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
           baseY: positions[i].y,
           targetX: positions[i].x,
           targetY: positions[i].y,
-          orbitRadius: tier === "field" ? 3 + rng2() * 5 : 2 + rng2() * 3,
+          orbitRadius: tier === "field" ? 6 + rng2() * 8 : 4 + rng2() * 4,
           orbitSpeed:
             tier === "field"
-              ? 0.00015 + rng2() * 0.00025
-              : 0.00005 + rng2() * 0.0001,
+              ? 0.0003 + rng2() * 0.0004
+              : 0.0001 + rng2() * 0.0002,
           orbitPhase: rng2() * Math.PI * 2,
-          driftFreqX: 0.000015 + rng2() * 0.000025,
-          driftFreqY: 0.000015 + rng2() * 0.000025,
+          driftFreqX: 0.00003 + rng2() * 0.00005,
+          driftFreqY: 0.00003 + rng2() * 0.00005,
           driftPhaseX: rng2() * Math.PI * 2,
           driftPhaseY: rng2() * Math.PI * 2,
-          driftAmp: 8 + rng2() * 10,
+          driftAmp: 15 + rng2() * 15,
           tier,
         });
       }
@@ -235,10 +235,10 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               (edgeMidX - mouse.x) ** 2 + (edgeMidY - mouse.y) ** 2
             );
             const boost = eDist < MOUSE_RADIUS * 1.5
-              ? 0.015 * (1 - eDist / (MOUSE_RADIUS * 1.5))
+              ? 0.008 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.015 + 0.015 * (1 - dist / maxDist) + boost;
+            const alpha = 0.008 + 0.008 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -259,7 +259,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.004)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.002)`;
               ctx.fill();
             }
           }
@@ -268,7 +268,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.06 + 0.04 * Math.sin(t * 0.0008);
+          const pulse = 0.03 + 0.02 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
@@ -280,12 +280,12 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.05)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.018)`;
           ctx.fill();
         }
       }
