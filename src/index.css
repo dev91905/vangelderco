@@ -110,3 +110,38 @@ body::after {
   0% { top: -2px; }
   100% { top: 100%; }
 }
+
+@keyframes crt-boot {
+  0% { opacity: 0; }
+  10% { opacity: 0.8; }
+  15% { opacity: 0.2; }
+  25% { opacity: 0.9; }
+  30% { opacity: 0.3; }
+  40% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Hero nav link hover effects */
+.hero-nav-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.hero-nav-link:hover > span:first-child {
+  color: hsl(0 80% 48% / 0.8) !important;
+  transform: translateX(-4px);
+}
+
+.hero-nav-link:hover .hero-nav-glow {
+  background: radial-gradient(ellipse at center, hsl(0 80% 48% / 0.08) 0%, transparent 70%) !important;
+}
+
+.hero-nav-link:hover .hero-nav-scan > span {
+  left: 100% !important;
+  background: hsl(0 80% 48% / 0.6) !important;
+  box-shadow: 0 0 12px 3px hsl(0 80% 48% / 0.3) !important;
+}
+
+.hero-nav-link:hover > span:last-child {
+  transform: translateX(4px);
+}
