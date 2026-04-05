@@ -1,27 +1,30 @@
 
 
-# Fix: Case Studies Auto-Saved as Blog Posts
+# Stabilize Content Manager Sort Logic
 
-## Root Cause
+## Current Behavior
 
-`AdminEditor.tsx` line 24 initializes `type` to `"blog-post"`. When editing a Case Study:
+Posts sort by `created_at DESC` — newest created first. Problem: `created_at` is set once at row insertion and never changes. If two posts are created in the same second (or via a batch insert like the seed data), their order is arbitrary and can shift between page loads since Postgres doesn't guarantee stable ordering on ties.
 
-1. Component mounts with `type = "blog-post"` (default state)
-2. The `useEffect` that loads post data from the query fires, but React state updates are async
-3. Any `setDirty(true)` call during initialization (or from the `useEffect` setting state) triggers the 3-second auto-save timer
-4. The auto-save fires `formData()` which reads the current state — if the post data hasn't fully populated yet, `type` is still `"blog-post"`
+Additionally, `created_at` doesn't reflect editorial intent — a draft created months ago that gets published today still sorts by its original creation date, buried below newer drafts.
 
-The `dirty` flag shouldn't be `true` until the user actually makes a change, but the `markDirty` wrapper is called by the state setters in the `useEffect` load path — wait, actually the load path uses raw setters (`setType(post.type)`), not `markDirty`. So the issue is subtler: the `hasLoadedRef` guard only prevents re-loading, but the initial render with default values could still interact with auto-save if any other effect sets dirty.
+## Proposed Sort Logic
 
-The real fix is two-fold:
+**Primary: `published_at DESC NULLS LAST`, Secondary: `created_at DESC`**
 
-1. **Don't allow auto-save until post data has loaded** — gate auto-save on `hasLoadedRef.current`
-2. **Don't default `type` to `"blog-post"`** — leave it empty or use post data directly
+- Published posts sort by publish date (most recently published first)
+- Unpublished drafts (where `published_at` is null) fall to the bottom — they're work-in-progress, not priority items in the list
+- Within each group, ties break on `created_at` which is unique enough to be stable
+- This matches editorial mental models: "what did I publish recently?" is the primary question when scanning the list
 
 ## Changes
 
-### `src/pages/AdminEditor.tsx`
+### `src/components/admin/PostListTable.tsx`
+- Replace `.order("created_at", { ascending: false })` with two chained `.order()` calls:
+  ```ts
+  .order("published_at", { ascending: false, nullsFirst: false })
+  .order("created_at", { ascending: false })
+  ```
 
-1. In the auto-save `useEffect` (line 99), add a guard: `if (!hasLoadedRef.current && !isNew) return;` — prevents auto-save from firing before the post data has been loaded into state
-2. After the data-load `useEffect` sets all fields, ensure `dirty` is explicitly set to `false` (it should already be, but add `setDirty(false)` at the end of the load block for safety)
+One line change, one file.
 
