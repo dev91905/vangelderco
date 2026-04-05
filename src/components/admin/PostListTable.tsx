@@ -13,6 +13,7 @@ interface PostListTableProps {
 
 const PostListTable = ({ filter }: PostListTableProps) => {
   const togglePublish = useTogglePublish();
+  const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["admin-posts"],
