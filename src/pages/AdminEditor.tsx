@@ -66,7 +66,7 @@ const AdminEditor = () => {
 
   const formData = useCallback((): PostFormData => ({
     title, slug, type, capability,
-    excerpt: null, content: null,
+    excerpt: excerpt || null, content: null,
     hero_image_url: heroImageUrl,
     content_blocks: contentBlocks,
     stats: type === "case-study" ? stats : null,
