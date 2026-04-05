@@ -68,7 +68,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
           }}
         >
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium truncate flex items-center gap-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
+            <h3 className="text-sm font-medium truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
               {post.title}
               {(post as any).password && <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(0 0% 100% / 0.15)" }} />}
             </h3>
