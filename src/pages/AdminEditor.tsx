@@ -28,6 +28,7 @@ const AdminEditor = () => {
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [contentBlocks, setContentBlocks] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
+  const [password, setPassword] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -56,6 +57,7 @@ const AdminEditor = () => {
       setPublishedAt(post.published_at);
       setContentBlocks(Array.isArray(post.content_blocks) ? post.content_blocks as any[] : []);
       setStats(Array.isArray(post.stats) ? post.stats as any[] : []);
+      setPassword((post as any).password || null);
       setDirty(false);
     }
   }, [post]);
@@ -66,9 +68,10 @@ const AdminEditor = () => {
     hero_image_url: heroImageUrl,
     content_blocks: contentBlocks,
     stats: type === "case-study" ? stats : null,
+    password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
-  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, isPublished, publishedAt]);
+  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
@@ -168,8 +171,10 @@ const AdminEditor = () => {
       <div className="flex-1 overflow-y-auto">
         <EditorMetaBar
           title={title} slug={slug} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
+          password={password}
           onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
           onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
+          onPasswordChange={markDirty(setPassword)}
         />
 
         {/* Stat Chips — inline with document flow */}

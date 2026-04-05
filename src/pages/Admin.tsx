@@ -1,11 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Settings, X, Lock } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
+import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
+
+const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 const Admin = () => {
   const [typeFilter, setTypeFilter] = useState("all");
   const [capFilter, setCapFilter] = useState("all");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { data: settings } = useSiteSettings();
+  const updateSetting = useUpdateSiteSetting();
+  const [globalPw, setGlobalPw] = useState<string>("");
+  const [pwLoaded, setPwLoaded] = useState(false);
+
+  // Sync global password from settings once loaded
+  if (settings && !pwLoaded) {
+    setGlobalPw(settings.global_article_password || "");
+    setPwLoaded(true);
+  }
 
   const typeChips = [
     { value: "all", label: "All" },
@@ -25,25 +39,90 @@ const Admin = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
         <div className="flex items-center gap-4">
-          <Link to="/" className="text-[10px] tracking-[0.2em] uppercase transition-colors hover:opacity-70" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.3)" }}>
+          <Link to="/" className="text-[10px] tracking-[0.2em] uppercase transition-colors hover:opacity-70" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
             ← Site
           </Link>
           <h1 className="text-sm font-medium tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.8)" }}>
             Content Manager
           </h1>
         </div>
-        <Link
-          to="/admin/new"
-          className="flex items-center gap-2 px-4 py-2 text-xs transition-colors hover:bg-[hsl(0_80%_48%_/_0.15)]"
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            color: "hsl(0 80% 48%)",
-            border: "1px solid hsl(0 80% 48% / 0.4)",
-          }}
-        >
-          <Plus className="w-3 h-3" /> New Post
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg relative"
+            title="Site settings"
+          >
+            <Settings className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+            {settings?.global_article_password && (
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: "hsl(0 80% 48%)" }} />
+            )}
+          </button>
+          <Link
+            to="/admin/new"
+            className="flex items-center gap-2 px-4 py-2 text-xs transition-colors hover:bg-[hsl(0_80%_48%_/_0.15)]"
+            style={{ ...mono, color: "hsl(0 80% 48%)", border: "1px solid hsl(0 80% 48% / 0.4)" }}
+          >
+            <Plus className="w-3 h-3" /> New Post
+          </Link>
+        </div>
       </div>
+
+      {/* Site settings overlay */}
+      {settingsOpen && (
+        <>
+          <div className="fixed inset-0 z-50" style={{ background: "hsl(0 0% 0% / 0.5)" }} onClick={() => setSettingsOpen(false)} />
+          <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-xl overflow-hidden" style={{ background: "hsl(0 0% 5%)", border: "1px solid hsl(0 0% 12%)" }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
+              <span className="text-[10px] uppercase tracking-[0.15em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>Site Settings</span>
+              <button onClick={() => setSettingsOpen(false)} className="p-1.5 rounded hover:bg-[hsl(0_0%_10%)] transition-colors">
+                <X className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
+                  <Lock className="w-3 h-3" /> Global Article Password
+                </label>
+                <p className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.15)" }}>
+                  If set, all articles require this password to view
+                </p>
+                <input
+                  value={globalPw}
+                  onChange={(e) => setGlobalPw(e.target.value)}
+                  placeholder="No global password"
+                  className="w-full px-3 py-2.5 text-xs bg-transparent outline-none"
+                  style={{ ...mono, color: "hsl(0 0% 100% / 0.6)", border: "1px solid hsl(0 0% 15%)" }}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
+                    setSettingsOpen(false);
+                  }}
+                  className="flex-1 px-4 py-2.5 text-xs transition-all rounded"
+                  style={{ ...mono, background: "hsl(0 80% 48%)", color: "hsl(0 0% 100%)" }}
+                >
+                  Save
+                </button>
+                {globalPw && (
+                  <button
+                    onClick={() => {
+                      setGlobalPw("");
+                      updateSetting.mutate({ key: "global_article_password", value: null });
+                      setSettingsOpen(false);
+                    }}
+                    className="px-4 py-2.5 text-xs transition-all rounded"
+                    style={{ ...mono, color: "hsl(0 80% 48% / 0.6)", border: "1px solid hsl(0 80% 48% / 0.2)" }}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2 px-4 md:px-8 py-3" style={{ borderBottom: "1px solid hsl(0 0% 8%)" }}>
