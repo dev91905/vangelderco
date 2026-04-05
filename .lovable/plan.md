@@ -1,27 +1,36 @@
 
 
-# Restore Horizontal Left-to-Right Scan Line
+# Hover Effect Redesign — CONTROL / HALO Style
 
-## What You Want
-The original horizontal scan line that sweeps **left to right** across each link on hover, then disappears — not the vertical top-to-bottom sweep currently in place.
+## What's Wrong Now
+- Glow is too bright/wide (you want it reverted)
+- Scan line sweeps to `left: 100%` of the full-width container, not the text — so it overshoots on shorter labels and stops exactly at the edge on longer ones
+- The overall effect feels more "cyberpunk terminal" than CONTROL/HALO
 
-## Changes
+## CONTROL's Menu Language
+CONTROL's UI is bureaucratic and paranormal. Menu items don't have flashy sweeps. They have:
+- A quiet **red tint wash** that fills behind the selected item — like a classified document being highlighted
+- A solid **red left-edge bar** (2-3px) that appears instantly
+- Text brightens slightly
+- Everything else stays still. The power is in the restraint.
+
+## New Hover Effect
+On hover, each link gets:
+1. **Red left bar**: 2px solid red accent appears at the left edge of the text (not the container), `opacity 0→1`, no animation delay — instant like a selection indicator
+2. **Background wash**: A very faint horizontal band of red (`hsl(0 80% 48% / 0.04)`) fills behind the text area — like a row being selected in a classified system
+3. **Text brightens**: White goes from `0.9` to `1.0` opacity
+4. **No caret, no scan line, no underline, no glow orb** — remove all of those
+
+This is simpler, more CONTROL, and eliminates the scan-line-width inconsistency entirely.
+
+## Files to Modify
 
 ### `src/pages/Index.tsx`
-- Change the `.hero-nav-scan` span from horizontal bar (`left-0 right-0`, `height: 1px`) to a **vertical line** (`top-0 bottom-0`, `width: 1px`) that sweeps left-to-right across the link
+- Remove: glow span, scan-line span, caret span, underline span
+- Simplify link internals to just the text with a left-border that appears on hover
+- Add a background wash element (single span, `absolute inset-0`)
 
 ### `src/index.css`
-- Replace `@keyframes hero-scan-down` with `@keyframes hero-scan-right` — animates `left` from `0%` to `100%` instead of `top`
-- Fades out at the end so it doesn't stick at the right edge
-- Update `.hero-nav-link:hover .hero-nav-scan` to reference the new keyframe
-
-```css
-@keyframes hero-scan-right {
-  0% { left: 0%; opacity: 1; }
-  80% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
-}
-```
-
-The scan element becomes a 1px-wide vertical red line (full height of the link) that sweeps across left-to-right on hover, with the same red accent color and glow trail.
+- Rewrite `.hero-nav-link:hover` rules: left-border opacity, background wash, text color
+- Remove all scan/glow/caret/underline hover rules
 

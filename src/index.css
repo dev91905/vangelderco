@@ -138,14 +138,3 @@ body::after {
 .hero-nav-link:hover .hero-nav-text {
   color: hsl(0 0% 100% / 1) !important;
 }
-
-.hero-nav-link:hover .hero-nav-scan {
-  opacity: 1 !important;
-  animation: hero-scan-right 0.6s ease-out forwards !important;
-}
-
-@keyframes hero-scan-right {
-  0% { left: 0%; opacity: 1; }
-  80% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
-}

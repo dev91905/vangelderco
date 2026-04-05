@@ -73,18 +73,6 @@ const Index = () => {
                   }}
                 />
 
-                {/* Scan beam */}
-                <span
-                  className="hero-nav-scan absolute top-0 bottom-0 pointer-events-none"
-                  style={{
-                    width: "1px",
-                    left: "0%",
-                    opacity: 0,
-                    background: "hsl(0 80% 48% / 0.5)",
-                    boxShadow: "0 0 8px 2px hsl(0 80% 48% / 0.15)",
-                  }}
-                />
-
                 {/* Text */}
                 <span
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-150"
