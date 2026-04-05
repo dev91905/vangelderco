@@ -1,7 +1,76 @@
 import { useState, useEffect } from "react";
-import { Settings, X } from "lucide-react";
+import { Settings, X, Eye, EyeOff, Copy, RefreshCw, Trash2, Lock, Check } from "lucide-react";
 import ImageUploader from "./ImageUploader";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+const generatePassword = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const arr = new Uint8Array(12);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, (b) => chars[b % chars.length]).join("");
+};
+
+const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v: string | null) => void }) => {
+  const [show, setShow] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!value) return;
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleGenerate = () => {
+    const pw = generatePassword();
+    onChange(pw);
+    setShow(true);
+  };
+
+  return (
+    <div className="space-y-2">
+      <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-1.5" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
+        <Lock className="w-3 h-3" /> Password Protection
+      </label>
+      <div className="rounded-lg overflow-hidden" style={{ border: "1px solid hsl(0 0% 12%)", background: "hsl(0 0% 4%)" }}>
+        <div className="flex items-center">
+          <input
+            type={show ? "text" : "password"}
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value || null)}
+            placeholder="No password set"
+            className="flex-1 px-3 py-2.5 text-xs bg-transparent outline-none min-w-0"
+            style={{ ...mono, color: "hsl(0 0% 100% / 0.7)" }}
+          />
+        </div>
+        <div className="flex items-center gap-px px-1 pb-1">
+          <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+            {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+            {show ? "Hide" : "Show"}
+          </button>
+          <button onClick={handleGenerate} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+            <RefreshCw className="w-3 h-3" /> Generate
+          </button>
+          <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)] disabled:opacity-20" style={{ ...mono, color: copied ? "hsl(120 40% 50% / 0.7)" : "hsl(0 0% 100% / 0.3)" }}>
+            {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+          {value && (
+            <button onClick={() => { onChange(null); setShow(false); }} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_80%_48%_/_0.08)] ml-auto" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
+              <Trash2 className="w-3 h-3" /> Remove
+            </button>
+          )}
+        </div>
+      </div>
+      {value && (
+        <span className="text-[9px] flex items-center gap-1.5" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
+          <Lock className="w-2.5 h-2.5" /> This article is password protected
+        </span>
+      )}
+    </div>
+  );
+};
+
 
 interface EditorMetaBarProps {
   title: string;
@@ -174,33 +243,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
               </div>
 
               {/* Password protection */}
-              <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Password Protection</label>
-                <div className="relative">
-                  <input
-                    value={props.password || ""}
-                    onChange={(e) => props.onPasswordChange(e.target.value || null)}
-                    placeholder="Leave empty for no protection"
-                    className="w-full px-3 py-2.5 text-xs bg-transparent outline-none pr-8"
-                    style={{ ...mono, color: "hsl(0 0% 100% / 0.6)", border: "1px solid hsl(0 0% 15%)" }}
-                  />
-                  {props.password && (
-                    <button
-                      onClick={() => props.onPasswordChange(null)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] transition-colors hover:opacity-70"
-                      style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-                {props.password && (
-                  <span className="text-[9px] flex items-center gap-1.5" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    This article is password protected
-                  </span>
-                )}
-              </div>
+              <PasswordField value={props.password} onChange={props.onPasswordChange} />
             </div>
           </div>
         </>

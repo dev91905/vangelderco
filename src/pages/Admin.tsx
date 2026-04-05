@@ -1,10 +1,69 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Settings, X, Lock } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+
+const generatePassword = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const arr = new Uint8Array(12);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, (b) => chars[b % chars.length]).join("");
+};
+
+const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: string; onChange: (v: string) => void; onSave: () => void; onRemove: () => void }) => {
+  const [show, setShow] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => { if (!value) return; navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1500); };
+  const handleGen = () => { onChange(generatePassword()); setShow(true); };
+
+  return (
+    <div className="p-5 space-y-4">
+      <div className="space-y-2">
+        <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
+          <Lock className="w-3 h-3" /> Global Article Password
+        </label>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full" style={{ background: value ? "hsl(0 80% 48%)" : "hsl(0 0% 25%)" }} />
+          <span className="text-[10px]" style={{ ...mono, color: value ? "hsl(0 80% 48% / 0.7)" : "hsl(0 0% 100% / 0.2)" }}>
+            {value ? "Active" : "Not set"}
+          </span>
+        </div>
+        <div className="rounded-lg overflow-hidden" style={{ border: "1px solid hsl(0 0% 12%)", background: "hsl(0 0% 3%)" }}>
+          <input
+            type={show ? "text" : "password"}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="No global password"
+            className="w-full px-3 py-2.5 text-xs bg-transparent outline-none"
+            style={{ ...mono, color: "hsl(0 0% 100% / 0.7)" }}
+          />
+          <div className="flex items-center gap-px px-1 pb-1">
+            <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+              {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} {show ? "Hide" : "Show"}
+            </button>
+            <button onClick={handleGen} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+              <RefreshCw className="w-3 h-3" /> Generate
+            </button>
+            <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)] disabled:opacity-20" style={{ ...mono, color: copied ? "hsl(120 40% 50% / 0.7)" : "hsl(0 0% 100% / 0.3)" }}>
+              {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} {copied ? "Copied" : "Copy"}
+            </button>
+            {value && (
+              <button onClick={onRemove} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_80%_48%_/_0.08)] ml-auto" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
+                <Trash2 className="w-3 h-3" /> Remove
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      <button onClick={onSave} className="w-full px-4 py-2.5 text-xs transition-all rounded" style={{ ...mono, background: "hsl(0 80% 48%)", color: "hsl(0 0% 100%)" }}>
+        Save
+      </button>
+    </div>
+  );
+};
 
 const Admin = () => {
   const [typeFilter, setTypeFilter] = useState("all");
@@ -78,48 +137,19 @@ const Admin = () => {
                 <X className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
               </button>
             </div>
-            <div className="p-5 space-y-4">
-              <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
-                  <Lock className="w-3 h-3" /> Global Article Password
-                </label>
-                <p className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.15)" }}>
-                  If set, all articles require this password to view
-                </p>
-                <input
-                  value={globalPw}
-                  onChange={(e) => setGlobalPw(e.target.value)}
-                  placeholder="No global password"
-                  className="w-full px-3 py-2.5 text-xs bg-transparent outline-none"
-                  style={{ ...mono, color: "hsl(0 0% 100% / 0.6)", border: "1px solid hsl(0 0% 15%)" }}
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
-                    setSettingsOpen(false);
-                  }}
-                  className="flex-1 px-4 py-2.5 text-xs transition-all rounded"
-                  style={{ ...mono, background: "hsl(0 80% 48%)", color: "hsl(0 0% 100%)" }}
-                >
-                  Save
-                </button>
-                {globalPw && (
-                  <button
-                    onClick={() => {
-                      setGlobalPw("");
-                      updateSetting.mutate({ key: "global_article_password", value: null });
-                      setSettingsOpen(false);
-                    }}
-                    className="px-4 py-2.5 text-xs transition-all rounded"
-                    style={{ ...mono, color: "hsl(0 80% 48% / 0.6)", border: "1px solid hsl(0 80% 48% / 0.2)" }}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            </div>
+            <GlobalPasswordPanel
+              value={globalPw}
+              onChange={setGlobalPw}
+              onSave={() => {
+                updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
+                setSettingsOpen(false);
+              }}
+              onRemove={() => {
+                setGlobalPw("");
+                updateSetting.mutate({ key: "global_article_password", value: null });
+                setSettingsOpen(false);
+              }}
+            />
           </div>
         </>
       )}
