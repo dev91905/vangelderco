@@ -132,14 +132,20 @@ const Admin = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
-            className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg"
+            className="p-2 rounded-lg"
+            style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 0% 12%)", transition: "background 300ms, border-color 300ms" }}
+            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.background = "hsl(0 0% 10%)"; e.currentTarget.style.borderColor = "hsl(0 0% 18%)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(0 0% 6%)"; e.currentTarget.style.borderColor = "hsl(0 0% 12%)"; }}
             title="Sign out"
           >
             <LogOut className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
           </button>
           <button
             onClick={() => setSettingsOpen(true)}
-            className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg relative"
+            className="p-2 rounded-lg relative"
+            style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 0% 12%)", transition: "background 300ms, border-color 300ms" }}
+            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.background = "hsl(0 0% 10%)"; e.currentTarget.style.borderColor = "hsl(0 0% 18%)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(0 0% 6%)"; e.currentTarget.style.borderColor = "hsl(0 0% 12%)"; }}
             title="Site settings"
           >
             <Settings className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
