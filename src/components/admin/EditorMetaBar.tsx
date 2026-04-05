@@ -84,6 +84,7 @@ interface EditorMetaBarProps {
   password: string | null;
   onTitleChange: (v: string) => void;
   onSlugChange: (v: string) => void;
+  onExcerptChange: (v: string) => void;
   onTypeChange: (v: string) => void;
   onCapabilityChange: (v: string) => void;
   onHeroImageChange: (v: string | null) => void;
