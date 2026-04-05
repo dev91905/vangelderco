@@ -1,18 +1,22 @@
 
 
-# Fix Deep Organizing Gray Blob
+# Fix Deep Organizing — Spread Instead of Squeeze
 
 ## Problem
-
-The `deep-organizing` mode compresses all 16 nodes to 72% toward center (`0.72` factor). This clusters them tightly, and since `MAX_EDGE_DIST = 0.22` connects most nearby nodes, nearly every node forms triangles with its neighbors. Those triangles (even at `0.005` opacity) stack on top of each other in the center, creating a visible gray mass behind the text.
+The `deep-organizing` mode compresses nodes toward center (`0.82` factor), which on a 390px mobile viewport clusters everything into a visible blob. The other modes work because they *reshape* the field (shift left, stretch wide) rather than compressing it.
 
 ## Fix — `src/components/ConstellationField.tsx`
 
-Two changes:
+Replace the deep-organizing transform with a **vertical stretch + slight horizontal shift** — a distinct reshaping like the other modes, not a compression:
 
-1. **Spread the deep-organizing nodes back out**: Change the compression factor from `0.72` to `0.82` — still visibly tighter than home, but not so tight that everything overlaps into a blob.
+```typescript
+case "deep-organizing":
+  x = 0.5 + (nx - 0.5) * 1.1;
+  y = Math.pow(ny, 1.4);
+  break;
+```
 
-2. **Reduce triangle fill opacity**: `0.005` → `0.003`. With nodes closer together in this mode, even a small per-triangle alpha compounds. Dropping it makes the fills imperceptible while keeping edge lines visible.
+This pushes nodes slightly wider horizontally (1.1× from center) and compresses them toward the top via the power curve — creating a "pulled upward" feel that's visually distinct from cultural-strategy (right-weighted) and cross-sector (wide-spread). Nodes near the bottom get pulled up, nodes near the top stay put. No clustering, no blob.
 
-One file, two constant changes.
+One file, two lines changed.
 
