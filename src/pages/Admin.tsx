@@ -85,48 +85,19 @@ const Admin = () => {
                 <X className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
               </button>
             </div>
-            <div className="p-5 space-y-4">
-              <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
-                  <Lock className="w-3 h-3" /> Global Article Password
-                </label>
-                <p className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.15)" }}>
-                  If set, all articles require this password to view
-                </p>
-                <input
-                  value={globalPw}
-                  onChange={(e) => setGlobalPw(e.target.value)}
-                  placeholder="No global password"
-                  className="w-full px-3 py-2.5 text-xs bg-transparent outline-none"
-                  style={{ ...mono, color: "hsl(0 0% 100% / 0.6)", border: "1px solid hsl(0 0% 15%)" }}
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
-                    setSettingsOpen(false);
-                  }}
-                  className="flex-1 px-4 py-2.5 text-xs transition-all rounded"
-                  style={{ ...mono, background: "hsl(0 80% 48%)", color: "hsl(0 0% 100%)" }}
-                >
-                  Save
-                </button>
-                {globalPw && (
-                  <button
-                    onClick={() => {
-                      setGlobalPw("");
-                      updateSetting.mutate({ key: "global_article_password", value: null });
-                      setSettingsOpen(false);
-                    }}
-                    className="px-4 py-2.5 text-xs transition-all rounded"
-                    style={{ ...mono, color: "hsl(0 80% 48% / 0.6)", border: "1px solid hsl(0 80% 48% / 0.2)" }}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            </div>
+            <GlobalPasswordPanel
+              value={globalPw}
+              onChange={setGlobalPw}
+              onSave={() => {
+                updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
+                setSettingsOpen(false);
+              }}
+              onRemove={() => {
+                setGlobalPw("");
+                updateSetting.mutate({ key: "global_article_password", value: null });
+                setSettingsOpen(false);
+              }}
+            />
           </div>
         </>
       )}
