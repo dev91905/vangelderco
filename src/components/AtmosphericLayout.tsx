@@ -15,7 +15,7 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
           height: "min(80vh, 600px)",
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.25) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.18) 0%, hsl(0 80% 48% / 0.10) 30%, hsl(0 80% 48% / 0.03) 55%, transparent 80%)",
           animation: "breathe 8s ease-in-out infinite",
           transform: "translate(-50%, -50%)",
         }}
