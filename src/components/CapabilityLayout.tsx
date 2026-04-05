@@ -19,6 +19,15 @@ const CapabilityLayout = ({
   description,
 }: CapabilityLayoutProps) => {
   const { data: posts, isLoading } = useCapabilityPosts(capability);
+  const { playChitter } = useGlitchSFX();
+  const wasLoading = useRef(true);
+
+  useEffect(() => {
+    if (wasLoading.current && !isLoading) {
+      playChitter();
+    }
+    wasLoading.current = isLoading;
+  }, [isLoading, playChitter]);
 
   return (
     <AtmosphericLayout>
