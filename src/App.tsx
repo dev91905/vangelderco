@@ -11,6 +11,8 @@ import NotFound from "./pages/NotFound.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
 import AdminEditor from "./pages/AdminEditor.tsx";
+import AdminLogin from "./pages/AdminLogin.tsx";
+import RequireAuth from "./components/admin/RequireAuth.tsx";
 
 const queryClient = new QueryClient();
 
