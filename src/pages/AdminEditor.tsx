@@ -236,6 +236,7 @@ const AdminEditor = () => {
         <span>/ commands</span>
         <span>⌘⇧P publish</span>
       </div>
+      </div>
     </div>
   );
 };
