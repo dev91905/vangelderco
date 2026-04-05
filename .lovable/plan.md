@@ -1,40 +1,83 @@
 
+# Fix mobile SFX properly
 
-# Redesign Glitch SFX — From Noise Bursts to Tonal UI Sounds
+## Why it’s failing on iOS
 
-## What's wrong
+This is not a “mobile event” problem first. It’s an audio lifecycle problem.
 
-The current sounds are all **filtered white noise** — random static bursts. That's why they sound like rubber bands snapping. They have no pitch, no tone, no musicality. Real game UI sounds (Control, Halo) use **low-frequency sine/triangle tones** with gentle amplitude envelopes — soft, warm, resonant pulses that feel like the interface is alive.
+1. `useGlitchSFX.ts` calls `sharedCtx.resume()` but does not wait for it.
+2. Right after that, it creates oscillators and starts playback immediately.
+3. On iOS Safari, if the audio context is still `suspended` when those nodes are scheduled, you hear nothing.
+4. The sub-page loading sound is triggered from `useEffect`, which is not a user gesture, so it cannot unlock audio by itself.
+5. Route navigation happens immediately after tapping a hero link, which gives the sound even less chance to start before the screen changes.
 
-## New sound design — `src/hooks/useGlitchSFX.ts`
+## Fix approach
 
-### Hover: Soft tonal ping
-- **Single sine wave** at ~220Hz (low A), very short (~80ms)
-- Gentle fade-in over 10ms, slow exponential decay
-- Gain: `0.03` — barely there
-- Optional: layer a second sine at ~330Hz (fifth above) at half volume for harmonic richness
-- No noise, no filters. Pure tone.
+### 1. Refactor `src/hooks/useGlitchSFX.ts`
+Make the hook expose a real “audio ready” path instead of best-effort fire-and-pray.
 
-### Click: Deeper resonant pulse
-- **Triangle wave** at ~110Hz (low, feels weighty) for ~150ms
-- Layer a sine at ~165Hz at lower volume
-- Slight pitch bend downward (110→90Hz) over the duration — gives it that "settling" feel like Control's menu sounds
-- Gain: `0.04`
-- No noise component at all
+Plan:
+- Keep module-level `sharedCtx` / `unlocked`
+- Add an async `ensureAudioReady()` function that:
+  - creates `AudioContext` / `webkitAudioContext`
+  - `await`s `resume()`
+  - primes the context with the silent buffer
+  - only marks `unlocked = true` after that succeeds
+- Make `playHoverGlitch`, `playClickGlitch`, `playChitter` assume the context is already ready
+- Add a safe guard so non-gesture effects do nothing unless audio has already been unlocked
 
-### Chitter (loading): Sequence of soft tonal pips
-- 4 quick sine pips at ~300Hz, 40ms each, 50ms apart
-- Each pip slightly different pitch (300, 320, 280, 340) — feels like data processing
-- Very low gain: `0.02`
-- Smooth envelope, no hard edges
+This removes the current race where playback is scheduled before iOS actually allows audio.
 
-## Key differences from current
-- **No white noise anywhere** — removes all the "bright crackle" character
-- **Low frequencies** (110-330Hz) instead of high-pass filtered noise (3000Hz+)
-- **Sine/triangle waves** instead of random buffers — gives actual pitch/tone
-- **Longer, gentler envelopes** — no sharp attack, gradual decay
-- **Much lower gain** across the board
+### 2. Change hero-link interaction in `src/pages/Index.tsx`
+Do not rely on the current `Link` navigation timing.
 
-## Files
-- `src/hooks/useGlitchSFX.ts` — full rewrite of the three sound functions
+Plan:
+- Use `useNavigate`
+- Intercept hero-link activation
+- On tap/click:
+  - prevent default navigation
+  - call `ensureAudioReady()`
+  - play the click sound
+  - navigate after a very short delay (~60–120ms)
 
+Important:
+- Keep hover sound desktop-only
+- Do not add “hover on tap” back
+- Preserve keyboard activation
+
+This makes the mobile tap and desktop click use the same click sound, exactly as requested.
+
+### 3. Tighten `src/components/CapabilityLayout.tsx`
+The loading chitter should only fire after audio is already unlocked.
+
+Plan:
+- Before `playChitter()`, check the shared unlocked state (or a helper like `canPlayAudio()`)
+- If audio is not unlocked yet, skip it silently
+
+That prevents iOS from trying to play blocked audio from `useEffect`.
+
+## Expected result
+
+After this:
+- first tap on a hero link on iPhone should unlock audio correctly
+- that same tap should play the click SFX before navigation
+- the loading chitter on the destination page should work only after the first interaction has unlocked audio
+- no fake hover-on-tap behavior
+
+## Files to update
+
+- `src/hooks/useGlitchSFX.ts`
+- `src/pages/Index.tsx`
+- `src/components/CapabilityLayout.tsx`
+
+## Technical note
+
+The core bug is this line pattern in the current hook:
+
+```ts
+if (sharedCtx.state === "suspended") {
+  void sharedCtx.resume();
+}
+```
+
+That is the weak point. On iOS, “resume requested” is not the same as “audio is now playable.” The fix is to make unlock explicit, awaited, and tied to the hero-link tap before navigation.
