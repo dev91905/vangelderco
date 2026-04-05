@@ -106,7 +106,16 @@ export const PasswordGateWrapper = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (verifying) return;
+
+    if (!password.trim()) {
+      playClickGlitch();
+      setError(true);
+      setShake(true);
+      return;
+    }
+
     setVerifying(true);
+    playClickGlitch();
     
     try {
       const { data, error: fnError } = await supabase.functions.invoke("verify-post-password", {
@@ -116,6 +125,7 @@ export const PasswordGateWrapper = ({
       if (fnError) throw fnError;
 
       if (data?.valid) {
+        playChitter();
         sessionStorage.setItem(sessionKey, "1");
         setUnlocked(true);
         onUnlockProp?.();
