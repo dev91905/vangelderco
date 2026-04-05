@@ -1,18 +1,40 @@
 
 
-# Restore Missing Excerpt for "Reframing Climate Through Cultural Infrastructure"
+# Standardize Back Navigation Indicators
 
-## Problem
-The excerpt for this post is `NULL` in the database. All other posts have their excerpts intact. The PostCard component correctly renders excerpts when present.
+## Current State — 4 Different Patterns
 
-## Fix
-Single SQL migration to restore the excerpt:
+| Location | Current | Type |
+|---|---|---|
+| Blog post view | `< Return` (angle bracket entity) | Text |
+| Case study view | `< Return` (angle bracket entity) | Text |
+| Password gate | `← Go back` (Unicode left arrow) | Text |
+| Admin content manager | `← Site` (Unicode left arrow) | Text |
+| Admin editor toolbar | Lucide `ArrowLeft` icon | Icon button |
 
-```sql
-UPDATE capability_posts
-SET excerpt = 'How a network of cultural producers shifted public narrative on climate from moral crisis to economic opportunity.'
-WHERE title = 'Reframing Climate Through Cultural Infrastructure';
-```
+The carousel prev/next buttons (`ChevronLeft`/`ChevronRight`) are navigation *within* content, not "go back" — those stay as-is.
 
-One migration, no code changes.
+## Decision: Standardize on `← ` (Unicode left arrow)
+
+The `< Return` pattern using an HTML angle bracket looks like broken markup. The Lucide `ArrowLeft` icon in the editor toolbar is fine for a compact icon-only button context. The inconsistency is in the **text-based back links** — three different labels and two different arrow styles.
+
+**Standard**: All text-based back links use `←` (Unicode) as the prefix character. Labels stay contextual but consistent in format:
+
+| Location | New text |
+|---|---|
+| Blog post view | `← Return` |
+| Case study view | `← Return` |
+| Password gate | `← Go back` (already correct) |
+| Admin content manager | `← Site` (already correct) |
+| Admin editor toolbar | Lucide `ArrowLeft` icon (keep — icon-only context) |
+
+## Changes
+
+### `src/components/blog/BlogPostView.tsx`
+- Line 47: Replace `&lt; Return` with `← Return`
+
+### `src/components/casestudy/CaseStudyView.tsx`
+- Line 67: Replace `&lt; Return` with `← Return`
+
+Two lines, two files. Password gate and admin pages are already using the correct pattern.
 
