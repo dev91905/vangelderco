@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface PasswordGateProps {
   title: string;
@@ -112,6 +113,7 @@ export interface PasswordGateWrapperProps {
   slug: string;
   title: string;
   heroImageUrl: string | null;
+  capability: string;
   children: React.ReactNode;
 }
 
@@ -121,8 +123,15 @@ export const PasswordGateWrapper = ({
   slug,
   title,
   heroImageUrl,
+  capability,
   children,
 }: PasswordGateWrapperProps) => {
+  const capabilityRoute: Record<string, string> = {
+    "cultural-strategy": "/cultural-strategy",
+    "cross-sector": "/cross-sector",
+    "deep-organizing": "/deep-organizing",
+  };
+
   const effectivePassword = postPassword || globalPassword;
   const sessionKey = postPassword ? `gate:${slug}` : "gate:global";
   
@@ -158,6 +167,26 @@ export const PasswordGateWrapper = ({
           <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={{ filter: "blur(40px) brightness(0.15)", transform: "scale(1.2)" }} />
         </div>
       )}
+
+      {/* HUD */}
+      <span
+        className="fixed top-6 right-6 z-[60] text-[10px] tracking-[0.2em] uppercase"
+        style={{ ...mono, color: "hsl(0 0% 100% / 0.18)" }}
+      >
+        Van Gelder Co.
+      </span>
+
+      {/* Back */}
+      <Link
+        to={capabilityRoute[capability] || "/"}
+        className="fixed top-6 left-6 z-[60] text-[10px] tracking-[0.2em] uppercase transition-colors duration-300"
+        style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
+      >
+        ← Return
+      </Link>
+
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 max-w-md w-full">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>
           {title}
@@ -171,14 +200,6 @@ export const PasswordGateWrapper = ({
           </div>
           <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
         </div>
-        <button
-          onClick={() => window.history.back()}
-          className="text-[10px] tracking-[0.15em] uppercase transition-colors hover:opacity-60"
-          style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}
-          type="button"
-        >
-          ← Go back
-        </button>
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
           <div className={`w-full transition-transform ${shake ? "animate-shake" : ""}`} onAnimationEnd={() => setShake(false)}>
             <input
