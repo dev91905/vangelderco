@@ -1,19 +1,39 @@
 
 
-# Add Corner Brackets to Password Gate
+# Add Admin Authentication (Email & Password)
 
-## Problem
-The password gate renders a plain dark background. It doesn't use `AtmosphericLayout`, so it's missing the four corner bracket SVGs that appear on every other page. It also lacks the breathing glow, vignette, and scan beam — but the corner brackets are the most visually noticeable omission.
+## Summary
+Protect all `/admin` routes behind email/password login. One account is created via signup, then used to log in. No profile table needed — just Supabase auth.
 
-## Fix
+## Changes
 
-### `src/components/PasswordGate.tsx` — `PasswordGateWrapper` return block
+### 1. `src/pages/AdminLogin.tsx` — New file
+Login page matching the site's brutalist aesthetic:
+- Email + password inputs, "Sign In" button
+- Small "Create account" toggle that reveals a signup form (same page, not a separate route)
+- After successful auth, redirect to `/admin`
+- Uses `supabase.auth.signInWithPassword()` and `supabase.auth.signUp()`
+- Error states inline, no modals
+- Same near-black background, JetBrains Mono, red accent as the rest of admin
 
-Add the four corner bracket SVGs (copied from `AtmosphericLayout.tsx`) inside the gate's outer `div`, alongside the existing HUD elements. Same positioning (`fixed top-4 left-4` etc.), same `z-30`, same `opacity-[0.12]`.
+### 2. `src/components/admin/RequireAuth.tsx` — New file
+Wrapper component that:
+- Listens to `supabase.auth.onAuthStateChange()` + calls `getSession()` on mount
+- If authenticated → renders children
+- If not → redirects to `/admin/login`
+- Shows a minimal loading state while checking session
 
-Optionally also add the breathing glow, vignette, and scan beam divs to fully match the atmospheric feel — these are pure decorative layers with `pointer-events-none` and won't interfere with the form.
+### 3. `src/App.tsx` — Route updates
+- Add `/admin/login` route → `AdminLogin`
+- Wrap the three admin routes (`/admin`, `/admin/new`, `/admin/edit/:id`) with `RequireAuth`
 
-### No other files change
+### 4. `src/pages/Admin.tsx` — Add sign-out
+- Add a "Sign Out" button in the header bar (next to the Settings gear)
+- Calls `supabase.auth.signOut()` then navigates to `/admin/login`
 
-One file, adding ~20 lines of SVG/decorative markup.
+### 5. Security scan findings
+- The two scan findings about exposed passwords in `capability_posts` and `site_settings` are already addressed by the earlier security fix (edge function verification, column exclusion from public queries). The RLS policies already restrict write access to authenticated users. Adding auth completes the picture — only logged-in admins can reach the management UI.
+
+### No database changes
+Supabase auth is built-in. No profiles table needed (user confirmed). No new migrations.
 
