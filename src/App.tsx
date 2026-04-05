@@ -8,6 +8,7 @@ import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
 import DeepOrganizing from "./pages/DeepOrganizing.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PostDetail from "./pages/PostDetail.tsx";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/cultural-strategy" element={<CulturalStrategy />} />
           <Route path="/cross-sector" element={<CrossSector />} />
           <Route path="/deep-organizing" element={<DeepOrganizing />} />
+          <Route path="/post/:slug" element={<PostDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { CapabilityPost } from "@/hooks/useCapabilityPosts";
 import { format } from "date-fns";
 
@@ -8,20 +8,18 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, index }: PostCardProps) => {
-  const [expanded, setExpanded] = useState(false);
-
   return (
-    <button
-      onClick={() => setExpanded(!expanded)}
-      className="w-full text-left group"
+    <Link
+      to={post.slug ? `/post/${post.slug}` : "#"}
+      className="w-full text-left group block"
       style={{
         animation: `fade-up 0.5s ease-out ${0.6 + index * 0.15}s both`,
       }}
     >
       <div
-        className="p-4 md:p-5 transition-colors duration-300"
+        className="p-4 md:p-5 transition-colors duration-300 hover:bg-[hsl(0_0%_6%)]"
         style={{
-          background: expanded ? "hsl(0 0% 6%)" : "hsl(0 0% 4%)",
+          background: "hsl(0 0% 4%)",
           borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
           borderTop: "1px solid hsl(0 0% 100% / 0.05)",
           borderRight: "1px solid hsl(0 0% 100% / 0.05)",
@@ -72,27 +70,8 @@ const PostCard = ({ post, index }: PostCardProps) => {
             {post.excerpt}
           </p>
         )}
-
-        {expanded && post.content && (
-          <div
-            className="mt-4 pt-4"
-            style={{
-              borderTop: "1px solid hsl(0 0% 100% / 0.06)",
-            }}
-          >
-            <p
-              className="text-[12px] md:text-[13px] leading-[1.8] whitespace-pre-wrap"
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                color: "hsl(0 0% 100% / 0.55)",
-              }}
-            >
-              {post.content}
-            </p>
-          </div>
-        )}
       </div>
-    </button>
+    </Link>
   );
 };
 
