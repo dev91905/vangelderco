@@ -69,6 +69,7 @@ export interface PasswordGateWrapperProps {
   heroImageUrl: string | null;
   capability: string;
   requiresPassword: boolean;
+  onUnlock?: () => void;
   children: React.ReactNode;
 }
 
@@ -78,6 +79,7 @@ export const PasswordGateWrapper = ({
   heroImageUrl,
   capability,
   requiresPassword,
+  onUnlock: onUnlockProp,
   children,
 }: PasswordGateWrapperProps) => {
   const capabilityRoute: Record<string, string> = {
