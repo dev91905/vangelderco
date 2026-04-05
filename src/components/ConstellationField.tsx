@@ -93,8 +93,8 @@ function getLayoutPositions(
         y = Math.pow(ny, 0.85);
         break;
       case "deep-organizing":
-        x = 0.5 + (nx - 0.5) * 0.72;
-        y = 0.5 + (ny - 0.5) * 0.72;
+        x = 0.5 + (nx - 0.5) * 0.82;
+        y = 0.5 + (ny - 0.5) * 0.82;
         break;
     }
 
