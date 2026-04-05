@@ -172,7 +172,7 @@ export const PasswordGateWrapper = ({
           <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
         </div>
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
-          <div className={`w-full transition-transform ${shake ? "animate-[shake_0.5s_ease-in-out]" : ""}`} onAnimationEnd={() => setShake(false)}>
+          <div className={`w-full transition-transform ${shake ? "animate-shake" : ""}`} onAnimationEnd={() => setShake(false)}>
             <input
               type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(false); }}
               placeholder="Enter password" autoFocus
