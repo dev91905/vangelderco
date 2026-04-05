@@ -73,7 +73,7 @@ const AdminEditor = () => {
     password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
-  }), [title, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
+  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
