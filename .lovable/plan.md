@@ -1,34 +1,36 @@
 
 
-# Hover Effect Audit & Fix
+# Hover Effect Redesign — CONTROL / HALO Style
 
-## Problems Found
+## What's Wrong Now
+- Glow is too bright/wide (you want it reverted)
+- Scan line sweeps to `left: 100%` of the full-width container, not the text — so it overshoots on shorter labels and stops exactly at the edge on longer ones
+- The overall effect feels more "cyberpunk terminal" than CONTROL/HALO
 
-1. **Caret (`>`) is mispositioned**: It's `absolute left-0` relative to the full-width link container (which spans the entire row). Since the text is centered, the caret appears at the far-left edge of the viewport area — disconnected from the text it's supposed to lead.
+## CONTROL's Menu Language
+CONTROL's UI is bureaucratic and paranormal. Menu items don't have flashy sweeps. They have:
+- A quiet **red tint wash** that fills behind the selected item — like a classified document being highlighted
+- A solid **red left-edge bar** (2-3px) that appears instantly
+- Text brightens slightly
+- Everything else stays still. The power is in the restraint.
 
-2. **Text shifts right, caret stays far left**: On hover, the text gets `translateX(4px)` but the caret is anchored to the container edge, not the text. The spatial relationship is broken.
+## New Hover Effect
+On hover, each link gets:
+1. **Red left bar**: 2px solid red accent appears at the left edge of the text (not the container), `opacity 0→1`, no animation delay — instant like a selection indicator
+2. **Background wash**: A very faint horizontal band of red (`hsl(0 80% 48% / 0.04)`) fills behind the text area — like a row being selected in a classified system
+3. **Text brightens**: White goes from `0.9` to `1.0` opacity
+4. **No caret, no scan line, no underline, no glow orb** — remove all of those
 
-3. **Scan line sweep is barely visible**: The 2px red bar sweeping left-to-right is too subtle at the current opacity and size to register as a deliberate effect.
+This is simpler, more CONTROL, and eliminates the scan-line-width inconsistency entirely.
 
-4. **Glow is too faint**: The radial glow at `0.08` opacity is nearly invisible against the dark background.
+## Files to Modify
 
-## Fix
+### `src/pages/Index.tsx`
+- Remove: glow span, scan-line span, caret span, underline span
+- Simplify link internals to just the text with a left-border that appears on hover
+- Add a background wash element (single span, `absolute inset-0`)
 
-**Restructure the link internals** so the caret is positioned relative to the text, not the container:
-
-- Wrap the caret + text in an `inline-flex` container so they sit next to each other naturally
-- Remove `absolute` positioning from the caret — use `opacity: 0 → 1` and a small negative margin or gap instead
-- Keep the link itself as `flex justify-center` so the group stays centered
-
-**Improve the hover effects**:
-
-- Caret: `opacity 0→0.8`, slight `translateX` from -8px to 0 (slides in from left of text)
-- Text: subtle color shift to slightly warmer white (`hsl(0 0% 100% / 0.95)`) instead of translateX (shifting centered text looks off-balance)
-- Glow: increase to `0.12` opacity, tighten the ellipse so it concentrates behind the text
-- Scan line: widen to 3px, increase opacity to `0.8`, add a longer trailing glow (`box-shadow` spread)
-- Add a faint red underline that scales in from center (`scaleX(0) → scaleX(1)`) — 1px, red at 40% opacity
-
-**Files to modify**:
-- `src/pages/Index.tsx` — restructure link markup (inline-flex wrapper for caret + text)
-- `src/index.css` — rewrite `.hero-nav-link:hover` rules with corrected selectors and improved values
+### `src/index.css`
+- Rewrite `.hero-nav-link:hover` rules: left-border opacity, background wash, text color
+- Remove all scan/glow/caret/underline hover rules
 
