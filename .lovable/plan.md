@@ -1,26 +1,20 @@
 
 
-# Lock Down Admin to Invite-Only
+# Add SFX + Improve Hover Effects on PostCard
 
-## Problem
-The login page has a "Create account" toggle that lets anyone sign up and access the admin. This is a security hole — admin should be invite-only, with users created only on the backend.
+## Changes — `src/components/PostCard.tsx`
 
-## Changes
+1. **Import and use `useGlitchSFX`** — call `playHoverGlitch` on `mouseenter`
+2. **Enhance hover effects**:
+   - Border-left brightens to full red (already exists, keep)
+   - Background shifts from `hsl(0 0% 4%)` → `hsl(0 0% 7%)` on hover
+   - Top/right/bottom borders brighten slightly from `0.05` → `0.1` opacity
+   - Title text brightens to full white on hover
+   - Type label brightens on hover
+   - Add a subtle `translateX(2px)` shift on the whole card inner content on hover (not just title)
 
-### 1. Remove signup from AdminLogin — `src/pages/AdminLogin.tsx`
-- Delete the `isSignUp` state, `signUpSuccess` state, and all signup-related code
-- Remove the signup branch from `handleSubmit`
-- Remove the "Create account" / "Already have an account?" toggle button
-- Remove the signup success confirmation screen
-- Keep only the sign-in form: email, password, submit
+All done via `onMouseEnter`/`onMouseLeave` inline style updates, matching the pattern used in `PostListTable.tsx` and the admin page.
 
-### 2. Disable self-service signups on the backend
-- Use the auth configuration tool to disable signups entirely, so even direct API calls to the auth endpoint can't create accounts
-- New users can only be added by you through Lovable Cloud's user management
-
-## Result
-Login page becomes sign-in only. No one can create an account through the UI or API. You add admin users manually on the backend when needed.
-
-## Files
-- `src/pages/AdminLogin.tsx` — strip all signup code
+## File
+- `src/components/PostCard.tsx`
 
