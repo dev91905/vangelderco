@@ -36,13 +36,33 @@ const ensureAudioReady = async (): Promise<AudioContext | null> => {
 
 const canPlayAudio = () => unlocked && sharedCtx && sharedCtx.state === "running";
 
-const getReadyCtx = (): AudioContext | null => {
-  if (!canPlayAudio()) return null;
+const syncInit = (): AudioContext | null => {
+  const Ctor = getAudioContextCtor();
+  if (!Ctor) return null;
+
+  if (!sharedCtx) {
+    sharedCtx = new Ctor();
+  }
+
+  if (sharedCtx.state === "suspended") {
+    sharedCtx.resume();
+  }
+
+  if (!unlocked) {
+    const buffer = sharedCtx.createBuffer(1, 1, sharedCtx.sampleRate);
+    const source = sharedCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(sharedCtx.destination);
+    source.start(0);
+    unlocked = true;
+  }
+
+  if (sharedCtx.state !== "running") return null;
   return sharedCtx;
 };
 
 const playHoverGlitch = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const duration = 0.08;
@@ -76,7 +96,7 @@ const playHoverGlitch = () => {
 };
 
 const playClickGlitch = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const duration = 0.15;
@@ -112,7 +132,7 @@ const playClickGlitch = () => {
 };
 
 const playChitter = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const now = ctx.currentTime;
