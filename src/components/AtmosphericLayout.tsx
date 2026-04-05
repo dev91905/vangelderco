@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 interface AtmosphericLayoutProps {
   children: ReactNode;
