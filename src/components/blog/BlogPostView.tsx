@@ -6,6 +6,7 @@ import ContentBlockRenderer, { ContentBlock } from "@/components/content/Content
 interface BlogPostViewProps {
   post: {
     title: string;
+    excerpt: string | null;
     capability: string;
     published_at: string | null;
     hero_image_url: string | null;
