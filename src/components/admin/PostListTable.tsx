@@ -50,8 +50,22 @@ const PostListTable = ({ filter }: PostListTableProps) => {
         <Link
           key={post.id}
           to={`/admin/edit/${post.id}`}
-          className="flex items-center gap-4 p-4 transition-colors hover:bg-[hsl(0_0%_6%)] group"
-          style={{ background: "hsl(0 0% 4%)", borderBottom: "1px solid hsl(0 0% 8%)" }}
+          className="flex items-center gap-4 p-4 transition-all group"
+          style={{
+            background: "hsl(0 0% 4%)",
+            borderBottom: "1px solid hsl(0 0% 8%)",
+            borderLeft: "2px solid transparent",
+            transition: "background 200ms, border-left-color 200ms",
+          }}
+          onPointerEnter={(e) => {
+            playHoverGlitch();
+            e.currentTarget.style.background = "hsl(0 0% 6%)";
+            e.currentTarget.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
+          }}
+          onPointerLeave={(e) => {
+            e.currentTarget.style.background = "hsl(0 0% 4%)";
+            e.currentTarget.style.borderLeftColor = "transparent";
+          }}
         >
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-medium truncate flex items-center gap-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
