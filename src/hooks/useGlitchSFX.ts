@@ -1,30 +1,57 @@
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 
+type AudioContextWindow = Window & typeof globalThis & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
+let sharedCtx: AudioContext | null = null;
 let unlocked = false;
 
+const getAudioContextCtor = () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.AudioContext ??
+    (window as AudioContextWindow).webkitAudioContext ??
+    null;
+};
+
+const getCtx = () => {
+  const AudioContextCtor = getAudioContextCtor();
+
+  if (!AudioContextCtor) {
+    return null;
+  }
+
+  if (!sharedCtx) {
+    sharedCtx = new AudioContextCtor();
+  }
+
+  if (sharedCtx.state === "suspended") {
+    void sharedCtx.resume();
+  }
+
+  if (!unlocked) {
+    const buffer = sharedCtx.createBuffer(1, 1, sharedCtx.sampleRate);
+    const source = sharedCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(sharedCtx.destination);
+    source.start(0);
+    unlocked = true;
+  }
+
+  return sharedCtx;
+};
+
 const useGlitchSFX = () => {
-  const ctxRef = useRef<AudioContext | null>(null);
-
-  const getCtx = useCallback(() => {
-    if (!ctxRef.current) {
-      ctxRef.current = new AudioContext();
-    }
-    if (ctxRef.current.state === "suspended") {
-      ctxRef.current.resume();
-    }
-    if (!unlocked) {
-      const buf = ctxRef.current.createBuffer(1, 1, ctxRef.current.sampleRate);
-      const src = ctxRef.current.createBufferSource();
-      src.buffer = buf;
-      src.connect(ctxRef.current.destination);
-      src.start(0);
-      unlocked = true;
-    }
-    return ctxRef.current;
-  }, []);
-
   const playHoverGlitch = useCallback(() => {
     const ctx = getCtx();
+
+    if (!ctx) {
+      return;
+    }
+
     const duration = 0.08;
     const now = ctx.currentTime;
 
@@ -53,10 +80,15 @@ const useGlitchSFX = () => {
     osc2.connect(gain2).connect(ctx.destination);
     osc2.start(now);
     osc2.stop(now + duration);
-  }, [getCtx]);
+  }, []);
 
   const playClickGlitch = useCallback(() => {
     const ctx = getCtx();
+
+    if (!ctx) {
+      return;
+    }
+
     const duration = 0.15;
     const now = ctx.currentTime;
 
@@ -87,10 +119,15 @@ const useGlitchSFX = () => {
     osc2.connect(gain2).connect(ctx.destination);
     osc2.start(now);
     osc2.stop(now + duration);
-  }, [getCtx]);
+  }, []);
 
   const playChitter = useCallback(() => {
     const ctx = getCtx();
+
+    if (!ctx) {
+      return;
+    }
+
     const now = ctx.currentTime;
     const pitches = [300, 320, 280, 340];
     const pipDuration = 0.04;
@@ -111,7 +148,7 @@ const useGlitchSFX = () => {
       osc.start(t);
       osc.stop(t + pipDuration);
     });
-  }, [getCtx]);
+  }, []);
 
   return { playHoverGlitch, playClickGlitch, playChitter };
 };
