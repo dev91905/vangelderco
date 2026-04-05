@@ -62,7 +62,7 @@ const syncInit = (): AudioContext | null => {
 };
 
 const playHoverGlitch = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const duration = 0.08;
@@ -96,7 +96,7 @@ const playHoverGlitch = () => {
 };
 
 const playClickGlitch = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const duration = 0.15;
@@ -132,7 +132,7 @@ const playClickGlitch = () => {
 };
 
 const playChitter = () => {
-  const ctx = getReadyCtx();
+  const ctx = syncInit();
   if (!ctx) return;
 
   const now = ctx.currentTime;
