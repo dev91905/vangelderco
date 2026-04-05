@@ -224,12 +224,27 @@ const Admin = () => {
             key={c.value}
             onClick={() => setCapFilter(c.value)}
             onPointerEnter={() => playHoverGlitch()}
-            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase transition-all"
+            className="px-3 py-1 text-[10px] tracking-[0.1em] uppercase rounded-sm"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               color: capFilter === c.value ? "hsl(0 0% 100% / 0.7)" : "hsl(0 0% 100% / 0.25)",
               background: capFilter === c.value ? "hsl(0 0% 10%)" : "transparent",
               border: `1px solid ${capFilter === c.value ? "hsl(0 0% 20%)" : "transparent"}`,
+              transition: "color 300ms, background 300ms, border-color 300ms",
+            }}
+            onMouseEnter={(e) => {
+              if (capFilter !== c.value) {
+                e.currentTarget.style.color = "hsl(0 0% 100% / 0.55)";
+                e.currentTarget.style.background = "hsl(0 0% 8%)";
+                e.currentTarget.style.borderColor = "hsl(0 0% 18%)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (capFilter !== c.value) {
+                e.currentTarget.style.color = "hsl(0 0% 100% / 0.25)";
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "transparent";
+              }
             }}
           >
             {c.label}
