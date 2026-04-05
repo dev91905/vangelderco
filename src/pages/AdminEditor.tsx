@@ -51,6 +51,7 @@ const AdminEditor = () => {
       hasLoadedRef.current = true;
       setTitle(post.title);
       setSlug(post.slug || "");
+      setExcerpt(post.excerpt || "");
       setType(post.type);
       setCapability(post.capability);
       setHeroImageUrl(post.hero_image_url);
