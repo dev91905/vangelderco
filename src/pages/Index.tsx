@@ -75,12 +75,12 @@ const Index = () => {
 
                 {/* Scan beam */}
                 <span
-                  className="hero-nav-scan absolute left-0 right-0 pointer-events-none"
+                  className="hero-nav-scan absolute top-0 bottom-0 pointer-events-none"
                   style={{
-                    height: "1px",
-                    top: "-1px",
+                    width: "1px",
+                    left: "0%",
                     opacity: 0,
-                    background: "hsl(0 80% 48% / 0.4)",
+                    background: "hsl(0 80% 48% / 0.5)",
                     boxShadow: "0 0 8px 2px hsl(0 80% 48% / 0.15)",
                   }}
                 />
