@@ -1,42 +1,32 @@
 
 
-# Reduce Grain Jitter at Screen Edges
+# Make Constellation Mode Transitions More Dramatic
 
 ## Problem
-The film grain overlay (`body::before`) uses `transform: translate()` with values up to 4% to animate. Since the overlay is sized exactly to the viewport (`inset: 0`), these translations shift the entire texture, exposing bare edges and creating visible jitter along the screen borders.
 
-## Fix — `src/index.css`
+The mode transforms are extremely subtle — barely perceptible:
+- **Cultural strategy**: `pow(nx, 1.15)` — shifts a node at x=0.5 to x=0.467. That's ~3% movement on a 1114px screen = ~33px. Invisible.
+- **Cross-sector**: scales x by 1.08 from center — moves edge nodes ~4%. Also invisible.
+- **Deep organizing**: pulls 5% toward center. Barely registers.
 
-Two changes:
+Before the hand-composed layout rewrite, the grid positions were different per mode (different grid configs), creating obvious repositioning. Now every mode uses the same base coordinates with near-identity transforms applied.
 
-1. **Shrink translation distances** from 2–4% down to 0.5–1% — the grain still animates but the edge movement becomes imperceptible
-2. **Oversize the grain layer** by adding `inset: -5%` and `width: 110%; height: 110%` so even with translation, the texture always covers the full viewport with bleed room
+## Fix — `src/components/ConstellationField.tsx`
 
-```css
-/* Updated grain keyframes — much smaller translations */
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  10% { transform: translate(-0.5%, -0.5%); }
-  20% { transform: translate(0.5%, 0.3%); }
-  30% { transform: translate(-0.3%, 0.5%); }
-  40% { transform: translate(0.5%, -0.3%); }
-  50% { transform: translate(-0.5%, 0.3%); }
-  60% { transform: translate(0.3%, -0.5%); }
-  70% { transform: translate(-0.5%, 0.3%); }
-  80% { transform: translate(0.3%, 0.5%); }
-  90% { transform: translate(0.5%, -0.3%); }
-  100% { transform: translate(-0.3%, 0.5%); }
-}
-```
+Increase the strength of each mode's transform so the constellation visibly reshapes:
 
-And oversize the pseudo-element:
-```css
-body::before {
-  inset: -5%;
-  width: 110%;
-  height: 110%;
-}
-```
+| Mode | Current | Proposed |
+|------|---------|----------|
+| **cultural-strategy** | `pow(nx, 1.15)` | `pow(nx, 1.6)` — pulls right-side nodes leftward noticeably, compresses the field toward the left |
+| **cross-sector** | `(nx-0.5)*1.08+0.5` | `(nx-0.5)*1.35+0.5` — spreads nodes outward from center, creating a wider, more dispersed pattern |
+| **deep-organizing** | `*0.95` toward center | `*0.72` toward center — pulls all nodes visibly inward into a tighter cluster |
 
-One file, two small edits.
+Also add **y-axis transforms** to cultural-strategy and cross-sector (currently only x changes), so the reshaping feels two-dimensional:
+
+- **cultural-strategy**: also apply `y = 0.5 + (ny - 0.5) * 0.85` — slight vertical compression
+- **cross-sector**: also apply `y = Math.pow(ny, 0.85)` — slight vertical spread toward top
+
+The existing `LERP_SPEED = 0.025` creates a smooth ~2-second transition, so these larger movements will animate gracefully rather than jumping.
+
+One file, one function, ~10 lines changed.
 
