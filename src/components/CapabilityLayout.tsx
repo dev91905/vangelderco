@@ -53,7 +53,7 @@ const CapabilityLayout = ({
       {/* Main content — scrollable */}
       <div
         className="relative z-20 h-dvh overflow-y-auto"
-        style={{ animation: "crt-boot 0.5s ease-out both" }}
+        style={{ animation: "fade-up 0.5s ease-out both" }}
       >
         <main className="flex flex-col items-center px-6 pt-20 pb-16 max-w-3xl mx-auto gap-8 md:gap-12">
           {/* Classification label */}
