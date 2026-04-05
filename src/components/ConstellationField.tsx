@@ -251,7 +251,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ? 0.012 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.012 + 0.012 * (1 - dist / maxDist) + boost;
+            const alpha = 0.025 + 0.02 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
