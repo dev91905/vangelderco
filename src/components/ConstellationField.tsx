@@ -262,22 +262,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         }
       }
 
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          if (!connected[i][j]) continue;
-          for (let k = j + 1; k < nodes.length; k++) {
-            if (connected[i][k] && connected[j][k]) {
-              ctx.beginPath();
-              ctx.moveTo(nodes[i].x, nodes[i].y);
-              ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.lineTo(nodes[k].x, nodes[k].y);
-              ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
-              ctx.fill();
-            }
-          }
-        }
-      }
+      // Triangle fills removed — edges only
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
