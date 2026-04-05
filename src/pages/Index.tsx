@@ -90,7 +90,7 @@ const Index = () => {
           {/* Sector tags */}
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
-            style={{ animation: "fade-up 0.7s ease-out 2.4s both" }}
+            style={{ animation: "fade-up 0.7s ease-out 1.6s both" }}
           >
             {SECTORS.map((sector) => (
               <span
