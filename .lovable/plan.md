@@ -1,74 +1,49 @@
 
 
-# Constellation Field — Animated Page Transitions
+# Constellation Field — Dial Back to Truly Subtle
 
-## Problem
-Currently, each page mounts its own `AtmosphericLayout` → its own `ConstellationField`. On navigation the canvas is destroyed and recreated — no transition, no visual continuity.
+## Problems
 
-## Approach
+1. **Too visible**: Node sizes, edge opacities, and triangle fills are all too prominent. This should be barely perceptible — noticed after staring, not on arrival.
+2. **Odd composition on sub-pages**: The layout presets (left-weighted, three clusters, dense core) create awkward, unbalanced arrangements that look broken rather than intentional. The differences are too dramatic.
+3. **Too much motion**: Drift amplitude of 20–50px and orbit radii of 6–20px create jittery, distracting movement instead of glacial drift.
+4. **Too many connections**: `MAX_EDGE_DIST` at 0.25 of the diagonal creates a dense web of lines — reads as a mesh, not a constellation.
 
-Lift `ConstellationField` above the router so it's a single persistent instance. Give it a `mode` prop (`"home" | "cultural-strategy" | "cross-sector" | "deep-organizing"`) driven by the current route. When the mode changes, nodes smoothly lerp to new target positions over ~1.5 seconds.
+## Fix — One File
 
-Each mode defines a distinct constellation personality:
-- **Home**: Balanced 6×6 grid, north star at golden-ratio center — the current default
-- **Cultural Strategy**: Nodes cluster toward the left third, denser connections — cultural network gravity
-- **Cross-Sector**: Nodes spread into three distinct clusters (left, center-top, right) with bridging connections between them — cross-sector bridges
-- **Deep Organizing**: Nodes pull tighter toward center in a dense core with sparse outer ring — deep infrastructure concentration
+### `src/components/ConstellationField.tsx`
 
-## Changes
+**Reduce opacity across the board:**
+- Edge lines: `0.03–0.05` → `0.015–0.03`
+- Field nodes: `0.06` → `0.03`
+- Anchor nodes: `0.10` → `0.05`
+- North star pulse: `0.10–0.18` → `0.06–0.10`
+- North star glow: reduce accordingly
+- Triangle fills: `0.008` → `0.004`
 
-### 1. `src/components/ConstellationField.tsx`
-- Accept `mode` prop (default `"home"`)
-- Define four layout presets — each returns target `baseX`/`baseY` for the 36 nodes using the same seeded jitter but different spatial distributions
-- On mode change: store new targets, lerp each node's `baseX`/`baseY` toward target over ~90 frames (~1.5s at 60fps) using ease-out interpolation
-- Animation loop already runs — just add the lerp step before the existing drift/orbit/repulsion logic
+**Shrink node sizes:**
+- North star: `2.5px` → `1.8px`, glow `6px` → `4px`
+- Anchors: `1.6px` → `1.2px`
+- Field: `1.0px` → `0.7px`
 
-### 2. `src/App.tsx`
-- Add `ConstellationField` as a sibling above `<Routes>`, outside any layout component
-- Use `useLocation()` to derive the mode from the current pathname
-- Pass mode as prop
+**Reduce motion:**
+- Drift amplitude: `20–50` → `8–18`
+- Orbit radius: field `6–20` → `3–8`, anchors `4–12` → `2–5`
+- Orbit/drift speeds: halve them
 
-### 3. `src/components/AtmosphericLayout.tsx`
-- Remove `<ConstellationField />` from here (it now lives in App)
-- Keep all other atmospheric layers (glow, vignette, scan beam, brackets)
+**Reduce connection density:**
+- `MAX_EDGE_DIST`: `0.25` → `0.18`
 
-### 4. `src/components/PasswordGate.tsx`
-- Remove its `<ConstellationField />` import — the global instance covers it
+**Soften sub-page layouts** — make them gentle variations, not dramatic rearrangements:
+- Cultural strategy: mild leftward bias (`pow(nx, 1.3)` instead of `1.8`)
+- Cross-sector: slightly wider spacing, not three isolated clusters — keep the grid but stretch horizontally
+- Deep organizing: gentle center-pull, not dramatic compression
+- All layouts should still read as a full-screen balanced field with a subtle personality shift
 
-### No other files change. No new dependencies.
+**Reduce mouse interaction:**
+- `MOUSE_FORCE`: `3` → `1.5`
+- `MOUSE_RADIUS`: `150` → `120`
+- Edge brightness boost near cursor: halve it
 
-## Layout Presets (spatial logic)
-
-```text
-HOME:          Even 6×6 grid
-               ·  ·  ·  ·  ·  ·
-               ·  ·  ·  ·  ·  ·
-               ·  ·  ·  ★  ·  ·
-               ·  ·  ·  ·  ·  ·
-               ·  ·  ·  ·  ·  ·
-               ·  ·  ·  ·  ·  ·
-
-CULTURAL:      Left-weighted cluster
-               ··· ·     ·
-               ····  ·      ·
-               ···★·    ·
-               ····  ·
-               ··· ·        ·
-               ··       ·
-
-CROSS-SECTOR:  Three bridged clusters
-               ···      ···
-               ···  ··  ···
-                  ·★··
-               ·    ··    ·
-               ···      ···
-
-DEEP-ORG:      Dense core, sparse halo
-                    ·
-                 ·     ·
-               · ····· ·
-                 ·★··
-               · ····· ·
-                 ·     ·
-```
+No other files change.
 
