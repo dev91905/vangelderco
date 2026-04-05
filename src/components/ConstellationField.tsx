@@ -28,16 +28,26 @@ interface Node {
   tier: "northstar" | "anchor" | "field";
 }
 
-const COLS = 4;
-const ROWS = 4;
-const MAX_EDGE_DIST = 0.22;
+const MAX_EDGE_DIST = 0.24;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
-const ANCHOR_INDICES = new Set([0, 5, 10, 15]);
-const NORTH_STAR_COL = Math.round(COLS * 0.618);
-const NORTH_STAR_ROW = Math.round(ROWS * 0.382);
-const NORTH_STAR_INDEX = NORTH_STAR_ROW * COLS + NORTH_STAR_COL;
 const LERP_SPEED = 0.025;
+
+function getGridConfig(w: number, h: number) {
+  const isTallMobile = w < 640 && h / w > 1.5;
+  const cols = 4;
+  const rows = isTallMobile ? 5 : 4;
+  const anchorIndices = new Set(
+    isTallMobile
+      ? [0, cols + 1, cols * 2 + 2, cols * 3 + 1, cols * rows - 1]
+      : [0, cols + 1, cols * 2 + 2, cols * rows - 1]
+  );
+  const northStarCol = Math.round(cols * 0.618);
+  const northStarRow = Math.round(rows * 0.382);
+  const northStarIndex = northStarRow * cols + northStarCol;
+
+  return { cols, rows, anchorIndices, northStarIndex };
+}
 
 function getLayoutPositions(
   mode: ConstellationMode,
@@ -45,37 +55,38 @@ function getLayoutPositions(
   h: number,
   rng: () => number
 ): { x: number; y: number }[] {
+  const { cols, rows } = getGridConfig(w, h);
   const positions: { x: number; y: number }[] = [];
 
-  for (let row = 0; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-      const jitterX = (rng() - 0.5) * (w / COLS) * 0.3 * 2;
-      const jitterY = (rng() - 0.5) * (h / ROWS) * 0.3 * 2;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const cellW = w / cols;
+      const cellH = h / rows;
+      const jitterX = (rng() - 0.5) * cellW * 0.6;
+      const jitterY = (rng() - 0.5) * cellH * 0.6;
 
       let bx: number, by: number;
-      const cellW = w / COLS;
-      const cellH = h / ROWS;
       const baseX = (col + 0.5) * cellW;
       const baseY = (row + 0.5) * cellH;
 
       switch (mode) {
         case "cultural-strategy": {
-          const nx = col / (COLS - 1);
+          const nx = col / (cols - 1);
           const skewedX = Math.pow(nx, 1.3);
           bx = w * 0.06 + skewedX * w * 0.88 + jitterX;
           by = baseY + jitterY;
           break;
         }
         case "cross-sector": {
-          const nx = col / (COLS - 1);
+          const nx = col / (cols - 1);
           const stretchX = 0.5 + (nx - 0.5) * 1.15;
           bx = stretchX * w + jitterX;
           by = baseY + jitterY;
           break;
         }
         case "deep-organizing": {
-          const nx = (col + 0.5) / COLS - 0.5;
-          const ny = (row + 0.5) / ROWS - 0.5;
+          const nx = (col + 0.5) / cols - 0.5;
+          const ny = (row + 0.5) / rows - 0.5;
           const dist = Math.sqrt(nx * nx + ny * ny);
           const pull = 0.85 + 0.15 * (1 - dist / 0.7);
           bx = w * 0.5 + nx * pull * w * 0.95 + jitterX;
@@ -132,25 +143,27 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
     const initNodes = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      canvas.width = w * devicePixelRatio;
-      canvas.height = h * devicePixelRatio;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sizeRef.current = { w, h };
 
+      const { cols, rows, anchorIndices, northStarIndex } = getGridConfig(w, h);
       const rng = seededRandom(42);
       const positions = getLayoutPositions(modeRef.current, w, h, rng);
       const rng2 = seededRandom(99);
 
       const nodes: Node[] = [];
-      for (let i = 0; i < COLS * ROWS; i++) {
+      for (let i = 0; i < cols * rows; i++) {
         const tier: Node["tier"] =
-          i === NORTH_STAR_INDEX
+          i === northStarIndex
             ? "northstar"
-            : ANCHOR_INDICES.has(i)
-            ? "anchor"
-            : "field";
+            : anchorIndices.has(i)
+              ? "anchor"
+              : "field";
 
         nodes.push({
           x: positions[i].x,
