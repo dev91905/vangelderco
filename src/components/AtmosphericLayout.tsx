@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import ConstellationField from "./ConstellationField";
 
 interface AtmosphericLayoutProps {
   children: ReactNode;
@@ -7,6 +8,7 @@ interface AtmosphericLayoutProps {
 const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-background">
+      <ConstellationField />
       {/* Breathing red glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 -z-0"
