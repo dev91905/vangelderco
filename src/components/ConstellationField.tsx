@@ -235,10 +235,10 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               (edgeMidX - mouse.x) ** 2 + (edgeMidY - mouse.y) ** 2
             );
             const boost = eDist < MOUSE_RADIUS * 1.5
-              ? 0.008 * (1 - eDist / (MOUSE_RADIUS * 1.5))
+              ? 0.012 * (1 - eDist / (MOUSE_RADIUS * 1.5))
               : 0;
 
-            const alpha = 0.008 + 0.008 * (1 - dist / maxDist) + boost;
+            const alpha = 0.012 + 0.012 * (1 - dist / maxDist) + boost;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -259,7 +259,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.002)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
               ctx.fill();
             }
           }
@@ -268,7 +268,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.03 + 0.02 * Math.sin(t * 0.0008);
+          const pulse = 0.045 + 0.03 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
@@ -280,12 +280,12 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.04)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.018)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.025)`;
           ctx.fill();
         }
       }
