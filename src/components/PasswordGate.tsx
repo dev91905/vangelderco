@@ -184,7 +184,7 @@ export const PasswordGateWrapper = ({
         onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
       >
-        ← Return
+        &lt; Return
       </Link>
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 max-w-md w-full">

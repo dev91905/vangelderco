@@ -99,7 +99,7 @@ const Admin = () => {
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
         <div className="flex items-center gap-4">
           <Link to="/" className="text-[10px] tracking-[0.2em] uppercase transition-colors hover:opacity-70" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
-            ← Site
+            &lt; Site
           </Link>
           <h1 className="text-sm font-medium tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.8)" }}>
             Content Manager
