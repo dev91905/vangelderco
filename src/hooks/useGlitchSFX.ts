@@ -2,23 +2,32 @@ import { useCallback, useRef } from "react";
 
 const useGlitchSFX = () => {
   const ctxRef = useRef<AudioContext | null>(null);
+  const unlockedRef = useRef(false);
 
-  const getCtx = useCallback(() => {
+  const getCtx = useCallback(async () => {
     if (!ctxRef.current) {
       ctxRef.current = new AudioContext();
     }
     if (ctxRef.current.state === "suspended") {
-      ctxRef.current.resume();
+      await ctxRef.current.resume();
+    }
+    // iOS unlock: play a silent buffer on first interaction
+    if (!unlockedRef.current) {
+      const buf = ctxRef.current.createBuffer(1, 1, ctxRef.current.sampleRate);
+      const src = ctxRef.current.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctxRef.current.destination);
+      src.start(0);
+      unlockedRef.current = true;
     }
     return ctxRef.current;
   }, []);
 
-  const playHoverGlitch = useCallback(() => {
-    const ctx = getCtx();
+  const playHoverGlitch = useCallback(async () => {
+    const ctx = await getCtx();
     const duration = 0.08;
     const now = ctx.currentTime;
 
-    // Primary sine — low A
     const osc1 = ctx.createOscillator();
     osc1.type = "sine";
     osc1.frequency.value = 220;
@@ -32,7 +41,6 @@ const useGlitchSFX = () => {
     osc1.start(now);
     osc1.stop(now + duration);
 
-    // Harmonic fifth layer
     const osc2 = ctx.createOscillator();
     osc2.type = "sine";
     osc2.frequency.value = 330;
@@ -47,12 +55,11 @@ const useGlitchSFX = () => {
     osc2.stop(now + duration);
   }, [getCtx]);
 
-  const playClickGlitch = useCallback(() => {
-    const ctx = getCtx();
+  const playClickGlitch = useCallback(async () => {
+    const ctx = await getCtx();
     const duration = 0.15;
     const now = ctx.currentTime;
 
-    // Deep triangle wave with pitch bend
     const osc1 = ctx.createOscillator();
     osc1.type = "triangle";
     osc1.frequency.setValueAtTime(110, now);
@@ -67,7 +74,6 @@ const useGlitchSFX = () => {
     osc1.start(now);
     osc1.stop(now + duration);
 
-    // Harmonic layer
     const osc2 = ctx.createOscillator();
     osc2.type = "sine";
     osc2.frequency.setValueAtTime(165, now);
@@ -83,8 +89,8 @@ const useGlitchSFX = () => {
     osc2.stop(now + duration);
   }, [getCtx]);
 
-  const playChitter = useCallback(() => {
-    const ctx = getCtx();
+  const playChitter = useCallback(async () => {
+    const ctx = await getCtx();
     const now = ctx.currentTime;
     const pitches = [300, 320, 280, 340];
     const pipDuration = 0.04;
