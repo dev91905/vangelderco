@@ -137,4 +137,9 @@ body::after {
 
 .hero-nav-link:hover .hero-nav-text {
   color: hsl(0 0% 100% / 1) !important;
+  transform: translateX(6px);
+}
+
+.hero-nav-text {
+  transition: color 0.15s ease, transform 0.15s ease;
 }
