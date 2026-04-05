@@ -268,7 +268,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.06 + 0.04 * Math.sin(t * 0.0008);
+          const pulse = 0.03 + 0.02 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
@@ -280,12 +280,12 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.05)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.03)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.018)`;
           ctx.fill();
         }
       }
