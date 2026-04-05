@@ -28,12 +28,12 @@ interface Node {
   tier: "northstar" | "anchor" | "field";
 }
 
-const COLS = 6;
-const ROWS = 6;
-const MAX_EDGE_DIST = 0.18;
+const COLS = 4;
+const ROWS = 4;
+const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
-const ANCHOR_INDICES = new Set([0, 7, 14, 21, 28]);
+const ANCHOR_INDICES = new Set([0, 5, 10, 15]);
 const NORTH_STAR_COL = Math.round(COLS * 0.618);
 const NORTH_STAR_ROW = Math.round(ROWS * 0.382);
 const NORTH_STAR_INDEX = NORTH_STAR_ROW * COLS + NORTH_STAR_COL;
