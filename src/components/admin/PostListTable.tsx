@@ -19,6 +19,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
       const { data, error } = await supabase
         .from("capability_posts")
         .select("*")
+        .order("published_at", { ascending: false, nullsFirst: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
