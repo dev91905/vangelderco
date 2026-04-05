@@ -6,10 +6,14 @@ export type CapabilityPost = {
   capability: string;
   type: string;
   title: string;
+  slug: string | null;
   excerpt: string | null;
   content: string | null;
   published_at: string | null;
   created_at: string;
+  hero_image_url: string | null;
+  content_blocks: unknown | null;
+  stats: unknown | null;
 };
 
 export function useCapabilityPosts(capability: string) {

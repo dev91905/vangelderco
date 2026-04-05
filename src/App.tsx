@@ -8,6 +8,7 @@ import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
 import DeepOrganizing from "./pages/DeepOrganizing.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PostDetail from "./pages/PostDetail.tsx";
 
 const queryClient = new QueryClient();
 
