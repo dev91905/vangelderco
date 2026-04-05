@@ -1,39 +1,41 @@
 
 
-# Geometric Constellation Background — Animated Triangular Network
+# Constellation Field — Intentional, Dynamic, Alive
 
-## Concept
+## Problems with current version
+- Nodes are purely random scatter — no compositional intent
+- Static orbit patterns — no evolution over time
+- No cursor awareness — feels dead
+- Sparse coverage — doesn't fill the viewport evenly
+- All nodes behave identically (except north star)
 
-A full-viewport SVG canvas of slowly drifting triangular constellations — faint interconnected nodes forming triangular geometries that pulse and shift. Think the Oldest House from CONTROL: barely-there geometric structures hovering in darkness, hinting at something vast and unknowable. The three-sided forms reference the three domains. Nodes connected by hair-thin lines evoke network constellations and the north star motif.
+## Design approach
 
-## Design
+**Intentional layout**: Place nodes on a structured grid with jitter — 6×5 grid across viewport with ~30% positional noise. Ensures even full-screen coverage while avoiding mechanical regularity. North star stays near golden-ratio center (~0.618, 0.382).
 
-- **Geometry**: ~20–30 nodes scattered across the viewport, connected into triangular clusters by thin lines. Not a uniform grid — organic, slightly asymmetric placement that feels like a star chart.
-- **Animation**: Nodes drift slowly (CSS or requestAnimationFrame), each on its own subtle orbit. Lines stretch and contract as nodes move. One node slightly brighter than the rest — the north star.
-- **Opacity**: Extremely faint. Node dots at `0.06–0.10` opacity, connecting lines at `0.03–0.05`. The "north star" node pulses gently between `0.10–0.18`. Should feel subliminal — noticed after 10 seconds of looking, not on first glance.
-- **Color**: White lines/dots with a very faint red tint on the north star pulse (`hsl(0 80% 48% / 0.08)`).
-- **No interaction**: Pure `pointer-events-none` decoration.
+**Evolving behavior**: Nodes slowly migrate their base positions over time using low-frequency sine waves on different axes. Connections form and dissolve as distances shift. The constellation is never the same twice across a 60-second window.
 
-## Implementation
+**Cursor responsiveness**: Track mouse position (via `pointermove` on `window`). Nodes within a radius of the cursor gently drift away — subtle repulsion field. Lines near cursor gain a faint brightness boost. `pointer-events-none` stays on the canvas; listener goes on `window`.
 
-### New component: `src/components/ConstellationField.tsx`
+**Tiered node hierarchy**: Three tiers instead of binary:
+- **North star** (1): Larger, red pulse, outer glow — unchanged
+- **Anchor nodes** (5): Slightly larger dots (1.6px), faintly brighter (0.10 opacity), slower drift — structural landmarks
+- **Field nodes** (remaining ~30): Small (1.0px), standard opacity (0.06), faster drift
 
-A self-contained canvas/SVG component:
-- Generates node positions on mount (deterministic seed so it's consistent)
-- Uses `requestAnimationFrame` for smooth, GPU-friendly drift animation
-- Canvas-based (not DOM nodes) for performance — draws dots and lines each frame
-- Responsive: fills parent container, recalculates on resize
-- North star node: one designated node with a slow `sin()`-based brightness pulse
+**More nodes**: Increase to ~36 for denser coverage.
 
-### `src/components/AtmosphericLayout.tsx`
+**Triangle rendering**: When three mutually-connected nodes form a triangle, fill it with an extremely faint wash (`0.008` opacity) — gives depth without adding noise.
 
-Add `<ConstellationField />` as a new layer between the breathing glow and the vignette, at `z-[1]`, `pointer-events-none`, `fixed inset-0`.
+## Changes
 
-### `src/components/PasswordGate.tsx`
+### `src/components/ConstellationField.tsx` — Full rewrite
 
-Add the same `<ConstellationField />` inside the gate wrapper so the password page gets it too.
+1. **Grid-based placement**: 6 columns × 6 rows = 36 base positions, each jittered by ±15% of cell size
+2. **Mouse tracking**: `useRef` for cursor position, `pointermove` listener on `window`, repulsion force within 150px radius
+3. **Evolving base drift**: Each node's `baseX`/`baseY` shifts slowly via `sin(t * drift_freq + phase)` — the whole field breathes
+4. **Tiered rendering**: Anchor nodes at indices 0,7,14,21,28 — slightly larger, brighter
+5. **Triangle fills**: After drawing edges, detect triangles (three mutual connections) and fill with near-invisible white
+6. **Smoother edges**: Increase `MAX_EDGE_DIST` slightly to `0.25` for more connections
 
-### No other changes
-
-No new dependencies. Pure HTML Canvas + RAF. No Three.js needed for this level of subtlety.
+No other files change. Same canvas, same z-index, same integration points.
 
