@@ -74,7 +74,7 @@ const Deck = () => {
         scrollSnapType: "y mandatory",
       }}
     >
-      {/* Breathing gold glow */}
+      {/* Breathing red glow */}
       <div
         className="pointer-events-none fixed left-1/2 top-1/2 -z-0"
         style={{
@@ -82,17 +82,34 @@ const Deck = () => {
           height: "min(80vh, 600px)",
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse at center, hsl(40 50% 57% / 0.10) 0%, hsl(40 50% 57% / 0.05) 30%, hsl(40 50% 57% / 0.015) 55%, transparent 80%)",
+            "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.12) 0%, hsl(0 80% 48% / 0.06) 30%, hsl(0 80% 48% / 0.02) 55%, transparent 80%)",
           animation: "breathe 8s ease-in-out infinite",
           transform: "translate(-50%, -50%)",
         }}
       />
 
+      {/* Scan beam */}
+      <div
+        className="pointer-events-none fixed left-0 z-20 w-full"
+        style={{
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)",
+          animation: "scan-beam 7s linear infinite",
+        }}
+      />
+
+      {/* Corner brackets */}
+      <svg className="fixed top-4 left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M1 8V1h7" /></svg>
+      <svg className="fixed top-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 8V1h-7" /></svg>
+      <svg className="fixed bottom-4 left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M1 16v7h7" /></svg>
+      <svg className="fixed bottom-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 16v7h-7" /></svg>
+
       {/* Frame counter HUD */}
       <div
         className="fixed bottom-8 right-8 z-30"
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: "11px",
           letterSpacing: "0.15em",
           color: "hsl(0 0% 100% / 0.25)",
@@ -105,7 +122,7 @@ const Deck = () => {
       <div
         className="fixed top-8 right-8 z-30"
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: "9px",
           letterSpacing: "0.2em",
           textTransform: "uppercase",
@@ -120,9 +137,9 @@ const Deck = () => {
         <div className="flex flex-col items-center text-center gap-6">
           <h1
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(28px, 5vw, 56px)",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "hsl(0 0% 100%)",
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
@@ -134,12 +151,12 @@ const Deck = () => {
             style={{
               width: "40px",
               height: "1px",
-              background: "hsl(40 50% 57% / 0.6)",
+              background: "hsl(0 80% 48% / 0.6)",
             }}
           />
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(16px, 2.2vw, 24px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.7)",
@@ -151,7 +168,7 @@ const Deck = () => {
           </p>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: "clamp(10px, 1.2vw, 13px)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
@@ -169,7 +186,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(20px, 3vw, 34px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.9)",
@@ -181,7 +198,7 @@ const Deck = () => {
           <div className="flex flex-col gap-5">
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(14px, 1.8vw, 19px)",
                 fontWeight: 400,
                 color: "hsl(0 0% 100% / 0.45)",
@@ -192,7 +209,7 @@ const Deck = () => {
             </p>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(16px, 2.2vw, 24px)",
                 fontWeight: 400,
                 color: "hsl(0 0% 100% / 0.7)",
@@ -210,7 +227,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(18px, 2.6vw, 30px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.85)",
@@ -252,7 +269,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(20px, 3vw, 34px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.9)",
@@ -265,12 +282,12 @@ const Deck = () => {
             style={{
               width: "40px",
               height: "1px",
-              background: "hsl(40 50% 57% / 0.3)",
+              background: "hsl(0 80% 48% / 0.3)",
             }}
           />
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(15px, 2vw, 21px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.5)",
@@ -287,9 +304,9 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "hsl(0 0% 100%)",
               letterSpacing: "-0.01em",
             }}
@@ -315,7 +332,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(20px, 3vw, 34px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.9)",
@@ -326,17 +343,17 @@ const Deck = () => {
           </p>
           <div
             style={{
-              borderLeft: "2px solid hsl(40 50% 57% / 0.5)",
+              borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
               paddingLeft: "20px",
             }}
           >
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "10px",
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: "hsl(40 50% 57% / 0.7)",
+                color: "hsl(0 80% 48% / 0.7)",
                 marginBottom: "12px",
               }}
             >
@@ -344,7 +361,7 @@ const Deck = () => {
             </p>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(15px, 2vw, 20px)",
                 fontWeight: 400,
                 color: "hsl(0 0% 100% / 0.7)",
@@ -356,7 +373,7 @@ const Deck = () => {
             </p>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(13px, 1.6vw, 17px)",
                 color: "hsl(0 0% 100% / 0.45)",
                 lineHeight: 1.65,
@@ -367,7 +384,7 @@ const Deck = () => {
             </p>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(13px, 1.6vw, 17px)",
                 color: "hsl(0 0% 100% / 0.45)",
                 lineHeight: 1.65,
@@ -378,10 +395,10 @@ const Deck = () => {
             </p>
             <p
               style={{
-                fontFamily: "'Instrument Serif', serif",
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "clamp(14px, 1.8vw, 18px)",
                 fontStyle: "italic",
-                color: "hsl(40 50% 57% / 0.7)",
+                color: "hsl(0 80% 48% / 0.7)",
                 lineHeight: 1.55,
               }}
             >
@@ -402,9 +419,9 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <h2
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "hsl(0 0% 100%)",
               letterSpacing: "-0.01em",
             }}
@@ -438,9 +455,9 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <h2
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "hsl(0 0% 100%)",
               letterSpacing: "-0.01em",
             }}
@@ -490,7 +507,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(20px, 3vw, 34px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.9)",
@@ -509,7 +526,7 @@ const Deck = () => {
                 <p
                   key={i}
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'Space Grotesk', sans-serif",
                     fontSize: "clamp(13px, 1.6vw, 17px)",
                     color: "hsl(0 0% 100% / 0.5)",
                     lineHeight: 1.65,
@@ -522,7 +539,7 @@ const Deck = () => {
             <div className="flex flex-col gap-5">
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "'Space Grotesk', sans-serif",
                   fontSize: "clamp(13px, 1.6vw, 17px)",
                   color: "hsl(0 0% 100% / 0.5)",
                   lineHeight: 1.65,
@@ -532,7 +549,7 @@ const Deck = () => {
               </p>
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "'Space Grotesk', sans-serif",
                   fontSize: "clamp(13px, 1.6vw, 17px)",
                   color: "hsl(0 0% 100% / 0.45)",
                   lineHeight: 1.65,
@@ -542,7 +559,7 @@ const Deck = () => {
               </p>
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "'Space Grotesk', sans-serif",
                   fontSize: "clamp(16px, 2.2vw, 22px)",
                   fontWeight: 400,
                   color: "hsl(0 0% 100% / 0.85)",
@@ -561,7 +578,7 @@ const Deck = () => {
         <div className="flex flex-col gap-8">
           <p
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(22px, 3.5vw, 40px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.95)",
@@ -574,12 +591,12 @@ const Deck = () => {
             style={{
               width: "40px",
               height: "1px",
-              background: "hsl(40 50% 57% / 0.3)",
+              background: "hsl(0 80% 48% / 0.3)",
             }}
           />
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(15px, 2vw, 21px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.5)",
@@ -596,9 +613,9 @@ const Deck = () => {
         <div className="flex flex-col items-center text-center gap-8">
           <h2
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(28px, 5vw, 56px)",
-              fontWeight: 400,
+              fontWeight: 500,
               color: "hsl(0 0% 100%)",
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
@@ -608,7 +625,7 @@ const Deck = () => {
           </h2>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(15px, 2vw, 21px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.5)",
@@ -621,24 +638,24 @@ const Deck = () => {
           <a
             href="mailto:info@vgcstratcomm.com"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: "12px",
               fontWeight: 500,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: "hsl(40 50% 57% / 0.9)",
-              border: "1px solid hsl(40 50% 57% / 0.4)",
+              color: "hsl(0 80% 48% / 0.9)",
+              border: "1px solid hsl(0 80% 48% / 0.4)",
               padding: "14px 36px",
               textDecoration: "none",
               transition: "border-color 300ms, color 300ms",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "hsl(40 50% 57% / 0.8)";
-              e.currentTarget.style.color = "hsl(40 50% 57% / 1)";
+              e.currentTarget.style.borderColor = "hsl(0 80% 48% / 0.8)";
+              e.currentTarget.style.color = "hsl(0 80% 48% / 1)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "hsl(40 50% 57% / 0.4)";
-              e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)";
+              e.currentTarget.style.borderColor = "hsl(0 80% 48% / 0.4)";
+              e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)";
             }}
           >
             Get in touch
@@ -663,11 +680,11 @@ const ContrastColumn = ({
   <div className="flex flex-col gap-4">
     <span
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'JetBrains Mono', monospace",
         fontSize: "10px",
         letterSpacing: "0.2em",
         textTransform: "uppercase",
-        color: accent ? "hsl(40 50% 57% / 0.8)" : "hsl(0 0% 100% / 0.3)",
+        color: accent ? "hsl(0 80% 48% / 0.8)" : "hsl(0 0% 100% / 0.3)",
       }}
     >
       {title}
@@ -676,13 +693,13 @@ const ContrastColumn = ({
       <p
         key={i}
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'Space Grotesk', sans-serif",
           fontSize: "clamp(12px, 1.4vw, 15px)",
           color: accent ? "hsl(0 0% 100% / 0.6)" : "hsl(0 0% 100% / 0.3)",
           lineHeight: 1.6,
           paddingLeft: "12px",
           borderLeft: accent
-            ? "2px solid hsl(40 50% 57% / 0.3)"
+            ? "2px solid hsl(0 80% 48% / 0.3)"
             : "1px solid hsl(0 0% 100% / 0.08)",
         }}
       >
@@ -702,17 +719,17 @@ const CapCard = ({
   <div
     style={{
       border: "1px solid hsl(0 0% 100% / 0.08)",
-      borderTop: "2px solid hsl(40 50% 57% / 0.5)",
+      borderTop: "2px solid hsl(0 80% 48% / 0.5)",
       padding: "24px",
     }}
   >
     <p
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'JetBrains Mono', monospace",
         fontSize: "10px",
         letterSpacing: "0.2em",
         textTransform: "uppercase",
-        color: "hsl(40 50% 57% / 0.8)",
+        color: "hsl(0 80% 48% / 0.8)",
         marginBottom: "12px",
       }}
     >
@@ -720,7 +737,7 @@ const CapCard = ({
     </p>
     <p
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Space Grotesk', sans-serif",
         fontSize: "clamp(13px, 1.5vw, 16px)",
         color: "hsl(0 0% 100% / 0.5)",
         lineHeight: 1.7,
@@ -748,20 +765,20 @@ const OptionCard = ({
   >
     <span
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'JetBrains Mono', monospace",
         fontSize: "9px",
         letterSpacing: "0.2em",
         textTransform: "uppercase",
-        color: "hsl(40 50% 57% / 0.7)",
+        color: "hsl(0 80% 48% / 0.7)",
       }}
     >
       {label}
     </span>
     <p
       style={{
-        fontFamily: "'Instrument Serif', serif",
+        fontFamily: "'Space Grotesk', sans-serif",
         fontSize: "clamp(16px, 2vw, 20px)",
-        fontWeight: 400,
+        fontWeight: 500,
         color: "hsl(0 0% 100% / 0.9)",
         marginTop: "8px",
         marginBottom: "8px",
@@ -771,7 +788,7 @@ const OptionCard = ({
     </p>
     <p
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Space Grotesk', sans-serif",
         fontSize: "clamp(12px, 1.4vw, 15px)",
         color: "hsl(0 0% 100% / 0.4)",
         lineHeight: 1.65,
@@ -788,22 +805,22 @@ const StatChip = ({ value, label }: { value: string; label: string }) => (
     style={{
       background: "hsl(0 0% 4%)",
       border: "1px solid hsl(0 0% 100% / 0.06)",
-      borderLeft: "2px solid hsl(40 50% 57% / 0.6)",
+      borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
     }}
   >
     <span
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'JetBrains Mono', monospace",
         fontSize: "clamp(14px, 1.6vw, 20px)",
         fontWeight: 500,
-        color: "hsl(40 50% 57% / 0.9)",
+        color: "hsl(0 80% 48% / 0.9)",
       }}
     >
       {value}
     </span>
     <span
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'JetBrains Mono', monospace",
         fontSize: "9px",
         letterSpacing: "0.15em",
         textTransform: "uppercase",
@@ -834,7 +851,7 @@ const TimelineStep = ({
           width: "8px",
           height: "8px",
           borderRadius: "50%",
-          background: "hsl(40 50% 57% / 0.8)",
+          background: "hsl(0 80% 48% / 0.8)",
           flexShrink: 0,
           marginTop: "4px",
         }}
@@ -844,7 +861,7 @@ const TimelineStep = ({
           style={{
             width: "1px",
             flexGrow: 1,
-            background: "hsl(40 50% 57% / 0.15)",
+            background: "hsl(0 80% 48% / 0.15)",
             minHeight: "40px",
           }}
         />
@@ -853,20 +870,20 @@ const TimelineStep = ({
     <div className="flex flex-col gap-1 pb-8">
       <span
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: "9px",
           letterSpacing: "0.2em",
           textTransform: "uppercase",
-          color: "hsl(40 50% 57% / 0.7)",
+          color: "hsl(0 80% 48% / 0.7)",
         }}
       >
         {period}
       </span>
       <span
         style={{
-          fontFamily: "'Instrument Serif', serif",
+          fontFamily: "'Space Grotesk', sans-serif",
           fontSize: "clamp(15px, 1.8vw, 19px)",
-          fontWeight: 400,
+          fontWeight: 500,
           color: "hsl(0 0% 100% / 0.9)",
         }}
       >
@@ -874,7 +891,7 @@ const TimelineStep = ({
       </span>
       <span
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'Space Grotesk', sans-serif",
           fontSize: "clamp(12px, 1.4vw, 15px)",
           color: "hsl(0 0% 100% / 0.4)",
           lineHeight: 1.6,
@@ -903,9 +920,9 @@ const DeliverableRow = ({
   >
     <span
       style={{
-        fontFamily: "'Instrument Serif', serif",
+        fontFamily: "'Space Grotesk', sans-serif",
         fontSize: "clamp(15px, 1.8vw, 19px)",
-        fontWeight: 400,
+        fontWeight: 500,
         color: "hsl(0 0% 100% / 0.85)",
       }}
     >
@@ -913,7 +930,7 @@ const DeliverableRow = ({
     </span>
     <span
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Space Grotesk', sans-serif",
         fontSize: "clamp(12px, 1.4vw, 15px)",
         color: "hsl(0 0% 100% / 0.4)",
         lineHeight: 1.6,

@@ -23,7 +23,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
         className="p-4 md:p-5 transition-all duration-300"
         style={{
           background: "hsl(0 0% 4%)",
-          borderLeft: "2px solid hsl(40 50% 57% / 0.5)",
+          borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
           borderTop: "1px solid hsl(0 0% 100% / 0.05)",
           borderRight: "1px solid hsl(0 0% 100% / 0.05)",
           borderBottom: "1px solid hsl(0 0% 100% / 0.05)",
@@ -33,20 +33,22 @@ const PostCard = ({ post, index }: PostCardProps) => {
           playHoverGlitch();
           const el = e.currentTarget;
           el.style.background = "hsl(0 0% 7%)";
-          el.style.borderLeftColor = "hsl(40 50% 57% / 0.9)";
+          el.style.borderLeftColor = "hsl(0 80% 48% / 0.9)";
           el.style.borderTopColor = "hsl(0 0% 100% / 0.1)";
           el.style.borderRightColor = "hsl(0 0% 100% / 0.1)";
           el.style.borderBottomColor = "hsl(0 0% 100% / 0.1)";
           el.style.transform = "translateX(2px)";
+          // Brighten title
           const title = el.querySelector("[data-title]") as HTMLElement;
           if (title) title.style.color = "hsl(0 0% 100% / 1)";
+          // Brighten type label
           const label = el.querySelector("[data-label]") as HTMLElement;
-          if (label) label.style.color = "hsl(40 50% 57% / 1)";
+          if (label) label.style.color = "hsl(0 80% 48% / 1)";
         }}
         onMouseLeave={(e) => {
           const el = e.currentTarget;
           el.style.background = "hsl(0 0% 4%)";
-          el.style.borderLeftColor = "hsl(40 50% 57% / 0.5)";
+          el.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
           el.style.borderTopColor = "hsl(0 0% 100% / 0.05)";
           el.style.borderRightColor = "hsl(0 0% 100% / 0.05)";
           el.style.borderBottomColor = "hsl(0 0% 100% / 0.05)";
@@ -54,7 +56,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
           const title = el.querySelector("[data-title]") as HTMLElement;
           if (title) title.style.color = "hsl(0 0% 100% / 0.85)";
           const label = el.querySelector("[data-label]") as HTMLElement;
-          if (label) label.style.color = "hsl(40 50% 57% / 0.7)";
+          if (label) label.style.color = "hsl(0 80% 48% / 0.7)";
         }}
       >
         <div className="flex items-baseline justify-between gap-4 mb-2">
@@ -62,8 +64,8 @@ const PostCard = ({ post, index }: PostCardProps) => {
             data-label
             className="text-[10px] tracking-[0.15em] uppercase"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(40 50% 57% / 0.7)",
+              fontFamily: "'JetBrains Mono', monospace",
+              color: "hsl(0 80% 48% / 0.7)",
               transition: "color 300ms",
             }}
           >
@@ -73,7 +75,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
             <span
               className="text-[10px] tracking-[0.1em]"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'JetBrains Mono', monospace",
                 color: "hsl(0 0% 100% / 0.25)",
               }}
             >
@@ -86,7 +88,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
           data-title
           className="text-[14px] md:text-[16px] font-medium mb-2"
           style={{
-            fontFamily: "'Instrument Serif', serif",
+            fontFamily: "'Space Grotesk', sans-serif",
             color: "hsl(0 0% 100% / 0.85)",
             transition: "color 300ms",
           }}
@@ -98,7 +100,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
           <p
             className="text-[11px] md:text-[12px] leading-relaxed"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.4)",
             }}
           >

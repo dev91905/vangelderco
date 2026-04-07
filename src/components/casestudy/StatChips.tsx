@@ -21,15 +21,15 @@ const StatChips = ({ stats, visible }: StatChipsProps) => {
           style={{
             background: "hsl(0 0% 4%)",
             border: "1px solid hsl(0 0% 100% / 0.06)",
-            borderLeft: "2px solid hsl(40 50% 57% / 0.6)",
+            borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
             animation: `fade-up 0.4s ease-out ${i * 0.1}s both`,
           }}
         >
           <span
             className="text-[18px] md:text-[22px] font-medium"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(40 50% 57% / 0.9)",
+              fontFamily: "'JetBrains Mono', monospace",
+              color: "hsl(0 80% 48% / 0.9)",
             }}
           >
             {stat.label}
@@ -37,7 +37,7 @@ const StatChips = ({ stats, visible }: StatChipsProps) => {
           <span
             className="text-[9px] tracking-[0.15em] uppercase mt-1"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.4)",
             }}
           >

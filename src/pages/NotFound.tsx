@@ -7,7 +7,7 @@ const NotFound = () => {
       <div className="flex items-center justify-center h-full w-full">
         <span
           className="hidden sm:block fixed top-6 right-6 z-30 text-[10px] tracking-[0.2em] uppercase"
-          style={{ fontFamily: "'DM Sans', sans-serif", color: "hsl(0 0% 100% / 0.18)" }}
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.18)" }}
         >
           Van Gelder Co.
         </span>
@@ -16,8 +16,8 @@ const NotFound = () => {
           <span
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(40 50% 57% / 0.7)",
+              fontFamily: "'JetBrains Mono', monospace",
+              color: "hsl(0 80% 48% / 0.7)",
               animation: "fade-up 0.5s ease-out 0.2s both",
             }}
           >
@@ -27,7 +27,7 @@ const NotFound = () => {
           <h1
             className="text-[48px] md:text-[72px] font-medium leading-none"
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Space Grotesk', sans-serif",
               color: "hsl(0 0% 100% / 0.12)",
               animation: "fade-up 0.5s ease-out 0.3s both",
             }}
@@ -38,7 +38,7 @@ const NotFound = () => {
           <p
             className="text-[11px] tracking-[0.15em] uppercase"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.3)",
               animation: "fade-up 0.5s ease-out 0.5s both",
             }}
@@ -50,11 +50,11 @@ const NotFound = () => {
             to="/"
             className="text-[10px] tracking-[0.2em] uppercase transition-colors duration-300 mt-4"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'JetBrains Mono', monospace",
               color: "hsl(0 0% 100% / 0.3)",
               animation: "fade-up 0.5s ease-out 0.7s both",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
           >
             &lt; Return

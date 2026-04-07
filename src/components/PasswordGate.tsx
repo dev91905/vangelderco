@@ -9,8 +9,8 @@ interface PasswordGateProps {
   onUnlock: () => void;
 }
 
-const sans: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
-const serif: React.CSSProperties = { fontFamily: "'Instrument Serif', serif" };
+const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+const grotesk: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
 
 const PasswordGate = ({ title, heroImageUrl, onUnlock }: PasswordGateProps) => {
   const [password, setPassword] = useState("");
@@ -32,17 +32,17 @@ const PasswordGate = ({ title, heroImageUrl, onUnlock }: PasswordGateProps) => {
         </div>
       )}
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 max-w-md w-full">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-center leading-tight" style={{ ...serif, color: "hsl(0 0% 100% / 0.85)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>
           {title}
         </h1>
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: "1px solid hsl(40 50% 57% / 0.3)", background: "hsl(40 50% 57% / 0.06)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(40 50% 57% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(0 80% 48% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
           </div>
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...sans, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
+          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
         </div>
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
           <div className={`w-full transition-transform ${shake ? "animate-shake" : ""}`} onAnimationEnd={() => setShake(false)}>
@@ -50,12 +50,12 @@ const PasswordGate = ({ title, heroImageUrl, onUnlock }: PasswordGateProps) => {
               type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(false); }}
               placeholder="Enter password" autoFocus
               className="w-full px-4 py-3 text-sm bg-transparent outline-none text-center"
-              style={{ ...sans, color: "hsl(0 0% 100% / 0.8)", border: `1px solid ${error ? "hsl(40 50% 57% / 0.5)" : "hsl(0 0% 15%)"}`, background: "hsl(0 0% 4%)" }}
+              style={{ ...mono, color: "hsl(0 0% 100% / 0.8)", border: `1px solid ${error ? "hsl(0 80% 48% / 0.5)" : "hsl(0 0% 15%)"}`, background: "hsl(0 0% 4%)" }}
             />
           </div>
-          {error && <span className="text-[10px]" style={{ ...sans, color: "hsl(40 50% 57% / 0.7)" }}>Incorrect password</span>}
+          {error && <span className="text-[10px]" style={{ ...mono, color: "hsl(0 80% 48% / 0.7)" }}>Incorrect password</span>}
           <button type="submit" className="px-6 py-2.5 text-xs tracking-[0.1em] uppercase transition-all"
-            style={{ ...sans, background: password ? "hsl(40 50% 57%)" : "transparent", color: password ? "hsl(0 0% 100%)" : "hsl(40 50% 57% / 0.5)", border: password ? "1px solid hsl(40 50% 57%)" : "1px solid hsl(40 50% 57% / 0.3)" }}>
+            style={{ ...mono, background: password ? "hsl(0 80% 48%)" : "transparent", color: password ? "hsl(0 0% 100%)" : "hsl(0 80% 48% / 0.5)", border: password ? "1px solid hsl(0 80% 48%)" : "1px solid hsl(0 80% 48% / 0.3)" }}>
             Unlock
           </button>
         </form>
@@ -144,8 +144,8 @@ export const PasswordGateWrapper = ({
     }
   };
 
-  const sans: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
-  const serif: React.CSSProperties = { fontFamily: "'Instrument Serif', serif" };
+  const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+  const grotesk: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-y-auto" style={{ background: "hsl(0 0% 2.5%)" }}>
@@ -155,33 +155,41 @@ export const PasswordGateWrapper = ({
         </div>
       )}
 
-      {/* Breathing gold glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0" style={{ width: "min(80vw, 700px)", height: "min(80vh, 600px)", borderRadius: "50%", background: "radial-gradient(ellipse at center, hsl(40 50% 57% / 0.14) 0%, hsl(40 50% 57% / 0.07) 30%, hsl(40 50% 57% / 0.02) 55%, transparent 80%)", animation: "breathe 8s ease-in-out infinite", transform: "translate(-50%, -50%)" }} />
+      {/* Breathing red glow */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0" style={{ width: "min(80vw, 700px)", height: "min(80vh, 600px)", borderRadius: "50%", background: "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.18) 0%, hsl(0 80% 48% / 0.10) 30%, hsl(0 80% 48% / 0.03) 55%, transparent 80%)", animation: "breathe 8s ease-in-out infinite", transform: "translate(-50%, -50%)" }} />
+      {/* Scan beam */}
+      <div className="pointer-events-none fixed left-0 z-20 w-full" style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)", animation: "scan-beam 7s linear infinite", position: "fixed" }} />
+
+      {/* Corner brackets */}
+      <svg className="fixed top-3 left-3 sm:top-4 sm:left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M1 8V1h7" /></svg>
+      <svg className="fixed top-3 right-3 sm:top-4 sm:right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 8V1h-7" /></svg>
+      <svg className="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M1 16v7h7" /></svg>
+      <svg className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 16v7h-7" /></svg>
 
       {/* HUD */}
-      <span className="hidden sm:block fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] text-[10px] tracking-[0.2em] uppercase" style={{ ...sans, color: "hsl(0 0% 100% / 0.18)" }}>Van Gelder Co.</span>
+      <span className="hidden sm:block fixed top-4 right-4 sm:top-6 sm:right-6 z-[60] text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.18)" }}>Van Gelder Co.</span>
 
       {/* Back */}
       <Link
         to={capabilityRoute[capability] || "/"}
         className="fixed top-4 left-4 sm:top-6 sm:left-6 z-[60] text-[10px] tracking-[0.2em] uppercase transition-colors duration-300"
-        style={{ ...sans, color: "hsl(0 0% 100% / 0.3)" }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)")}
+        style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
       >
         &lt; Return
       </Link>
 
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 px-5 sm:px-6 py-8 max-w-sm sm:max-w-md w-full max-h-screen">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ ...serif, color: "hsl(0 0% 100% / 0.85)" }}>{title}</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ ...grotesk, color: "hsl(0 0% 100% / 0.85)" }}>{title}</h1>
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center" style={{ border: "1px solid hsl(40 50% 57% / 0.3)", background: "hsl(40 50% 57% / 0.06)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(40 50% 57% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-10 h-10 flex items-center justify-center" style={{ border: "1px solid hsl(0 80% 48% / 0.3)", background: "hsl(0 80% 48% / 0.06)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(0 80% 48% / 0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
           </div>
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...sans, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
+          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>Protected Content</span>
         </div>
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
           <div className={`w-full transition-transform ${shake ? "animate-shake" : ""}`} onAnimationEnd={() => setShake(false)}>
@@ -189,12 +197,12 @@ export const PasswordGateWrapper = ({
               type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(false); }}
               placeholder="Enter password" autoFocus
               className="w-full px-4 py-3 text-sm bg-transparent outline-none text-center"
-              style={{ ...sans, color: "hsl(0 0% 100% / 0.8)", border: `1px solid ${error ? "hsl(40 50% 57% / 0.5)" : "hsl(0 0% 15%)"}`, background: "hsl(0 0% 4%)" }}
+              style={{ ...mono, color: "hsl(0 0% 100% / 0.8)", border: `1px solid ${error ? "hsl(0 80% 48% / 0.5)" : "hsl(0 0% 15%)"}`, background: "hsl(0 0% 4%)" }}
             />
           </div>
-          {error && <span className="text-[10px]" style={{ ...sans, color: "hsl(40 50% 57% / 0.7)" }}>Incorrect password</span>}
+          {error && <span className="text-[10px]" style={{ ...mono, color: "hsl(0 80% 48% / 0.7)" }}>Incorrect password</span>}
           <button type="submit" disabled={verifying} className="px-6 py-3 text-xs tracking-[0.1em] uppercase transition-all"
-            style={{ ...sans, background: password ? "hsl(40 50% 57%)" : "transparent", color: password ? "hsl(0 0% 100%)" : "hsl(40 50% 57% / 0.5)", border: password ? "1px solid hsl(40 50% 57%)" : "1px solid hsl(40 50% 57% / 0.3)", opacity: verifying ? 0.5 : 1 }}>
+            style={{ ...mono, background: password ? "hsl(0 80% 48%)" : "transparent", color: password ? "hsl(0 0% 100%)" : "hsl(0 80% 48% / 0.5)", border: password ? "1px solid hsl(0 80% 48%)" : "1px solid hsl(0 80% 48% / 0.3)", opacity: verifying ? 0.5 : 1 }}>
             {verifying ? "Verifying..." : "Unlock"}
           </button>
         </form>
