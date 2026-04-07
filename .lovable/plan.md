@@ -1,60 +1,56 @@
 
 
-# Replace Deck Content — New Copy, Same Brutalist UI
+# Site-Wide Visual Identity Overhaul — Gold + Serif
 
-## What changes
+## The shift
 
-Replace all content in `src/pages/Deck.tsx` with the content from the pasted JSX, while keeping the existing UI system intact: DeckFrame scroll-snap, HUD chrome (corner brackets, scan beam, frame counter, ESC hint), SFX on frame change, red accent palette, Space Grotesk + JetBrains Mono typography.
+From: Near-black brutalist with red accent, Space Grotesk headings, JetBrains Mono body, CRT scanlines, film grain, corner brackets, scan beam.
 
-The deck goes from 13 frames to 11.
+To: Clean near-black with warm gold accent (`#c9a55a`), **Instrument Serif** display headings, **DM Sans** body text, no CRT/grain overlays. Sophisticated and approachable.
 
-## Frame-by-frame content mapping
+## Font loading — `index.html`
+- Replace current Google Fonts link: drop Space Grotesk + JetBrains Mono
+- Add: `Instrument+Serif:ital@0;1` and `DM+Sans:wght@400;500;600`
 
-| # | Label | Content |
-|---|-------|---------|
-| 1 | — | "VGC StratComm" title + "Strategic communications for donor advisors who need more than comms." + subtitle line |
-| 2 | The Problem | "You've invested in paid media, comms firms, op-eds, maybe a documentary. None of it is moving the needle." + Facebook metrics critique |
-| 3 | What You're Up Against | Two-column contrast grid: "The Standard Playbook" (6 items) vs "What the Other Side Is Doing" (6 items). New visual component but styled in our system (hsl colors, JetBrains Mono labels, red accent borders) |
-| 4 | The Real Discipline | "Strategic communications isn't a media buy..." + "Most donor advisors have access to one or two of these tools..." |
-| 5 | Three Capabilities | Three capability cards in a single frame (Cultural Strategy, Cross-Sector Intelligence, Deep Organizing) with full descriptions from the JSX. Styled as bordered cards with red accent. No case examples, no stat chips. |
-| 6 | Proof of Concept | Full case study: skilled trades coalition, $59K starting, free concerts via streaming data + voter files. 4 stat chips: "4 CITIES", "11,400 LEADS", "3.2× CONVERSION", "$59K STARTING". Replaces the individual case examples. |
-| 7 | How We Work | 4 service rows (Strategy Audit, Partnership Development, Program Design & Management, Intelligence Feed). Uses existing DeliverableRow component. |
-| 8 | The First 90 Days | Same timeline steps + NEW Option A/B fork at the bottom: "Option A: Run it yourself" vs "Option B: Ongoing retainer". Fork styled as two side-by-side bordered cards. |
-| 9 | Why This Exists | "We spent a decade inside the system..." + two-column layout: left has the three gaps (money/map/people), right has donor advisor paragraph + "We built VGC StratComm to close that gap." |
-| 10 | The Promise | "Everything we know becomes everything you know." as hero text + "We're not building a dependency..." + learnable message |
-| 11 | — | "VGC StratComm" + "If you're ready to stop spending on comms that don't move anyone — let's talk." + "Get in touch" email link button (styled as bordered uppercase link in our red accent) |
+## CSS foundation — `src/index.css`
+- `--primary` / `--accent` / `--ring`: red → gold (`40 50% 57%`)
+- Body font: `'DM Sans', system-ui, sans-serif`
+- **Remove**: `body::before` (film grain), `body::after` (CRT scanlines), `@keyframes grain`, `@keyframes scan-beam`
+- Update `@keyframes breathe` glow color from red to gold
+- Restyle `.hero-nav-link` hover effects with gold instead of red
 
-## New visual components (inline, same file)
+## AtmosphericLayout
+- Breathing glow: red → gold
+- **Remove**: scan beam div, corner bracket SVGs
+- Admin link hover: gold
 
-- **ContrastGrid**: Two-column layout for frame 3. JetBrains Mono labels, hsl borders, red accent on "Other Side" column header.
-- **CapCard**: Bordered card for frame 5. Red top-border accent, Space Grotesk title, body text.
-- **OptionCard**: Small bordered card for the A/B fork in frame 8. JetBrains Mono label, Space Grotesk title/body.
+## Pages & Components (font + color find-replace)
 
-## What stays exactly the same
+Every instance of:
+- `'Space Grotesk'` → `'Instrument Serif', serif`
+- `'JetBrains Mono'` → `'DM Sans', sans-serif`
+- `hsl(0 80% 48%)` → `#c9a55a` / `hsl(40 50% 57%)`
 
-- DeckFrame component (unchanged)
-- Scroll-snap container, HUD chrome (brackets, scan beam, frame counter, ESC hint)
-- useGlitchSFX on frame transitions
-- Arrow key + ESC navigation
-- StatChip component (reused for proof of concept)
-- TimelineStep component (reused)
-- DeliverableRow component (reused)
-- All typography families, color values, sizing patterns
+Across these files:
+- `src/pages/Index.tsx`
+- `src/pages/Deck.tsx` (all 11 frames + inline components)
+- `src/components/deck/DeckFrame.tsx`
+- `src/components/CapabilityLayout.tsx`
+- `src/components/PostCard.tsx`
+- `src/components/PasswordGate.tsx`
+- `src/pages/NotFound.tsx`
+- `src/components/casestudy/StatChips.tsx`
+- `src/components/ConstellationField.tsx` — node/edge colors to gold
 
 ## What's removed
+- Film grain overlay, CRT scanlines, scan beam, corner bracket SVGs
 
-- "What We Do" triangle SVG frame
-- "The Loop" circular SVG frame
-- Individual case examples on domain frames
-- Pull-quotes on domain frames
-- "By referral only" close frame (replaced with CTA + email)
+## What stays
+- Near-black background, scroll-snap deck, keyboard nav, SFX, ConstellationField (recolored), all content/copy, Supabase integration, admin pages
 
-## Technical details
+## Memory updates
+- `mem://design/tokens` and `mem://index.md` updated to reflect Instrument Serif + DM Sans + gold identity
 
-### File: `src/pages/Deck.tsx`
-- `TOTAL_FRAMES` changes from 13 to 11
-- All frame content rewritten with new copy
-- 3 new inline components: ContrastGrid items, CapCard, OptionCard
-- StatChip, TimelineStep, DeliverableRow kept as-is
-- No other files change
+## Files modified (~14)
+`index.html`, `src/index.css`, `src/components/AtmosphericLayout.tsx`, `src/pages/Index.tsx`, `src/pages/Deck.tsx`, `src/components/deck/DeckFrame.tsx`, `src/components/CapabilityLayout.tsx`, `src/components/PostCard.tsx`, `src/components/PasswordGate.tsx`, `src/pages/NotFound.tsx`, `src/components/casestudy/StatChips.tsx`, `src/components/ConstellationField.tsx`, `mem://design/tokens`, `mem://index.md`
 
