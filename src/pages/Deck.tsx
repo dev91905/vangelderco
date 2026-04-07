@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 
-const TOTAL_FRAMES = 9;
+const TOTAL_FRAMES = 13;
 
 const Deck = () => {
   const navigate = useNavigate();
@@ -164,7 +164,7 @@ const Deck = () => {
               maxWidth: "500px",
             }}
           >
-            Strategic Communications for the Sectors That Shape Power
+            Strategic advisory for the people trying to move something that matters
           </p>
         </div>
       </DeckFrame>
@@ -181,24 +181,128 @@ const Deck = () => {
               lineHeight: 1.45,
             }}
           >
-            The infrastructure connecting culture, policy, and capital is broken.
+            You're spending millions on paid media, op-eds, and documentaries nobody watches.
           </p>
+          <div className="flex flex-col gap-5">
+            <p
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(14px, 1.8vw, 19px)",
+                fontWeight: 400,
+                color: "hsl(0 0% 100% / 0.45)",
+                lineHeight: 1.65,
+              }}
+            >
+              Facebook counts a three-second scroll as a view. You get inflated numbers back and wonder why nothing moved. You're testing messages in a test tube, then paying people to watch them.
+            </p>
+            <p
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(16px, 2.2vw, 24px)",
+                fontWeight: 400,
+                color: "hsl(0 0% 100% / 0.7)",
+                lineHeight: 1.5,
+              }}
+            >
+              The tools aren't broken. They're just the wrong tools.
+            </p>
+          </div>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 3: Meanwhile ─── */}
+      <DeckFrame ref={setRef(2)} label="Meanwhile">
+        <div className="flex flex-col gap-8">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(16px, 2vw, 22px)",
+              fontSize: "clamp(18px, 2.6vw, 30px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.45)",
-              lineHeight: 1.6,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.45,
             }}
           >
-            The people with resources and the people with reach operate in parallel — never in concert. Philanthropic capital deploys without cultural strategy. Advocacy campaigns launch without ground infrastructure. And the leaders closest to communities remain invisible to the institutions that could amplify them.
+            While you run Facebook ads, the other side is buying the platforms you advertise on.
+          </p>
+          <div className="flex flex-col gap-4">
+            {[
+              "Acquiring legacy media and changing the programming",
+              "Investing in investigative news and digital creator economies",
+              "Running public polls that shift policy baselines",
+              "Developing new media talent, then acquiring legacy platforms",
+              "Building political ideology in real time — in the feeds your audience already watches",
+            ].map((line, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <div
+                  style={{
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: "hsl(0 80% 48% / 0.7)",
+                    flexShrink: 0,
+                    marginTop: "10px",
+                  }}
+                />
+                <p
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: "clamp(13px, 1.6vw, 17px)",
+                    color: "hsl(0 0% 100% / 0.45)",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {line}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.8vw, 19px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.6)",
+              lineHeight: 1.6,
+              marginTop: "8px",
+            }}
+          >
+            They don't test in a test tube. They throw money everywhere, see what sticks organically, and supercharge it.
           </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 3: Cultural Strategy ─── */}
-      <DeckFrame ref={setRef(2)} label="Domain // 001">
+      {/* ─── FRAME 4: What We Do ─── */}
+      <DeckFrame ref={setRef(3)} label="What We Do">
+        <div className="flex flex-col gap-10 items-center text-center">
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(18px, 2.8vw, 32px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.9)",
+              lineHeight: 1.5,
+              maxWidth: "700px",
+            }}
+          >
+            We sit at the intersection of philanthropy, policy, labor, culture, and technology — and we build the connective tissue between them.
+          </p>
+          {/* Three-node triangle */}
+          <svg width="200" height="180" viewBox="0 0 200 180" fill="none" className="mt-4">
+            <line x1="100" y1="20" x2="30" y2="155" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
+            <line x1="100" y1="20" x2="170" y2="155" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
+            <line x1="30" y1="155" x2="170" y2="155" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
+            <circle cx="100" cy="20" r="4" fill="hsl(0 80% 48% / 0.8)" />
+            <circle cx="30" cy="155" r="4" fill="hsl(0 80% 48% / 0.8)" />
+            <circle cx="170" cy="155" r="4" fill="hsl(0 80% 48% / 0.8)" />
+            <text x="100" y="10" textAnchor="middle" fill="hsl(0 0% 100% / 0.4)" fontSize="8" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.1em">CULTURE</text>
+            <text x="18" y="175" textAnchor="middle" fill="hsl(0 0% 100% / 0.4)" fontSize="8" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.1em">INTELLIGENCE</text>
+            <text x="182" y="175" textAnchor="middle" fill="hsl(0 0% 100% / 0.4)" fontSize="8" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.1em">ORGANIZING</text>
+          </svg>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 5: Cultural Strategy ─── */}
+      <DeckFrame ref={setRef(4)} label="Domain // 001">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -219,10 +323,23 @@ const Deck = () => {
               lineHeight: 1.7,
             }}
           >
-            We design public engagement campaigns with partners across arts, media, faith, and education — the sectors that shape the cultural conditions for policy.
+            Music industry. Local and national news. Digital creators. Brands and advertisers. Social platforms. Film and TV. Faith institutions. Veterans groups. Athletes. College campuses. Anywhere people gather around an interest that has nothing to do with politics — we find where those spaces intersect with institutional power and design coordinated interventions that shift narratives and norms at scale.
+          </p>
+          {/* Pull-quote */}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.6vw, 17px)",
+              fontStyle: "italic",
+              color: "hsl(0 80% 48% / 0.7)",
+              borderLeft: "2px solid hsl(0 80% 48% / 0.3)",
+              paddingLeft: "16px",
+            }}
+          >
+            Culture doesn't support the strategy. Culture IS the strategy.
           </p>
           <div
-            className="mt-4"
+            className="mt-2"
             style={{
               borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
               paddingLeft: "20px",
@@ -258,8 +375,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 4: Cross-Sector Intelligence ─── */}
-      <DeckFrame ref={setRef(3)} label="Domain // 002">
+      {/* ─── FRAME 6: Cross-Sector Intelligence ─── */}
+      <DeckFrame ref={setRef(5)} label="Domain // 002">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -280,10 +397,23 @@ const Deck = () => {
               lineHeight: 1.7,
             }}
           >
-            We bring energy, labor, philanthropy, culture, policy, and national security leaders to the same table — and build unexpected alliances that turn shared interest into joint action.
+            Even the best donor advisors struggle with multi-sector organizing. How does a philanthropic dollar unlock community foundations, national security, public utilities, policy, other donors, culture, and labor — simultaneously? It's a lot to hold in one's head. We build the processes, coalitions, and tools that make it visible and manageable.
+          </p>
+          {/* Pull-quote */}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.6vw, 17px)",
+              fontStyle: "italic",
+              color: "hsl(0 80% 48% / 0.7)",
+              borderLeft: "2px solid hsl(0 80% 48% / 0.3)",
+              paddingLeft: "16px",
+            }}
+          >
+            Know first. Move first.
           </p>
           <div
-            className="mt-4"
+            className="mt-2"
             style={{
               borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
               paddingLeft: "20px",
@@ -319,8 +449,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 5: Deep Organizing ─── */}
-      <DeckFrame ref={setRef(4)} label="Domain // 003">
+      {/* ─── FRAME 7: Deep Organizing ─── */}
+      <DeckFrame ref={setRef(6)} label="Domain // 003">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -341,10 +471,23 @@ const Deck = () => {
               lineHeight: 1.7,
             }}
           >
-            We identify community leaders already earning trust and building followings, and connect them with the resources to go further — the talent that traditional funding pipelines miss.
+            You're used to mass mobilization — turning out the same people over and over without growing the movement. The question every donor is asking now: am I building durable power, or funding something that fizzles in four years? We find the organic leaders who already have trust and momentum, audit and develop groups, do landscape analysis, and scale what works.
+          </p>
+          {/* Pull-quote */}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.6vw, 17px)",
+              fontStyle: "italic",
+              color: "hsl(0 80% 48% / 0.7)",
+              borderLeft: "2px solid hsl(0 80% 48% / 0.3)",
+              paddingLeft: "16px",
+            }}
+          >
+            Not events. Not 'engagement.' Organizing.
           </p>
           <div
-            className="mt-4"
+            className="mt-2"
             style={{
               borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
               paddingLeft: "20px",
@@ -380,127 +523,184 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 6: How It Works Together ─── */}
-      <DeckFrame ref={setRef(5)} label="The System">
+      {/* ─── FRAME 8: The Loop ─── */}
+      <DeckFrame ref={setRef(7)} label="The Loop">
         <div className="flex flex-col gap-10 items-center text-center">
-          <h2
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(22px, 3vw, 36px)",
-              fontWeight: 500,
-              color: "hsl(0 0% 100%)",
-            }}
-          >
-            Three domains. One system.
-          </h2>
-          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-center w-full">
-            {[
-              { num: "001", name: "Cultural Strategy", desc: "Shape the narrative" },
-              { num: "002", name: "Cross-Sector", desc: "Align the capital" },
-              { num: "003", name: "Deep Organizing", desc: "Build the ground" },
-            ].map((d, i) => (
-              <div key={i} className="flex flex-col items-center gap-3">
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "9px",
-                    letterSpacing: "0.2em",
-                    color: "hsl(0 80% 48% / 0.6)",
-                  }}
-                >
-                  {d.num}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "clamp(16px, 2vw, 20px)",
-                    fontWeight: 500,
-                    color: "hsl(0 0% 100% / 0.9)",
-                  }}
-                >
-                  {d.name}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "11px",
-                    color: "hsl(0 0% 100% / 0.35)",
-                  }}
-                >
-                  {d.desc}
-                </span>
-                {i < 2 && (
-                  <div
-                    className="hidden md:block"
-                    style={{
-                      position: "absolute",
-                      width: "40px",
-                      height: "1px",
-                      background: "hsl(0 80% 48% / 0.2)",
-                      right: "-25px",
-                      top: "50%",
-                    }}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
           <p
-            className="mt-4"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(13px, 1.6vw, 17px)",
-              color: "hsl(0 0% 100% / 0.35)",
-              lineHeight: 1.7,
-              maxWidth: "600px",
+              fontSize: "clamp(17px, 2.4vw, 26px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.55,
+              maxWidth: "650px",
             }}
           >
-            Each domain reinforces the others. Cultural conditions create political space. Cross-sector alignment directs resources. Ground infrastructure converts both into durable power.
+            Intelligence tells you where to aim. Culture tells you how to move people. Organizing makes it stick.
+          </p>
+          {/* Circular loop diagram */}
+          <svg width="280" height="260" viewBox="0 0 280 260" fill="none" className="mt-2">
+            {/* Circular path */}
+            <circle cx="140" cy="130" r="90" stroke="hsl(0 80% 48% / 0.15)" strokeWidth="1" fill="none" />
+            {/* Directional arcs */}
+            <path d="M 140 40 A 90 90 0 0 1 218 175" stroke="hsl(0 80% 48% / 0.35)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+            <path d="M 218 175 A 90 90 0 0 1 62 175" stroke="hsl(0 80% 48% / 0.35)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+            <path d="M 62 175 A 90 90 0 0 1 140 40" stroke="hsl(0 80% 48% / 0.35)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+            {/* Nodes */}
+            <circle cx="140" cy="40" r="5" fill="hsl(0 80% 48% / 0.8)" />
+            <circle cx="218" cy="175" r="5" fill="hsl(0 80% 48% / 0.8)" />
+            <circle cx="62" cy="175" r="5" fill="hsl(0 80% 48% / 0.8)" />
+            {/* Labels */}
+            <text x="140" y="22" textAnchor="middle" fill="hsl(0 0% 100% / 0.5)" fontSize="9" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.12em">INTELLIGENCE</text>
+            <text x="248" y="185" textAnchor="middle" fill="hsl(0 0% 100% / 0.5)" fontSize="9" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.12em">CULTURE</text>
+            <text x="32" y="185" textAnchor="middle" fill="hsl(0 0% 100% / 0.5)" fontSize="9" fontFamily="'JetBrains Mono', monospace" letterSpacing="0.12em">ORGANIZING</text>
+            {/* Arrow heads (small triangles) */}
+            <polygon points="210,165 220,175 210,175" fill="hsl(0 80% 48% / 0.5)" />
+            <polygon points="70,175 60,175 65,165" fill="hsl(0 80% 48% / 0.5)" />
+            <polygon points="135,48 140,38 145,48" fill="hsl(0 80% 48% / 0.5)" />
+          </svg>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "clamp(11px, 1.2vw, 13px)",
+              color: "hsl(0 0% 100% / 0.3)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            It's a loop, not a menu.
           </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 7: Origin Story ─── */}
-      <DeckFrame ref={setRef(6)} label="Why We Built This">
+      {/* ─── FRAME 9: What You Get ─── */}
+      <DeckFrame ref={setRef(8)} label="What You Get">
+        <div className="flex flex-col gap-8">
+          <h2
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(22px, 3vw, 34px)",
+              fontWeight: 500,
+              color: "hsl(0 0% 100%)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            How we're already helping clients.
+          </h2>
+          <div className="flex flex-col gap-0">
+            <DeliverableRow
+              title="Strategy Audit"
+              desc="We look at your current portfolio, analyze what's working and what's not, and identify gaps and opportunities."
+            />
+            <DeliverableRow
+              title="Partnership Development"
+              desc="Introductions to strategic partners and potential grantees your network hasn't surfaced."
+            />
+            <DeliverableRow
+              title="Program Design & Management"
+              desc="If something's missing, we build it and run it with you."
+            />
+            <DeliverableRow
+              title="Intelligence Feed"
+              desc="Ongoing cross-sector briefings so you're never operating on an incomplete map."
+            />
+            <DeliverableRow
+              title="Comms Support"
+              desc="Day-to-day material production. Internal and external communications."
+              isLast
+            />
+          </div>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 10: Origin Story ─── */}
+      <DeckFrame ref={setRef(9)} label="Why We Built This">
+        <div className="flex flex-col gap-6">
+          {[
+            "The donors had money but no map.",
+            "The policy people had maps but no people.",
+            "The culture people had people but no strategy.",
+          ].map((line, i) => (
+            <p
+              key={i}
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(18px, 2.6vw, 28px)",
+                fontWeight: 400,
+                color: "hsl(0 0% 100% / 0.7)",
+                lineHeight: 1.5,
+              }}
+            >
+              {line}
+            </p>
+          ))}
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(15px, 1.8vw, 20px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.4)",
+              lineHeight: 1.6,
+              marginTop: "8px",
+            }}
+          >
+            Everyone was operating with a piece of the picture. Nobody had the whole thing.
+          </p>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(18px, 2.4vw, 26px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.5,
+              marginTop: "8px",
+            }}
+          >
+            We built the connective tissue.
+          </p>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 11: The Promise ─── */}
+      <DeckFrame ref={setRef(10)} label="The Promise">
         <div className="flex flex-col gap-8">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 2.8vw, 32px)",
+              fontSize: "clamp(20px, 3vw, 34px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.85)",
+              color: "hsl(0 0% 100% / 0.9)",
+              lineHeight: 1.45,
+            }}
+          >
+            You'll learn everything we know.
+          </p>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(15px, 2vw, 21px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.5)",
+              lineHeight: 1.65,
+            }}
+          >
+            This isn't some black box you'll depend on forever. Work with us and you'll understand multi-sector strategy deeply enough to run it yourself.
+          </p>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(16px, 2.2vw, 24px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.7)",
               lineHeight: 1.5,
             }}
           >
-            We built this because we watched $500M in philanthropic capital deploy with no cultural strategy, no cross-sector coordination, and no ground infrastructure.
-          </p>
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(16px, 2vw, 22px)",
-              fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.4)",
-              lineHeight: 1.6,
-            }}
-          >
-            The money moved. Nothing changed.
-          </p>
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(16px, 2vw, 22px)",
-              fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.55)",
-              lineHeight: 1.6,
-            }}
-          >
-            We decided to build the connective tissue.
+            We're building your capacity, not your dependency.
           </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 8: First 90 Days ─── */}
-      <DeckFrame ref={setRef(7)} label="First 90 Days">
+      {/* ─── FRAME 12: First 90 Days ─── */}
+      <DeckFrame ref={setRef(11)} label="First 90 Days">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -544,8 +744,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 9: Close ─── */}
-      <DeckFrame ref={setRef(8)}>
+      {/* ─── FRAME 13: Close ─── */}
+      <DeckFrame ref={setRef(12)}>
         <div className="flex flex-col items-center text-center gap-8">
           <p
             style={{
@@ -672,6 +872,44 @@ const TimelineStep = ({
         {desc}
       </span>
     </div>
+  </div>
+);
+
+const DeliverableRow = ({
+  title,
+  desc,
+  isLast = false,
+}: {
+  title: string;
+  desc: string;
+  isLast?: boolean;
+}) => (
+  <div
+    className="flex flex-col gap-2 py-5"
+    style={{
+      borderBottom: isLast ? "none" : "1px solid hsl(0 0% 100% / 0.06)",
+    }}
+  >
+    <span
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(15px, 1.8vw, 19px)",
+        fontWeight: 500,
+        color: "hsl(0 0% 100% / 0.85)",
+      }}
+    >
+      {title}
+    </span>
+    <span
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(12px, 1.4vw, 15px)",
+        color: "hsl(0 0% 100% / 0.4)",
+        lineHeight: 1.6,
+      }}
+    >
+      {desc}
+    </span>
   </div>
 );
 
