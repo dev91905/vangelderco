@@ -11,6 +11,58 @@ import {
 
 const TOTAL_FRAMES = 12;
 
+/* ─── Reusable style fragments ─── */
+const styles = {
+  bold: { color: "hsl(0 0% 100% / 0.9)" } as React.CSSProperties,
+  lightboxHeading: {
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: "clamp(18px, 2.5vw, 26px)",
+    fontWeight: 500,
+    color: "hsl(0 0% 100% / 0.95)",
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+  lightboxBody: {
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: "clamp(13px, 1.5vw, 15px)",
+    color: "hsl(0 0% 100% / 0.45)",
+    lineHeight: 1.7,
+  } as React.CSSProperties,
+};
+
+const StatChip = ({ value, label }: { value: string; label: string }) => (
+  <div
+    className="flex flex-col px-4 py-3"
+    style={{
+      background: "hsl(0 0% 4%)",
+      border: "1px solid hsl(0 0% 100% / 0.06)",
+      borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
+    }}
+  >
+    <span
+      style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: "clamp(14px, 1.6vw, 20px)",
+        fontWeight: 500,
+        color: "hsl(0 80% 48% / 0.9)",
+      }}
+    >
+      {value}
+    </span>
+    <span
+      style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: "9px",
+        letterSpacing: "0.15em",
+        textTransform: "uppercase",
+        color: "hsl(0 0% 100% / 0.35)",
+        marginTop: "4px",
+      }}
+    >
+      {label}
+    </span>
+  </div>
+);
+
 /* ─── Case Study Data ─── */
 const CASE_STUDIES: {
   name: string;
