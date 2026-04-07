@@ -167,23 +167,7 @@ const CASE_STUDIES: {
   { name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", content: null },
 ];
 
-/* ─── Reusable style fragments ─── */
-const styles = {
-  bold: { color: "hsl(0 0% 100% / 0.9)" } as React.CSSProperties,
-  lightboxHeading: {
-    fontFamily: "'Space Grotesk', sans-serif",
-    fontSize: "clamp(18px, 2.5vw, 26px)",
-    fontWeight: 500,
-    color: "hsl(0 0% 100% / 0.95)",
-    lineHeight: 1.4,
-  } as React.CSSProperties,
-  lightboxBody: {
-    fontFamily: "'Space Grotesk', sans-serif",
-    fontSize: "clamp(13px, 1.5vw, 15px)",
-    color: "hsl(0 0% 100% / 0.45)",
-    lineHeight: 1.7,
-  } as React.CSSProperties,
-};
+
 
 const Deck = () => {
   const navigate = useNavigate();
