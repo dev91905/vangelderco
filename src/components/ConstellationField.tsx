@@ -28,7 +28,6 @@ interface Node {
   tier: "northstar" | "anchor" | "field";
 }
 
-// Hand-composed normalized positions (0–1 range)
 const BASE_NODES: { nx: number; ny: number; tier: Node["tier"] }[] = [
   { nx: 0.62, ny: 0.38, tier: "northstar" },
   { nx: 0.18, ny: 0.22, tier: "anchor" },
@@ -59,10 +58,8 @@ const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
 const LERP_SPEED = 0.025;
-
-// Oversize factor: canvas extends 20% beyond viewport in each direction
 const BLEED = 0.2;
-const SCALE = 1 + BLEED * 2; // 1.4
+const SCALE = 1 + BLEED * 2;
 
 function getNodeDefs(w: number, h: number) {
   const isTallMobile = w < 640 && h / w > 1.5;
@@ -75,7 +72,6 @@ function getLayoutPositions(
   h: number,
 ): { x: number; y: number; tier: Node["tier"] }[] {
   const defs = getNodeDefs(w, h);
-  // Map to oversized canvas space
   const cw = w * SCALE;
   const ch = h * SCALE;
 
@@ -175,7 +171,6 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
     initNodes();
 
-    // Mouse position needs to be offset into canvas space (canvas is shifted by -BLEED)
     const onPointerMove = (e: PointerEvent) => {
       const w = sizeRef.current.w;
       const h = sizeRef.current.h;
@@ -245,7 +240,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `hsla(0, 0%, 100%, ${alpha})`;
+            ctx.strokeStyle = `hsla(40, 50%, 57%, ${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -262,7 +257,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
+              ctx.fillStyle = `hsla(40, 50%, 57%, 0.003)`;
               ctx.fill();
             }
           }
@@ -274,21 +269,21 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
           const pulse = 0.06 + 0.03 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
+          ctx.fillStyle = `hsla(40, 50%, 57%, ${pulse})`;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.25})`;
+          ctx.fillStyle = `hsla(40, 50%, 57%, ${pulse * 0.25})`;
           ctx.fill();
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.055)`;
+          ctx.fillStyle = `hsla(40, 50%, 57%, 0.055)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.035)`;
+          ctx.fillStyle = `hsla(40, 50%, 57%, 0.035)`;
           ctx.fill();
         }
       }
