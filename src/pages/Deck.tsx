@@ -2,8 +2,136 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-const TOTAL_FRAMES = 11;
+const TOTAL_FRAMES = 12;
+
+/* ─── Case Study Data ─── */
+const CASE_STUDIES: {
+  name: string;
+  issue: string;
+  outcome: string;
+  content: React.ReactNode | null;
+}[] = [
+  {
+    name: "Clean Energy Workforce",
+    issue: "Skilled trades bottleneck threatening federal climate policy",
+    outcome: "40K reached, 4,000 workers registered, model now replicating nationally",
+    content: (
+      <div className="flex flex-col gap-6">
+        <p style={styles.lightboxHeading}>
+          Closing the clean energy workforce gap through culture, coalitions, and deep organizing.
+        </p>
+
+        <div className="flex flex-col gap-4">
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>Issue:</strong> After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it. For every electrician leaving, only one was replacing them. A bottleneck was forming that could turn into a political liability — <em>not enough workers</em> becomes <em>this policy is failing.</em>
+          </p>
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>What the donors missed:</strong> Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply.
+          </p>
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>What we were asked to do:</strong> Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy. Test whether that could create durable public support that crosses party lines.
+          </p>
+        </div>
+
+        <div style={{ width: "40px", height: "1px", background: "hsl(0 80% 48% / 0.3)" }} />
+
+        <div className="flex flex-col gap-4">
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>Phase 1 — Research.</strong> Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts across music, digital, radio, and news.
+          </p>
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>Phase 2 — Coalition & cultural strategy.</strong> Briefed senior government officials alongside talent agencies. Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically. Country, hip-hop, and digital creators who would never engage a climate campaign were now in. Built a working coalition across industry, labor, government, community organizations, nonprofits, and cultural sectors.
+          </p>
+          <p style={styles.lightboxBody}>
+            <strong style={styles.bold}>Phase 3 — Pilots.</strong> Free concerts in four cities. Artists matched to each market via streaming data and voter files. Communities came to learn about careers and signed up for jobs as a form of mass action.
+          </p>
+        </div>
+
+        <div style={{ width: "40px", height: "1px", background: "hsl(0 80% 48% / 0.3)" }} />
+
+        <div className="flex flex-col gap-3">
+          <p style={{ ...styles.lightboxBody, color: "hsl(0 0% 100% / 0.7)" }}>
+            <strong style={styles.bold}>Every lever activated — at the same time:</strong>
+          </p>
+          {[
+            "National artists. Local radio. Local digital creators. Targeted digital ads.",
+            "Whisper campaigns leaked to artist fan bases in high schools — 25% of one event filled before it was announced.",
+            "Local news, blogs, and national media covering it.",
+            "Spotify push notifications to fans. Google integrating events into search results.",
+          ].map((line, i) => (
+            <p key={i} style={{ ...styles.lightboxBody, paddingLeft: "12px", borderLeft: "1px solid hsl(0 80% 48% / 0.2)" }}>
+              {line}
+            </p>
+          ))}
+          <p style={{ ...styles.lightboxBody, fontStyle: "italic", color: "hsl(0 0% 100% / 0.6)", marginTop: "8px" }}>
+            This wasn't an op-ed and a digital ad. It was every available channel firing simultaneously — something most comms strategies never achieve because they're only working in one or two sectors.
+          </p>
+        </div>
+
+        <div style={{ width: "40px", height: "1px", background: "hsl(0 80% 48% / 0.3)" }} />
+
+        <div className="flex flex-col gap-3">
+          <p style={{ ...styles.lightboxBody, color: "hsl(0 0% 100% / 0.7)" }}>
+            <strong style={styles.bold}>What it produced:</strong>
+          </p>
+          {[
+            "The White House had been trying to unite these partners for months. We did it in three weeks.",
+            "Highest-paid training providers and lowest-income community organizations in the same room. An immediate pipeline between workers who needed jobs and employers who couldn't fill them.",
+          ].map((line, i) => (
+            <p key={i} style={{ ...styles.lightboxBody, paddingLeft: "12px", borderLeft: "1px solid hsl(0 80% 48% / 0.2)" }}>
+              {line}
+            </p>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-4 mt-2">
+          <StatChip value="40K" label="Reached" />
+          <StatChip value="4,000" label="Registered" />
+          <StatChip value="10–11%" label="Conversion Rate" />
+          <StatChip value="$40–80" label="Cost per Lead" />
+        </div>
+
+        <p style={{ ...styles.lightboxBody, color: "hsl(0 0% 100% / 0.5)", marginTop: "4px" }}>
+          Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model. The coalition is now applying it to deep community organizing, permitting, and other issues beyond job recruitment.
+        </p>
+      </div>
+    ),
+  },
+  { name: "Facial Recognition Ban", issue: "First-ever ban on facial recognition technology", outcome: "Legislation passed — New York State", content: null },
+  { name: "Faithless Electors", issue: "Constitutional vulnerability in the Electoral College", outcome: "Supreme Court decision", content: null },
+  { name: "Iceland Whaling", issue: "Commercial hunting of endangered fin whales", outcome: "185 fin whales saved", content: null },
+  { name: "Ireland Fracking Ban", issue: "Fracking expansion in Ireland", outcome: "National ban passed", content: null },
+  { name: "Gulf of Mexico Lease Sales", issue: "Fossil fuel lease sales in federal waters", outcome: "Lease sales blocked", content: null },
+  { name: "Brazil Indigenous Rights", issue: "Anti-indigenous legislation in the Brazilian legislature", outcome: "Legislation blocked", content: null },
+  { name: "UN Biodiversity Targets", issue: "Weak international biodiversity framework", outcome: "Stronger targets adopted — 2022", content: null },
+  { name: "Clean Energy Executive Action", issue: "Stalled federal clean energy production", outcome: "Executive action secured — national security framing", content: null },
+  { name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", content: null },
+];
+
+/* ─── Reusable style fragments ─── */
+const styles = {
+  bold: { color: "hsl(0 0% 100% / 0.9)" } as React.CSSProperties,
+  lightboxHeading: {
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: "clamp(18px, 2.5vw, 26px)",
+    fontWeight: 500,
+    color: "hsl(0 0% 100% / 0.95)",
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+  lightboxBody: {
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: "clamp(13px, 1.5vw, 15px)",
+    color: "hsl(0 0% 100% / 0.45)",
+    lineHeight: 1.7,
+  } as React.CSSProperties,
+};
 
 const Deck = () => {
   const navigate = useNavigate();
@@ -12,6 +140,7 @@ const Deck = () => {
   const [currentFrame, setCurrentFrame] = useState(0);
   const lastFrameRef = useRef(0);
   const { playHoverGlitch } = useGlitchSFX();
+  const [selectedCase, setSelectedCase] = useState<number | null>(null);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -19,9 +148,7 @@ const Deck = () => {
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            setCurrentFrame(i);
-          }
+          if (entry.isIntersecting) setCurrentFrame(i);
         },
         { threshold: 0.5 }
       );
@@ -45,6 +172,7 @@ const Deck = () => {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (selectedCase !== null) return; // don't navigate when lightbox open
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
         scrollToFrame(currentFrame + 1);
@@ -57,7 +185,7 @@ const Deck = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [currentFrame, navigate, scrollToFrame]);
+  }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => {
     frameRefs.current[i] = el;
@@ -147,13 +275,7 @@ const Deck = () => {
           >
             VGC StratComm
           </h1>
-          <div
-            style={{
-              width: "40px",
-              height: "1px",
-              background: "hsl(0 80% 48% / 0.6)",
-            }}
-          />
+          <div style={{ width: "40px", height: "1px", background: "hsl(0 80% 48% / 0.6)" }} />
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -161,22 +283,22 @@ const Deck = () => {
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.7)",
               lineHeight: 1.5,
-              maxWidth: "560px",
+              maxWidth: "600px",
             }}
           >
-            Strategic communications{"\n"}for donor advisors who{"\n"}need more than comms.
+            Strategic communications for donor advisors and program officers who need <em style={{ fontStyle: "italic", color: "hsl(0 0% 100% / 0.9)" }}>more than comms.</em>
           </p>
           <p
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "clamp(10px, 1.2vw, 13px)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "hsl(0 0% 100% / 0.3)",
-              maxWidth: "500px",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(13px, 1.6vw, 17px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.4)",
+              lineHeight: 1.55,
+              maxWidth: "520px",
             }}
           >
-            Cultural strategy. Cross-sector intelligence. Deep organizing.
+            Advice, connections, and hands-on support to make your stratcomm strategy actually work.
           </p>
         </div>
       </DeckFrame>
@@ -187,37 +309,20 @@ const Deck = () => {
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 3vw, 34px)",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.9)",
+              color: "hsl(0 0% 100% / 0.85)",
               lineHeight: 1.45,
             }}
           >
-            You've invested in paid media, comms firms, op-eds, maybe a documentary. None of it is moving the needle.
+            Common problems for anyone overseeing a stratcomm portfolio.
           </p>
           <div className="flex flex-col gap-5">
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(14px, 1.8vw, 19px)",
-                fontWeight: 400,
-                color: "hsl(0 0% 100% / 0.45)",
-                lineHeight: 1.65,
-              }}
-            >
-              Facebook counts a three-second scroll-by as a view. You're paying for impressions that aren't real engagement. Your reports say the campaign worked. Your outcomes say it didn't.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(16px, 2.2vw, 24px)",
-                fontWeight: 400,
-                color: "hsl(0 0% 100% / 0.7)",
-                lineHeight: 1.5,
-              }}
-            >
-              Meanwhile, the opposition isn't running a better version of your playbook. They're running a fundamentally different one.
-            </p>
+            <NumberedProblem n={1} title="No institutional memory." desc="No record of what was funded, why, or what it produced. Grants renewed because they've always been renewed." />
+            <NumberedProblem n={2} title="No decision-making framework." desc="No structure for evaluating new proposals. The default is inertia." />
+            <NumberedProblem n={3} title="No access beyond the usual channels." desc="Grantees rely on comms firms, paid media, op-eds, and documentaries. Entire cultural sectors — music, digital creators, faith communities, veteran groups, campuses — sit untouched. Nobody has the relationships to reach them." />
+            <NumberedProblem n={4} title="No real impact measurement." desc="Grantees report views and impressions. No framework connecting spend to policy outcomes, coalition growth, or anything durable." />
+            <NumberedProblem n={5} title="No one on the team comes from media." desc="When leadership asks why the strategy isn't translating into results, it's hard to diagnose without experience inside the sectors you're trying to activate." />
           </div>
         </div>
       </DeckFrame>
@@ -228,353 +333,260 @@ const Deck = () => {
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(18px, 2.6vw, 30px)",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
               fontWeight: 400,
               color: "hsl(0 0% 100% / 0.85)",
               lineHeight: 1.45,
             }}
           >
-            While you test messages in a focus group, they're acquiring the platforms you advertise on.
+            Same goal. Completely different process.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <ContrastColumn
-              title="The Standard Playbook"
-              items={[
-                "Test a message in a focus group",
-                "Put paid media behind it",
-                "Place op-eds and earned media",
-                "Fund a documentary",
-                "Hire influencers",
-                "Report impressions as impact",
-              ]}
+          <ComparisonTable
+            leftTitle="Your Side"
+            rightTitle="Their Side"
+            rows={[
+              { step: "Research", left: "Focus groups to test messages", right: "Monitor what's already resonating organically" },
+              { step: "Content", left: "Polished ads, op-eds, documentaries", right: "Entire creator ecosystems, talent pipelines, and self-funded investigative journalism — content around the clock" },
+              { step: "Distribution", left: "Buy placements on platforms", right: "Acquire the platforms and change the algorithms" },
+              { step: "Engagement", left: "Pay handfuls of influencers to post", right: "Organize at massive scale — churches, campuses, veteran groups, local networks. Grassroots groups as distribution." },
+              { step: "Measurement", left: "Count impressions and report reach", right: "Track what's shifting polls, moving legislation, growing their base" },
+              { step: "Iteration", left: "Declare success and fund the next one", right: "Cut what's failing, pour resources into what's working" },
+            ]}
+          />
+          <div className="flex flex-col gap-4 mt-2">
+            <p
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(13px, 1.5vw, 16px)",
+                color: "hsl(0 0% 100% / 0.45)",
+                lineHeight: 1.65,
+              }}
+            >
+              You test messages in a petri dish and pay people to watch the winners. Facebook counts a <strong style={{ color: "hsl(0 0% 100% / 0.8)" }}>three-second scroll-by</strong> as a view.
+            </p>
+            <p
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(13px, 1.5vw, 16px)",
+                color: "hsl(0 0% 100% / 0.45)",
+                lineHeight: 1.65,
+              }}
+            >
+              They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.
+            </p>
+          </div>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 4: What Effective Portfolios Have in Common ─── */}
+      <DeckFrame ref={setRef(3)} label="Effective Portfolios">
+        <div className="flex flex-col gap-8">
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.45,
+            }}
+          >
+            Three hallmarks across portfolios that are actually producing results.
+          </p>
+          <div className="flex flex-col gap-6">
+            <HallmarkCard
+              title="They're using the full culture stack."
+              rationale="Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels. Engaging them brings unexpected partners to the same table. If a portfolio is only in news and documentary, the most powerful levers aren't being touched."
+              help="Connect you to every cultural sector you're missing, map which networks reach the audiences you need, and integrate them into your strategy from the start."
             />
-            <ContrastColumn
-              title="What the Other Side Is Doing"
-              accent
-              items={[
-                "Acquiring legacy media platforms and changing the programming",
-                "Investing in digital creator economies where ideology forms in real time",
-                "Funding investigative journalism and developing new media talent",
-                "Running public polls designed to shift policy baselines",
-                "Organizing in churches, veteran groups, and local business networks",
-                "Finding what catches fire organically — then supercharging it",
-              ]}
+            <HallmarkCard
+              title="They're coordinating across sectors."
+              rationale="Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live. Grantees in silos can't deliver durable outcomes alone."
+              help="Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other. We get everyone to the table and make sure every partner knows their role."
+            />
+            <HallmarkCard
+              title="They're organizing for growth."
+              rationale="Sustained base-building with trusted local leaders — not cycling the same people through the same events. That growing base is the power everyone needs to win and protect the win."
+              help="Run live campaigns that engage new audiences and sustain organizing. Identify emerging leaders with built-in trust. Audit grantees for real vs. performed organizing and restructure around what's producing power."
             />
           </div>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 4: The Real Discipline ─── */}
-      <DeckFrame ref={setRef(3)} label="The Real Discipline">
+      {/* ─── FRAME 5: Core Capabilities ─── */}
+      <DeckFrame ref={setRef(4)} label="Core Capabilities">
         <div className="flex flex-col gap-8">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 3vw, 34px)",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.9)",
+              color: "hsl(0 0% 100% / 0.85)",
               lineHeight: 1.45,
             }}
           >
-            Strategic communications isn't a media buy. It's the integration of culture, coalition power, and deep public organizing — aimed at the same target, at the same time.
+            How people typically engage with us.
           </p>
-          <div
+          <div className="flex flex-col gap-0">
+            <DeliverableRow title="Portfolio Audit" desc="Deep dive into your grantees, past investments, and records. We interview grantees directly. You get the institutional record that's never existed." />
+            <DeliverableRow title="Strategic Framework" desc="Customized decision-making rubric for evaluating grants against strategy, not inertia. A tool your team owns and uses independently." />
+            <DeliverableRow title="Impact Measurement & Reporting" desc="Co-designed around your objectives. Real indicators of power — sectors convened, policy outcomes, capital unlocked — replacing vanity metrics. Built to tell the story to leadership, board, and co-funders." />
+            <DeliverableRow title="Access & Introductions" desc="Cultural operatives across music, film/TV, digital, news. Co-funders, strategic partners. A 480-member donor advisor and program officer network for confidential intel-sharing." />
+            <DeliverableRow title="Program Development & Management" desc="When the work surfaces a gap, we help build what doesn't exist — coalition, campaign, cultural activation, grant competition, or fund." />
+            <DeliverableRow title="Training" desc="No dependency. You learn to evaluate cultural landscapes, run multi-sector campaigns, and tell real organizing from performed organizing. Built into every engagement, not an add-on. If we do our jobs right, you won't need us forever." isLast />
+          </div>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 6: How We Measure Impact ─── */}
+      <DeckFrame ref={setRef(5)} label="Impact Measurement">
+        <div className="flex flex-col gap-8">
+          <p
             style={{
-              width: "40px",
-              height: "1px",
-              background: "hsl(0 80% 48% / 0.3)",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.45,
             }}
+          >
+            Most grantee reports measure activity. We measure power.
+          </p>
+          <ComparisonTable
+            leftTitle="What Most Grantees Report"
+            rightTitle="What We Track"
+            rows={[
+              { step: "", left: "Impressions and reach", right: "New sectors at the table" },
+              { step: "", left: "Video views (3-second scroll-bys)", right: "Decision-makers convened" },
+              { step: "", left: "Media mentions", right: "Coalition growth — expanding or static?" },
+              { step: "", left: "Social engagement", right: "Policy outcomes — legislation, executive action, regulation" },
+              { step: "", left: "Website traffic", right: "Capital unlocked from new sources" },
+              { step: "", left: '"Awareness"', right: "Infrastructure that outlasts the campaign" },
+            ]}
+            hideStepColumn
           />
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(15px, 2vw, 21px)",
-              fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.5)",
-              lineHeight: 1.65,
+              fontSize: "clamp(13px, 1.6vw, 17px)",
+              fontStyle: "italic",
+              color: "hsl(0 80% 48% / 0.7)",
+              lineHeight: 1.55,
             }}
           >
-            Most donor advisors have access to one or two of these tools. Almost nobody is operating all three. That's the gap. And it's the difference between spending money and building power.
+            A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
           </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 5: Three Capabilities ─── */}
-      <DeckFrame ref={setRef(4)} label="Three Capabilities">
+      {/* ─── FRAME 7: How Engagements Work ─── */}
+      <DeckFrame ref={setRef(6)} label="How Engagements Work">
         <div className="flex flex-col gap-8">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 500,
-              color: "hsl(0 0% 100%)",
-              letterSpacing: "-0.01em",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
+              fontWeight: 400,
+              color: "hsl(0 0% 100% / 0.85)",
+              lineHeight: 1.45,
             }}
           >
-            What we do.
+            Two types of clients come to us.
           </p>
+
+          <div className="flex flex-col gap-4">
+            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(0 0% 100% / 0.6)", lineHeight: 1.6 }}>
+              <strong style={{ color: "hsl(0 0% 100% / 0.9)" }}>Already up to speed and need capacity?</strong> Let's scope it to your specific needs.
+            </p>
+            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(0 0% 100% / 0.6)", lineHeight: 1.6 }}>
+              <strong style={{ color: "hsl(0 0% 100% / 0.9)" }}>Starting fresh?</strong> Two phases, roughly three months:
+            </p>
+          </div>
+
           <div className="flex flex-col gap-6">
-            <CapCard title="Cultural Strategy">
-              Working across the music industry, film and TV, digital creators, brands, faith institutions, veteran groups, athletes, and campuses — every place where people gather around an interest that has nothing to do with politics. We organize these sectors into your strategy from the start. Not as a comms afterthought. As the infrastructure.
-            </CapCard>
-            <CapCard title="Cross-Sector Intelligence">
-              How does a philanthropic dollar unlock community foundations, the national security community, public utilities, policy, labor, and culture — simultaneously? We already manage those relationships. We build tools to help you see the full landscape, identify where the leverage is, and run campaigns that pull every lever at once.
-            </CapCard>
-            <CapCard title="Deep Organizing">
-              Not mass mobilization. Not turning out the same people to the same rallies. Deep organizing means identifying organic leaders who already have trust in a community, building sustained infrastructure around them, and growing the base — so you're building durable power, not spending hundreds of millions on something that fizzles in four years.
-            </CapCard>
+            <PhaseBlock
+              label="Phase 1: Internal Review"
+              period="4–6 weeks"
+              bullets={[
+                "Go through everything — grantees, systems, assumptions, goals.",
+                "Voice-track what's been funded, what you're trying to accomplish, where things feel stuck.",
+                "Identify the gap between where you are and where you need to be.",
+              ]}
+              deliverable="Diagnostic — here's what we're hearing, here's the delta, here's the plan."
+            />
+            <PhaseBlock
+              label="Phase 2: External Engagement"
+              period="6–8 weeks"
+              bullets={[
+                "Interview existing grantees. Flag what should concern you.",
+                "Introduce external partners — cultural operatives, strategic partners, potential grantees, co-funders.",
+                "Training on what's available and how these industries work. Deal flow on how new partners can strengthen existing grantees.",
+              ]}
+              deliverable="What to scale, what to cut, what to add. A rebalanced portfolio with the rationale to brief leadership."
+            />
           </div>
-        </div>
-      </DeckFrame>
 
-      {/* ─── FRAME 6: Proof of Concept ─── */}
-      <DeckFrame ref={setRef(5)} label="Proof of Concept">
-        <div className="flex flex-col gap-8">
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 3vw, 34px)",
-              fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.9)",
-              lineHeight: 1.45,
-            }}
-          >
-            It works when you integrate all three.
-          </p>
-          <div
-            style={{
-              borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
-              paddingLeft: "20px",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "10px",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "hsl(0 80% 48% / 0.7)",
-                marginBottom: "12px",
-              }}
-            >
-              Case Study
-            </p>
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(15px, 2vw, 20px)",
-                fontWeight: 400,
-                color: "hsl(0 0% 100% / 0.7)",
-                lineHeight: 1.55,
-                marginBottom: "16px",
-              }}
-            >
-              A national coalition needed to recruit workers into skilled trades — $59K starting, no degree required. Every partner assumed the pitch was climate.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(13px, 1.6vw, 17px)",
-                color: "hsl(0 0% 100% / 0.45)",
-                lineHeight: 1.65,
-                marginBottom: "16px",
-              }}
-            >
-              It wasn't. Across four pilot cities — progressive and conservative — climate messaging fell flat. What moved people: pay, avoiding student debt, building something in their own community.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(13px, 1.6vw, 17px)",
-                color: "hsl(0 0% 100% / 0.45)",
-                lineHeight: 1.65,
-                marginBottom: "16px",
-              }}
-            >
-              We redesigned the strategy around free concerts with locally trending artists identified through streaming data and voter files. The concerts weren't a sideshow — they were the organizing mechanism. Entry required a workforce survey. Leads flowed directly to union partners and industry training programs.
-            </p>
-            <p
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(14px, 1.8vw, 18px)",
-                fontStyle: "italic",
-                color: "hsl(0 80% 48% / 0.7)",
-                lineHeight: 1.55,
-              }}
-            >
-              The culture wasn't the wrapper. It was the engine. And the pilot data reshaped every subsequent donor conversation.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-4 mt-2">
-            <StatChip value="4 CITIES" label="Pilot Markets" />
-            <StatChip value="11,400" label="Leads Generated" />
-            <StatChip value="3.2×" label="Conversion vs Control" />
-            <StatChip value="$59K" label="Starting Salary" />
-          </div>
-        </div>
-      </DeckFrame>
-
-      {/* ─── FRAME 7: How We Work ─── */}
-      <DeckFrame ref={setRef(6)} label="How We Work">
-        <div className="flex flex-col gap-8">
-          <h2
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 500,
-              color: "hsl(0 0% 100%)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            What an engagement looks like.
-          </h2>
-          <div className="flex flex-col gap-0">
-            <DeliverableRow
-              title="Strategy Audit"
-              desc="We look at your current portfolio, analyze what's working and what's not, and identify gaps and opportunities."
-            />
-            <DeliverableRow
-              title="Partnership Development"
-              desc="Introductions to strategic partners and potential grantees your network hasn't surfaced."
-            />
-            <DeliverableRow
-              title="Program Design & Management"
-              desc="If something's missing, we build it and run it with you."
-            />
-            <DeliverableRow
-              title="Intelligence Feed"
-              desc="Ongoing cross-sector briefings so you're never operating on an incomplete map."
-              isLast
-            />
-          </div>
-        </div>
-      </DeckFrame>
-
-      {/* ─── FRAME 8: First 90 Days ─── */}
-      <DeckFrame ref={setRef(7)} label="First 90 Days">
-        <div className="flex flex-col gap-8">
-          <h2
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(22px, 3vw, 34px)",
-              fontWeight: 500,
-              color: "hsl(0 0% 100%)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            A three-month engagement with clear deliverables at every stage.
-          </h2>
-          <div className="flex flex-col gap-0 ml-2">
-            <TimelineStep
-              period="WEEK 1–2"
-              title="Intake"
-              desc="Portfolio review, priorities, blind spots, adversaries. We learn your landscape before we touch it."
-            />
-            <TimelineStep
-              period="WEEK 3–4"
-              title="First Intelligence Briefing"
-              desc="Cross-sector map delivered. Who's moving, who's stalled, where the openings are."
-            />
-            <TimelineStep
-              period="MONTH 2"
-              title="Cultural Strategy Scoping"
-              desc="Campaign architecture. Which narratives to build, which to break, which partners to activate."
-            />
-            <TimelineStep
-              period="MONTH 3"
-              title="Organizing Architecture"
-              desc="Ground infrastructure design. Structure tests deployed. First cohort of leaders identified."
-              isLast
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
             <OptionCard
-              label="Option A"
-              title="Run it yourself"
-              desc="You walk away with a complete strategic plan, a restructured portfolio, new partnerships in place, and the knowledge to execute independently. The engagement is done. You're equipped."
+              label="You take it from here"
+              title="You own it"
+              desc="Diagnostic, recommendations, introductions in hand. We stay available for light advising as you need us."
             />
             <OptionCard
-              label="Option B"
+              label="We build it with you"
               title="Ongoing retainer"
-              desc="We continue working together — managing coalitions, running campaigns, delivering intelligence, and building your capacity month over month. Direct access. No layers."
+              desc="Full team, managed alongside you, field experience running it yourself. Direct access. No layers."
             />
           </div>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 9: Why This Exists ─── */}
-      <DeckFrame ref={setRef(8)} label="Why This Exists">
+      {/* ─── FRAME 8: Who We Are ─── */}
+      <DeckFrame ref={setRef(7)} label="Who We Are">
         <div className="flex flex-col gap-8">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 3vw, 34px)",
+              fontSize: "clamp(18px, 2.6vw, 28px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.9)",
+              color: "hsl(0 0% 100% / 0.85)",
               lineHeight: 1.45,
             }}
           >
-            We spent a decade inside the system. We kept hitting the same wall.
+            We've been in your position — responsible for making stratcomm work, evaluating grantees, trying to show leadership the money is producing something real.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <div className="flex flex-col gap-5">
-              {[
-                "Donors had money but no map. They funded what their program officers surfaced — usually the same organizations everyone already knew about.",
-                "Policy people had maps but no people. They could identify the right committee chair but couldn't turn out a room.",
-                "Culture people had people but no strategy. They could fill a stadium but nobody knew what to do with the crowd once they had it.",
-              ].map((line, i) => (
-                <p
-                  key={i}
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "clamp(13px, 1.6vw, 17px)",
-                    color: "hsl(0 0% 100% / 0.5)",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {line}
-                </p>
-              ))}
-            </div>
-            <div className="flex flex-col gap-5">
-              <p
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(13px, 1.6vw, 17px)",
-                  color: "hsl(0 0% 100% / 0.5)",
-                  lineHeight: 1.65,
-                }}
-              >
-                And the donor advisors — the people trying to connect all of this — were stuck cycling through the same three tools: a comms firm, a paid media buy, and a hope that someone would watch the documentary.
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(13px, 1.6vw, 17px)",
-                  color: "hsl(0 0% 100% / 0.45)",
-                  lineHeight: 1.65,
-                }}
-              >
-                Everyone had a piece of the picture. Nobody had the whole thing.
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(16px, 2.2vw, 22px)",
-                  fontWeight: 400,
-                  color: "hsl(0 0% 100% / 0.85)",
-                  lineHeight: 1.5,
-                }}
-              >
-                We built VGC StratComm to close that gap — not to replace donor advisors, but to make them dramatically more effective.
-              </p>
-            </div>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.8vw, 18px)",
+              color: "hsl(0 0% 100% / 0.55)",
+              lineHeight: 1.6,
+            }}
+          >
+            The difference is where we came from. Our team is built from careers in <strong style={{ color: "hsl(0 0% 100% / 0.85)" }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
+          </p>
+          <div className="flex flex-col gap-0">
+            <SectorRow name="News" desc="Local and national — how stories get placed and why" />
+            <SectorRow name="Music" desc="Labels, touring, festivals, artist strategy" />
+            <SectorRow name="Film & TV" desc="Production, distribution, cultural impact" />
+            <SectorRow name="Digital" desc="Advertising, creator economy — where opinion forms now" />
+            <SectorRow name="PR" desc="Corporate, entertainment, crisis communications" />
+            <SectorRow name="Philanthropy" desc="Running organizations, managing portfolios, advising donors" isLast />
           </div>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(14px, 1.8vw, 18px)",
+              color: "hsl(0 0% 100% / 0.55)",
+              lineHeight: 1.6,
+            }}
+          >
+            What's holding most donor advisors and program officers back isn't effort — it's <strong style={{ color: "hsl(0 0% 100% / 0.85)" }}>access and pattern recognition</strong> across these industries. That's what we transfer.
+          </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 10: The Promise ─── */}
-      <DeckFrame ref={setRef(9)} label="The Promise">
+      {/* ─── FRAME 9: The Promise ─── */}
+      <DeckFrame ref={setRef(8)} label="The Promise">
         <div className="flex flex-col gap-8">
           <p
             style={{
@@ -587,13 +599,7 @@ const Deck = () => {
           >
             Everything we know becomes everything you know.
           </p>
-          <div
-            style={{
-              width: "40px",
-              height: "1px",
-              background: "hsl(0 80% 48% / 0.3)",
-            }}
-          />
+          <div style={{ width: "40px", height: "1px", background: "hsl(0 80% 48% / 0.3)" }} />
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -608,8 +614,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 11: CTA ─── */}
-      <DeckFrame ref={setRef(10)}>
+      {/* ─── FRAME 10: CTA ─── */}
+      <DeckFrame ref={setRef(9)}>
         <div className="flex flex-col items-center text-center gap-8">
           <h2
             style={{
@@ -633,7 +639,7 @@ const Deck = () => {
               maxWidth: "520px",
             }}
           >
-            If you're ready to stop spending on comms that don't move anyone — let's talk.
+            Let's look at your portfolio together.
           </p>
           <a
             href="mailto:info@vgcstratcomm.com"
@@ -662,59 +668,232 @@ const Deck = () => {
           </a>
         </div>
       </DeckFrame>
+
+      {/* ─── FRAME 11: The Promise (separator) ─── */}
+      <DeckFrame ref={setRef(10)} label="Case Studies">
+        <div className="flex flex-col gap-8">
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(22px, 3vw, 34px)",
+              fontWeight: 500,
+              color: "hsl(0 0% 100%)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Want to see it in action?
+          </p>
+          <p
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(13px, 1.5vw, 16px)",
+              color: "hsl(0 0% 100% / 0.35)",
+              lineHeight: 1.5,
+            }}
+          >
+            Click any case study to read the full breakdown.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {CASE_STUDIES.map((cs, i) => (
+              <CaseStudyCard
+                key={i}
+                name={cs.name}
+                outcome={cs.outcome}
+                hasContent={cs.content !== null}
+                onClick={() => setSelectedCase(i)}
+              />
+            ))}
+          </div>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "10px",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "hsl(0 0% 100% / 0.25)",
+              marginTop: "4px",
+            }}
+          >
+            Full case studies coming soon. Clean Energy Workforce available now.
+          </p>
+        </div>
+      </DeckFrame>
+
+      {/* ─── FRAME 12: spacer to allow last frame to snap ─── */}
+      <DeckFrame ref={setRef(11)}>
+        <div className="flex flex-col items-center text-center gap-6">
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "10px",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "hsl(0 0% 100% / 0.15)",
+            }}
+          >
+            ↑ Scroll up to explore case studies
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(24px, 4vw, 44px)",
+              fontWeight: 500,
+              color: "hsl(0 0% 100% / 0.08)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            VGC StratComm
+          </h2>
+        </div>
+      </DeckFrame>
+
+      {/* ─── Case Study Lightbox ─── */}
+      <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
+        <DialogContent
+          className="max-w-2xl max-h-[85vh] overflow-y-auto"
+          style={{
+            background: "hsl(0 0% 4%)",
+            border: "1px solid hsl(0 0% 100% / 0.08)",
+            borderTop: "2px solid hsl(0 80% 48% / 0.5)",
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(18px, 2.5vw, 24px)",
+                fontWeight: 500,
+                color: "hsl(0 0% 100% / 0.9)",
+              }}
+            >
+              {selectedCase !== null ? CASE_STUDIES[selectedCase].name : ""}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedCase !== null && CASE_STUDIES[selectedCase].content ? (
+            CASE_STUDIES[selectedCase].content
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 gap-4">
+              <p
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "16px",
+                  color: "hsl(0 0% 100% / 0.5)",
+                }}
+              >
+                Full case study coming soon.
+              </p>
+              <p
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "11px",
+                  letterSpacing: "0.1em",
+                  color: "hsl(0 0% 100% / 0.25)",
+                }}
+              >
+                {selectedCase !== null ? CASE_STUDIES[selectedCase].outcome : ""}
+              </p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
 /* ─── Inline Components ─── */
 
-const ContrastColumn = ({
-  title,
-  items,
-  accent = false,
-}: {
-  title: string;
-  items: string[];
-  accent?: boolean;
-}) => (
-  <div className="flex flex-col gap-4">
+const NumberedProblem = ({ n, title, desc }: { n: number; title: string; desc: string }) => (
+  <div className="flex gap-4">
     <span
       style={{
         fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "10px",
-        letterSpacing: "0.2em",
-        textTransform: "uppercase",
-        color: accent ? "hsl(0 80% 48% / 0.8)" : "hsl(0 0% 100% / 0.3)",
+        fontSize: "clamp(16px, 2vw, 22px)",
+        fontWeight: 600,
+        color: "hsl(0 80% 48% / 0.7)",
+        lineHeight: 1.4,
+        minWidth: "28px",
       }}
     >
-      {title}
+      {n}.
     </span>
-    {items.map((item, i) => (
-      <p
-        key={i}
-        style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: "clamp(12px, 1.4vw, 15px)",
-          color: accent ? "hsl(0 0% 100% / 0.6)" : "hsl(0 0% 100% / 0.3)",
-          lineHeight: 1.6,
-          paddingLeft: "12px",
-          borderLeft: accent
-            ? "2px solid hsl(0 80% 48% / 0.3)"
-            : "1px solid hsl(0 0% 100% / 0.08)",
-        }}
-      >
-        {item}
-      </p>
-    ))}
+    <p
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(13px, 1.5vw, 16px)",
+        color: "hsl(0 0% 100% / 0.45)",
+        lineHeight: 1.65,
+      }}
+    >
+      <strong style={{ color: "hsl(0 0% 100% / 0.85)" }}>{title}</strong>{" "}
+      {desc}
+    </p>
   </div>
 );
 
-const CapCard = ({
+const ComparisonTable = ({
+  leftTitle,
+  rightTitle,
+  rows,
+  hideStepColumn = false,
+}: {
+  leftTitle: string;
+  rightTitle: string;
+  rows: { step: string; left: string; right: string }[];
+  hideStepColumn?: boolean;
+}) => (
+  <div className="w-full overflow-x-auto -mx-2 px-2">
+    <table className="w-full border-collapse" style={{ minWidth: hideStepColumn ? "400px" : "500px" }}>
+      <thead>
+        <tr>
+          {!hideStepColumn && <th style={{ ...thStyle, width: "100px" }} />}
+          <th style={{ ...thStyle, color: "hsl(0 0% 100% / 0.3)" }}>{leftTitle}</th>
+          <th style={{ ...thStyle, color: "hsl(0 80% 48% / 0.8)" }}>{rightTitle}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, i) => (
+          <tr key={i}>
+            {!hideStepColumn && (
+              <td style={{ ...tdStyle, fontWeight: 600, color: "hsl(0 0% 100% / 0.6)" }}>
+                {row.step}
+              </td>
+            )}
+            <td style={{ ...tdStyle, color: "hsl(0 0% 100% / 0.3)" }}>{row.left}</td>
+            <td style={{ ...tdStyle, color: "hsl(0 0% 100% / 0.6)", borderLeft: "2px solid hsl(0 80% 48% / 0.2)" }}>{row.right}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const thStyle: React.CSSProperties = {
+  fontFamily: "'JetBrains Mono', monospace",
+  fontSize: "9px",
+  letterSpacing: "0.2em",
+  textTransform: "uppercase",
+  textAlign: "left",
+  padding: "8px 12px",
+  borderBottom: "1px solid hsl(0 0% 100% / 0.08)",
+};
+
+const tdStyle: React.CSSProperties = {
+  fontFamily: "'Space Grotesk', sans-serif",
+  fontSize: "clamp(11px, 1.3vw, 14px)",
+  lineHeight: 1.6,
+  padding: "10px 12px",
+  borderBottom: "1px solid hsl(0 0% 100% / 0.04)",
+  verticalAlign: "top",
+};
+
+const HallmarkCard = ({
   title,
-  children,
+  rationale,
+  help,
 }: {
   title: string;
-  children: React.ReactNode;
+  rationale: string;
+  help: string;
 }) => (
   <div
     style={{
@@ -725,11 +904,10 @@ const CapCard = ({
   >
     <p
       style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "10px",
-        letterSpacing: "0.2em",
-        textTransform: "uppercase",
-        color: "hsl(0 80% 48% / 0.8)",
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(15px, 1.8vw, 19px)",
+        fontWeight: 500,
+        color: "hsl(0 0% 100% / 0.9)",
         marginBottom: "12px",
       }}
     >
@@ -738,12 +916,94 @@ const CapCard = ({
     <p
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
-        fontSize: "clamp(13px, 1.5vw, 16px)",
-        color: "hsl(0 0% 100% / 0.5)",
+        fontSize: "clamp(12px, 1.4vw, 15px)",
+        color: "hsl(0 0% 100% / 0.45)",
         lineHeight: 1.7,
+        marginBottom: "12px",
       }}
     >
-      {children}
+      {rationale}
+    </p>
+    <p
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(12px, 1.4vw, 15px)",
+        color: "hsl(0 0% 100% / 0.55)",
+        lineHeight: 1.7,
+        fontStyle: "italic",
+      }}
+    >
+      <span style={{ color: "hsl(0 80% 48% / 0.7)", fontStyle: "normal", fontWeight: 500 }}>How we help: </span>
+      {help}
+    </p>
+  </div>
+);
+
+const PhaseBlock = ({
+  label,
+  period,
+  bullets,
+  deliverable,
+}: {
+  label: string;
+  period: string;
+  bullets: string[];
+  deliverable: string;
+}) => (
+  <div
+    style={{
+      borderLeft: "2px solid hsl(0 80% 48% / 0.3)",
+      paddingLeft: "20px",
+    }}
+  >
+    <div className="flex items-baseline gap-3 mb-3">
+      <span
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontSize: "clamp(15px, 1.8vw, 19px)",
+          fontWeight: 500,
+          color: "hsl(0 0% 100% / 0.9)",
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "9px",
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          color: "hsl(0 80% 48% / 0.6)",
+        }}
+      >
+        {period}
+      </span>
+    </div>
+    {bullets.map((b, i) => (
+      <p
+        key={i}
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontSize: "clamp(12px, 1.4vw, 14px)",
+          color: "hsl(0 0% 100% / 0.4)",
+          lineHeight: 1.65,
+          marginBottom: "6px",
+          paddingLeft: "12px",
+        }}
+      >
+        {b}
+      </p>
+    ))}
+    <p
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(12px, 1.4vw, 14px)",
+        color: "hsl(0 0% 100% / 0.6)",
+        lineHeight: 1.65,
+        marginTop: "8px",
+      }}
+    >
+      <strong style={{ color: "hsl(0 0% 100% / 0.8)" }}>Deliverable:</strong> {deliverable}
     </p>
   </div>
 );
@@ -799,6 +1059,100 @@ const OptionCard = ({
   </div>
 );
 
+const SectorRow = ({
+  name,
+  desc,
+  isLast = false,
+}: {
+  name: string;
+  desc: string;
+  isLast?: boolean;
+}) => (
+  <div
+    className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 py-3"
+    style={{
+      borderBottom: isLast ? "none" : "1px solid hsl(0 0% 100% / 0.06)",
+    }}
+  >
+    <span
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(14px, 1.6vw, 17px)",
+        fontWeight: 500,
+        color: "hsl(0 0% 100% / 0.85)",
+        minWidth: "120px",
+      }}
+    >
+      {name}
+    </span>
+    <span
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(12px, 1.4vw, 15px)",
+        color: "hsl(0 0% 100% / 0.4)",
+        lineHeight: 1.6,
+      }}
+    >
+      {desc}
+    </span>
+  </div>
+);
+
+const CaseStudyCard = ({
+  name,
+  outcome,
+  hasContent,
+  onClick,
+}: {
+  name: string;
+  outcome: string;
+  hasContent: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className="text-left transition-all duration-200"
+    style={{
+      border: "1px solid hsl(0 0% 100% / 0.08)",
+      borderTop: hasContent ? "2px solid hsl(0 80% 48% / 0.5)" : "2px solid hsl(0 0% 100% / 0.08)",
+      padding: "20px",
+      background: "transparent",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.borderColor = "hsl(0 0% 100% / 0.15)";
+      e.currentTarget.style.background = "hsl(0 0% 100% / 0.02)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.borderColor = "hsl(0 0% 100% / 0.08)";
+      e.currentTarget.style.background = "transparent";
+    }}
+  >
+    <p
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: "clamp(14px, 1.6vw, 17px)",
+        fontWeight: 500,
+        color: "hsl(0 0% 100% / 0.85)",
+        marginBottom: "6px",
+      }}
+    >
+      {name}
+    </p>
+    <p
+      style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: "10px",
+        letterSpacing: "0.1em",
+        color: hasContent ? "hsl(0 80% 48% / 0.6)" : "hsl(0 0% 100% / 0.25)",
+        lineHeight: 1.5,
+      }}
+    >
+      {outcome}
+    </p>
+  </button>
+);
+
 const StatChip = ({ value, label }: { value: string; label: string }) => (
   <div
     className="flex flex-col px-4 py-3"
@@ -830,76 +1184,6 @@ const StatChip = ({ value, label }: { value: string; label: string }) => (
     >
       {label}
     </span>
-  </div>
-);
-
-const TimelineStep = ({
-  period,
-  title,
-  desc,
-  isLast = false,
-}: {
-  period: string;
-  title: string;
-  desc: string;
-  isLast?: boolean;
-}) => (
-  <div className="flex gap-5">
-    <div className="flex flex-col items-center" style={{ width: "20px" }}>
-      <div
-        style={{
-          width: "8px",
-          height: "8px",
-          borderRadius: "50%",
-          background: "hsl(0 80% 48% / 0.8)",
-          flexShrink: 0,
-          marginTop: "4px",
-        }}
-      />
-      {!isLast && (
-        <div
-          style={{
-            width: "1px",
-            flexGrow: 1,
-            background: "hsl(0 80% 48% / 0.15)",
-            minHeight: "40px",
-          }}
-        />
-      )}
-    </div>
-    <div className="flex flex-col gap-1 pb-8">
-      <span
-        style={{
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: "9px",
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          color: "hsl(0 80% 48% / 0.7)",
-        }}
-      >
-        {period}
-      </span>
-      <span
-        style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: "clamp(15px, 1.8vw, 19px)",
-          fontWeight: 500,
-          color: "hsl(0 0% 100% / 0.9)",
-        }}
-      >
-        {title}
-      </span>
-      <span
-        style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: "clamp(12px, 1.4vw, 15px)",
-          color: "hsl(0 0% 100% / 0.4)",
-          lineHeight: 1.6,
-        }}
-      >
-        {desc}
-      </span>
-    </div>
   </div>
 );
 
