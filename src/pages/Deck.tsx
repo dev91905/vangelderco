@@ -1189,39 +1189,7 @@ const CaseStudyCard = ({
   </button>
 );
 
-const StatChip = ({ value, label }: { value: string; label: string }) => (
-  <div
-    className="flex flex-col px-4 py-3"
-    style={{
-      background: "hsl(0 0% 4%)",
-      border: "1px solid hsl(0 0% 100% / 0.06)",
-      borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
-    }}
-  >
-    <span
-      style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "clamp(14px, 1.6vw, 20px)",
-        fontWeight: 500,
-        color: "hsl(0 80% 48% / 0.9)",
-      }}
-    >
-      {value}
-    </span>
-    <span
-      style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "9px",
-        letterSpacing: "0.15em",
-        textTransform: "uppercase",
-        color: "hsl(0 0% 100% / 0.35)",
-        marginTop: "4px",
-      }}
-    >
-      {label}
-    </span>
-  </div>
-);
+
 
 const DeliverableRow = ({
   title,
