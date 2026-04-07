@@ -23,7 +23,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
           <span
             className="absolute top-8 left-8 z-10"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: "9px",
               letterSpacing: "0.2em",
               textTransform: "uppercase",

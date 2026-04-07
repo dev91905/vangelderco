@@ -8,7 +8,7 @@ interface AtmosphericLayoutProps {
 const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-background">
-      {/* Breathing red glow */}
+      {/* Breathing gold glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 -z-0"
         style={{
@@ -16,44 +16,17 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
           height: "min(80vh, 600px)",
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.18) 0%, hsl(0 80% 48% / 0.10) 30%, hsl(0 80% 48% / 0.03) 55%, transparent 80%)",
+            "radial-gradient(ellipse at center, hsl(40 50% 57% / 0.14) 0%, hsl(40 50% 57% / 0.07) 30%, hsl(40 50% 57% / 0.02) 55%, transparent 80%)",
           animation: "breathe 8s ease-in-out infinite",
           transform: "translate(-50%, -50%)",
         }}
       />
 
-
-      {/* Scan beam */}
-      <div
-        className="pointer-events-none fixed left-0 z-20 w-full"
-        style={{
-          height: "1px",
-          background:
-            "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)",
-          animation: "scan-beam 7s linear infinite",
-          position: "fixed",
-        }}
-      />
-
-      {/* Corner brackets */}
-      <svg className="fixed top-4 left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1">
-        <path d="M1 8V1h7" />
-      </svg>
-      <svg className="fixed top-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1">
-        <path d="M23 8V1h-7" />
-      </svg>
-      <svg className="fixed bottom-4 left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1">
-        <path d="M1 16v7h7" />
-      </svg>
-      <svg className="fixed bottom-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1">
-        <path d="M23 16v7h-7" />
-      </svg>
-
       <Link
         to="/admin"
         className="fixed bottom-6 right-6 z-30"
         style={{
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "'DM Sans', sans-serif",
           fontSize: "10px",
           letterSpacing: "0.2em",
           textTransform: "uppercase",
@@ -61,7 +34,7 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
           transition: "color 300ms",
           textDecoration: "none",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.18)")}
       >
         Admin

@@ -24,8 +24,8 @@ const Index = () => {
       <div className="flex items-center justify-center h-full w-full">
         {/* HUD: top-right */}
         <span
-          className="fixed top-6 right-6 z-30 font-mono text-[10px] tracking-[0.2em] uppercase"
-          style={{ color: "hsl(0 0% 100% / 0.18)", fontFamily: "'JetBrains Mono', monospace" }}
+          className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.2em] uppercase"
+          style={{ color: "hsl(0 0% 100% / 0.18)", fontFamily: "'DM Sans', sans-serif" }}
         >
           Van Gelder Co.
         </span>
@@ -36,8 +36,8 @@ const Index = () => {
           <span
             className="text-[11px] tracking-[0.3em] uppercase"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 80% 48% / 0.9)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(40 50% 57% / 0.9)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -62,7 +62,7 @@ const Index = () => {
                 <span
                   className="hero-nav-wash absolute inset-0 pointer-events-none"
                   style={{
-                    background: "hsl(0 80% 48% / 0)",
+                    background: "hsl(40 50% 57% / 0)",
                     transition: "background 0.15s ease",
                   }}
                 />
@@ -72,7 +72,7 @@ const Index = () => {
                   className="hero-nav-bar absolute left-0 top-0 bottom-0 pointer-events-none"
                   style={{
                     width: "2px",
-                    background: "hsl(0 80% 48% / 0.8)",
+                    background: "hsl(40 50% 57% / 0.8)",
                     opacity: 0,
                     transition: "opacity 0.1s ease",
                   }}
@@ -82,7 +82,7 @@ const Index = () => {
                 <span
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-150"
                   style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontFamily: "'Instrument Serif', serif",
                     color: "hsl(0 0% 100% / 0.9)",
                   }}
                 >
@@ -102,10 +102,10 @@ const Index = () => {
                 key={sector}
                 className="text-[10px] md:text-[11px] tracking-[0.15em] uppercase px-3 py-1.5"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "'DM Sans', sans-serif",
                   color: "hsl(0 0% 100% / 0.5)",
                   border: "1px solid hsl(0 0% 100% / 0.08)",
-                  borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
+                  borderLeft: "2px solid hsl(40 50% 57% / 0.5)",
                 }}
               >
                 {sector}
@@ -117,7 +117,7 @@ const Index = () => {
           <span
             className="text-[10px] tracking-[0.35em] uppercase"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'DM Sans', sans-serif",
               color: "hsl(0 0% 100% / 0.25)",
               animation: "fade-up 0.6s ease-out 2.0s both",
             }}
