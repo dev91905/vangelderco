@@ -5,7 +5,7 @@ const DeepOrganizing = () => (
     capability="deep-organizing"
     label="VGC Domain // 003"
     title="Deep Organizing"
-    description="Digital mobilization is noise. We build real-world ground power — the kind that holds territory, survives leadership transitions, and puts thousands in motion on seventy-two hours' notice."
+    description="We support emerging community leaders by connecting them with resources, relationships, and infrastructure to grow their impact over time."
   />
 );
 
