@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
 import DeepOrganizing from "./pages/DeepOrganizing.tsx";
+import Deck from "./pages/Deck.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
