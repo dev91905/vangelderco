@@ -39,6 +39,7 @@ function AppRoutes() {
         <Route path="/cross-sector" element={<CrossSector />} />
         <Route path="/deep-organizing" element={<DeepOrganizing />} />
         <Route path="/post/:slug" element={<PostDetail />} />
+        <Route path="/deck" element={<Deck />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
         <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
