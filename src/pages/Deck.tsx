@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 
-const TOTAL_FRAMES = 10;
+const TOTAL_FRAMES = 9;
 
 const Deck = () => {
   const navigate = useNavigate();
@@ -13,7 +13,6 @@ const Deck = () => {
   const lastFrameRef = useRef(0);
   const { playHoverGlitch } = useGlitchSFX();
 
-  // Intersection observer to track current frame
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     frameRefs.current.forEach((el, i) => {
@@ -32,7 +31,6 @@ const Deck = () => {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  // SFX on frame change
   useEffect(() => {
     if (currentFrame !== lastFrameRef.current) {
       playHoverGlitch();
@@ -45,7 +43,6 @@ const Deck = () => {
     frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
@@ -77,7 +74,7 @@ const Deck = () => {
         scrollSnapType: "y mandatory",
       }}
     >
-      {/* Breathing red glow — fixed */}
+      {/* Breathing red glow */}
       <div
         className="pointer-events-none fixed left-1/2 top-1/2 -z-0"
         style={{
@@ -184,72 +181,24 @@ const Deck = () => {
               lineHeight: 1.45,
             }}
           >
-            The people with the money, the people with the power, and the people with the culture are designing strategy in separate rooms.
+            The infrastructure connecting culture, policy, and capital is broken.
           </p>
-          <div className="flex flex-col gap-5 mt-2">
-            {[
-              "Philanthropy funds what it can measure — and ignores what it can't.",
-              "Policy moves what it can legislate — and loses what it can't enforce.",
-              "Culture moves what it can feel — and has no strategy for what comes next.",
-            ].map((line, i) => (
-              <p
-                key={i}
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(14px, 1.8vw, 18px)",
-                  color: "hsl(0 0% 100% / 0.4)",
-                  lineHeight: 1.6,
-                  paddingLeft: "16px",
-                  borderLeft: "1px solid hsl(0 80% 48% / 0.25)",
-                }}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
-      </DeckFrame>
-
-      {/* ─── FRAME 3: What We Do ─── */}
-      <DeckFrame ref={setRef(2)} label="What We Do">
-        <div className="flex flex-col gap-10 items-center text-center">
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(18px, 2.6vw, 28px)",
+              fontSize: "clamp(16px, 2vw, 22px)",
               fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.85)",
-              lineHeight: 1.5,
-              maxWidth: "700px",
+              color: "hsl(0 0% 100% / 0.45)",
+              lineHeight: 1.6,
             }}
           >
-            We sit at the intersection of philanthropy, policy, labor, culture, and technology — and we build the connective tissue between them.
+            The people with resources and the people with reach operate in parallel — never in concert. Philanthropic capital deploys without cultural strategy. Advocacy campaigns launch without ground infrastructure. And the leaders closest to communities remain invisible to the institutions that could amplify them.
           </p>
-          {/* Triangle / three-node visual */}
-          <svg
-            viewBox="0 0 300 260"
-            width="280"
-            height="240"
-            style={{ marginTop: "8px" }}
-          >
-            {/* Connecting lines */}
-            <line x1="150" y1="40" x2="50" y2="220" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
-            <line x1="150" y1="40" x2="250" y2="220" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
-            <line x1="50" y1="220" x2="250" y2="220" stroke="hsl(0 80% 48% / 0.2)" strokeWidth="1" />
-            {/* Nodes */}
-            <circle cx="150" cy="40" r="5" fill="hsl(0 80% 48% / 0.8)" />
-            <circle cx="50" cy="220" r="5" fill="hsl(0 80% 48% / 0.8)" />
-            <circle cx="250" cy="220" r="5" fill="hsl(0 80% 48% / 0.8)" />
-            {/* Labels */}
-            <text x="150" y="20" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="9" letterSpacing="0.15em">CULTURAL STRATEGY</text>
-            <text x="50" y="248" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="9" letterSpacing="0.15em">CROSS-SECTOR</text>
-            <text x="250" y="248" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="9" letterSpacing="0.15em">DEEP ORGANIZING</text>
-          </svg>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 4: Cultural Strategy ─── */}
-      <DeckFrame ref={setRef(3)} label="Domain // 001">
+      {/* ─── FRAME 3: Cultural Strategy ─── */}
+      <DeckFrame ref={setRef(2)} label="Domain // 001">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -262,18 +211,6 @@ const Deck = () => {
           >
             Cultural Strategy
           </h2>
-          {/* Pull-quote */}
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(13px, 1.5vw, 16px)",
-              fontStyle: "italic",
-              color: "hsl(0 80% 48% / 0.7)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Culture doesn't support the strategy. Culture IS the strategy.
-          </p>
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -284,7 +221,6 @@ const Deck = () => {
           >
             We design public engagement campaigns with partners across arts, media, faith, and education — the sectors that shape the cultural conditions for policy.
           </p>
-          {/* Mock example */}
           <div
             className="mt-4"
             style={{
@@ -315,7 +251,6 @@ const Deck = () => {
               A faith-media coalition campaign that shifted narrative polling 12 points in 90 days — reframing a stalled policy issue into a cultural inevitability.
             </p>
           </div>
-          {/* Stat chip */}
           <div className="flex gap-4 mt-2">
             <StatChip value="12-PT SHIFT" label="Narrative Polling" />
             <StatChip value="90 DAYS" label="Campaign Duration" />
@@ -323,8 +258,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 5: Cross-Sector Intelligence ─── */}
-      <DeckFrame ref={setRef(4)} label="Domain // 002">
+      {/* ─── FRAME 4: Cross-Sector Intelligence ─── */}
+      <DeckFrame ref={setRef(3)} label="Domain // 002">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -337,17 +272,6 @@ const Deck = () => {
           >
             Cross-Sector Intelligence
           </h2>
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(13px, 1.5vw, 16px)",
-              fontStyle: "italic",
-              color: "hsl(0 80% 48% / 0.7)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Know first. Move first.
-          </p>
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -395,8 +319,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 6: Deep Organizing ─── */}
-      <DeckFrame ref={setRef(5)} label="Domain // 003">
+      {/* ─── FRAME 5: Deep Organizing ─── */}
+      <DeckFrame ref={setRef(4)} label="Domain // 003">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -409,17 +333,6 @@ const Deck = () => {
           >
             Deep Organizing
           </h2>
-          <p
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(13px, 1.5vw, 16px)",
-              fontStyle: "italic",
-              color: "hsl(0 80% 48% / 0.7)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Not events. Not 'engagement.' Organizing.
-          </p>
           <p
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -467,59 +380,88 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 7: The Loop ─── */}
-      <DeckFrame ref={setRef(6)} label="The System">
+      {/* ─── FRAME 6: How It Works Together ─── */}
+      <DeckFrame ref={setRef(5)} label="The System">
         <div className="flex flex-col gap-10 items-center text-center">
           <h2
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(20px, 2.8vw, 32px)",
-              fontWeight: 400,
-              color: "hsl(0 0% 100% / 0.9)",
-              lineHeight: 1.45,
-              maxWidth: "650px",
+              fontSize: "clamp(22px, 3vw, 36px)",
+              fontWeight: 500,
+              color: "hsl(0 0% 100%)",
             }}
           >
-            Intelligence tells you where to aim. Culture tells you how to move people. Organizing makes it stick.
+            Three domains. One system.
           </h2>
+          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-center w-full">
+            {[
+              { num: "001", name: "Cultural Strategy", desc: "Shape the narrative" },
+              { num: "002", name: "Cross-Sector", desc: "Align the capital" },
+              { num: "003", name: "Deep Organizing", desc: "Build the ground" },
+            ].map((d, i) => (
+              <div key={i} className="flex flex-col items-center gap-3">
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "9px",
+                    letterSpacing: "0.2em",
+                    color: "hsl(0 80% 48% / 0.6)",
+                  }}
+                >
+                  {d.num}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: "clamp(16px, 2vw, 20px)",
+                    fontWeight: 500,
+                    color: "hsl(0 0% 100% / 0.9)",
+                  }}
+                >
+                  {d.name}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "11px",
+                    color: "hsl(0 0% 100% / 0.35)",
+                  }}
+                >
+                  {d.desc}
+                </span>
+                {i < 2 && (
+                  <div
+                    className="hidden md:block"
+                    style={{
+                      position: "absolute",
+                      width: "40px",
+                      height: "1px",
+                      background: "hsl(0 80% 48% / 0.2)",
+                      right: "-25px",
+                      top: "50%",
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
           <p
+            className="mt-4"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "11px",
-              letterSpacing: "0.15em",
-              color: "hsl(0 0% 100% / 0.3)",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(13px, 1.6vw, 17px)",
+              color: "hsl(0 0% 100% / 0.35)",
+              lineHeight: 1.7,
+              maxWidth: "600px",
             }}
           >
-            It's a loop, not a menu.
+            Each domain reinforces the others. Cultural conditions create political space. Cross-sector alignment directs resources. Ground infrastructure converts both into durable power.
           </p>
-          {/* Circular flow SVG */}
-          <svg viewBox="0 0 320 320" width="280" height="280" style={{ marginTop: "8px" }}>
-            {/* Circle path (invisible, for reference) */}
-            <circle cx="160" cy="160" r="110" fill="none" stroke="hsl(0 80% 48% / 0.12)" strokeWidth="1" strokeDasharray="4 6" />
-            {/* Nodes at 12, 4, 8 o'clock */}
-            <circle cx="160" cy="50" r="6" fill="hsl(0 80% 48% / 0.8)" />
-            <circle cx="255" cy="215" r="6" fill="hsl(0 80% 48% / 0.8)" />
-            <circle cx="65" cy="215" r="6" fill="hsl(0 80% 48% / 0.8)" />
-            {/* Arrow arcs — simplified as lines with arrowheads */}
-            <path d="M 175 55 Q 240 100 250 205" fill="none" stroke="hsl(0 80% 48% / 0.3)" strokeWidth="1" markerEnd="url(#arrowRed)" />
-            <path d="M 245 225 Q 165 280 75 225" fill="none" stroke="hsl(0 80% 48% / 0.3)" strokeWidth="1" markerEnd="url(#arrowRed)" />
-            <path d="M 55 205 Q 80 100 145 55" fill="none" stroke="hsl(0 80% 48% / 0.3)" strokeWidth="1" markerEnd="url(#arrowRed)" />
-            {/* Arrowhead marker */}
-            <defs>
-              <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <path d="M0,0 L8,3 L0,6" fill="hsl(0 80% 48% / 0.5)" />
-              </marker>
-            </defs>
-            {/* Labels */}
-            <text x="160" y="32" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="8" letterSpacing="0.15em">INTELLIGENCE</text>
-            <text x="285" y="228" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="8" letterSpacing="0.15em">CULTURE</text>
-            <text x="35" y="228" textAnchor="middle" fill="hsl(0 0% 100% / 0.6)" fontFamily="'JetBrains Mono', monospace" fontSize="8" letterSpacing="0.15em">ORGANIZING</text>
-          </svg>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 8: Origin Story ─── */}
-      <DeckFrame ref={setRef(7)} label="Why We Built This">
+      {/* ─── FRAME 7: Origin Story ─── */}
+      <DeckFrame ref={setRef(6)} label="Why We Built This">
         <div className="flex flex-col gap-8">
           <p
             style={{
@@ -530,7 +472,7 @@ const Deck = () => {
               lineHeight: 1.5,
             }}
           >
-            Donors had money but no map. Policy people had maps but no people. Culture people had people but no strategy.
+            We built this because we watched $500M in philanthropic capital deploy with no cultural strategy, no cross-sector coordination, and no ground infrastructure.
           </p>
           <p
             style={{
@@ -541,7 +483,7 @@ const Deck = () => {
               lineHeight: 1.6,
             }}
           >
-            Everyone had a piece. Nobody had the picture.
+            The money moved. Nothing changed.
           </p>
           <p
             style={{
@@ -552,13 +494,13 @@ const Deck = () => {
               lineHeight: 1.6,
             }}
           >
-            We built the connective tissue.
+            We decided to build the connective tissue.
           </p>
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 9: First 90 Days ─── */}
-      <DeckFrame ref={setRef(8)} label="First 90 Days">
+      {/* ─── FRAME 8: First 90 Days ─── */}
+      <DeckFrame ref={setRef(7)} label="First 90 Days">
         <div className="flex flex-col gap-8">
           <h2
             style={{
@@ -602,8 +544,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ─── FRAME 10: Close ─── */}
-      <DeckFrame ref={setRef(9)}>
+      {/* ─── FRAME 9: Close ─── */}
+      <DeckFrame ref={setRef(8)}>
         <div className="flex flex-col items-center text-center gap-8">
           <p
             style={{
@@ -629,7 +571,6 @@ const Deck = () => {
   );
 };
 
-/* Inline stat chip component */
 const StatChip = ({ value, label }: { value: string; label: string }) => (
   <div
     className="flex flex-col px-4 py-3"
@@ -664,7 +605,6 @@ const StatChip = ({ value, label }: { value: string; label: string }) => (
   </div>
 );
 
-/* Timeline step component for First 90 Days */
 const TimelineStep = ({
   period,
   title,
@@ -677,7 +617,6 @@ const TimelineStep = ({
   isLast?: boolean;
 }) => (
   <div className="flex gap-5">
-    {/* Vertical line + dot */}
     <div className="flex flex-col items-center" style={{ width: "20px" }}>
       <div
         style={{
@@ -700,7 +639,6 @@ const TimelineStep = ({
         />
       )}
     </div>
-    {/* Content */}
     <div className="flex flex-col gap-1 pb-8">
       <span
         style={{
