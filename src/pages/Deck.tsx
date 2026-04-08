@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, FormEvent } from "react";
+import React, { useEffect, useRef, useState, useCallback, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
@@ -611,79 +611,113 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} className="flex flex-col gap-8">
-          {/* ── Heading row: slide-2 pattern ── */}
-          <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-36">
-            <p style={{ ...heading("clamp(24px, 3.2vw, 42px)"), fontWeight: 700, ...r3.stagger(0), flex: "1 1 50%" }}>
+        <div ref={r3.ref} className="flex flex-col gap-5">
+          {/* ── Compact heading ── */}
+          <div style={r3.stagger(0)}>
+            <p style={{ ...heading("clamp(20px, 2.6vw, 32px)"), fontWeight: 700, marginBottom: "6px" }}>
               Same goal. Completely different playbooks.
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r3.stagger(1), flex: "1 1 50%" }}>
-              Both sides of an issue want the same thing — shift public opinion and force policy outcomes. But they run completely different processes to get there.
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.3vw, 17px)", color: f.ink(0.55), lineHeight: 1.5 }}>
+              Both sides want the same thing — shift public opinion and force policy outcomes. But they run completely different processes to get there.
             </p>
           </div>
 
-          {/* ── Comparison table in a single card ── */}
+          {/* ── Two-column comparison ── */}
           <div style={{
-            background: f.ink(0.03),
-            borderRadius: "12px",
-            padding: "clamp(16px, 2vw, 28px)",
-            ...r3.stagger(2, 200),
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "0",
+            borderRadius: "10px",
+            overflow: "hidden",
+            border: `1px solid ${f.ink(0.08)}`,
+            ...r3.stagger(1, 200),
           }}>
             {/* Column headers */}
-            <div className="grid" style={{ gridTemplateColumns: "100px 1fr 1fr", gap: "clamp(12px, 2vw, 24px)", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "10px", marginBottom: "2px" }}>
-              <div />
-              <p style={{ ...label("10px"), color: f.ink(0.5) }}>Your side</p>
-              <p style={{ ...label("10px"), color: f.ink(0.5) }}>Their side</p>
+            <div style={{
+              padding: "10px 20px",
+              background: f.ink(0.04),
+              borderBottom: `1px solid ${f.ink(0.08)}`,
+              borderRight: `1px solid ${f.ink(0.08)}`,
+            }}>
+              <p style={{ ...label("10px"), color: f.ink(0.45) }}>Your side</p>
+            </div>
+            <div style={{
+              padding: "10px 20px",
+              background: f.ink(0.88),
+              borderBottom: `1px solid ${f.ink(0.08)}`,
+            }}>
+              <p style={{ ...label("10px"), color: `hsl(40 30% 96% / 0.6)` }}>Their side</p>
             </div>
 
             {CONFRONTATION_ROWS.map((row, i) => {
               const isLast = i === CONFRONTATION_ROWS.length - 1;
+              const rowAnim = {
+                opacity: r3.isActive ? 1 : 0,
+                transform: r3.isActive ? "translateY(0)" : "translateY(6px)",
+                transition: `opacity 0.35s ease ${150 + i * 60}ms, transform 0.35s ease ${150 + i * 60}ms`,
+              };
               return (
-                <div
-                  key={i}
-                  className="grid"
-                  style={{
-                    gridTemplateColumns: "100px 1fr 1fr",
-                    gap: "clamp(12px, 2vw, 24px)",
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                    paddingTop: isLast ? "16px" : "12px",
-                    paddingBottom: "12px",
-                    borderTop: isLast ? `1px solid ${f.ink(0.12)}` : "none",
-                    opacity: r3.isActive ? 1 : 0,
-                    transform: r3.isActive ? "translateY(0)" : "translateY(8px)",
-                    transition: `opacity 0.4s ease ${200 + i * 80}ms, transform 0.4s ease ${200 + i * 80}ms`,
-                  }}
-                >
-                  <p style={{
-                    fontFamily: f.sans,
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    color: f.ink(0.5),
-                    textTransform: "uppercase" as const,
-                    letterSpacing: "0.06em",
-                    paddingTop: "2px",
+                <React.Fragment key={i}>
+                  {/* Your side cell */}
+                  <div style={{
+                    padding: "10px 20px",
+                    background: f.ink(0.02),
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
+                    borderRight: `1px solid ${f.ink(0.08)}`,
+                    borderTop: isLast ? `2px solid ${f.ink(0.1)}` : "none",
+                    ...rowAnim,
                   }}>
-                    {row.dimension}
-                  </p>
-                  <p style={{
-                    fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.3vw, 15px)",
-                    color: f.ink(0.7),
-                    lineHeight: 1.65,
-                    fontWeight: isLast ? 500 : 400,
+                    <p style={{
+                      fontFamily: f.sans,
+                      fontSize: "9px",
+                      fontWeight: 700,
+                      color: f.ink(0.35),
+                      textTransform: "uppercase" as const,
+                      letterSpacing: "0.08em",
+                      marginBottom: "3px",
+                    }}>
+                      {row.dimension}
+                    </p>
+                    <p style={{
+                      fontFamily: f.serif,
+                      fontSize: "clamp(12.5px, 1.2vw, 14.5px)",
+                      color: f.ink(0.6),
+                      lineHeight: 1.55,
+                      fontWeight: isLast ? 500 : 400,
+                    }}>
+                      {row.yours}
+                    </p>
+                  </div>
+                  {/* Their side cell */}
+                  <div style={{
+                    padding: "10px 20px",
+                    background: f.ink(isLast ? 0.92 : 0.88),
+                    borderBottom: !isLast ? `1px solid hsl(30 10% 12% / 0.7)` : "none",
+                    borderTop: isLast ? `2px solid hsl(40 30% 96% / 0.15)` : "none",
+                    ...rowAnim,
                   }}>
-                    {row.yours}
-                  </p>
-                  <p style={{
-                    fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.3vw, 15px)",
-                    color: f.ink(0.7),
-                    lineHeight: 1.65,
-                    fontWeight: isLast ? 600 : 500,
-                  }}>
-                    {row.theirs}
-                  </p>
-                </div>
+                    <p style={{
+                      fontFamily: f.sans,
+                      fontSize: "9px",
+                      fontWeight: 700,
+                      color: `hsl(40 30% 96% / 0.35)`,
+                      textTransform: "uppercase" as const,
+                      letterSpacing: "0.08em",
+                      marginBottom: "3px",
+                    }}>
+                      {row.dimension}
+                    </p>
+                    <p style={{
+                      fontFamily: f.serif,
+                      fontSize: "clamp(12.5px, 1.2vw, 14.5px)",
+                      color: `hsl(40 30% 96% / 0.85)`,
+                      lineHeight: 1.55,
+                      fontWeight: isLast ? 600 : 400,
+                    }}>
+                      {row.theirs}
+                    </p>
+                  </div>
+                </React.Fragment>
               );
             })}
           </div>
