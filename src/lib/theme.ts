@@ -27,8 +27,8 @@ const error = (alpha = 1) => `hsl(${BASE.destructive} / ${alpha})`;
 const success = (alpha = 1) => `hsl(${BASE.success} / ${alpha})`;
 
 /* ── Typography ── */
-const serif = "'Instrument Serif', serif";
-const sans = "'DM Sans', sans-serif";
+const serif = "'Source Serif 4', Georgia, serif";
+const sans = "'Inter', system-ui, sans-serif";
 
 /* ── Borders & surfaces ── */
 const border = (alpha = 0.08) => `1px solid ${ink(alpha)}`;
@@ -43,18 +43,18 @@ const surface = {
 
 /* ── Pre-built text styles (CSSProperties) ── */
 const heading = (size = "clamp(18px, 2.6vw, 28px)"): React.CSSProperties => ({
-  fontFamily: serif,
+  fontFamily: sans,
   fontSize: size,
-  fontWeight: 400,
+  fontWeight: 600,
   color: ink(0.9),
-  lineHeight: 1.4,
+  lineHeight: 1.3,
 });
 
 const body = (alpha = 0.5): React.CSSProperties => ({
-  fontFamily: sans,
-  fontSize: "clamp(13px, 1.5vw, 16px)",
+  fontFamily: serif,
+  fontSize: "clamp(14px, 1.5vw, 17px)",
   color: ink(alpha),
-  lineHeight: 1.65,
+  lineHeight: 1.75,
 });
 
 const label = (size = "10px"): React.CSSProperties => ({
