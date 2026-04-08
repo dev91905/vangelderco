@@ -1,92 +1,66 @@
 
 
-# V4 Design System — Anthropic-Inspired Editorial Warmth
+# V4 Design Pass — Remaining Pages & Components
 
-## The shift
+## What's still broken
 
-Kill the dark-mode-with-gold-glow aesthetic entirely. Move to a **warm light background** with **black typography**, massive whitespace, and editorial confidence. The Anthropic look is: cream canvas, high-contrast black serif headings, clean sans body, zero decorative effects, depth through spacing not surfaces.
+Every file below still uses the old dark-mode tokens: near-black backgrounds (`hsl(0 0% 2.5%)`), white text at various opacities, red accents (`hsl(0 80% 48%)`), JetBrains Mono everywhere, and Space Grotesk for headings. The V4 palette is warm cream bg, near-black ink, Instrument Serif headings, DM Sans body — none of these files got updated.
 
-## What changes
+## Files to update (18 files)
 
-### 1. Color system — dark to light
-- Background: near-black → **warm cream** `hsl(40 30% 96%)` / `#F5F0EB`
-- Text: white-at-various-opacities → **near-black** `hsl(30 10% 12%)`
-- Accent: gold glow → **warm black** or subtle amber for interactive elements
-- Cards: dark surfaces → **white** with barely-there borders or no borders at all
-- Kill the breathing gold glow, constellation field, all ambient effects
+### Admin pages
+- **`src/pages/Admin.tsx`** — dark bg, red accents, JetBrains Mono, Space Grotesk heading. Flip to cream bg, ink borders, DM Sans labels, Instrument Serif title.
+- **`src/pages/AdminLogin.tsx`** — dark bg, red button, monospace inputs. Flip to cream bg, black pill button, DM Sans inputs.
+- **`src/pages/AdminEditor.tsx`** — dark bg toolbar, red save button, monospace labels. Flip to cream bg, ink-colored toolbar, black pill save.
 
-### 2. Typography
-- Keep Instrument Serif for headings — it fits the editorial vibe
-- Keep DM Sans for body — clean, modern
-- Kill JetBrains Mono entirely — no monospace labels, no "frame 01/12" counters
-- Headings get **much larger** — Anthropic uses massive type (60-80px+)
-- Body text gets more generous line-height and size
+### Admin components
+- **`src/components/admin/PostListTable.tsx`** — dark row backgrounds, red hover accents, JetBrains Mono. Flip to white rows on cream, ink hover, DM Sans.
+- **`src/components/admin/EditorMetaBar.tsx`** — dark drawer, red toggles, JetBrains Mono/Space Grotesk. Flip to white drawer on cream, ink toggles, DM Sans.
+- **`src/components/admin/BlockCanvas.tsx`** — dark insert points, red plus icons, JetBrains Mono. Flip to cream palette.
+- **`src/components/admin/BlockEditor.tsx`** — dark focus bg, red borders on quotes/callouts, JetBrains Mono/Space Grotesk. Flip to cream palette.
+- **`src/components/admin/BlockTypePicker.tsx`** — dark dropdown, red selection highlights, JetBrains Mono. Flip to white dropdown, ink selection.
+- **`src/components/admin/ImageUploader.tsx`** — dark dashed borders, red remove buttons, JetBrains Mono. Flip to cream palette.
+- **`src/components/admin/StatChipsEditor.tsx`** — dark cards, red stat values, JetBrains Mono. Flip to cream palette.
 
-### 3. Layout — the big structural change
-- **Remove DeckFrame entirely** as a visual wrapper. The deck becomes a clean horizontal scroll with no chrome whatsoever — no progress dots, no frame counter, no ESC hint, no slide labels
-- Navigation: minimal dot indicators only, or remove entirely in favor of scroll
-- Content areas get true full-width composition with generous margins (80-120px side padding)
-- Cards lose all borders and dark surfaces — they become text blocks with whitespace separation
+### Public content views
+- **`src/components/blog/BlogPostView.tsx`** — dark bg gradient, red meta labels, JetBrains Mono, Space Grotesk headings. Flip to cream bg, ink meta, Instrument Serif headings, DM Sans body.
+- **`src/components/casestudy/CaseStudyView.tsx`** — same dark treatment. Flip to cream editorial.
+- **`src/components/casestudy/StatChips.tsx`** — dark cards, red values. Flip to cream cards, ink values.
+- **`src/components/casestudy/ExpandableSection.tsx`** — dark bg, red left border. Flip to white/cream, ink border.
+- **`src/components/casestudy/ContentCarousel.tsx`** — dark bg, red dot indicators. Flip to cream.
+- **`src/components/content/ContentBlockRenderer.tsx`** — dark surfaces, red quote borders, JetBrains Mono/Space Grotesk. Flip to cream palette, Instrument Serif headings, DM Sans body.
+- **`src/components/PasswordGate.tsx`** — dark bg, red glow, corner brackets, scan beam, JetBrains Mono/Space Grotesk. Strip all retro effects, flip to cream bg with clean editorial gate.
 
-### 4. Component restyling
-- **Pain point cards**: White cards on cream, subtle shadow on hover, no numbered badges, no mono labels
-- **Confrontation table**: Clean editorial table — thin horizontal rules only, no background fills, no colored borders
-- **Domain tabs**: Simple underline tabs, no background fills
-- **Capability cards**: Text-only with a heading and description, no card container
-- **Metrics table**: Same editorial table treatment — rules, not boxes
-- **Case study grid**: Clean cards with just title + outcome, hover lift
-- **CTA**: Simple black button on cream, Anthropic-style pill shape
+### Other pages
+- **`src/pages/NotFound.tsx`** — dark bg, red "Signal Lost", Space Grotesk 404, JetBrains Mono. Flip to cream, Instrument Serif 404, DM Sans labels.
+- **`src/pages/PostDetail.tsx`** — loading states use JetBrains Mono + white-on-dark. Flip to DM Sans + ink-on-cream.
 
-### 5. Animation refinement
-- Kill all "deck-" prefixed animations
-- Keep simple fade-up on scroll-into-view
-- No clip-reveal, no glow-pulse, no stagger delays beyond 200ms
-- Smooth, barely-perceptible transitions
+## Token reference (consistent across all files)
 
-### 6. Homepage (Index.tsx)
-- Cream background, black serif heading, no atmospheric layout wrapper
-- Hero links become clean text with subtle hover underlines
-- Sector tags become simple comma-separated text or minimal pills
-- Remove ConstellationField canvas
-
-### 7. AtmosphericLayout
-- Strip to a simple cream-background wrapper — no glows, no ambient effects
-- Or remove entirely and just use bare layouts
-
-### 8. Global CSS
-- All CSS variables flip to light palette
-- Remove all retro keyframes, gold glow animations
-- Scrollbar styling becomes subtle gray on cream
-
-## What stays
-- All content and copy (untouched)
-- Horizontal scroll-snap architecture
-- All interactive branching logic
-- Keyboard + wheel navigation
-- Case study lightbox
-- SFX hooks (can stay, they're subtle)
-
-## Files modified
-- `index.html` — may adjust font imports
-- `src/index.css` — full palette flip, kill all effect keyframes
-- `tailwind.config.ts` — update CSS variable defaults
-- `src/components/AtmosphericLayout.tsx` — strip to minimal wrapper
-- `src/pages/Index.tsx` — cream + black editorial hero
-- `src/pages/Deck.tsx` — full visual token overhaul, remove chrome
-- `src/components/deck/DeckFrame.tsx` — simplified, no labels
-- `src/components/CapabilityLayout.tsx` — light palette
-- `src/components/PostCard.tsx` — light card style
+| Token | Old | New |
+|-------|-----|-----|
+| Background | `hsl(0 0% 2.5%)` | `hsl(40 30% 96%)` |
+| Card/surface | `hsl(0 0% 4-6%)` | `hsl(0 0% 100%)` |
+| Text primary | `hsl(0 0% 100% / 0.9)` | `hsl(30 10% 12% / 0.9)` |
+| Text secondary | `hsl(0 0% 100% / 0.3-0.5)` | `hsl(30 10% 12% / 0.3-0.5)` |
+| Accent | `hsl(0 80% 48%)` | `hsl(30 10% 12%)` (black pill/ink) |
+| Border | `hsl(0 0% 8-15%)` | `hsl(30 10% 12% / 0.06-0.1)` |
+| Heading font | Space Grotesk | Instrument Serif |
+| Body/label font | JetBrains Mono | DM Sans |
+| Button style | Red bg | Black pill (border-radius: 999px) |
 
 ## What gets removed
-- Gold glow ambient effect
-- Progress dots navigation
-- Frame counter ("01 / 12")
-- ESC hint
-- Slide labels ("Self-Diagnosis", "What You're Up Against")
-- All `mono()` styling for UI chrome
-- Dark surface layering system
-- ConstellationField (if used on deck)
+- Corner bracket SVGs in PasswordGate
+- Red breathing glow in PasswordGate
+- Scan beam in PasswordGate
+- All `'JetBrains Mono'` references
+- All `'Space Grotesk'` references
+- All red accent colors (`hsl(0 80% 48%)`)
 
-## What it should feel like
-A premium editorial experience — like reading a beautifully typeset proposal on cream paper. Content-forward. The design disappears. The argument lands.
+## What stays the same
+- All functionality, logic, and data flow
+- Component structure and props
+- Admin CRUD operations
+- Password verification flow
+- Drag-and-drop block editing
 
