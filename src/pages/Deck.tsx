@@ -1046,6 +1046,7 @@ const Deck = () => {
               );
             })}
           </div>
+        </div>
       </DeckFrame>
 
       {/* ═══ FRAME 6: Capabilities ═══ */}
