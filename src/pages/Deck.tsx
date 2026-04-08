@@ -32,7 +32,7 @@ const PAIN_POINTS = [
   {
     id: "history",
     short: "Starting at ground zero",
-    detail: "No record of what was funded, what worked, or why. Every new officer inherits a blank slate.",
+    detail: "You inherited an existing portfolio with no record of what's working or why. ",
     consequence: "You can't improve what you can't remember. Every cycle resets to zero.",
     capRelevance: "We build the institutional record that's never existed — audit everything, document what worked, create the baseline.",
   },
