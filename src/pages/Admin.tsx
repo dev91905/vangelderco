@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, MessageSquare, ChevronDown, ChevronUp, Link as LinkIcon, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
@@ -76,9 +76,10 @@ const Admin = () => {
   const { data: settings } = useSiteSettings();
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
+  const [bookingLink, setBookingLink] = useState<string>("");
   const [pwLoaded, setPwLoaded] = useState(false);
 
-  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setPwLoaded(true); }
+  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setBookingLink(settings.booking_link || ""); setPwLoaded(true); }
 
   const typeChips = [
     { value: "all", label: "All" },
@@ -136,6 +137,33 @@ const Admin = () => {
               onSave={() => { updateSetting.mutate({ key: "global_article_password", value: globalPw || null }); setSettingsOpen(false); }}
               onRemove={() => { setGlobalPw(""); updateSetting.mutate({ key: "global_article_password", value: null }); setSettingsOpen(false); }}
             />
+            {/* Booking Link */}
+            <div className="p-5 space-y-3" style={{ borderTop: t.border(0.06) }}>
+              <label className="text-[11px] uppercase tracking-[0.08em] flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
+                <LinkIcon className="w-3 h-3" /> Booking Link
+              </label>
+              <input
+                type="url"
+                value={bookingLink}
+                onChange={(e) => setBookingLink(e.target.value)}
+                placeholder="https://calendly.com/your-link"
+                className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
+                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.white }}
+              />
+              <p className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
+                Used for "Schedule a Meeting" on the deck CTA page.
+              </p>
+              <button
+                onClick={() => {
+                  updateSetting.mutate({ key: "booking_link", value: bookingLink || null });
+                  setSettingsOpen(false);
+                }}
+                className="w-full px-4 py-2.5 text-sm transition-all rounded-full"
+                style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream }}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </>
       )}
@@ -162,12 +190,113 @@ const Admin = () => {
         <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
       </div>
 
+      <ContactsFeed />
       <SubmissionsFeed />
     </div>
   );
 };
 
-const SubmissionsFeed = () => {
+const ContactsFeed = () => {
+  const [open, setOpen] = useState(true);
+  const { data: contacts, isLoading } = useQuery({
+    queryKey: ["deck-contacts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deck_contacts" as any)
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as unknown as Array<{
+        id: string; first_name: string; last_name: string;
+        organization: string | null; email: string;
+        custom_challenge: string | null; selected_pains: string[] | null;
+        created_at: string;
+      }>;
+    },
+  });
+
+  const count = contacts?.length ?? 0;
+
+  return (
+    <div className="px-4 md:px-8 py-4" style={{ borderTop: t.border(0.06) }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-3 w-full text-left py-2"
+        style={{ background: "none", border: "none", cursor: "pointer" }}
+      >
+        <Mail className="w-4 h-4" style={{ color: t.ink(0.35) }} />
+        <span style={{ fontFamily: t.sans, fontSize: "13px", fontWeight: 600, color: t.ink(0.6) }}>
+          Deck Contacts
+        </span>
+        {count > 0 && (
+          <span style={{
+            fontFamily: t.sans, fontSize: "11px", fontWeight: 600,
+            color: t.cream, background: t.ink(0.7),
+            padding: "1px 8px", borderRadius: "999px",
+          }}>
+            {count}
+          </span>
+        )}
+        {open ? <ChevronUp className="w-3.5 h-3.5 ml-auto" style={{ color: t.ink(0.3) }} /> : <ChevronDown className="w-3.5 h-3.5 ml-auto" style={{ color: t.ink(0.3) }} />}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-2 max-h-[500px] overflow-y-auto pr-1">
+          {isLoading && <p style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.3) }}>Loading…</p>}
+          {!isLoading && count === 0 && (
+            <p style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.3), padding: "12px 0" }}>
+              No contacts yet.
+            </p>
+          )}
+          {contacts?.map((c) => (
+            <div
+              key={c.id}
+              style={{
+                padding: "16px 18px",
+                borderRadius: "10px",
+                border: t.border(0.06),
+                background: t.white,
+              }}
+            >
+              <div className="flex items-baseline gap-2 mb-1">
+                <p style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>
+                  {c.first_name} {c.last_name}
+                </p>
+                {c.organization && (
+                  <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35) }}>
+                    · {c.organization}
+                  </span>
+                )}
+              </div>
+              <a href={`mailto:${c.email}`} style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.5), textDecoration: "underline", textUnderlineOffset: "2px" }}>
+                {c.email}
+              </a>
+              {c.custom_challenge && (
+                <p style={{ fontFamily: t.serif, fontSize: "12px", color: t.ink(0.5), lineHeight: 1.6, marginTop: "8px", paddingTop: "8px", borderTop: t.border(0.04), fontStyle: "italic" }}>
+                  "{c.custom_challenge}"
+                </p>
+              )}
+              {c.selected_pains && c.selected_pains.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {c.selected_pains.map((p, i) => (
+                    <span key={i} style={{ fontFamily: t.sans, fontSize: "10px", color: t.ink(0.4), background: t.ink(0.04), padding: "2px 8px", borderRadius: "999px" }}>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <p style={{ fontFamily: t.sans, fontSize: "10px", color: t.ink(0.25), marginTop: "8px" }}>
+                {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
   const [open, setOpen] = useState(false);
   const { data: submissions, isLoading } = useQuery({
     queryKey: ["deck-submissions"],

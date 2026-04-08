@@ -5,6 +5,7 @@ import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown } from "lucide-react";
 import {
   Dialog,
@@ -13,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TOTAL_FRAMES = 12;
+const TOTAL_FRAMES = 13;
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -202,24 +203,42 @@ const Deck = () => {
   const [customMessage, setCustomMessage] = useState("");
   const [openRows, setOpenRows] = useState<Set<number>>(new Set());
   const [confrontationStep, setConfrontationStep] = useState(0);
-  const [customSubmitted, setCustomSubmitted] = useState(false);
-  const [customSubmitting, setCustomSubmitting] = useState(false);
+  const [customSaved, setCustomSaved] = useState(false); // local "saved" state — not DB
 
-  const handleCustomSubmit = async (e?: FormEvent) => {
+  /* CTA form state */
+  const [ctaMode, setCtaMode] = useState<"choose" | "email" | "thanks" | null>(null);
+  const [ctaForm, setCtaForm] = useState({ firstName: "", lastName: "", organization: "", email: "" });
+  const [ctaSubmitting, setCtaSubmitting] = useState(false);
+
+  const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
-    if (!customMessage.trim() || customSubmitting) return;
-    setCustomSubmitting(true);
-    await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
-    setCustomSubmitting(false);
-    setCustomSubmitted(true);
-    setCustomMessage("");
-    setTimeout(() => { setCustomSubmitted(false); setCustomOpen(false); }, 2000);
+    if (!ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim() || ctaSubmitting) return;
+    setCtaSubmitting(true);
+    // Save contact + custom challenge + selected pains
+    await supabase.from("deck_contacts" as any).insert({
+      first_name: ctaForm.firstName.trim(),
+      last_name: ctaForm.lastName.trim(),
+      organization: ctaForm.organization.trim() || null,
+      email: ctaForm.email.trim(),
+      custom_challenge: customSaved ? customMessage.trim() || null : null,
+      selected_pains: selectedPains.length > 0 ? selectedPains : null,
+    } as any);
+    // Also save the custom challenge to deck_submissions if present
+    if (customSaved && customMessage.trim()) {
+      await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
+    }
+    setCtaSubmitting(false);
+    setCtaMode("thanks");
   };
   
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [expandedHallmark, setExpandedHallmark] = useState<number | null>(null);
+
+  /* Fetch booking link from settings */
+  const { data: siteSettings } = useSiteSettings();
+  const bookingLink = siteSettings?.booking_link || null;
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -329,6 +348,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
+  const r12 = useFrameReveal();
 
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
@@ -542,18 +562,29 @@ const Deck = () => {
             <div
               style={{
                 padding: "28px 24px",
-                border: `1px dashed ${f.ink(0.12)}`,
-                background: customOpen ? f.ink(0.03) : "transparent",
+                border: customSaved ? `1px solid ${f.ink(0.12)}` : `1px dashed ${f.ink(0.12)}`,
+                background: customOpen || customSaved ? f.ink(0.03) : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
                 transition: "opacity 0.3s ease 400ms, transform 0.3s ease 400ms, background 0.15s ease",
               }}
             >
-              {customSubmitted ? (
-                <p style={{ fontFamily: f.sans, fontSize: "15px", fontWeight: 600, color: f.ink(0.7) }}>
-                  Thanks — noted. ✓
-                </p>
+              {customSaved && !customOpen ? (
+                <div>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
+                    Your challenge ✓
+                  </p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.6), lineHeight: 1.6, marginBottom: "12px" }}>
+                    "{customMessage}"
+                  </p>
+                  <button
+                    onClick={() => setCustomOpen(true)}
+                    style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.35), background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: "3px" }}
+                  >
+                    Edit
+                  </button>
+                </div>
               ) : !customOpen ? (
                 <button
                   onClick={() => setCustomOpen(true)}
@@ -568,7 +599,7 @@ const Deck = () => {
                   </p>
                 </button>
               ) : (
-                <form onSubmit={handleCustomSubmit} className="flex flex-col gap-3">
+                <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); setCustomOpen(false); } }} className="flex flex-col gap-3">
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
                     What's your challenge?
                   </p>
@@ -596,7 +627,7 @@ const Deck = () => {
                   <div className="flex items-center gap-2">
                     <button
                       type="submit"
-                      disabled={!customMessage.trim() || customSubmitting}
+                      disabled={!customMessage.trim()}
                       style={{
                         fontFamily: f.sans,
                         fontSize: "12px",
@@ -611,11 +642,11 @@ const Deck = () => {
                         transition: "background 0.15s ease",
                       }}
                     >
-                      {customSubmitting ? "Sending…" : "Submit"}
+                      Save
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setCustomOpen(false); setCustomMessage(""); }}
+                      onClick={() => { setCustomOpen(false); if (!customSaved) setCustomMessage(""); }}
                       style={{
                         fontFamily: f.sans,
                         fontSize: "12px",
@@ -1197,73 +1228,261 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 11: CTA + Proof ═══ */}
-      <DeckFrame ref={setRef(10)} mode="wide">
-        <div ref={r11.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[40%] flex flex-col justify-center" style={r11.stagger(0)}>
-            <h2 style={{ fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
-              VGC StratComm
-            </h2>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, marginBottom: "28px" }}>
-              Let's look at your portfolio together.
-            </p>
-            <a
-              href="mailto:info@vgcstratcomm.com"
-              className="inline-block"
-              style={{
-                fontFamily: f.sans,
-                fontSize: "13px",
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                fontWeight: 500,
-                color: f.cream,
-                background: f.ink(0.88),
-                padding: "16px 36px",
-                borderRadius: "999px",
-                textDecoration: "none",
-                textAlign: "center",
-                transition: "background 300ms, transform 180ms",
-                maxWidth: "200px",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(1); e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = f.ink(0.88); e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              Get in touch
-            </a>
-          </div>
+      {/* ═══ FRAME 11: CTA — What's Next ═══ */}
+      <DeckFrame ref={setRef(10)} mode="narrow">
+        <div ref={r11.ref} className="flex flex-col gap-8 items-center text-center">
+          <h2 style={{ ...r11.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+            What's next?
+          </h2>
+          <p style={{ ...r11.stagger(1, 200), fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
+            Let's look at your portfolio together.
+          </p>
 
-          <div className="lg:w-[60%]">
-            <p style={{ ...label("10px"), marginBottom: "16px", ...r11.stagger(1, 200) }}>Selected case work</p>
-            <div className="grid grid-cols-2 gap-3">
-              {CASE_STUDIES.map((cs, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedCase(i)}
-                  className="text-left transition-all duration-300"
+          {/* Two CTA options */}
+          {ctaMode !== "email" && ctaMode !== "thanks" && (
+            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg" style={r11.stagger(2, 400)}>
+              <button
+                onClick={() => setCtaMode("email")}
+                style={{
+                  flex: 1,
+                  fontFamily: f.sans,
+                  fontSize: "13px",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase" as const,
+                  fontWeight: 600,
+                  color: f.cream,
+                  background: f.ink(0.88),
+                  padding: "18px 32px",
+                  borderRadius: "999px",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background 300ms, transform 180ms",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(1); e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = f.ink(0.88); e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                Email Us
+              </button>
+              {bookingLink && (
+                <a
+                  href={bookingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
-                    padding: "16px 14px",
-                    background: cs.content ? f.ink(0.9) : "transparent",
-                    border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
-                    borderRadius: "8px",
+                    flex: 1,
+                    fontFamily: f.sans,
+                    fontSize: "13px",
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase" as const,
+                    fontWeight: 600,
+                    color: f.ink(0.7),
+                    background: "transparent",
+                    padding: "18px 32px",
+                    borderRadius: "999px",
+                    border: `1px solid ${f.ink(0.12)}`,
                     cursor: "pointer",
-                    opacity: r11.isActive ? 1 : 0,
-                    transform: r11.isActive ? "translateY(0)" : "translateY(8px)",
-                    transition: `all 0.4s ease ${300 + i * 60}ms`,
+                    textDecoration: "none",
+                    textAlign: "center",
+                    transition: "all 300ms",
                   }}
-                  onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } }}
-                  onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.12); e.currentTarget.style.color = f.ink(0.7); }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", fontWeight: 700, color: cs.content ? f.cream : f.ink(0.35), marginBottom: "4px" }}>{cs.name}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(40 30% 70%)" : f.ink(0.2) }}>{cs.outcome}</p>
-                </button>
-              ))}
+                  Schedule a Meeting
+                </a>
+              )}
             </div>
+          )}
+
+          {/* Email form */}
+          {ctaMode === "email" && (
+            <form
+              onSubmit={handleCtaSubmit}
+              className="flex flex-col gap-4 w-full max-w-md text-left"
+              style={{ animation: "fade-in 0.4s ease-out" }}
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={ctaForm.firstName}
+                    onChange={(e) => setCtaForm(p => ({ ...p, firstName: e.target.value }))}
+                    style={{
+                      width: "100%",
+                      fontFamily: f.sans,
+                      fontSize: "14px",
+                      color: f.ink(0.8),
+                      background: "white",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      borderRadius: "8px",
+                      padding: "12px",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
+                  />
+                </div>
+                <div>
+                  <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Last name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={ctaForm.lastName}
+                    onChange={(e) => setCtaForm(p => ({ ...p, lastName: e.target.value }))}
+                    style={{
+                      width: "100%",
+                      fontFamily: f.sans,
+                      fontSize: "14px",
+                      color: f.ink(0.8),
+                      background: "white",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      borderRadius: "8px",
+                      padding: "12px",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
+                  />
+                </div>
+              </div>
+              <div>
+                <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Organization</label>
+                <input
+                  type="text"
+                  value={ctaForm.organization}
+                  onChange={(e) => setCtaForm(p => ({ ...p, organization: e.target.value }))}
+                  style={{
+                    width: "100%",
+                    fontFamily: f.sans,
+                    fontSize: "14px",
+                    color: f.ink(0.8),
+                    background: "white",
+                    border: `1px solid ${f.ink(0.1)}`,
+                    borderRadius: "8px",
+                    padding: "12px",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
+                />
+              </div>
+              <div>
+                <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Email *</label>
+                <input
+                  type="email"
+                  required
+                  value={ctaForm.email}
+                  onChange={(e) => setCtaForm(p => ({ ...p, email: e.target.value }))}
+                  style={{
+                    width: "100%",
+                    fontFamily: f.sans,
+                    fontSize: "14px",
+                    color: f.ink(0.8),
+                    background: "white",
+                    border: `1px solid ${f.ink(0.1)}`,
+                    borderRadius: "8px",
+                    padding: "12px",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
+                />
+              </div>
+              <div className="flex gap-3 justify-center mt-2">
+                <button
+                  type="submit"
+                  disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
+                  style={{
+                    fontFamily: f.sans,
+                    fontSize: "13px",
+                    letterSpacing: "0.06em",
+                    fontWeight: 600,
+                    color: f.cream,
+                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? f.ink(0.88) : f.ink(0.2),
+                    border: "none",
+                    padding: "14px 36px",
+                    borderRadius: "999px",
+                    cursor: (ctaForm.firstName.trim() && ctaForm.email.trim()) ? "pointer" : "default",
+                    transition: "background 0.15s ease",
+                  }}
+                >
+                  {ctaSubmitting ? "Sending…" : "Send"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCtaMode("choose")}
+                  style={{
+                    fontFamily: f.sans,
+                    fontSize: "12px",
+                    color: f.ink(0.35),
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "14px 16px",
+                  }}
+                >
+                  Back
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* Thank you */}
+          {ctaMode === "thanks" && (
+            <div style={{ animation: "fade-in 0.5s ease-out" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px" }}>
+                Received ✓
+              </p>
+              <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "400px", margin: "0 auto" }}>
+                A team member is reviewing and will reach out shortly.
+              </p>
+            </div>
+          )}
+        </div>
+      </DeckFrame>
+
+      {/* ═══ FRAME 12: Case Studies ═══ */}
+      <DeckFrame ref={setRef(11)} mode="wide">
+        <div ref={r12.ref} className="flex flex-col gap-8 w-full">
+          <div style={r12.stagger(0)}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
+              Selected case work.
+            </p>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>
+              Click any case to read the full story.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" style={r12.stagger(1, 200)}>
+            {CASE_STUDIES.map((cs, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedCase(i)}
+                className="text-left transition-all duration-300"
+                style={{
+                  padding: "20px 16px",
+                  background: cs.content ? f.ink(0.9) : "transparent",
+                  border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  opacity: r12.isActive ? 1 : 0,
+                  transform: r12.isActive ? "translateY(0)" : "translateY(8px)",
+                  transition: `all 0.4s ease ${200 + i * 50}ms`,
+                }}
+                onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } else { e.currentTarget.style.transform = "translateY(-2px)"; } }}
+                onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } else { e.currentTarget.style.transform = "translateY(0)"; } }}
+              >
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? f.cream : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(40 30% 70%)" : f.ink(0.25) }}>{cs.outcome}</p>
+              </button>
+            ))}
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 12: Spacer ═══ */}
-      <DeckFrame ref={setRef(11)}>
+      {/* ═══ FRAME 13: Spacer ═══ */}
+      <DeckFrame ref={setRef(12)}>
         <div className="flex flex-col items-center text-center gap-6">
           <p style={{ ...label("10px") }}>← Scroll back to explore</p>
           <h2 style={{ fontFamily: f.sans, fontSize: "clamp(24px, 4vw, 44px)", fontWeight: 700, color: f.ink(0.06), letterSpacing: "-0.02em" }}>VGC StratComm</h2>
