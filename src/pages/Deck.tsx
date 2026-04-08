@@ -446,7 +446,7 @@ const Deck = () => {
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), maxWidth: "600px", flex: "0 0 auto" }}>
               What's getting in the way?
             </p>
-            <p style={{ ...body(0.4), ...r2.stagger(1), maxWidth: "400px", flex: "0 0 auto", fontSize: "clamp(14px, 1.4vw, 16px)" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(18px, 2vw, 24px)", color: f.ink(0.85), lineHeight: 1.5, ...r2.stagger(1), maxWidth: "400px", flex: "0 0 auto" }}>
               These are the most common challenges we see in stratcomm portfolios. Select everything that resonates.
             </p>
           </div>
