@@ -309,22 +309,15 @@ const Deck = () => {
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
-  /* Auto-advance confrontation sequence when slide 3 is visible */
-  useEffect(() => {
-    if (currentFrame !== 2) return;
-    if (confrontationStep >= CONFRONTATION_ROWS.length) return;
-    const timer = setTimeout(() => {
-      setConfrontationStep(s => s + 1);
-    }, confrontationStep === 0 ? 2200 : 3000);
-    return () => clearTimeout(timer);
-  }, [currentFrame, confrontationStep]);
-
-  /* Reset sequence when leaving slide 3 */
+  /* Reset confrontation when leaving slide 3 */
   useEffect(() => {
     if (currentFrame !== 2) {
       setConfrontationStep(0);
     }
   }, [currentFrame]);
+
+  /* Whether slide 3 sequence should consume scroll/key input */
+  const confrontationConsuming = currentFrame === 2 && confrontationStep <= CONFRONTATION_ROWS.length;
 
   return (
     <div
