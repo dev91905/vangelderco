@@ -101,7 +101,7 @@ const Admin = () => {
             onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
             <ArrowLeft className="w-3 h-3" /> Back to Site
           </Link>
-          <h1 className="text-lg font-medium tracking-tight" style={{ fontFamily: t.serif, color: t.ink(0.85) }}>Content Manager</h1>
+          <h1 className="text-lg font-medium tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}

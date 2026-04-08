@@ -7,7 +7,7 @@ const NotFound = () => {
     <AtmosphericLayout>
       <div className="flex items-center justify-center h-full w-full">
         <main className="relative z-20 flex flex-col items-center text-center px-6 gap-6">
-          <h1 className="text-[72px] md:text-[120px] font-medium leading-none" style={{ fontFamily: t.serif, color: t.ink(0.08), animation: "fade-up 0.5s ease-out 0.3s both" }}>
+          <h1 className="text-[72px] md:text-[120px] font-medium leading-none" style={{ fontFamily: t.sans, color: t.ink(0.08), animation: "fade-up 0.5s ease-out 0.3s both" }}>
             404
           </h1>
           <p className="text-[14px]" style={{ fontFamily: t.sans, color: t.ink(0.35), animation: "fade-up 0.5s ease-out 0.5s both" }}>
