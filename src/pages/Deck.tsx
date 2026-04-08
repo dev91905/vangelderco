@@ -311,20 +311,20 @@ const Deck = () => {
 
   /* Auto-advance confrontation sequence when slide 3 is visible */
   useEffect(() => {
-    if (activeFrame !== 2) return;
+    if (currentFrame !== 2) return;
     if (confrontationStep >= CONFRONTATION_ROWS.length) return;
     const timer = setTimeout(() => {
       setConfrontationStep(s => s + 1);
     }, confrontationStep === 0 ? 2200 : 3000);
     return () => clearTimeout(timer);
-  }, [activeFrame, confrontationStep]);
+  }, [currentFrame, confrontationStep]);
 
   /* Reset sequence when leaving slide 3 */
   useEffect(() => {
-    if (activeFrame !== 2) {
+    if (currentFrame !== 2) {
       setConfrontationStep(0);
     }
-  }, [activeFrame]);
+  }, [currentFrame]);
 
   return (
     <div
