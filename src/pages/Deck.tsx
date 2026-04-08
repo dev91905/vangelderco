@@ -956,7 +956,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(4)} mode="full">
         <div ref={r5.ref} className="flex flex-col gap-0 w-full">
           <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0), marginBottom: "12px" }}>
-            Here's how we can help.
+            You're ready to level up. We can help.
           </p>
           <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
             We know how to help you level up because we've done it ourselves.
