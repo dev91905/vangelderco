@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TOTAL_FRAMES = 12;
+const TOTAL_FRAMES = 13;
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
