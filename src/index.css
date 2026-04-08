@@ -41,7 +41,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: 'Source Serif 4', Georgia, serif;
     overflow: hidden;
   }
 
