@@ -953,60 +953,70 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 5: Three Service Domains ═══ */}
-      <DeckFrame ref={setRef(4)} mode="full">
-        <div ref={r5.ref} className="flex flex-col gap-0 w-full">
+      <DeckFrame ref={setRef(4)} mode="wide">
+        <div ref={r5.ref} className="flex flex-col w-full">
           <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0), marginBottom: "12px" }}>
             You're ready to level up. We can help.
           </p>
-          <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
+          <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "48px", maxWidth: "500px" }}>
             We know how this works because we've done it ourselves.
           </p>
 
-          <div className="flex w-full gap-3 mb-1">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {DOMAINS.map((d, i) => {
-              const isActive = activeDomain === d.id;
+              const isOpen = activeDomain === d.id;
               return (
                 <button
                   key={d.id}
-                  onClick={() => setActiveDomain(isActive ? null : d.id)}
-                  className="flex-1 text-left transition-all duration-300"
+                  onClick={() => setActiveDomain(isOpen ? null : d.id)}
+                  className="text-left transition-all duration-300"
                   style={{
-                    padding: "24px 20px",
-                    background: isActive ? f.ink(0.9) : "transparent",
-                    borderBottom: isActive ? `2px solid ${f.ink(0.8)}` : `2px solid ${f.ink(0.06)}`,
-                    borderRadius: "12px 12px 0 0",
+                    padding: "28px 24px",
+                    background: f.ink(0.02),
+                    border: `1px solid ${f.ink(isOpen ? 0.12 : 0.06)}`,
+                    borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r5.isActive ? 1 : 0,
                     transform: r5.isActive ? "translateY(0)" : "translateY(12px)",
                     transition: `all 0.5s ease ${300 + i * 150}ms`,
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2.2vw, 24px)", fontWeight: 700, color: isActive ? f.cream : f.ink(0.45) }}>{d.title}</p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(11px, 1.2vw, 14px)", color: isActive ? "hsl(40 30% 75%)" : f.ink(0.3), marginTop: "4px", lineHeight: 1.5 }}>{d.tagline}</p>
+                  {/* Header row */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "6px" }}>{d.title}</p>
+                      <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.4), lineHeight: 1.5 }}>{d.tagline}</p>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginTop: "4px", flexShrink: 0, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.3s ease" }}>
+                      <path d="M4 7L9 12L14 7" stroke={f.ink(0.3)} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+
+                  {/* Expanded content */}
+                  <div style={{ maxHeight: isOpen ? "600px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isOpen ? 1 : 0 }}>
+                    <div style={{ marginTop: "20px", paddingTop: "20px", borderTop: `1px solid ${f.ink(0.06)}` }}>
+                      <div style={{ marginBottom: "20px" }}>
+                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it is</span>
+                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.what}</p>
+                      </div>
+                      <div style={{ marginBottom: "20px" }}>
+                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it unlocks</span>
+                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.unlocks}</p>
+                      </div>
+                      <div style={{ marginBottom: "20px" }}>
+                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What most advisors miss</span>
+                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.missed}</p>
+                      </div>
+                      <div>
+                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>Example</span>
+                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.7, fontStyle: "italic" }}>{d.example}</p>
+                      </div>
+                    </div>
+                  </div>
                 </button>
               );
             })}
           </div>
-
-          {activeDomainData && (
-            <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full overflow-hidden"
-              style={{ animation: "deck-fade-up 0.5s ease forwards", background: f.ink(0.9), borderRadius: "0 0 12px 12px" }}
-            >
-              <div style={{ padding: "32px 28px", borderRight: `1px solid ${f.ink(0.8)}` }}>
-                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What it is</span>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.what}</p>
-                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginTop: "24px", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What it unlocks</span>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.unlocks}</p>
-              </div>
-              <div style={{ padding: "32px 28px" }}>
-                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What donor advisors usually miss</span>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.missed}</p>
-                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginTop: "24px", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>Example</span>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 75%)", lineHeight: 1.7, fontStyle: "italic" }}>{activeDomainData.example}</p>
-              </div>
-            </div>
-          )}
         </div>
       </DeckFrame>
 
