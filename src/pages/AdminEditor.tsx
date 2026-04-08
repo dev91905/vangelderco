@@ -9,7 +9,7 @@ import StatChipsEditor from "@/components/admin/StatChipsEditor";
 import { ArrowLeft, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
 
 const AdminEditor = () => {
   const { id } = useParams();
@@ -129,41 +129,41 @@ const AdminEditor = () => {
 
   if (!isNew && isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(0 0% 2.5%)" }}>
-        <span className="text-xs" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>Loading...</span>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(40 30% 96%)" }}>
+        <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: "hsl(0 0% 2.5%)" }}>
+    <div className="h-screen flex flex-col" style={{ background: "hsl(40 30% 96%)" }}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(0 0% 3% / 0.9)", borderBottom: "1px solid hsl(0 0% 8%)" }}>
+      <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(40 30% 96% / 0.9)", borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
         <div className="flex items-center gap-3">
-          <Link to="/admin" className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg">
-            <ArrowLeft className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
+          <Link to="/admin" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
+            <ArrowLeft className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.4)" }} />
           </Link>
-          <span className="text-xs truncate max-w-[200px] hidden md:block" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+          <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
             {title || "Untitled"}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] mr-2" style={{ ...mono, color: saveStatus === "saving" ? "hsl(0 80% 48% / 0.6)" : saveStatus === "saved" ? "hsl(120 40% 50% / 0.6)" : dirty ? "hsl(0 80% 48% / 0.5)" : "hsl(0 0% 100% / 0.15)" }}>
+          <span className="text-[12px] mr-2" style={{ ...label, color: saveStatus === "saving" ? "hsl(30 10% 12% / 0.5)" : saveStatus === "saved" ? "hsl(150 40% 40% / 0.7)" : dirty ? "hsl(30 10% 12% / 0.4)" : "hsl(30 10% 12% / 0.15)" }}>
             {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved" : dirty ? "Unsaved" : ""}
           </span>
           {slug && isPublished && (
-            <a href={`/post/${slug}`} target="_blank" rel="noopener noreferrer" className="p-2 transition-colors hover:bg-[hsl(0_0%_10%)] rounded-lg">
-              <ExternalLink className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+            <a href={`/post/${slug}`} target="_blank" rel="noopener noreferrer" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
+              <ExternalLink className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.3)" }} />
             </a>
           )}
           {!isNew && (
-            <button onClick={handleDelete} className="p-2 transition-colors hover:bg-[hsl(0_80%_48%_/_0.08)] rounded-lg">
-              <Trash2 className="w-4 h-4" style={{ color: "hsl(0 80% 48% / 0.4)" }} />
+            <button onClick={handleDelete} className="p-2 transition-colors hover:bg-[hsl(0_60%_50%_/_0.06)] rounded-xl">
+              <Trash2 className="w-4 h-4" style={{ color: "hsl(0 60% 45% / 0.4)" }} />
             </button>
           )}
           <button onClick={handleSave} disabled={createPost.isPending || updatePost.isPending}
-            className="px-4 py-2 text-xs transition-all rounded-lg"
-            style={{ ...mono, background: dirty ? "hsl(0 80% 48%)" : "transparent", color: dirty ? "hsl(0 0% 100%)" : "hsl(0 80% 48% / 0.7)", border: dirty ? "none" : "1px solid hsl(0 80% 48% / 0.3)", opacity: (createPost.isPending || updatePost.isPending) ? 0.5 : 1 }}>
+            className="px-4 py-2 text-sm transition-all rounded-full"
+            style={{ ...label, background: dirty ? "hsl(30 10% 12%)" : "transparent", color: dirty ? "hsl(40 30% 96%)" : "hsl(30 10% 12% / 0.5)", border: dirty ? "none" : "1px solid hsl(30 10% 12% / 0.15)", opacity: (createPost.isPending || updatePost.isPending) ? 0.5 : 1 }}>
             {createPost.isPending || updatePost.isPending ? "Saving..." : isNew ? "Create" : "Save"}
           </button>
         </div>
@@ -179,20 +179,17 @@ const AdminEditor = () => {
           onPasswordChange={markDirty(setPassword)}
         />
 
-        {/* Stat Chips — inline with document flow */}
         {type === "case-study" && (
           <div className="px-4 md:px-8 py-4">
             <StatChipsEditor stats={stats} onChange={markDirty(setStats)} />
           </div>
         )}
 
-        {/* Block Canvas */}
         <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto">
           <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={type === "case-study"} />
         </div>
 
-        {/* Keyboard hints — inside scroll area */}
-        <div className="flex items-center justify-center gap-4 text-[9px] py-8 mt-12" style={{ ...mono, color: "hsl(0 0% 100% / 0.1)" }}>
+        <div className="flex items-center justify-center gap-4 text-[11px] py-8 mt-12" style={{ ...label, color: "hsl(30 10% 12% / 0.15)" }}>
           <span>⌘S save</span>
           <span>/ commands</span>
           <span>⌘⇧P publish</span>

@@ -10,7 +10,9 @@ interface ImageUploaderProps {
   compact?: boolean;
 }
 
-const ImageUploader = ({ value, onChange, label = "Image", compact = false }: ImageUploaderProps) => {
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+
+const ImageUploader = ({ value, onChange, label: labelText = "Image", compact = false }: ImageUploaderProps) => {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
@@ -43,13 +45,13 @@ const ImageUploader = ({ value, onChange, label = "Image", compact = false }: Im
   if (compact && value) {
     return (
       <div className="relative group">
-        <img src={value} alt="" className="w-full h-24 object-cover rounded" style={{ border: "1px solid hsl(0 0% 15%)" }} />
+        <img src={value} alt="" className="w-full h-24 object-cover rounded-xl" style={{ border: "1px solid hsl(30 10% 12% / 0.06)" }} />
         <button
           onClick={() => onChange(null)}
-          className="absolute top-1 right-1 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: "hsl(0 80% 48%)" }}
+          className="absolute top-1 right-1 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ background: "hsl(30 10% 12%)" }}
         >
-          <X className="w-3 h-3 text-white" />
+          <X className="w-3 h-3" style={{ color: "hsl(40 30% 96%)" }} />
         </button>
       </div>
     );
@@ -57,20 +59,20 @@ const ImageUploader = ({ value, onChange, label = "Image", compact = false }: Im
 
   return (
     <div className="space-y-2">
-      {!compact && (
-        <label className="text-[10px] tracking-[0.15em] uppercase block" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.4)" }}>
-          {label}
-        </label>
+      {!compact && labelText && (
+        <span className="text-[11px] uppercase tracking-[0.06em] block" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
+          {labelText}
+        </span>
       )}
       {value ? (
         <div className="relative group">
-          <img src={value} alt="" className="w-full h-48 object-cover" style={{ border: "1px solid hsl(0 0% 15%)" }} />
+          <img src={value} alt="" className="w-full h-48 object-cover rounded-xl" style={{ border: "1px solid hsl(30 10% 12% / 0.06)" }} />
           <button
             onClick={() => onChange(null)}
-            className="absolute top-2 right-2 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
-            style={{ background: "hsl(0 80% 48%)" }}
+            className="absolute top-2 right-2 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            style={{ background: "hsl(30 10% 12%)" }}
           >
-            <X className="w-4 h-4 text-white" />
+            <X className="w-4 h-4" style={{ color: "hsl(40 30% 96%)" }} />
           </button>
         </div>
       ) : (
@@ -78,10 +80,10 @@ const ImageUploader = ({ value, onChange, label = "Image", compact = false }: Im
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
-          className="flex flex-col items-center justify-center gap-2 p-6 cursor-pointer transition-colors"
+          className="flex flex-col items-center justify-center gap-2 p-6 cursor-pointer transition-colors rounded-xl"
           style={{
-            border: `1px dashed ${dragOver ? "hsl(0 80% 48%)" : "hsl(0 0% 20%)"}`,
-            background: dragOver ? "hsl(0 80% 48% / 0.05)" : "transparent",
+            border: `1px dashed ${dragOver ? "hsl(30 10% 12% / 0.3)" : "hsl(30 10% 12% / 0.12)"}`,
+            background: dragOver ? "hsl(30 10% 12% / 0.02)" : "transparent",
           }}
           onClick={() => {
             const input = document.createElement("input");
@@ -95,13 +97,13 @@ const ImageUploader = ({ value, onChange, label = "Image", compact = false }: Im
           }}
         >
           {uploading ? (
-            <span className="text-xs" style={{ color: "hsl(0 0% 100% / 0.5)", fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-sm" style={{ color: "hsl(30 10% 12% / 0.4)", ...label }}>
               Uploading...
             </span>
           ) : (
             <>
-              <Upload className="w-5 h-5" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
-              <span className="text-[10px]" style={{ color: "hsl(0 0% 100% / 0.3)", fontFamily: "'JetBrains Mono', monospace" }}>
+              <Upload className="w-5 h-5" style={{ color: "hsl(30 10% 12% / 0.2)" }} />
+              <span className="text-[12px]" style={{ color: "hsl(30 10% 12% / 0.3)", ...label }}>
                 Drop image or click to upload
               </span>
             </>

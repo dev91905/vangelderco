@@ -19,10 +19,10 @@ const ContentCarousel = ({ slides }: ContentCarouselProps) => {
   return (
     <div className="flex flex-col gap-3">
       <div
-        className="relative w-full aspect-video flex items-center justify-center overflow-hidden"
+        className="relative w-full aspect-video flex items-center justify-center overflow-hidden rounded-xl"
         style={{
-          background: "hsl(0 0% 4%)",
-          border: "1px solid hsl(0 0% 100% / 0.06)",
+          background: "hsl(0 0% 100%)",
+          border: "1px solid hsl(30 10% 12% / 0.06)",
         }}
       >
         {slides[current].src ? (
@@ -33,10 +33,10 @@ const ContentCarousel = ({ slides }: ContentCarouselProps) => {
           />
         ) : (
           <span
-            className="text-[10px] tracking-[0.2em] uppercase"
+            className="text-[12px]"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 0% 100% / 0.15)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(30 10% 12% / 0.2)",
             }}
           >
             {slides[current].alt || `Slide ${current + 1}`}
@@ -48,14 +48,14 @@ const ContentCarousel = ({ slides }: ContentCarouselProps) => {
             <button
               onClick={() => setCurrent((c) => (c - 1 + slides.length) % slides.length)}
               className="absolute left-2 top-1/2 -translate-y-1/2 p-1"
-              style={{ color: "hsl(0 0% 100% / 0.4)" }}
+              style={{ color: "hsl(30 10% 12% / 0.4)" }}
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={() => setCurrent((c) => (c + 1) % slides.length)}
               className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
-              style={{ color: "hsl(0 0% 100% / 0.4)" }}
+              style={{ color: "hsl(30 10% 12% / 0.4)" }}
             >
               <ChevronRight size={20} />
             </button>
@@ -65,10 +65,10 @@ const ContentCarousel = ({ slides }: ContentCarouselProps) => {
 
       {slides[current].caption && (
         <span
-          className="text-[10px] tracking-[0.1em]"
+          className="text-[12px]"
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            color: "hsl(0 0% 100% / 0.3)",
+            fontFamily: "'DM Sans', sans-serif",
+            color: "hsl(30 10% 12% / 0.35)",
           }}
         >
           {slides[current].caption}
@@ -84,7 +84,7 @@ const ContentCarousel = ({ slides }: ContentCarouselProps) => {
               className="w-1.5 h-1.5 rounded-full transition-colors"
               style={{
                 background:
-                  i === current ? "hsl(0 80% 48% / 0.8)" : "hsl(0 0% 100% / 0.15)",
+                  i === current ? "hsl(30 10% 12% / 0.6)" : "hsl(30 10% 12% / 0.12)",
               }}
             />
           ))}

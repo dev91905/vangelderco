@@ -24,7 +24,7 @@ const ALL_TYPES: { type: BlockType; label: string; icon: any; caseStudyOnly?: bo
   { type: "stat-grid", label: "Stat Grid", icon: LayoutGrid, caseStudyOnly: true },
 ];
 
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
 
 const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter: externalFilter = "" }: BlockTypePickerProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -54,28 +54,28 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter: externalFilte
   }, [onClose]);
 
   const searchInput = !externalFilter && (
-    <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: "1px solid hsl(0 0% 12%)" }}>
-      <Search className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(0 0% 100% / 0.2)" }} />
+    <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
+      <Search className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(30 10% 12% / 0.2)" }} />
       <input
         ref={inputRef}
         value={localFilter}
         onChange={(e) => setLocalFilter(e.target.value)}
         placeholder="Filter..."
-        className="w-full bg-transparent outline-none text-xs"
-        style={{ ...mono, color: "hsl(0 0% 100% / 0.6)" }}
+        className="w-full bg-transparent outline-none text-sm"
+        style={{ ...label, color: "hsl(30 10% 12% / 0.6)" }}
       />
     </div>
   );
 
   const list = (
     <div className="py-1 space-y-0.5" style={{ maxHeight: isMobile ? "60vh" : "280px", overflowY: "auto" }}>
-      {types.length === 0 && <div className="px-3 py-2 text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>No matching blocks</div>}
+      {types.length === 0 && <div className="px-3 py-2 text-[12px]" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>No matching blocks</div>}
       {types.map((t, i) => (
         <button key={t.type} onClick={() => onSelect(t.type)} onMouseEnter={() => setSelectedIndex(i)}
-          className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
-          style={{ background: i === selectedIndex ? "hsl(0 80% 48% / 0.08)" : "transparent" }}>
-          <t.icon className="w-4 h-4 flex-shrink-0" style={{ color: i === selectedIndex ? "hsl(0 80% 48% / 0.7)" : "hsl(0 0% 100% / 0.25)" }} />
-          <span className="text-xs" style={{ ...mono, color: i === selectedIndex ? "hsl(0 0% 100% / 0.8)" : "hsl(0 0% 100% / 0.45)" }}>{t.label}</span>
+          className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors rounded-lg"
+          style={{ background: i === selectedIndex ? "hsl(30 10% 12% / 0.04)" : "transparent" }}>
+          <t.icon className="w-4 h-4 flex-shrink-0" style={{ color: i === selectedIndex ? "hsl(30 10% 12% / 0.6)" : "hsl(30 10% 12% / 0.25)" }} />
+          <span className="text-sm" style={{ ...label, color: i === selectedIndex ? "hsl(30 10% 12% / 0.8)" : "hsl(30 10% 12% / 0.45)" }}>{t.label}</span>
         </button>
       ))}
     </div>
@@ -84,9 +84,9 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter: externalFilte
   if (isMobile) {
     return (
       <>
-        <div className="fixed inset-0 z-50" style={{ background: "hsl(0 0% 0% / 0.6)" }} onClick={onClose} />
-        <div ref={ref} className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl pb-safe" style={{ background: "hsl(0 0% 6%)", borderTop: "1px solid hsl(0 0% 15%)" }}>
-          <div className="w-10 h-1 rounded-full mx-auto mt-3 mb-2" style={{ background: "hsl(0 0% 25%)" }} />
+        <div className="fixed inset-0 z-50" style={{ background: "hsl(30 10% 12% / 0.15)" }} onClick={onClose} />
+        <div ref={ref} className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl pb-safe" style={{ background: "hsl(40 30% 96%)", borderTop: "1px solid hsl(30 10% 12% / 0.08)" }}>
+          <div className="w-10 h-1 rounded-full mx-auto mt-3 mb-2" style={{ background: "hsl(30 10% 12% / 0.1)" }} />
           {searchInput}
           {list}
         </div>
@@ -95,7 +95,7 @@ const BlockTypePicker = ({ onSelect, onClose, isCaseStudy, filter: externalFilte
   }
 
   return (
-    <div ref={ref} className="w-52 rounded-lg shadow-2xl overflow-hidden" style={{ background: "hsl(0 0% 6%)", border: "1px solid hsl(0 0% 15%)" }}>
+    <div ref={ref} className="w-52 rounded-xl shadow-lg overflow-hidden" style={{ background: "hsl(40 30% 96%)", border: "1px solid hsl(30 10% 12% / 0.08)" }}>
       {searchInput}
       {list}
     </div>

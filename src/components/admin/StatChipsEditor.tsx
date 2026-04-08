@@ -12,6 +12,8 @@ interface StatChipsEditorProps {
   onChange: (stats: Stat[]) => void;
 }
 
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+
 const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const labelRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -37,13 +39,13 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
-        <label
-          className="text-[10px] tracking-[0.15em] uppercase flex-shrink-0"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.2)" }}
+        <span
+          className="text-[11px] tracking-[0.06em] uppercase flex-shrink-0"
+          style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}
         >
           Stat Chips
-        </label>
-        <div className="flex-1 h-px" style={{ background: "hsl(0 0% 100% / 0.05)" }} />
+        </span>
+        <div className="flex-1 h-px" style={{ background: "hsl(30 10% 12% / 0.06)" }} />
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -52,35 +54,31 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
           return (
             <div
               key={i}
-              className="group relative flex flex-col px-4 py-3 min-w-[140px] max-w-[220px] transition-opacity"
+              className="group relative flex flex-col px-4 py-3 min-w-[140px] max-w-[220px] transition-opacity rounded-xl"
               style={{
-                background: "hsl(0 0% 4%)",
-                border: "1px solid hsl(0 0% 100% / 0.06)",
-                borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
+                background: "hsl(0 0% 100%)",
+                border: "1px solid hsl(30 10% 12% / 0.06)",
+                borderLeft: "2px solid hsl(30 10% 12% / 0.2)",
                 opacity: hidden ? 0.4 : 1,
               }}
             >
-              {/* Actions — top-right, visible on hover */}
-              <div
-                className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
+              <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => update(i, { visible: !hidden })}
                   className="p-1 rounded transition-colors"
-                  style={{ color: "hsl(0 0% 100% / 0.3)" }}
+                  style={{ color: "hsl(30 10% 12% / 0.3)" }}
                 >
                   {hidden ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                 </button>
                 <button
                   onClick={() => onChange(stats.filter((_, j) => j !== i))}
-                  className="p-1 rounded transition-colors hover:bg-[hsl(0_80%_48%_/_0.15)]"
-                  style={{ color: "hsl(0 0% 100% / 0.3)" }}
+                  className="p-1 rounded transition-colors hover:bg-[hsl(0_60%_50%_/_0.06)]"
+                  style={{ color: "hsl(30 10% 12% / 0.3)" }}
                 >
                   <X className="w-3 h-3" />
                 </button>
               </div>
 
-              {/* Label — large, red, mono */}
               <input
                 ref={(el) => { labelRefs.current[i] = el; }}
                 value={stat.label}
@@ -88,35 +86,33 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
                 placeholder="$200M"
                 className="bg-transparent outline-none border-none text-lg font-medium w-full"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: hidden ? "hsl(0 0% 100% / 0.25)" : "hsl(0 80% 48% / 0.9)",
+                  ...label,
+                  color: hidden ? "hsl(30 10% 12% / 0.25)" : "hsl(30 10% 12% / 0.8)",
                   textDecoration: hidden ? "line-through" : "none",
                 }}
               />
 
-              {/* Description — small, uppercase, tracking */}
               <input
                 value={stat.description}
                 onChange={(e) => update(i, { description: e.target.value })}
                 placeholder="Description"
-                className="bg-transparent outline-none border-none text-[9px] tracking-[0.15em] uppercase mt-1 w-full"
+                className="bg-transparent outline-none border-none text-[11px] tracking-[0.05em] uppercase mt-1 w-full"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: "hsl(0 0% 100% / 0.4)",
+                  ...label,
+                  color: "hsl(30 10% 12% / 0.35)",
                 }}
               />
             </div>
           );
         })}
 
-        {/* Add card */}
         <button
           onClick={addStat}
-          className="flex flex-col items-center justify-center min-w-[100px] min-h-[72px] px-4 py-3 transition-all hover:border-[hsl(0_80%_48%_/_0.3)]"
+          className="flex flex-col items-center justify-center min-w-[100px] min-h-[72px] px-4 py-3 transition-all rounded-xl hover:border-[hsl(30_10%_12%_/_0.15)]"
           style={{
-            border: "1px dashed hsl(0 0% 100% / 0.1)",
+            border: "1px dashed hsl(30 10% 12% / 0.1)",
             background: "transparent",
-            color: "hsl(0 0% 100% / 0.15)",
+            color: "hsl(30 10% 12% / 0.2)",
           }}
         >
           <Plus className="w-5 h-5" />
