@@ -962,61 +962,64 @@ const Deck = () => {
             We know how this works because we've done it ourselves.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          {/* Tab bar */}
+          <div className="flex gap-0 w-full" style={{ borderBottom: `1px solid ${f.ink(0.08)}`, ...r5.stagger(2) }}>
             {DOMAINS.map((d, i) => {
-              const isOpen = activeDomain === d.id;
+              const isActive = activeDomain === d.id;
               return (
                 <button
                   key={d.id}
-                  onClick={() => setActiveDomain(isOpen ? null : d.id)}
-                  className="text-left transition-all duration-300"
+                  onClick={() => setActiveDomain(d.id)}
+                  className="transition-all duration-200"
                   style={{
-                    padding: "28px 24px",
-                    background: f.ink(0.02),
-                    border: `1px solid ${f.ink(isOpen ? 0.12 : 0.06)}`,
-                    borderRadius: "12px",
+                    padding: "16px 28px",
                     cursor: "pointer",
-                    opacity: r5.isActive ? 1 : 0,
-                    transform: r5.isActive ? "translateY(0)" : "translateY(12px)",
-                    transition: `all 0.5s ease ${300 + i * 150}ms`,
+                    borderBottom: isActive ? `2px solid ${f.ink(0.7)}` : "2px solid transparent",
+                    marginBottom: "-1px",
+                    background: "transparent",
+                    border: "none",
+                    borderBottomWidth: "2px",
+                    borderBottomStyle: "solid",
+                    borderBottomColor: isActive ? f.ink(0.7) : "transparent",
                   }}
                 >
-                  {/* Header row */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1">
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "6px" }}>{d.title}</p>
-                      <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.4), lineHeight: 1.5 }}>{d.tagline}</p>
-                    </div>
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginTop: "4px", flexShrink: 0, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.3s ease" }}>
-                      <path d="M4 7L9 12L14 7" stroke={f.ink(0.3)} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-
-                  {/* Expanded content */}
-                  <div style={{ maxHeight: isOpen ? "600px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isOpen ? 1 : 0 }}>
-                    <div style={{ marginTop: "20px", paddingTop: "20px", borderTop: `1px solid ${f.ink(0.06)}` }}>
-                      <div style={{ marginBottom: "20px" }}>
-                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it is</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.what}</p>
-                      </div>
-                      <div style={{ marginBottom: "20px" }}>
-                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it unlocks</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.unlocks}</p>
-                      </div>
-                      <div style={{ marginBottom: "20px" }}>
-                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What most advisors miss</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.7 }}>{d.missed}</p>
-                      </div>
-                      <div>
-                        <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>Example</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.7, fontStyle: "italic" }}>{d.example}</p>
-                      </div>
-                    </div>
-                  </div>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", fontWeight: 600, color: isActive ? f.ink(0.85) : f.ink(0.35), transition: "color 0.2s ease" }}>{d.title}</p>
                 </button>
               );
             })}
           </div>
+
+          {/* Tab content */}
+          {activeDomainData && (
+            <div
+              key={activeDomain}
+              className="w-full"
+              style={{ animation: "fade-up 0.4s ease forwards", padding: "36px 0" }}
+            >
+              <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.4), lineHeight: 1.6, marginBottom: "32px", maxWidth: "600px" }}>
+                {activeDomainData.tagline}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-6">
+                <div>
+                  <span style={{ ...label("9px"), display: "block", marginBottom: "10px" }}>What it is</span>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>{activeDomainData.what}</p>
+                </div>
+                <div>
+                  <span style={{ ...label("9px"), display: "block", marginBottom: "10px" }}>What it unlocks</span>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>{activeDomainData.unlocks}</p>
+                </div>
+                <div>
+                  <span style={{ ...label("9px"), display: "block", marginBottom: "10px" }}>What most advisors miss</span>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>{activeDomainData.missed}</p>
+                </div>
+                <div>
+                  <span style={{ ...label("9px"), display: "block", marginBottom: "10px" }}>Example</span>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.45), lineHeight: 1.7, fontStyle: "italic" }}>{activeDomainData.example}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </DeckFrame>
 
