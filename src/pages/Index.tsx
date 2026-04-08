@@ -64,10 +64,6 @@ const Index = () => {
                   style={{ background: "transparent", transition: "background 0.15s ease" }}
                 />
                 <span
-                  className="hero-nav-bar absolute left-0 top-2 bottom-2 pointer-events-none rounded-full"
-                  style={{ width: "2px", background: t.ink(0.3), opacity: 0, transition: "opacity 0.1s ease" }}
-                />
-                <span
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-normal leading-[1.15] transition-colors duration-150"
                   style={{ fontFamily: t.sans, color: t.ink(0.8) }}
                 >
