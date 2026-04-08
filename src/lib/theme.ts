@@ -45,7 +45,7 @@ const surface = {
 const heading = (size = "clamp(18px, 2.6vw, 28px)"): React.CSSProperties => ({
   fontFamily: sans,
   fontSize: size,
-  fontWeight: 600,
+  fontWeight: 700,
   color: ink(0.9),
   lineHeight: 1.3,
 });
