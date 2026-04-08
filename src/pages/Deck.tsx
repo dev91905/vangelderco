@@ -625,15 +625,15 @@ const Deck = () => {
           {/* ── Comparison table in a single card ── */}
           <div style={{
             background: f.ink(0.03),
-            borderRadius: "16px",
-            padding: "clamp(28px, 3.5vw, 48px)",
+            borderRadius: "12px",
+            padding: "clamp(16px, 2vw, 28px)",
             ...r3.stagger(2, 200),
           }}>
             {/* Column headers */}
-            <div className="grid" style={{ gridTemplateColumns: "120px 1fr 1fr", gap: "clamp(20px, 3vw, 40px)", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "16px", marginBottom: "8px" }}>
+            <div className="grid" style={{ gridTemplateColumns: "100px 1fr 1fr", gap: "clamp(12px, 2vw, 24px)", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "10px", marginBottom: "2px" }}>
               <div />
-              <p style={{ ...label("10px"), color: f.ink(0.35) }}>Your current portfolio</p>
-              <p style={{ ...label("10px"), color: f.ink(0.6) }}>How the opposition operates</p>
+              <p style={{ ...label("10px"), color: f.ink(0.5) }}>Your side</p>
+              <p style={{ ...label("10px"), color: f.ink(0.5) }}>Their side</p>
             </div>
 
             {CONFRONTATION_ROWS.map((row, i) => {
@@ -643,39 +643,42 @@ const Deck = () => {
                   key={i}
                   className="grid"
                   style={{
-                    gridTemplateColumns: "120px 1fr 1fr",
-                    gap: "clamp(20px, 3vw, 40px)",
+                    gridTemplateColumns: "100px 1fr 1fr",
+                    gap: "clamp(12px, 2vw, 24px)",
                     borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                    paddingTop: isLast ? "24px" : "18px",
-                    paddingBottom: "18px",
+                    paddingTop: isLast ? "14px" : "10px",
+                    paddingBottom: "10px",
                     borderTop: isLast ? `1px solid ${f.ink(0.12)}` : "none",
+                    opacity: r3.isActive ? 1 : 0,
+                    transform: r3.isActive ? "translateY(0)" : "translateY(8px)",
+                    transition: `opacity 0.4s ease ${200 + i * 80}ms, transform 0.4s ease ${200 + i * 80}ms`,
                   }}
                 >
                   <p style={{
                     fontFamily: f.sans,
-                    fontSize: "clamp(11px, 1.1vw, 13px)",
+                    fontSize: "11px",
                     fontWeight: 700,
-                    color: isLast ? f.ink(0.7) : f.ink(0.35),
+                    color: f.ink(0.5),
                     textTransform: "uppercase" as const,
                     letterSpacing: "0.06em",
-                    paddingTop: "3px",
+                    paddingTop: "2px",
                   }}>
                     {row.dimension}
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.4vw, 16px)",
-                    color: isLast ? f.ink(0.6) : f.ink(0.45),
-                    lineHeight: 1.7,
+                    fontSize: "clamp(12px, 1.2vw, 14px)",
+                    color: f.ink(0.7),
+                    lineHeight: 1.6,
                     fontWeight: isLast ? 500 : 400,
                   }}>
                     {row.yours}
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.4vw, 16px)",
-                    color: isLast ? f.ink(0.85) : f.ink(0.7),
-                    lineHeight: 1.7,
+                    fontSize: "clamp(12px, 1.2vw, 14px)",
+                    color: f.ink(0.7),
+                    lineHeight: 1.6,
                     fontWeight: isLast ? 600 : 400,
                   }}>
                     {row.theirs}
