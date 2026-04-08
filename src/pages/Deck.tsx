@@ -440,8 +440,8 @@ const Deck = () => {
             5 minutes
           </p>
           <div style={{ ...r1.stagger(4, 1200) }}>
-            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint 2s ease-in-out infinite", display: "block" }}>
-              ↓ scroll
+            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint-h 2s ease-in-out infinite", display: "block" }}>
+              → scroll
             </span>
           </div>
         </div>
