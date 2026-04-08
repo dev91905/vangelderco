@@ -912,9 +912,9 @@ const Deck = () => {
 
           <div className="lg:w-[65%] flex flex-col gap-4">
             {[
-              { title: "They're using the full culture stack.", rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.", help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need." },
-              { title: "They're coordinating across sectors.", rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live.", help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other." },
-              { title: "They're organizing for growth.", rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events.", help: "Run live campaigns that engage new audiences. Audit grantees for real vs. performed organizing." },
+              { title: "They use the full culture stack.", rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.", help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need." },
+              { title: "They coordinate across sectors.", rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live.", help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other." },
+              { title: "They organize for growth.", rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events.", help: "Run live campaigns that engage new audiences. Audit grantees for real vs. performed organizing." },
             ].map((h, i) => {
               const isExpanded = expandedHallmark === i;
               return (
