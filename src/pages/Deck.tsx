@@ -292,8 +292,20 @@ const Deck = () => {
         wheelTimeout = setTimeout(() => {
           if (Math.abs(accumulated) > 30) {
             const direction = accumulated > 0 ? 1 : -1;
-            const nextFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame + direction));
-            if (nextFrame !== currentFrame) scrollToFrame(nextFrame);
+            if (currentFrame === 2) {
+              // On slide 3: step through confrontation sequence
+              const nextStep = confrontationStep + direction;
+              if (nextStep >= 0 && nextStep <= CONFRONTATION_ROWS.length) {
+                setConfrontationStep(nextStep);
+              } else if (nextStep > CONFRONTATION_ROWS.length) {
+                scrollToFrame(currentFrame + 1);
+              } else {
+                scrollToFrame(currentFrame - 1);
+              }
+            } else {
+              const nextFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame + direction));
+              if (nextFrame !== currentFrame) scrollToFrame(nextFrame);
+            }
           }
           accumulated = 0;
         }, 80);
