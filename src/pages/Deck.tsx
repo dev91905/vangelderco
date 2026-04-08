@@ -612,138 +612,88 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} className="flex flex-col gap-5">
-              {/* ── Heading ── */}
-              <div style={r3.stagger(0)}>
-                <p style={{ ...heading("clamp(20px, 2.6vw, 32px)"), fontWeight: 700, marginBottom: "6px" }}>
-                  What you're up against.
-                </p>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.3vw, 17px)", color: f.ink(0.55), lineHeight: 1.5 }}>
-                  Both sides of an issue try to do the same thing — shift public opinion, force policy outcomes. But they run completely different playbooks to get there.
-                </p>
-              </div>
+        <div ref={r3.ref} className="flex flex-col gap-4">
+          <div style={r3.stagger(0)}>
+            <p style={{ ...heading("clamp(18px, 2.2vw, 28px)"), fontWeight: 700, marginBottom: "4px" }}>
+              What you're up against.
+            </p>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.45 }}>
+              Both sides of an issue try to do the same thing — shift public opinion, force policy outcomes. But they run completely different playbooks to get there.
+            </p>
+          </div>
 
-              {/* ── Interactive accordion rows ── */}
-              <div style={{
-                borderRadius: "10px",
-                overflow: "hidden",
-                border: `1px solid ${f.ink(0.08)}`,
-                ...r3.stagger(1, 200),
-              }}>
-                {CONFRONTATION_ROWS.map((row, i) => {
-                  const isOpen = openRows.has(i);
-                  const isLast = i === CONFRONTATION_ROWS.length - 1;
-                  const rowAnim = {
-                    opacity: r3.isActive ? 1 : 0,
-                    transform: r3.isActive ? "translateY(0)" : "translateY(6px)",
-                    transition: `opacity 0.35s ease ${150 + i * 60}ms, transform 0.35s ease ${150 + i * 60}ms`,
-                  };
-                  const toggleRow = () => {
-                    setOpenRows(prev => {
-                      const next = new Set(prev);
-                      if (next.has(i)) next.delete(i);
-                      else next.add(i);
-                      return next;
-                    });
-                  };
-                  return (
-                    <div key={i} style={rowAnim}>
-                      <button
-                        onClick={toggleRow}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "100%",
-                          padding: "12px 20px",
-                          background: isOpen ? f.ink(0.06) : f.ink(0.02),
-                          cursor: "pointer",
-                          border: "none",
-                          borderLeft: "none",
-                          borderRight: "none",
-                          borderBottomStyle: "solid" as const,
-                          borderBottomWidth: !isLast || isOpen ? "1px" : "0",
-                          borderBottomColor: f.ink(0.06),
-                          borderTopStyle: "solid" as const,
-                          borderTopWidth: isLast && !isOpen ? "2px" : "0",
-                          borderTopColor: f.ink(0.1),
-                          transition: "background 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => { if (!isOpen) e.currentTarget.style.background = f.ink(0.04); }}
-                        onMouseLeave={(e) => { if (!isOpen) e.currentTarget.style.background = f.ink(0.02); }}
-                      >
-                        <p style={{
-                          fontFamily: f.sans,
-                          fontSize: "11px",
-                          fontWeight: 700,
-                          color: isOpen ? f.ink(0.7) : f.ink(0.45),
-                          textTransform: "uppercase" as const,
-                          letterSpacing: "0.08em",
-                          transition: "color 0.2s ease",
-                        }}>
-                          {row.dimension}
-                        </p>
-                        <span style={{
-                          fontFamily: f.sans,
-                          fontSize: "14px",
-                          color: f.ink(0.3),
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                          transition: "transform 0.25s ease",
-                          display: "inline-block",
-                        }}>
-                          +
-                        </span>
-                      </button>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "80px 1fr 1fr",
+            borderRadius: "8px",
+            overflow: "hidden",
+            border: `1px solid ${f.ink(0.07)}`,
+            ...r3.stagger(1, 150),
+          }}>
+            {/* Header row */}
+            <div style={{ padding: "7px 12px", background: f.ink(0.04), borderBottom: `1px solid ${f.ink(0.07)}`, borderRight: `1px solid ${f.ink(0.05)}` }} />
+            <div style={{ padding: "7px 12px", background: f.ink(0.04), borderBottom: `1px solid ${f.ink(0.07)}`, borderRight: `1px solid ${f.ink(0.05)}` }}>
+              <p style={{ ...label("8px"), color: f.ink(0.4) }}>Your side</p>
+            </div>
+            <div style={{ padding: "7px 12px", background: f.ink(0.06), borderBottom: `1px solid ${f.ink(0.07)}` }}>
+              <p style={{ ...label("8px"), color: f.ink(0.5) }}>Their side</p>
+            </div>
 
-                      <div style={{
-                        maxHeight: isOpen ? "300px" : "0",
-                        overflow: "hidden",
-                        transition: "max-height 0.35s ease",
-                      }}>
-                        <div style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gap: "0",
-                        }}>
-                          {/* Your side */}
-                          <div style={{
-                            padding: "16px 20px",
-                            background: f.ink(0.02),
-                            borderRight: `1px solid ${f.ink(0.06)}`,
-                          }}>
-                            <p style={{ ...label("9px"), color: f.ink(0.35), marginBottom: "6px" }}>Your side</p>
-                            <p style={{
-                              fontFamily: f.serif,
-                              fontSize: "clamp(13px, 1.3vw, 15px)",
-                              color: f.ink(0.55),
-                              lineHeight: 1.6,
-                              fontWeight: isLast ? 500 : 400,
-                            }}>
-                              {row.yours}
-                            </p>
-                          </div>
-                          {/* Their side — subtle warm tint, not heavy black */}
-                          <div style={{
-                            padding: "16px 20px",
-                            background: f.ink(0.07),
-                          }}>
-                            <p style={{ ...label("9px"), color: f.ink(0.4), marginBottom: "6px" }}>Their side</p>
-                            <p style={{
-                              fontFamily: f.serif,
-                              fontSize: "clamp(13px, 1.3vw, 15px)",
-                              color: f.ink(0.75),
-                              lineHeight: 1.6,
-                              fontWeight: isLast ? 600 : 500,
-                            }}>
-                              {row.theirs}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            {CONFRONTATION_ROWS.map((row, i) => {
+              const isLast = i === CONFRONTATION_ROWS.length - 1;
+              const anim = {
+                opacity: r3.isActive ? 1 : 0,
+                transform: r3.isActive ? "translateY(0)" : "translateY(4px)",
+                transition: `opacity 0.3s ease ${100 + i * 50}ms, transform 0.3s ease ${100 + i * 50}ms`,
+              };
+              return (
+                <React.Fragment key={i}>
+                  <div style={{
+                    padding: "8px 12px",
+                    background: f.ink(0.02),
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.04)}` : "none",
+                    borderRight: `1px solid ${f.ink(0.05)}`,
+                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
+                    display: "flex", alignItems: "flex-start",
+                    ...anim,
+                  }}>
+                    <p style={{
+                      fontFamily: f.sans, fontSize: "8px", fontWeight: 700,
+                      color: f.ink(0.4), textTransform: "uppercase" as const,
+                      letterSpacing: "0.06em", paddingTop: "1px",
+                    }}>{row.dimension}</p>
+                  </div>
+                  <div style={{
+                    padding: "8px 12px",
+                    background: f.ink(0.01),
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.04)}` : "none",
+                    borderRight: `1px solid ${f.ink(0.05)}`,
+                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
+                    ...anim,
+                  }}>
+                    <p style={{
+                      fontFamily: f.serif, fontSize: "clamp(11px, 1vw, 13px)",
+                      color: f.ink(0.55), lineHeight: 1.5,
+                      fontWeight: isLast ? 500 : 400,
+                    }}>{row.yours}</p>
+                  </div>
+                  <div style={{
+                    padding: "8px 12px",
+                    background: f.ink(0.05),
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
+                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
+                    ...anim,
+                  }}>
+                    <p style={{
+                      fontFamily: f.serif, fontSize: "clamp(11px, 1vw, 13px)",
+                      color: f.ink(0.72), lineHeight: 1.5,
+                      fontWeight: isLast ? 600 : 500,
+                    }}>{row.theirs}</p>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
         </div>
       </DeckFrame>
 
