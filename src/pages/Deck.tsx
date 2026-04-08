@@ -489,13 +489,29 @@ const Deck = () => {
             For donor advisors and program officers who want a portfolio that{" "}
             <em style={{ fontStyle: "italic", color: f.white(0.9) }}>hits harder.</em>
           </p>
+          <p
+            style={{
+              ...r1.stagger(3, 450),
+              fontFamily: f.sg,
+              fontSize: "clamp(15px, 2vw, 22px)",
+              fontWeight: 400,
+              color: f.white(0.45),
+              lineHeight: 1.6,
+              maxWidth: "640px",
+              margin: 0,
+            }}
+          >
+            Everything we know about effective strategic communications — in five minutes.
+            <br />
+            How we think, how we work, and what we'd do with your portfolio.
+          </p>
           <div
             style={{
-              ...r1.stagger(3, 600),
+              ...r1.stagger(4, 600),
               display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              gap: "16px",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "12px",
             }}
           >
             <button
@@ -524,31 +540,18 @@ const Deck = () => {
                 e.currentTarget.style.borderColor = f.redA(0.45);
               }}
             >
-              Start the walkthrough →
+              Go →
             </button>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-              <p
-                style={{
-                  fontFamily: f.sg,
-                  fontSize: "clamp(14px, 1.6vw, 18px)",
-                  color: f.white(0.35),
-                  lineHeight: 1.4,
-                  margin: 0,
-                }}
-              >
-                5 minutes
-              </p>
-              <span
-                style={{
-                  ...mono("9px"),
-                  color: f.white(0.28),
-                  animation: "deck-scroll-hint-h 2s ease-in-out infinite",
-                  display: "block",
-                }}
-              >
-                Use mouse wheel, trackpad, or ← → keys
-              </span>
-            </div>
+            <span
+              style={{
+                ...mono("9px"),
+                color: f.white(0.28),
+                animation: "deck-scroll-hint-h 2s ease-in-out infinite",
+                display: "block",
+              }}
+            >
+              Use mouse wheel, trackpad, or ← → keys
+            </span>
           </div>
         </div>
       </DeckFrame>
