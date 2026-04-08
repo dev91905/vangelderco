@@ -58,7 +58,7 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
           </h1>
 
           {post.excerpt && (
-            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ fontFamily: t.sans, color: t.ink(0.5), animation: "fade-up 0.5s ease-out 0.35s both" }}>
+            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ ...t.body(0.5), fontSize: "clamp(15px, 1.7vw, 15px)", textAlign: "center", animation: "fade-up 0.5s ease-out 0.35s both" }}>
               {post.excerpt}
             </p>
           )}
@@ -73,7 +73,7 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
 
           <article className="w-full" style={{ animation: "fade-up 0.6s ease-out 0.6s both" }}>
             {post.content_blocks ? <ContentBlockRenderer blocks={post.content_blocks} /> : (
-              <p className="text-[15px] leading-[1.9]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>No content available.</p>
+              <p className="text-[15px] leading-[1.9]" style={{ ...t.body(0.4), fontSize: "clamp(15px, 1.7vw, 15px)" }}>No content available.</p>
             )}
           </article>
         </main>

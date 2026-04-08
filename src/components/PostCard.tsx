@@ -53,7 +53,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="text-[12px] md:text-[13px] leading-relaxed" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
+          <p className="text-[12px] md:text-[13px] leading-relaxed" style={{ ...t.body(0.4), fontSize: "clamp(12px, 1.4vw, 13px)" }}>
             {post.excerpt}
           </p>
         )}
