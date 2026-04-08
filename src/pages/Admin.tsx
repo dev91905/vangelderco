@@ -76,9 +76,10 @@ const Admin = () => {
   const { data: settings } = useSiteSettings();
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
+  const [bookingLink, setBookingLink] = useState<string>("");
   const [pwLoaded, setPwLoaded] = useState(false);
 
-  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setPwLoaded(true); }
+  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setBookingLink(settings.booking_link || ""); setPwLoaded(true); }
 
   const typeChips = [
     { value: "all", label: "All" },
