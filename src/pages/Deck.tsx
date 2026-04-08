@@ -348,6 +348,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
+  const r12 = useFrameReveal();
 
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
