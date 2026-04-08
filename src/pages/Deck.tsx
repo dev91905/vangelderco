@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, FormEvent } from "react";
+import React, { useEffect, useRef, useState, useCallback, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
