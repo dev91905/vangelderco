@@ -54,7 +54,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
           </h1>
 
           {post.excerpt && (
-            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ ...t.body(0.5), fontSize: "clamp(15px, 1.7vw, 15px)", textAlign: "center", animation: "fade-up 0.5s ease-out 0.35s both" }}>
+            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ ...t.body(), fontSize: "clamp(17px, 1.9vw, 19px)", textAlign: "center", animation: "fade-up 0.5s ease-out 0.35s both" }}>
               {post.excerpt}
             </p>
           )}
@@ -83,7 +83,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
           <article className="w-full" style={{ animation: "fade-up 0.6s ease-out 0.7s both" }}>
             {post.content_blocks ? <ContentBlockRenderer blocks={post.content_blocks} renderExtended={renderExtended} /> : (
-              <p className="text-[15px] leading-[1.9]" style={{ ...t.body(0.4), fontSize: "clamp(15px, 1.7vw, 15px)" }}>No content available.</p>
+              <p className="text-[15px] leading-[1.9]" style={t.body()}>No content available.</p>
             )}
           </article>
         </main>
