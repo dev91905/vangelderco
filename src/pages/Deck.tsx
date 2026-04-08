@@ -280,20 +280,36 @@ const Deck = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
-  // Mouse wheel → horizontal scroll
+  // Mouse wheel → horizontal scroll (snap-aware)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    let wheelTimeout: ReturnType<typeof setTimeout> | null = null;
+    let accumulated = 0;
     const handler = (e: WheelEvent) => {
       if (selectedCase !== null) return;
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
-        el.scrollLeft += e.deltaY;
+        accumulated += e.deltaY;
+        if (wheelTimeout) clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+          if (Math.abs(accumulated) > 30) {
+            const direction = accumulated > 0 ? 1 : -1;
+            const nextFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame + direction));
+            if (nextFrame !== currentFrame) {
+              scrollToFrame(nextFrame);
+            }
+          }
+          accumulated = 0;
+        }, 80);
       }
     };
     el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
-  }, [selectedCase]);
+    return () => {
+      el.removeEventListener("wheel", handler);
+      if (wheelTimeout) clearTimeout(wheelTimeout);
+    };
+  }, [selectedCase, currentFrame, scrollToFrame]);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => {
     frameRefs.current[i] = el;
