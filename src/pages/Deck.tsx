@@ -460,7 +460,7 @@ const Deck = () => {
               What's getting in your way?
             </p>
             <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r2.stagger(1), flex: "1 1 50%" }}>
-              More foundations are rethinking their stratcomm portfolios than ever. If you're here, you're probably one of them. These are the challenges we see most — select all that resonate.
+              More foundations are rethinking their stratcomm portfolios than ever. These are the challenges we see most — select all that resonate.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 100)}>
