@@ -959,7 +959,7 @@ const Deck = () => {
             Here's how we can help.
           </p>
           <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
-            We know this works because we've done it ourselves.
+            We know how to help you level up because we've done it ourselves.
           </p>
 
           <div className="flex w-full gap-3 mb-1">
