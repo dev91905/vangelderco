@@ -313,7 +313,7 @@ const Deck = () => {
     };
     el.addEventListener("wheel", handler, { passive: false });
     return () => { el.removeEventListener("wheel", handler); if (wheelTimeout) clearTimeout(wheelTimeout); };
-  }, [selectedCase, currentFrame, scrollToFrame]);
+  }, [selectedCase, currentFrame, confrontationStep, scrollToFrame]);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
