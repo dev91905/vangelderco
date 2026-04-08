@@ -555,7 +555,6 @@ const Deck = () => {
                     fontSize: "clamp(12px, 1.4vw, 15px)",
                     color: isFocused ? f.ink(0.8) : f.ink(0.55),
                     lineHeight: 1.7,
-                    borderLeft: `2px solid ${isFocused ? f.ink(0.3) : f.ink(0.06)}`,
                     transition: "all 0.5s ease",
                   }}>
                     {row.theirs}
@@ -567,7 +566,7 @@ const Deck = () => {
 
           {confrontationStep >= CONFRONTATION_ROWS.length - 1 && (
             <div className="mt-10 max-w-[600px]" style={{ opacity: 0, animation: "deck-fade-up 0.8s ease 600ms forwards" }}>
-              <p style={{ ...body(0.5), borderLeft: `2px solid ${f.ink(0.15)}`, paddingLeft: "16px" }}>
+              <p style={{ ...body(0.5), paddingLeft: "16px" }}>
                 You test messages in a petri dish and pay people to watch the winners.{" "}
                 <span style={{ color: f.ink(0.8) }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
               </p>
@@ -585,7 +584,7 @@ const Deck = () => {
               <span style={{ color: f.ink(0.5) }}>actually producing results.</span>
             </p>
             {selectedPainDatas.length > 0 && (
-              <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", borderLeft: `2px solid ${f.ink(0.1)}`, paddingLeft: "12px" }}>
+              <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
                 You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
@@ -685,7 +684,7 @@ const Deck = () => {
                 <span style={{ ...label("10px"), display: "block", marginBottom: "12px" }}>What donor advisors usually miss</span>
                 <p style={{ ...body(0.5), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.missed}</p>
                 <span style={{ ...label("10px"), display: "block", marginTop: "24px", marginBottom: "12px" }}>In practice</span>
-                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic", borderLeft: `2px solid ${f.ink(0.08)}`, paddingLeft: "12px" }}>{activeDomainData.example}</p>
+                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic" }}>{activeDomainData.example}</p>
               </div>
             </div>
           )}
@@ -750,7 +749,7 @@ const Deck = () => {
               Most grantee reports measure activity.{" "}
               <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", color: f.ink(0.45), lineHeight: 1.55, borderLeft: `2px solid ${f.ink(0.1)}`, paddingLeft: "16px" }}>
+            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", color: f.ink(0.45), lineHeight: 1.55 }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
@@ -758,7 +757,7 @@ const Deck = () => {
           <div className="lg:w-[60%]">
             <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ ...label("10px"), padding: "14px 20px" }}>What most grantees report</div>
-              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6), borderLeft: `2px solid ${f.ink(0.06)}` }}>What we track</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6) }}>What we track</div>
             </div>
             {METRICS_ROWS.map((row, i) => {
               const delay = 300 + i * 200;
@@ -774,7 +773,7 @@ const Deck = () => {
                   }}
                 >
                   <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6, borderLeft: `2px solid ${f.ink(0.06)}` }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
@@ -829,7 +828,7 @@ const Deck = () => {
                     <span style={{ ...label("9px") }}>{p.time}</span>
                   </div>
                   {p.bullets.map((b, i) => (
-                    <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.ink(0.06)}` }}>{b}</p>
+                    <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px" }}>{b}</p>
                   ))}
                   <p style={{ ...body(0.55), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
                     <strong style={{ color: f.ink(0.75) }}>Output:</strong> {p.output}
