@@ -12,7 +12,7 @@ interface DeckFrameProps {
 }
 
 const modeStyles: Record<FrameMode, string> = {
-  narrow: "max-w-[680px] px-10 md:px-16",
+  narrow: "max-w-[720px] px-8 md:px-16",
   wide: "max-w-[1400px] px-8 md:px-20 lg:px-28",
   full: "w-full px-8 md:px-16 lg:px-24",
 };

@@ -377,14 +377,14 @@ const Deck = () => {
       </div>
 
       {/* ═══ FRAME 1: Hero ═══ */}
-      <DeckFrame ref={setRef(0)} mode="wide">
-        <div ref={r1.ref} className="flex flex-col items-start gap-8 min-h-[60vh] justify-center">
+      <DeckFrame ref={setRef(0)} mode="narrow">
+        <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <h1
             style={{
               ...r1.stagger(0),
               fontFamily: f.sans,
-              fontSize: "clamp(40px, 7vw, 88px)",
-              fontWeight: 400,
+              fontSize: "clamp(36px, 5.5vw, 64px)",
+              fontWeight: 700,
               color: f.ink(0.92),
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
@@ -404,7 +404,7 @@ const Deck = () => {
             }}
           >
             For donor advisors and program officers who want a portfolio that{" "}
-            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.75) }}>hits harder.</em>
+            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.65) }}>hits harder.</em>
           </p>
           <div
             style={{
@@ -412,7 +412,7 @@ const Deck = () => {
               display: "flex",
               flexWrap: "wrap",
               alignItems: "center",
-              gap: "20px",
+              gap: "24px",
             }}
           >
             <button
@@ -437,14 +437,9 @@ const Deck = () => {
             >
               Start the walkthrough →
             </button>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", color: f.ink(0.3), lineHeight: 1.4, margin: 0 }}>
-                5 minutes
-              </p>
-              <span style={{ fontFamily: f.sans, fontSize: "10px", color: f.ink(0.2), animation: "deck-scroll-hint-h 2s ease-in-out infinite", display: "block" }}>
-                Use mouse wheel, trackpad, or ← → keys
-              </span>
-            </div>
+            <span style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em", color: f.ink(0.25) }}>
+              5 min read · scroll or arrow keys
+            </span>
           </div>
         </div>
       </DeckFrame>
