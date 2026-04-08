@@ -239,6 +239,7 @@ const Deck = () => {
   const { data: siteSettings } = useSiteSettings();
   const bookingLink = siteSettings?.booking_link || null;
 
+  useEffect(() => {
     const observers: IntersectionObserver[] = [];
     frameRefs.current.forEach((el, i) => {
       if (!el) return;
