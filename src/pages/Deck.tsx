@@ -454,27 +454,16 @@ const Deck = () => {
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide">
-        <div ref={r2.ref} className="flex flex-col" style={{ gap: "clamp(20px, 3vw, 36px)" }}>
-          {/* ── Editorial heading — split layout ── */}
-          <div className="flex flex-col lg:flex-row lg:items-end" style={{ gap: "clamp(12px, 2vw, 32px)", ...r2.stagger(0) }}>
-            <p style={{ ...heading("clamp(22px, 3vw, 38px)"), fontWeight: 700, flex: "1 1 45%", lineHeight: 1.15 }}>
+        <div ref={r2.ref} className="flex flex-col gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-36">
+            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "1 1 50%" }}>
               What's getting in your way?
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.45), lineHeight: 1.55, flex: "1 1 55%" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r2.stagger(1), flex: "1 1 50%" }}>
               More foundations are rethinking their stratcomm portfolios than ever. If you're here, you're probably one of them. These are the challenges we see most — select all that resonate.
             </p>
           </div>
-
-          {/* ── Pain point grid — editorial cards ── */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1px",
-            background: f.ink(0.07),
-            borderRadius: "6px",
-            overflow: "hidden",
-            ...r2.stagger(1, 100),
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 100)}>
             {PAIN_POINTS.map((pain, i) => {
               const isSelected = selectedPains.includes(pain.id);
               return (
@@ -483,95 +472,73 @@ const Deck = () => {
                   onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
                   className="text-left"
                   style={{
-                    padding: "clamp(18px, 2vw, 28px) clamp(16px, 1.8vw, 24px)",
-                    background: isSelected ? f.ink(0.05) : `hsl(40 25% 98%)`,
+                    padding: "28px 24px",
+                    border: isSelected ? `1px solid ${f.ink(0.15)}` : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? f.ink(0.08) : "transparent",
+                    borderRadius: "12px",
                     cursor: "pointer",
-                    border: "none",
                     opacity: r2.isActive ? 1 : 0,
-                    transform: r2.isActive ? "translateY(0)" : "translateY(6px)",
-                    transition: `opacity 0.3s ease ${80 + i * 50}ms, transform 0.3s ease ${80 + i * 50}ms, background 0.2s ease`,
-                    position: "relative" as const,
+                    transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
+                    transition: `opacity 0.3s ease ${100 + i * 60}ms, transform 0.3s ease ${100 + i * 60}ms, background 0.15s ease, border 0.15s ease`,
                   }}
-                  onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = f.ink(0.03); }}
-                  onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = `hsl(40 25% 98%)`; }}
                 >
-                  {/* Selection indicator */}
-                  {isSelected && (
-                    <div style={{
-                      position: "absolute",
-                      top: 0, left: 0, right: 0,
-                      height: "2px",
-                      background: f.ink(0.5),
-                    }} />
-                  )}
-                  <p style={{
-                    fontFamily: f.sans,
-                    fontSize: "clamp(13px, 1.4vw, 16px)",
-                    fontWeight: 600,
-                    color: f.ink(isSelected ? 0.9 : 0.7),
-                    marginBottom: "6px",
-                    lineHeight: 1.3,
-                    transition: "color 0.2s ease",
-                  }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
                     {pain.short}
                   </p>
-                  <p style={{
-                    fontFamily: f.serif,
-                    fontSize: "clamp(11.5px, 1.1vw, 13.5px)",
-                    color: f.ink(0.4),
-                    lineHeight: 1.55,
-                  }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
                     {pain.detail}
                   </p>
                   {isSelected && (
-                    <p style={{
-                      marginTop: "10px",
-                      paddingTop: "8px",
-                      borderTop: `1px solid ${f.ink(0.08)}`,
-                      fontFamily: f.serif,
-                      fontSize: "clamp(11px, 1vw, 13px)",
-                      color: f.ink(0.45),
-                      lineHeight: 1.55,
-                      fontStyle: "italic",
-                    }}>
+                    <p
+                      style={{
+                        marginTop: "16px",
+                        paddingTop: "12px",
+                        borderTop: `1px solid ${f.ink(0.1)}`,
+                        fontFamily: f.serif,
+                        fontSize: "clamp(12px, 1.3vw, 14px)",
+                        color: f.ink(0.5),
+                        lineHeight: 1.6,
+                        fontStyle: "italic",
+                      }}
+                    >
                       {pain.consequence}
                     </p>
                   )}
                 </button>
               );
             })}
-            {/* 6th cell — Something else */}
+            {/* 6th card — Something else */}
             <div
               style={{
-                padding: "clamp(18px, 2vw, 28px) clamp(16px, 1.8vw, 24px)",
-                background: customOpen ? f.ink(0.03) : `hsl(40 25% 98%)`,
+                padding: "28px 24px",
+                border: `1px dashed ${f.ink(0.12)}`,
+                background: customOpen ? f.ink(0.03) : "transparent",
+                borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
-                transform: r2.isActive ? "translateY(0)" : "translateY(6px)",
-                transition: "opacity 0.3s ease 330ms, transform 0.3s ease 330ms, background 0.2s ease",
+                transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
+                transition: "opacity 0.3s ease 400ms, transform 0.3s ease 400ms, background 0.15s ease",
               }}
             >
               {customSubmitted ? (
-                <p style={{ fontFamily: f.sans, fontSize: "14px", fontWeight: 600, color: f.ink(0.6) }}>
-                  Noted — thank you. ✓
+                <p style={{ fontFamily: f.sans, fontSize: "15px", fontWeight: 600, color: f.ink(0.7) }}>
+                  Thanks — noted. ✓
                 </p>
               ) : !customOpen ? (
                 <button
                   onClick={() => setCustomOpen(true)}
-                  className="text-left w-full h-full"
+                  className="text-left w-full"
                   style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                  onMouseEnter={(e) => { e.currentTarget.parentElement!.style.background = f.ink(0.03); }}
-                  onMouseLeave={(e) => { e.currentTarget.parentElement!.style.background = `hsl(40 25% 98%)`; }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.5), marginBottom: "6px", lineHeight: 1.3 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
                     Something else
                   </p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(11.5px, 1.1vw, 13.5px)", color: f.ink(0.35), lineHeight: 1.55 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
                     Tell us what you're dealing with.
                   </p>
                 </button>
               ) : (
                 <form onSubmit={handleCustomSubmit} className="flex flex-col gap-3">
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.7) }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
                     What's your challenge?
                   </p>
                   <textarea
@@ -582,26 +549,51 @@ const Deck = () => {
                     rows={3}
                     maxLength={500}
                     style={{
-                      fontFamily: f.serif, fontSize: "13px", color: f.ink(0.7),
-                      background: "white", border: `1px solid ${f.ink(0.08)}`,
-                      borderRadius: "4px", padding: "10px", resize: "none", outline: "none",
+                      fontFamily: f.sans,
+                      fontSize: "14px",
+                      color: f.ink(0.8),
+                      background: "white",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      borderRadius: "8px",
+                      padding: "12px",
+                      resize: "none",
+                      outline: "none",
                     }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.18))}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.08))}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
                   />
                   <div className="flex items-center gap-2">
-                    <button type="submit" disabled={!customMessage.trim() || customSubmitting}
+                    <button
+                      type="submit"
+                      disabled={!customMessage.trim() || customSubmitting}
                       style={{
-                        fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.06em", fontWeight: 600,
-                        color: f.cream, background: customMessage.trim() ? f.ink(0.8) : f.ink(0.2),
-                        border: "none", padding: "7px 18px", borderRadius: "999px",
-                        cursor: customMessage.trim() ? "pointer" : "default", transition: "background 0.15s ease",
+                        fontFamily: f.sans,
+                        fontSize: "12px",
+                        letterSpacing: "0.04em",
+                        fontWeight: 600,
+                        color: f.cream,
+                        background: customMessage.trim() ? f.ink(0.85) : f.ink(0.2),
+                        border: "none",
+                        padding: "8px 20px",
+                        borderRadius: "999px",
+                        cursor: customMessage.trim() ? "pointer" : "default",
+                        transition: "background 0.15s ease",
                       }}
                     >
                       {customSubmitting ? "Sending…" : "Submit"}
                     </button>
-                    <button type="button" onClick={() => { setCustomOpen(false); setCustomMessage(""); }}
-                      style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.3), background: "none", border: "none", cursor: "pointer", padding: "7px 10px" }}
+                    <button
+                      type="button"
+                      onClick={() => { setCustomOpen(false); setCustomMessage(""); }}
+                      style={{
+                        fontFamily: f.sans,
+                        fontSize: "12px",
+                        color: f.ink(0.35),
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: "8px 12px",
+                      }}
                     >
                       Cancel
                     </button>
@@ -610,9 +602,8 @@ const Deck = () => {
               )}
             </div>
           </div>
-
           {selectedPains.length === 0 && (
-            <p style={{ ...label("9px"), ...r2.stagger(2, 600) }}>
+            <p style={{ ...label("9px"), ...r2.stagger(3, 800) }}>
               → or skip and keep scrolling
             </p>
           )}
@@ -621,16 +612,13 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} className="flex flex-col" style={{ gap: "clamp(24px, 3.5vw, 40px)" }}>
+        <div ref={r3.ref} className="flex flex-col" style={{ gap: "clamp(20px, 3vw, 36px)" }}>
           {/* ── Editorial heading — split layout ── */}
           <div className="flex flex-col lg:flex-row lg:items-end" style={{ gap: "clamp(12px, 2vw, 32px)", ...r3.stagger(0) }}>
-            <div style={{ flex: "1 1 45%" }}>
-              <p style={{ ...heading("clamp(24px, 3.2vw, 42px)"), fontWeight: 700, lineHeight: 1.1 }}>
-                What you're up against.
-              </p>
-              <div style={{ width: "40px", height: "2px", background: f.ink(0.15), marginTop: "12px" }} />
-            </div>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.42), lineHeight: 1.55, flex: "1 1 55%" }}>
+            <p style={{ ...heading("clamp(22px, 3vw, 38px)"), fontWeight: 700, flex: "1 1 45%", lineHeight: 1.15 }}>
+              What you're up against.
+            </p>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.45), lineHeight: 1.55, flex: "1 1 55%" }}>
               Both sides of an issue try to do the same thing — shift public opinion, force policy outcomes. But they run completely different playbooks to get there.
             </p>
           </div>
@@ -640,16 +628,14 @@ const Deck = () => {
             {/* Column headers */}
             <div style={{
               display: "grid",
-              gridTemplateColumns: "clamp(100px, 10vw, 140px) 1fr 1fr",
-              borderBottom: `2px solid ${f.ink(0.12)}`,
-              paddingBottom: "10px",
+              gridTemplateColumns: "1fr 1fr",
+              paddingLeft: "clamp(90px, 9vw, 130px)",
+              borderBottom: `1.5px solid ${f.ink(0.12)}`,
+              paddingBottom: "8px",
+              marginBottom: "0",
             }}>
-              <div />
-              <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "clamp(12px, 1.5vw, 20px)" }}>Your side</p>
-              <div style={{ paddingLeft: "clamp(12px, 1.5vw, 20px)", display: "flex", alignItems: "center", gap: "8px" }}>
-                <div style={{ width: "12px", height: "1.5px", background: f.ink(0.4) }} />
-                <p style={{ ...label("9px"), color: f.ink(0.55), fontWeight: 700 }}>Their side</p>
-              </div>
+              <p style={{ ...label("9px"), color: f.ink(0.35) }}>Your side</p>
+              <p style={{ ...label("9px"), color: f.ink(0.55), fontWeight: 700 }}>Their side</p>
             </div>
 
             {/* Rows */}
@@ -663,67 +649,46 @@ const Deck = () => {
               return (
                 <div
                   key={i}
-                  className="confrontation-row"
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "clamp(100px, 10vw, 140px) 1fr 1fr",
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                    borderTop: isLast ? `2px solid ${f.ink(0.12)}` : "none",
-                    transition: "background 0.15s ease",
-                    borderRadius: "2px",
+                    gridTemplateColumns: "clamp(90px, 9vw, 130px) 1fr 1fr",
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
+                    borderTop: isLast ? `1.5px solid ${f.ink(0.12)}` : "none",
                     ...anim,
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(0.02); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                 >
                   {/* Dimension label */}
-                  <div style={{
-                    padding: "clamp(12px, 1.4vw, 18px) 0",
-                    paddingRight: "16px",
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: "8px",
-                  }}>
-                    <span style={{
-                      fontFamily: f.sans,
-                      fontSize: "8px",
-                      fontWeight: 500,
-                      color: f.ink(0.18),
-                      fontVariantNumeric: "tabular-nums",
-                    }}>{String(i + 1).padStart(2, "0")}</span>
+                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) 0", paddingRight: "16px" }}>
                     <p style={{
                       fontFamily: f.sans,
                       fontSize: "9px",
                       fontWeight: 600,
-                      color: f.ink(isLast ? 0.5 : 0.3),
+                      color: f.ink(0.3),
                       textTransform: "uppercase" as const,
                       letterSpacing: "0.1em",
                       lineHeight: 1.4,
                     }}>{row.dimension}</p>
                   </div>
                   {/* Your side */}
-                  <div style={{
-                    padding: "clamp(12px, 1.4vw, 18px) clamp(14px, 1.8vw, 24px)",
-                    borderLeft: `1px solid ${f.ink(0.05)}`,
-                  }}>
+                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)", borderLeft: `1px solid ${f.ink(0.06)}` }}>
                     <p style={{
                       fontFamily: f.serif,
-                      fontSize: "clamp(12.5px, 1.15vw, 14.5px)",
-                      color: f.ink(0.42),
-                      lineHeight: 1.6,
+                      fontSize: "clamp(12px, 1.1vw, 14px)",
+                      color: f.ink(0.45),
+                      lineHeight: 1.55,
                     }}>{row.yours}</p>
                   </div>
                   {/* Their side */}
                   <div style={{
-                    padding: "clamp(12px, 1.4vw, 18px) clamp(14px, 1.8vw, 24px)",
-                    borderLeft: `1px solid ${f.ink(0.05)}`,
-                    background: isLast ? f.ink(0.025) : "transparent",
+                    padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)",
+                    borderLeft: `1px solid ${f.ink(0.06)}`,
+                    background: isLast ? f.ink(0.03) : "transparent",
                   }}>
                     <p style={{
                       fontFamily: f.serif,
-                      fontSize: "clamp(12.5px, 1.15vw, 14.5px)",
-                      color: f.ink(0.72),
-                      lineHeight: 1.6,
+                      fontSize: "clamp(12px, 1.1vw, 14px)",
+                      color: f.ink(0.75),
+                      lineHeight: 1.55,
                       fontWeight: isLast ? 600 : 500,
                     }}>{row.theirs}</p>
                   </div>
