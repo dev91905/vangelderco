@@ -262,10 +262,32 @@ const Deck = () => {
     frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Keyboard nav
+  // Keyboard nav (global, no focus required)
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const focusDeck = () => {
+      if (document.activeElement !== el) {
+        el.focus({ preventScroll: true });
+      }
+    };
+
+    focusDeck();
+    const focusTimer = window.setTimeout(focusDeck, 50);
+
     const handler = (e: KeyboardEvent) => {
       if (selectedCase !== null) return;
+
+      const target = e.target as HTMLElement | null;
+      const isTypingTarget =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.tagName === "SELECT" ||
+        target?.isContentEditable;
+
+      if (isTypingTarget) return;
+
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
         scrollToFrame(currentFrame + 1);
@@ -276,8 +298,15 @@ const Deck = () => {
         navigate("/");
       }
     };
+
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("pointerdown", focusDeck);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("pointerdown", focusDeck);
+      window.clearTimeout(focusTimer);
+    };
   }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
   // Mouse wheel → horizontal scroll (snap-aware)
@@ -353,7 +382,9 @@ const Deck = () => {
   return (
     <div
       ref={containerRef}
-      className="relative bg-background deck-scroll"
+      tabIndex={0}
+      aria-label="Interactive deck"
+      className="relative bg-background deck-scroll outline-none"
       style={{
         height: "100dvh",
         width: "100vw",
@@ -458,22 +489,66 @@ const Deck = () => {
             For donor advisors and program officers who want a portfolio that{" "}
             <em style={{ fontStyle: "italic", color: f.white(0.9) }}>hits harder.</em>
           </p>
-          <p
+          <div
             style={{
               ...r1.stagger(3, 600),
-              fontFamily: f.sg,
-              fontSize: "clamp(14px, 1.6vw, 18px)",
-              color: f.white(0.35),
-              lineHeight: 1.6,
-              maxWidth: "560px",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: "16px",
             }}
           >
-            5 minutes
-          </p>
-          <div style={{ ...r1.stagger(4, 1200) }}>
-            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint-h 2s ease-in-out infinite", display: "block" }}>
-              → scroll
-            </span>
+            <button
+              type="button"
+              onClick={() => scrollToFrame(1)}
+              style={{
+                fontFamily: f.jb,
+                fontSize: "11px",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: f.white(0.95),
+                background: f.redA(0.16),
+                border: `1px solid ${f.redA(0.45)}`,
+                padding: "14px 18px",
+                transition: "transform 180ms ease, background 180ms ease, border-color 180ms ease",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateX(6px)";
+                e.currentTarget.style.background = f.redA(0.24);
+                e.currentTarget.style.borderColor = f.redA(0.7);
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateX(0)";
+                e.currentTarget.style.background = f.redA(0.16);
+                e.currentTarget.style.borderColor = f.redA(0.45);
+              }}
+            >
+              Start the walkthrough →
+            </button>
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <p
+                style={{
+                  fontFamily: f.sg,
+                  fontSize: "clamp(14px, 1.6vw, 18px)",
+                  color: f.white(0.35),
+                  lineHeight: 1.4,
+                  margin: 0,
+                }}
+              >
+                5 minutes
+              </p>
+              <span
+                style={{
+                  ...mono("9px"),
+                  color: f.white(0.28),
+                  animation: "deck-scroll-hint-h 2s ease-in-out infinite",
+                  display: "block",
+                }}
+              >
+                Use mouse wheel, trackpad, or ← → keys
+              </span>
+            </div>
           </div>
         </div>
       </DeckFrame>
