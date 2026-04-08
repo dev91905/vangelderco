@@ -237,6 +237,5 @@ const SubmissionsFeed = () => {
     </div>
   );
 };
-};
 
 export default Admin;
