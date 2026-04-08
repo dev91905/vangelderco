@@ -556,18 +556,29 @@ const Deck = () => {
             <div
               style={{
                 padding: "28px 24px",
-                border: `1px dashed ${f.ink(0.12)}`,
-                background: customOpen ? f.ink(0.03) : "transparent",
+                border: customSaved ? `1px solid ${f.ink(0.12)}` : `1px dashed ${f.ink(0.12)}`,
+                background: customOpen || customSaved ? f.ink(0.03) : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
                 transition: "opacity 0.3s ease 400ms, transform 0.3s ease 400ms, background 0.15s ease",
               }}
             >
-              {customSubmitted ? (
-                <p style={{ fontFamily: f.sans, fontSize: "15px", fontWeight: 600, color: f.ink(0.7) }}>
-                  Thanks — noted. ✓
-                </p>
+              {customSaved && !customOpen ? (
+                <div>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
+                    Your challenge ✓
+                  </p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.6), lineHeight: 1.6, marginBottom: "12px" }}>
+                    "{customMessage}"
+                  </p>
+                  <button
+                    onClick={() => setCustomOpen(true)}
+                    style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.35), background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: "3px" }}
+                  >
+                    Edit
+                  </button>
+                </div>
               ) : !customOpen ? (
                 <button
                   onClick={() => setCustomOpen(true)}
@@ -582,7 +593,7 @@ const Deck = () => {
                   </p>
                 </button>
               ) : (
-                <form onSubmit={handleCustomSubmit} className="flex flex-col gap-3">
+                <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); setCustomOpen(false); } }} className="flex flex-col gap-3">
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
                     What's your challenge?
                   </p>
@@ -610,7 +621,7 @@ const Deck = () => {
                   <div className="flex items-center gap-2">
                     <button
                       type="submit"
-                      disabled={!customMessage.trim() || customSubmitting}
+                      disabled={!customMessage.trim()}
                       style={{
                         fontFamily: f.sans,
                         fontSize: "12px",
@@ -625,11 +636,11 @@ const Deck = () => {
                         transition: "background 0.15s ease",
                       }}
                     >
-                      {customSubmitting ? "Sending…" : "Submit"}
+                      Save
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setCustomOpen(false); setCustomMessage(""); }}
+                      onClick={() => { setCustomOpen(false); if (!customSaved) setCustomMessage(""); }}
                       style={{
                         fontFamily: f.sans,
                         fontSize: "12px",
