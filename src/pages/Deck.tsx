@@ -512,7 +512,7 @@ const Deck = () => {
           </div>
           {!selectedPain && (
             <p style={{ ...mono("8px"), color: f.white(0.15), ...r2.stagger(3, 800) }}>
-              ↓ or skip and keep scrolling
+              → or skip and keep scrolling
             </p>
           )}
         </div>
@@ -1238,7 +1238,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(11)}>
         <div className="flex flex-col items-center text-center gap-6">
           <p style={{ ...mono("10px"), color: f.white(0.15) }}>
-            ↑ Scroll up to explore
+            ← Scroll back to explore
           </p>
           <h2
             style={{
