@@ -21,7 +21,7 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
       </button>
       {open && (
         <div className="px-4 md:px-5 pb-4 md:pb-5" style={{ borderTop: t.border(0.04) }}>
-          <div className="pt-4" style={{ fontSize: "clamp(15px, 1.5vw, 16px)" }}><ContentBlockRenderer blocks={blocks} /></div>
+          <div className="pt-4"><ContentBlockRenderer blocks={blocks} compact /></div>
         </div>
       )}
     </div>
