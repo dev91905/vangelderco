@@ -724,7 +724,7 @@ const Deck = () => {
                       marginTop: "8px",
                       lineHeight: 1.5,
                     }}>
-                      Both sides try to shift public opinion and force policy outcomes — but they run completely different playbooks.
+                      Both sides of an issue try to shift public opinion and force policy outcomes — but they run completely different playbooks.
                     </p>
                   )}
                 </div>
