@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, useCallback, CSSProperties } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
+import { t } from "@/lib/theme";
 import {
   Dialog,
   DialogContent,
@@ -12,37 +13,18 @@ import {
 
 const TOTAL_FRAMES = 12;
 
-/* ─── Style tokens — V4 editorial light ─── */
+/* ─── Aliases — pull from centralized theme ─── */
 const f = {
-  serif: "'Instrument Serif', serif",
-  sans: "'DM Sans', sans-serif",
-  ink: (a: number) => `hsl(30 10% 12% / ${a})`,
-  cream: "hsl(40 30% 96%)",
-  rule: "hsl(30 10% 12% / 0.08)",
+  serif: t.serif,
+  sans: t.sans,
+  ink: t.ink,
+  cream: t.cream,
+  rule: t.rule,
 };
 
-const heading = (size = "clamp(18px, 2.6vw, 28px)"): CSSProperties => ({
-  fontFamily: f.serif,
-  fontSize: size,
-  fontWeight: 400,
-  color: f.ink(0.9),
-  lineHeight: 1.4,
-});
-
-const body = (alpha = 0.5): CSSProperties => ({
-  fontFamily: f.sans,
-  fontSize: "clamp(13px, 1.5vw, 16px)",
-  color: f.ink(alpha),
-  lineHeight: 1.65,
-});
-
-const label = (size = "10px"): CSSProperties => ({
-  fontFamily: f.sans,
-  fontSize: size,
-  letterSpacing: "0.12em",
-  textTransform: "uppercase" as const,
-  color: f.ink(0.3),
-});
+const heading = t.heading;
+const body = t.body;
+const label = t.label;
 
 /* ─── Pain points data ─── */
 const PAIN_POINTS = [
