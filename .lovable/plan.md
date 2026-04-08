@@ -1,52 +1,56 @@
 
 
-# Deck-Wide Design Audit & Fix
+# Slide 3 Redesign: The Confrontation Table
 
-## Problems Found
+## What's wrong now
 
-Across all 12 frames of the deck:
+1. **Staggered row animation** — rows reveal one at a time with a 900ms interval. That's 5+ seconds before the user can even see the full picture. Kills the "oh shit" moment.
+2. **Washed-out colors** — "yours" column is `ink(0.4)`, dimension labels are `ink(0.3)`, borders are `ink(0.04)`. Everything looks ghosted and unreadable.
+3. **Dead whitespace** — the 120px dimension label column + 40px divider column eat ~160px of horizontal space for almost no content. The grid feels hollow.
+4. **No visual hierarchy between sides** — both columns use the same serif font, similar sizes. There's no visceral contrast between "what you're doing" and "what they're doing." You can't glance at this and immediately feel the gap.
+5. **Kicker text hidden until animation completes** — the punchline is gated behind a 5-second wait.
 
-1. **White-on-cream cards everywhere** — Selected states, expanded panels, phase cards, case study cards, domain detail panels all use `background: "hsl(0 0% 100%)"` (pure white). The rest of the site uses dark chips/cards (`t.ink(0.9)` bg with `t.cream` text). At least 10 instances.
+## The redesign
 
-2. **Headings not bold** — Every `heading()` call and manual heading uses `fontWeight: 400`. The rest of the site uses `font-bold` / `fontWeight: 700` on all sans headings. Affects frames 1 (already fixed), 2–12.
+**Kill the stagger animation entirely.** All rows appear at once when the frame enters the viewport. Instant comprehension.
 
-3. **Body text still sans-serif** — `body()` returns `fontFamily: serif` but the deck bypasses it: all body/description text uses `fontFamily: f.sans`. Body copy should use `t.serif` / `t.body()` per the Anthropic pattern (sans headings, serif body).
+**Two-column card layout instead of a grid table.** Left card = "Your portfolio" (muted, smaller). Right card = "The opposition" (dark, bold, larger). The visual weight difference IS the insight — you don't need to read the words to feel the asymmetry.
 
-4. **StatChip in deck uses white-on-cream** — The site's `StatChips.tsx` component uses dark bg (`t.ink(0.9)`) with cream text. The deck's inline `StatChip` uses `background: f.ink(0.03)` — light on light.
+**Specifics:**
 
-5. **"+" expand icon instead of chevron** — Hallmarks section uses a `+` character. Rest of site uses `ChevronDown` from lucide-react.
+- **Left card**: translucent light background `ink(0.03)`, text at `ink(0.5)`, normal weight, smaller font. Feels anemic on purpose.
+- **Right card**: dark background `ink(0.9)`, cream text, bold weight, slightly larger font. Feels aggressive and dominant.
+- Each row inside both cards shares the same dimension label, stacked vertically with clean spacing.
+- Dimension labels (`Research`, `Content`, etc.) sit as small sans-serif headers above each row pair.
 
-6. **Inconsistent label separator** — Rest of site uses `//`. Deck doesn't use it anywhere labels are paired.
+**Remove the `confrontationStep` state and the `setInterval` timer entirely.** No animation gating. Everything shows when `r3.isActive` is true, with a single fast fade-in.
 
-## Plan
+**Kicker always visible** (no conditional on `confrontationStep`), fades in with the rest.
 
-### Single file edit: `src/pages/Deck.tsx`
+**Heading/subheading** stay as-is (the 2-column pattern from slide 2).
 
-**A. Kill all white backgrounds → dark cards**
-Every `background: "hsl(0 0% 100%)"` and `background: isSelected/isExpanded ? "hsl(0 0% 100%)" : ...` becomes:
-- Selected/active state: `background: f.ink(0.9)` with text color flipped to `f.cream` / light values
-- Unselected state: `background: "transparent"` (stays the same)
-- Phase cards, domain detail panel, experienced panel, case study cards with content: all get dark bg treatment
-- Box shadows on white cards removed (not needed on dark cards)
+## Layout structure
 
-**B. All headings → fontWeight: 700**
-Every `fontWeight: 400` on heading-role text (h1, h2, frame titles) → `fontWeight: 700`.
+```text
+┌──────────────────────────────────────────────────────┐
+│  Heading (left 50%)    │   Subheading (right 50%)    │
+├──────────────────────────────────────────────────────┤
+│                                                      │
+│  ┌─── Your portfolio ───┐  ┌─── The opposition ────┐ │
+│  │  RESEARCH             │  │  RESEARCH              │ │
+│  │  Focus groups...      │  │  Monitor what's        │ │
+│  │                       │  │  resonating...         │ │
+│  │  CONTENT              │  │  CONTENT               │ │
+│  │  Polished ads...      │  │  Creator ecosystems... │ │
+│  │  ...                  │  │  ...                   │ │
+│  └───────────────────────┘  └────────────────────────┘ │
+│                                                      │
+│  Kicker text                                         │
+└──────────────────────────────────────────────────────┘
+```
 
-**C. Body/description text → serif**
-All descriptive/body paragraphs switch from `fontFamily: f.sans` to using `body()` or `fontFamily: f.serif`. Headings/labels/UI stay sans.
-
-**D. Inline StatChip → dark style**
-Match the site's `StatChips.tsx`: `background: f.ink(0.9)`, value text `color: f.cream`, label text `color: "hsl(40 30% 80%)"`.
-
-**E. Hallmark expand icon → chevron**
-Import `ChevronDown` from lucide-react, replace `+` with it, matching `ExpandableSection.tsx` pattern.
-
-**F. Text color adjustments for dark cards**
-When cards go dark, all text inside them flips: titles → `f.cream`, descriptions → `hsl(40 30% 80%)` or similar light muted tone. Borders on dark cards become `f.ink(0.8)` or removed.
-
-## Frames affected
-All 12 frames get the heading weight fix and body serif fix. Frames 2, 4, 5, 8, 11 get the dark card treatment. Frame 11 case study grid gets dark cards for items with content.
+Left card: light/muted. Right card: dark/bold. The contrast does the teaching.
 
 ## Files modified
-- `src/pages/Deck.tsx` — all changes above (single file, ~40 individual edits)
+- `src/pages/Deck.tsx` — rewrite Frame 3 section (~lines 507-578), remove `confrontationStep` state and its `useEffect` timer
 
