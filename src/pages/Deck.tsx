@@ -75,7 +75,7 @@ const CONFRONTATION_ROWS = [
   { dimension: "Engagement", yours: "Pay a handful of influencers to post scripted content for a cycle.", theirs: "Organize at massive scale through churches, campuses, veterans, and local networks." },
   { dimension: "Measurement", yours: "Count impressions, reach, and media mentions at the end of the grant.", theirs: "Track what's shifting polls, moving legislation, and growing their base in real time." },
   { dimension: "Iteration", yours: "Declare success when the grant closes and move on to the next one.", theirs: "Cut what's failing mid-cycle and pour resources into what's actually working." },
-  { dimension: "Overall doctrine", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
+  { dimension: "Overall", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
 ];
 
 /* ─── Three domains ─── */
@@ -625,12 +625,12 @@ const Deck = () => {
           {/* ── Comparison table in a single card ── */}
           <div style={{
             background: f.ink(0.03),
-            borderRadius: "12px",
-            padding: "clamp(20px, 2.5vw, 32px)",
+            borderRadius: "16px",
+            padding: "clamp(28px, 3.5vw, 48px)",
             ...r3.stagger(2, 200),
           }}>
             {/* Column headers */}
-            <div className="grid" style={{ gridTemplateColumns: "140px 1fr 1fr", gap: "16px", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "12px", marginBottom: "4px" }}>
+            <div className="grid" style={{ gridTemplateColumns: "120px 1fr 1fr", gap: "clamp(20px, 3vw, 40px)", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "16px", marginBottom: "8px" }}>
               <div />
               <p style={{ ...label("10px"), color: f.ink(0.35) }}>Your current portfolio</p>
               <p style={{ ...label("10px"), color: f.ink(0.6) }}>How the opposition operates</p>
@@ -643,11 +643,11 @@ const Deck = () => {
                   key={i}
                   className="grid"
                   style={{
-                    gridTemplateColumns: "140px 1fr 1fr",
-                    gap: "16px",
+                    gridTemplateColumns: "120px 1fr 1fr",
+                    gap: "clamp(20px, 3vw, 40px)",
                     borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                    paddingTop: isLast ? "16px" : "12px",
-                    paddingBottom: "12px",
+                    paddingTop: isLast ? "24px" : "18px",
+                    paddingBottom: "18px",
                     borderTop: isLast ? `1px solid ${f.ink(0.12)}` : "none",
                   }}
                 >
@@ -658,24 +658,24 @@ const Deck = () => {
                     color: isLast ? f.ink(0.7) : f.ink(0.35),
                     textTransform: "uppercase" as const,
                     letterSpacing: "0.06em",
-                    paddingTop: "2px",
+                    paddingTop: "3px",
                   }}>
                     {row.dimension}
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.3vw, 15px)",
+                    fontSize: "clamp(13px, 1.4vw, 16px)",
                     color: isLast ? f.ink(0.6) : f.ink(0.45),
-                    lineHeight: 1.65,
+                    lineHeight: 1.7,
                     fontWeight: isLast ? 500 : 400,
                   }}>
                     {row.yours}
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(13px, 1.3vw, 15px)",
+                    fontSize: "clamp(13px, 1.4vw, 16px)",
                     color: isLast ? f.ink(0.85) : f.ink(0.7),
-                    lineHeight: 1.65,
+                    lineHeight: 1.7,
                     fontWeight: isLast ? 600 : 400,
                   }}>
                     {row.theirs}
