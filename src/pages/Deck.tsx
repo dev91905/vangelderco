@@ -69,13 +69,13 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "Research", yours: "Commission focus groups to test which messages poll best before launching.", theirs: "Monitor what's already resonating organically across platforms and communities." },
-  { dimension: "Content", yours: "Produce polished ads, op-eds, and documentaries on a campaign calendar.", theirs: "Fund entire creator ecosystems producing content around the clock." },
-  { dimension: "Distribution", yours: "Buy media placements and hope the right audiences see them.", theirs: "Acquire platforms and change the algorithms that decide what people see." },
-  { dimension: "Engagement", yours: "Pay a handful of influencers to post scripted content for a cycle.", theirs: "Organize at massive scale through churches, campuses, veterans, and local networks." },
-  { dimension: "Measurement", yours: "Count impressions, reach, and media mentions at the end of the grant.", theirs: "Track what's shifting polls, moving legislation, and growing their base in real time." },
-  { dimension: "Iteration", yours: "Declare success when the grant closes and move on to the next one.", theirs: "Cut what's failing mid-cycle and pour resources into what's actually working." },
-  { dimension: "Overall", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
+  { dimension: "Research", yours: "Focus-group messages before launching.", theirs: "Monitor what's already resonating organically." },
+  { dimension: "Content", yours: "Produce polished ads on a campaign calendar.", theirs: "Fund creator ecosystems producing around the clock." },
+  { dimension: "Distribution", yours: "Buy placements and hope the right people see them.", theirs: "Acquire platforms and change the algorithms." },
+  { dimension: "Engagement", yours: "Pay influencers to post scripted content for a cycle.", theirs: "Organize at scale through churches, campuses, and networks." },
+  { dimension: "Measurement", yours: "Count impressions and mentions at grant close.", theirs: "Track what's shifting polls and moving legislation in real time." },
+  { dimension: "Iteration", yours: "Declare success when the grant closes and move on.", theirs: "Cut what's failing mid-cycle and pour into what's working." },
+  { dimension: "Overall", yours: "Test messages, then pay people to watch the winners.", theirs: "Fund everything, watch what catches fire, and supercharge it." },
 ];
 
 /* ─── Three domains ─── */
