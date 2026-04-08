@@ -15,9 +15,10 @@ export type ContentBlock =
 interface ContentBlockRendererProps {
   blocks: ContentBlock[];
   renderExtended?: (block: ContentBlock, index: number) => React.ReactNode | null;
+  compact?: boolean;
 }
 
-const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererProps) => {
+const ContentBlockRenderer = ({ blocks, renderExtended, compact }: ContentBlockRendererProps) => {
   return (
     <div className="flex flex-col gap-6 md:gap-8">
       {blocks.map((block, i) => {
@@ -30,7 +31,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return <Tag key={i} className={`${sizes[block.level] || sizes[3]} font-medium leading-[1.3]`} style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{block.text}</Tag>;
           }
           case "paragraph":
-            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={t.body()}>{block.text}</p>;
+            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={{ ...t.body(), ...(compact ? { fontSize: "clamp(15px, 1.5vw, 16px)" } : {}) }}>{block.text}</p>;
           case "image":
             return (
               <figure key={i} className="flex flex-col gap-2">
