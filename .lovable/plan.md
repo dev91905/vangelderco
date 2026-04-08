@@ -1,43 +1,35 @@
 
 
-# Font System Overhaul — Anthropic Pattern
+# Fix Serif-on-Headings — Missed Font Swap
 
-## Current vs. Target
+## Problem
+The font overhaul changed `heading()` to use `sans` (Inter) and `body()` to use `serif` (Source Serif 4). But 12 files hardcode `fontFamily: t.serif` on heading elements instead of calling `t.heading()`. So headings still render in serif.
 
-| Role | Current | Target |
-|------|---------|--------|
-| Headings/UI | Instrument Serif (serif) | **Inter** (sans-serif) — clean geometric sans, free Google Font closest to Styrene A |
-| Body text | DM Sans (sans-serif) | **Source Serif 4** (serif) — warm, readable serif, free Google Font closest to Tiempos Text |
+## Fix
+Every `fontFamily: t.serif` on a heading/title element → `fontFamily: t.sans`. Leave `t.serif` only where it's correctly used for body/paragraph text.
 
-Styrene A and Tiempos Text are licensed commercial fonts. The closest free equivalents that nail the same vibe:
-- **Inter** for Styrene A — clean, slightly humanist sans with excellent weight range. Alternative: **Söhne** isn't on Google Fonts either, so Inter is the pragmatic pick.
-- **Source Serif 4** for Tiempos Text — warm, traditional serif with great readability at body sizes. It has the same "bookish but modern" character. Alternative: **Libre Baskerville** if you want something rounder.
+## Changes by file
 
-## What changes
+| File | Element | Current | Fix |
+|------|---------|---------|-----|
+| `CapabilityLayout.tsx` | `<h1>` title | `t.serif` | `t.sans` |
+| `CaseStudyView.tsx` | `<h1>` title | `t.serif` | `t.sans` |
+| `BlogPostView.tsx` | `<h1>` title | `t.serif` | `t.sans` |
+| `PostCard.tsx` | `<h3>` title | `t.serif` | `t.sans` |
+| `PasswordGate.tsx` | `<h1>` title (×2) | `t.serif` | `t.sans` |
+| `EditorMetaBar.tsx` | `<input>` title | `t.serif` | `t.sans` |
+| `Admin.tsx` | `<h1>` "Content Manager" | `t.serif` | `t.sans` |
+| `AdminLogin.tsx` | `<h1>` "Content Manager" | `t.serif` | `t.sans` |
+| `NotFound.tsx` | `<h1>` "404" | `t.serif` | `t.sans` |
+| `Index.tsx` | hero nav labels | `t.serif` | `t.sans` |
+| `ContentBlockRenderer.tsx` | `<h1>`–`<h6>` blocks | `t.serif` | `t.sans` |
 
-### 1. `index.html` — Swap Google Fonts import
-Replace `Instrument+Serif` and `DM+Sans` with `Inter:wght@400;500;600;700` and `Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400`. Remove JetBrains Mono (already dead).
+The `Deck.tsx` file likely has the same issue — will audit and fix in the same pass.
 
-### 2. `src/lib/theme.ts` — Flip the token roles
-```
-serif = "'Source Serif 4', Georgia, serif"   // body text, quotes, long-form
-sans  = "'Inter', system-ui, sans-serif"     // headings, UI labels, buttons
-```
-
-Update `heading()` to use `sans` (not serif) and `body()` to use `serif` (not sans). This is the Anthropic inversion — display type is sans, reading type is serif.
-
-Update `label()` and `pill` to keep using `sans` (they're UI elements).
-
-### 3. `src/index.css` — Update body font-family
-Change `font-family: 'DM Sans'` to `font-family: 'Source Serif 4', Georgia, serif` as the default body font.
-
-### 4. Every component already imports `t.serif` / `t.sans`
-Because the theme system is centralized, this swap propagates automatically. No individual component edits needed — the tokens just point to different fonts now.
+## What stays serif
+- Body paragraphs, descriptions, long-form content — these correctly use `t.serif` or `t.body()`
+- Blockquotes
 
 ## Files modified
-- `index.html` — font import URL
-- `src/lib/theme.ts` — font family strings + heading/body role swap
-- `src/index.css` — body default font
-
-3 files total. The centralized theme system means this is a site-wide change from 3 edits.
+~12 files, single token swap each. No logic changes.
 
