@@ -10,7 +10,6 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
   return (
     <div className="rounded-xl overflow-hidden" style={{
       border: t.border(0.06),
-      borderLeft: open ? `2px solid ${t.ink(0.2)}` : `2px solid ${t.ink(0.08)}`,
       transition: "border-color 0.2s ease",
     }}>
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 md:px-5 py-3 md:py-4 text-left group"

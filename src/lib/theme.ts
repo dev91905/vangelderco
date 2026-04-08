@@ -14,7 +14,7 @@
 const BASE = {
   bg: "40 30% 96%",
   fg: "30 10% 12%",
-  card: "0 0% 100%",
+  card: "40 25% 98%",       // subtle warm tint, NOT pure white
   destructive: "0 60% 45%",
   success: "150 40% 40%",
 } as const;

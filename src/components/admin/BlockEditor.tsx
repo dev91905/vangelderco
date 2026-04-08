@@ -125,7 +125,7 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
         )}
 
         {block.type === "quote" && (
-          <div className="pl-4" style={{ borderLeft: "2px solid hsl(30 10% 12% / 0.15)" }}>
+          <div className="pl-4">
             <AutoTextarea value={block.text || ""} onChange={(v) => update({ text: v })} placeholder="Quote text..." className="italic text-sm"
               style={{ ...serif, color: "hsl(30 10% 12% / 0.6)" }} />
             <input value={block.attribution || ""} onChange={(e) => update({ attribution: e.target.value })} placeholder="— Attribution"
