@@ -200,7 +200,7 @@ const Deck = () => {
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
   const [customOpen, setCustomOpen] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
-  const [openRow, setOpenRow] = useState<number | null>(null);
+  const [openRows, setOpenRows] = useState<Set<number>>(new Set());
   const [customSubmitted, setCustomSubmitted] = useState(false);
   const [customSubmitting, setCustomSubmitting] = useState(false);
 
@@ -631,18 +631,25 @@ const Deck = () => {
                 ...r3.stagger(1, 200),
               }}>
                 {CONFRONTATION_ROWS.map((row, i) => {
-                  const isOpen = openRow === i;
+                  const isOpen = openRows.has(i);
                   const isLast = i === CONFRONTATION_ROWS.length - 1;
                   const rowAnim = {
                     opacity: r3.isActive ? 1 : 0,
                     transform: r3.isActive ? "translateY(0)" : "translateY(6px)",
                     transition: `opacity 0.35s ease ${150 + i * 60}ms, transform 0.35s ease ${150 + i * 60}ms`,
                   };
+                  const toggleRow = () => {
+                    setOpenRows(prev => {
+                      const next = new Set(prev);
+                      if (next.has(i)) next.delete(i);
+                      else next.add(i);
+                      return next;
+                    });
+                  };
                   return (
                     <div key={i} style={rowAnim}>
-                      {/* Clickable dimension row */}
                       <button
-                        onClick={() => setOpenRow(isOpen ? null : i)}
+                        onClick={toggleRow}
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -650,8 +657,6 @@ const Deck = () => {
                           width: "100%",
                           padding: "12px 20px",
                           background: isOpen ? f.ink(0.06) : f.ink(0.02),
-                          borderBottom: !isLast || isOpen ? `1px solid ${f.ink(0.06)}` : "none",
-                          borderTop: isLast && !isOpen ? `2px solid ${f.ink(0.1)}` : "none",
                           cursor: "pointer",
                           border: "none",
                           borderLeft: "none",
@@ -690,7 +695,6 @@ const Deck = () => {
                         </span>
                       </button>
 
-                      {/* Expandable comparison panel */}
                       <div style={{
                         maxHeight: isOpen ? "300px" : "0",
                         overflow: "hidden",
@@ -705,31 +709,31 @@ const Deck = () => {
                           <div style={{
                             padding: "16px 20px",
                             background: f.ink(0.02),
-                            borderRight: `1px solid ${f.ink(0.08)}`,
+                            borderRight: `1px solid ${f.ink(0.06)}`,
                           }}>
                             <p style={{ ...label("9px"), color: f.ink(0.35), marginBottom: "6px" }}>Your side</p>
                             <p style={{
                               fontFamily: f.serif,
                               fontSize: "clamp(13px, 1.3vw, 15px)",
-                              color: f.ink(0.65),
+                              color: f.ink(0.55),
                               lineHeight: 1.6,
                               fontWeight: isLast ? 500 : 400,
                             }}>
                               {row.yours}
                             </p>
                           </div>
-                          {/* Their side */}
+                          {/* Their side — subtle warm tint, not heavy black */}
                           <div style={{
                             padding: "16px 20px",
-                            background: f.ink(isLast ? 0.92 : 0.88),
+                            background: f.ink(0.07),
                           }}>
-                            <p style={{ ...label("9px"), color: `hsl(40 30% 96% / 0.4)`, marginBottom: "6px" }}>Their side</p>
+                            <p style={{ ...label("9px"), color: f.ink(0.4), marginBottom: "6px" }}>Their side</p>
                             <p style={{
                               fontFamily: f.serif,
                               fontSize: "clamp(13px, 1.3vw, 15px)",
-                              color: `hsl(40 30% 96% / 0.88)`,
+                              color: f.ink(0.75),
                               lineHeight: 1.6,
-                              fontWeight: isLast ? 600 : 400,
+                              fontWeight: isLast ? 600 : 500,
                             }}>
                               {row.theirs}
                             </p>
