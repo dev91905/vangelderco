@@ -32,7 +32,7 @@ const PAIN_POINTS = [
   {
     id: "history",
     short: "Starting at ground zero",
-    detail: "You're new to the portfolio — or building one from scratch — and have no idea where to start.",
+    detail: "You're new to the portfolio — or building one from scratch — with no record of what's been funded or what's working.",
     consequence: "Without a baseline, there's no way to know what to fund first or where the gaps are.",
     capRelevance: "We build the institutional record that's never existed — audit everything, document what worked, create the baseline.",
   },
@@ -46,21 +46,21 @@ const PAIN_POINTS = [
   {
     id: "access",
     short: "Locked into familiar channels",
-    detail: "Your grantees are recycling the same playbook — op-eds, paid media, social, maybe a doc no one watches. You don't have the relationships to unlock anything else.",
+    detail: "Your grantees recycle the same playbook — op-eds, paid media, social, maybe a doc no one watches. No way to unlock more.",
     consequence: "The most powerful cultural sectors — music, faith, gaming, campuses — sit completely untouched.",
     capRelevance: "We connect you to every cultural sector you're missing — 480-member network across every industry.",
   },
   {
     id: "measurement",
     short: "Not sure how to measure",
-    detail: "Grantees send you views and impressions. Other donors tie funding to impossible benchmarks. You need to tell the impact story but aren't sure how to frame it.",
+    detail: "Grantees send views and impressions. Other donors tie funding to impossible benchmarks. You need to tell the impact story.",
     consequence: "You can't defend the portfolio to leadership if you can't articulate what it's actually doing.",
     capRelevance: "We co-design measurement around power indicators — policy outcomes, coalition growth, capital unlocked.",
   },
   {
     id: "expertise",
     short: "No operators in the room",
-    detail: "You're not a media expert. When something isn't working, it's hard to diagnose why — because you've never operated inside the sectors you're trying to activate.",
+    detail: "You're not a media expert. When something isn't working, you can't diagnose why — you've never operated in these sectors.",
     consequence: "Your board, grantees, and partners ask what's wrong and you don't have the pattern recognition to answer.",
     capRelevance: "Our team comes from commercial media and entertainment — we transfer pattern recognition, not just advice.",
   },
