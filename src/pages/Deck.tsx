@@ -923,8 +923,8 @@ const Deck = () => {
                   className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? f.ink(0.9) : "transparent",
-                    border: isExpanded ? "none" : `1px solid ${f.ink(0.06)}`,
+                    background: isExpanded ? f.ink(0.08) : "transparent",
+                    border: `1px solid ${isExpanded ? f.ink(0.15) : f.ink(0.06)}`,
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
@@ -932,16 +932,18 @@ const Deck = () => {
                     transition: `all 0.5s ease ${200 + i * 150}ms`,
                   }}
                 >
-                  <div className="flex items-start gap-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 700, color: isExpanded ? "hsl(40 30% 70%)" : f.ink(0.15), minWidth: "32px" }}>{i + 1}</span>
-                    <div className="flex-1">
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 700, color: isExpanded ? f.cream : f.ink(0.65) }}>{h.title}</p>
-                      <div style={{ maxHeight: isExpanded ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginTop: "12px", lineHeight: 1.7 }}>{h.rationale}</p>
-                        <p style={{ marginTop: "12px", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
-                      </div>
+                  <div className="flex items-center gap-4">
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 700, color: f.ink(0.15), minWidth: "32px", flexShrink: 0 }}>{i + 1}</span>
+                    <p className="flex-1" style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.65) }}>{h.title}</p>
+                    <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }} />
+                  </div>
+                  <div style={{ maxHeight: isExpanded ? "500px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
+                    <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), marginTop: "16px", marginLeft: "48px", lineHeight: 1.7 }}>{h.rationale}</p>
+                    <div style={{ margin: "16px 0 0 48px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "14px" }}>
+                      <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.5), lineHeight: 1.6 }}>
+                        <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
+                      </p>
                     </div>
-                    <ChevronDown size={16} style={{ color: isExpanded ? f.cream : f.ink(0.2), transition: "transform 0.3s ease, color 0.3s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0, marginTop: "4px" }} />
                   </div>
                 </button>
               );
