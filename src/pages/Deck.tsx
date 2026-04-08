@@ -407,7 +407,7 @@ const Deck = () => {
               animation: r1.isActive ? "deck-clip-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards" : "none",
             }}
           >
-            VGC StratComm
+            Building a Next-Generation StratComm Portfolio
           </h1>
           <div style={{ ...r1.stagger(1), width: "60px", height: "2px", background: f.redA(0.6) }} />
           <p
