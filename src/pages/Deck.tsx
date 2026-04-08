@@ -322,12 +322,15 @@ const Deck = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-background"
+      className="relative bg-background"
       style={{
         height: "100dvh",
-        overflowY: "auto",
-        overflowX: "hidden",
-        scrollSnapType: "y mandatory",
+        width: "100vw",
+        overflowX: "auto",
+        overflowY: "hidden",
+        scrollSnapType: "x mandatory",
+        display: "flex",
+        flexDirection: "row",
       }}
     >
       {/* Breathing red glow */}
