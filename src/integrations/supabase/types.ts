@@ -65,6 +65,39 @@ export type Database = {
         }
         Relationships: []
       }
+      deck_contacts: {
+        Row: {
+          created_at: string
+          custom_challenge: string | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          organization: string | null
+          selected_pains: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          custom_challenge?: string | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          organization?: string | null
+          selected_pains?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          custom_challenge?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          organization?: string | null
+          selected_pains?: string[] | null
+        }
+        Relationships: []
+      }
       deck_submissions: {
         Row: {
           created_at: string
