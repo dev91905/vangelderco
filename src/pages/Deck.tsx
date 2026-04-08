@@ -560,6 +560,7 @@ const Deck = () => {
             })}
             {/* 6th card — Something else */}
             <div
+              className="flex flex-col justify-center"
               style={{
                 padding: "28px 24px",
                 border: customSaved ? `1px solid ${f.ink(0.12)}` : `1px dashed ${f.ink(0.12)}`,
