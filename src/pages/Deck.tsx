@@ -257,9 +257,21 @@ const Deck = () => {
       if (selectedCase !== null) return;
       const target = e.target as HTMLElement | null;
       if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.tagName === "SELECT" || target?.isContentEditable) return;
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); scrollToFrame(currentFrame + 1); }
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); scrollToFrame(currentFrame - 1); }
-      else if (e.key === "Escape") { navigate("/"); }
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        if (currentFrame === 2 && confrontationStep < CONFRONTATION_ROWS.length) {
+          setConfrontationStep(s => s + 1);
+        } else {
+          scrollToFrame(currentFrame + 1);
+        }
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (currentFrame === 2 && confrontationStep > 0) {
+          setConfrontationStep(s => s - 1);
+        } else {
+          scrollToFrame(currentFrame - 1);
+        }
+      } else if (e.key === "Escape") { navigate("/"); }
     };
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
