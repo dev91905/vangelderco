@@ -190,6 +190,7 @@ const Admin = () => {
         <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
       </div>
 
+      <ContactsFeed />
       <SubmissionsFeed />
     </div>
   );
