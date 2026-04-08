@@ -20,21 +20,21 @@ const PostCard = ({ post, index }: PostCardProps) => {
     >
       <div
         className="p-5 md:p-6 rounded-xl transition-all duration-300"
-        style={{ background: t.white, border: t.border(0.06) }}
+        style={{ background: "transparent", border: `1px solid ${t.ink(0.08)}` }}
         onMouseEnter={(e) => {
           playHoverGlitch();
           const el = e.currentTarget;
-          el.style.borderColor = t.ink(0.12);
+          el.style.borderColor = t.ink(0.2);
           el.style.transform = "translateY(-1px)";
-          el.style.boxShadow = `0 4px 20px ${t.ink(0.06)}`;
+          el.style.boxShadow = "none";
           const title = el.querySelector("[data-title]") as HTMLElement;
           if (title) title.style.color = t.ink(1);
         }}
         onMouseLeave={(e) => {
           const el = e.currentTarget;
-          el.style.borderColor = t.ink(0.06);
+          el.style.borderColor = t.ink(0.08);
           el.style.transform = "translateY(0)";
-          el.style.boxShadow = "none";
+          el.style.boxShadow = "none"; 
           const title = el.querySelector("[data-title]") as HTMLElement;
           if (title) title.style.color = t.ink(0.8);
         }}
