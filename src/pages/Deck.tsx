@@ -377,7 +377,7 @@ const Deck = () => {
       </div>
 
       {/* ═══ FRAME 1: Hero ═══ */}
-      <DeckFrame ref={setRef(0)} mode="narrow">
+      <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <h1
             style={{
