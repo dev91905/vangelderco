@@ -421,8 +421,8 @@ const Deck = () => {
               maxWidth: "700px",
             }}
           >
-            Strategic communications for donor advisors who need{" "}
-            <em style={{ fontStyle: "italic", color: f.white(0.9) }}>more than comms.</em>
+            Strategic communications advisory for donor advisors and program officers who know{" "}
+            <em style={{ fontStyle: "italic", color: f.white(0.9) }}>their portfolio should be hitting harder.</em>
           </p>
           <p
             style={{
@@ -431,10 +431,10 @@ const Deck = () => {
               fontSize: "clamp(14px, 1.6vw, 18px)",
               color: f.white(0.35),
               lineHeight: 1.6,
-              maxWidth: "520px",
+              maxWidth: "560px",
             }}
           >
-            Advice, connections, and hands-on support to make your stratcomm strategy actually work.
+            The next few screens walk through how we think about strategic communications — and why most portfolios underperform. Takes about five minutes. Everything here is learnable, doable, and transferable.
           </p>
           <div style={{ ...r1.stagger(4, 1200) }}>
             <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint 2s ease-in-out infinite", display: "block" }}>
