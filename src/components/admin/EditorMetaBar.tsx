@@ -128,7 +128,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                 <div className="space-y-1">
                   {CAPABILITIES.map((c) => (
                     <button key={c.value} onClick={() => props.onCapabilityChange(c.value)} className="w-full text-left px-3 py-2 text-sm transition-colors rounded-lg"
-                      style={{ fontFamily: t.sans, background: props.capability === c.value ? t.ink(0.05) : "transparent", color: props.capability === c.value ? t.ink(0.8) : t.ink(0.4), borderLeft: props.capability === c.value ? `2px solid ${t.ink(0.3)}` : "2px solid transparent" }}>
+                      style={{ fontFamily: t.sans, background: props.capability === c.value ? t.ink(0.05) : "transparent", color: props.capability === c.value ? t.ink(0.8) : t.ink(0.4) }}>
                       {c.label}
                     </button>
                   ))}
