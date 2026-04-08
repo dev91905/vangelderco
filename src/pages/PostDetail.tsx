@@ -5,8 +5,7 @@ import { PasswordGateWrapper } from "@/components/PasswordGate";
 import BlogPostView from "@/components/blog/BlogPostView";
 import CaseStudyView from "@/components/casestudy/CaseStudyView";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
-
-const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+import { t } from "@/lib/theme";
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -26,7 +25,7 @@ const PostDetail = () => {
     return (
       <AtmosphericLayout>
         <div className="flex items-center justify-center h-full">
-          <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>Loading...</span>
+          <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Loading...</span>
         </div>
       </AtmosphericLayout>
     );
@@ -36,7 +35,7 @@ const PostDetail = () => {
     return (
       <AtmosphericLayout>
         <div className="flex items-center justify-center h-full">
-          <span className="text-sm" style={{ ...label, color: "hsl(0 60% 45% / 0.5)" }}>Post not found</span>
+          <span className="text-sm" style={{ fontFamily: t.sans, color: t.error(0.5) }}>Post not found</span>
         </div>
       </AtmosphericLayout>
     );
@@ -44,14 +43,7 @@ const PostDetail = () => {
 
   if (requiresPassword && !effectivelyUnlocked) {
     return (
-      <PasswordGateWrapper
-        slug={slug || ""}
-        title={meta.title}
-        heroImageUrl={meta.hero_image_url}
-        capability={meta.capability}
-        requiresPassword={true}
-        onUnlock={() => setUnlocked(true)}
-      >
+      <PasswordGateWrapper slug={slug || ""} title={meta.title} heroImageUrl={meta.hero_image_url} capability={meta.capability} requiresPassword={true} onUnlock={() => setUnlocked(true)}>
         <div />
       </PasswordGateWrapper>
     );
@@ -61,7 +53,7 @@ const PostDetail = () => {
     return (
       <AtmosphericLayout>
         <div className="flex items-center justify-center h-full">
-          <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>Loading...</span>
+          <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Loading...</span>
         </div>
       </AtmosphericLayout>
     );

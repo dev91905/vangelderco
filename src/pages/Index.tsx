@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import { t } from "@/lib/theme";
 
 const SECTORS = [
   "Energy",
@@ -25,7 +26,7 @@ const Index = () => {
         {/* HUD: top-right */}
         <span
           className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
-          style={{ color: "hsl(30 10% 12% / 0.3)", fontFamily: "'DM Sans', sans-serif" }}
+          style={{ color: t.ink(0.3), fontFamily: t.sans }}
         >
           Van Gelder Co.
         </span>
@@ -36,8 +37,8 @@ const Index = () => {
           <span
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(30 10% 12% / 0.4)",
+              fontFamily: t.sans,
+              color: t.ink(0.4),
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -58,33 +59,17 @@ const Index = () => {
                   animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.4 + i * 0.35}s both`,
                 }}
               >
-                {/* Background wash */}
                 <span
                   className="hero-nav-wash absolute inset-0 pointer-events-none rounded-lg"
-                  style={{
-                    background: "transparent",
-                    transition: "background 0.15s ease",
-                  }}
+                  style={{ background: "transparent", transition: "background 0.15s ease" }}
                 />
-
-                {/* Left bar */}
                 <span
                   className="hero-nav-bar absolute left-0 top-2 bottom-2 pointer-events-none rounded-full"
-                  style={{
-                    width: "2px",
-                    background: "hsl(30 10% 12% / 0.3)",
-                    opacity: 0,
-                    transition: "opacity 0.1s ease",
-                  }}
+                  style={{ width: "2px", background: t.ink(0.3), opacity: 0, transition: "opacity 0.1s ease" }}
                 />
-
-                {/* Text */}
                 <span
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-normal leading-[1.15] transition-colors duration-150"
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    color: "hsl(30 10% 12% / 0.8)",
-                  }}
+                  style={{ fontFamily: t.serif, color: t.ink(0.8) }}
                 >
                   {link.label}
                 </span>
@@ -102,10 +87,10 @@ const Index = () => {
                 key={sector}
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  color: "hsl(30 10% 12% / 0.35)",
-                  background: "hsl(30 10% 12% / 0.04)",
-                  border: "1px solid hsl(30 10% 12% / 0.08)",
+                  fontFamily: t.sans,
+                  color: t.ink(0.35),
+                  background: t.ink(0.04),
+                  border: t.border(0.08),
                 }}
               >
                 {sector}
@@ -117,8 +102,8 @@ const Index = () => {
           <span
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(30 10% 12% / 0.25)",
+              fontFamily: t.sans,
+              color: t.ink(0.25),
               animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
