@@ -276,7 +276,7 @@ const Deck = () => {
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
-  }, [currentFrame, navigate, scrollToFrame, selectedCase]);
+  }, [currentFrame, confrontationStep, navigate, scrollToFrame, selectedCase]);
 
   useEffect(() => {
     const el = containerRef.current;
