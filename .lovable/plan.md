@@ -1,56 +1,56 @@
 
 
-# Slide 3 Redesign: The Confrontation Table
+# Add "Something Else" Option + Submissions Feed
 
-## What's wrong now
+## What we're building
 
-1. **Staggered row animation** — rows reveal one at a time with a 900ms interval. That's 5+ seconds before the user can even see the full picture. Kills the "oh shit" moment.
-2. **Washed-out colors** — "yours" column is `ink(0.4)`, dimension labels are `ink(0.3)`, borders are `ink(0.04)`. Everything looks ghosted and unreadable.
-3. **Dead whitespace** — the 120px dimension label column + 40px divider column eat ~160px of horizontal space for almost no content. The grid feels hollow.
-4. **No visual hierarchy between sides** — both columns use the same serif font, similar sizes. There's no visceral contrast between "what you're doing" and "what they're doing." You can't glance at this and immediately feel the gap.
-5. **Kicker text hidden until animation completes** — the punchline is gated behind a 5-second wait.
+1. **Slide 2**: A 6th card styled differently ("Something else?") that, when clicked, expands an inline text input. User types their issue, hits enter, it saves to the database and shows a confirmation.
 
-## The redesign
+2. **Database**: New `deck_submissions` table to store these free-text responses with timestamp.
 
-**Kill the stagger animation entirely.** All rows appear at once when the frame enters the viewport. Instant comprehension.
+3. **Admin panel**: A new "Submissions" feed section on the Admin page — a clean, chronological list of all custom responses people have entered, with relative timestamps.
 
-**Two-column card layout instead of a grid table.** Left card = "Your portfolio" (muted, smaller). Right card = "The opposition" (dark, bold, larger). The visual weight difference IS the insight — you don't need to read the words to feel the asymmetry.
+## Technical plan
 
-**Specifics:**
+### 1. Create `deck_submissions` table (migration)
 
-- **Left card**: translucent light background `ink(0.03)`, text at `ink(0.5)`, normal weight, smaller font. Feels anemic on purpose.
-- **Right card**: dark background `ink(0.9)`, cream text, bold weight, slightly larger font. Feels aggressive and dominant.
-- Each row inside both cards shares the same dimension label, stacked vertically with clean spacing.
-- Dimension labels (`Research`, `Content`, etc.) sit as small sans-serif headers above each row pair.
+```sql
+create table public.deck_submissions (
+  id uuid primary key default gen_random_uuid(),
+  message text not null,
+  created_at timestamptz not null default now()
+);
 
-**Remove the `confrontationStep` state and the `setInterval` timer entirely.** No animation gating. Everything shows when `r3.isActive` is true, with a single fast fade-in.
+alter table public.deck_submissions enable row level security;
 
-**Kicker always visible** (no conditional on `confrontationStep`), fades in with the rest.
+-- Anyone can insert (public deck, no auth required)
+create policy "Anyone can submit" on public.deck_submissions
+  for insert to anon, authenticated with check (true);
 
-**Heading/subheading** stay as-is (the 2-column pattern from slide 2).
-
-## Layout structure
-
-```text
-┌──────────────────────────────────────────────────────┐
-│  Heading (left 50%)    │   Subheading (right 50%)    │
-├──────────────────────────────────────────────────────┤
-│                                                      │
-│  ┌─── Your portfolio ───┐  ┌─── The opposition ────┐ │
-│  │  RESEARCH             │  │  RESEARCH              │ │
-│  │  Focus groups...      │  │  Monitor what's        │ │
-│  │                       │  │  resonating...         │ │
-│  │  CONTENT              │  │  CONTENT               │ │
-│  │  Polished ads...      │  │  Creator ecosystems... │ │
-│  │  ...                  │  │  ...                   │ │
-│  └───────────────────────┘  └────────────────────────┘ │
-│                                                      │
-│  Kicker text                                         │
-└──────────────────────────────────────────────────────┘
+-- Only authenticated users can read (admin panel)
+create policy "Authenticated can read" on public.deck_submissions
+  for select to authenticated using (true);
 ```
 
-Left card: light/muted. Right card: dark/bold. The contrast does the teaching.
+### 2. Slide 2 — 6th card (`src/pages/Deck.tsx`)
+
+- Add a 6th card to the grid after the 5 PAIN_POINTS cards
+- Styled with a dashed border, slightly different from the others — signals "write your own"
+- Label: **"Something else"** with subtext like "Tell us what you're dealing with"
+- On click: expands an inline textarea + submit button (no modal)
+- On submit: inserts into `deck_submissions`, shows brief "Thanks" confirmation, collapses back
+- No auth required — anonymous insert
+
+### 3. Admin panel — Submissions feed (`src/pages/Admin.tsx`)
+
+- Add a collapsible "Deck Submissions" section below the post list (or as a tab)
+- Simple feed: each submission is a card with the message text + relative timestamp ("3 hours ago")
+- Sorted newest-first
+- Query via Supabase client (authenticated, so RLS allows reads)
+- Clean, minimal design matching existing admin aesthetic
 
 ## Files modified
-- `src/pages/Deck.tsx` — rewrite Frame 3 section (~lines 507-578), remove `confrontationStep` state and its `useEffect` timer
+- `src/pages/Deck.tsx` — add 6th card with inline input + submit logic
+- `src/pages/Admin.tsx` — add submissions feed section
+- New migration for `deck_submissions` table
 
