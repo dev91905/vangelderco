@@ -442,7 +442,7 @@ const Deck = () => {
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-12">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 lg:gap-12">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), maxWidth: "600px", flex: "0 0 auto" }}>
               What's getting in the way?
             </p>
