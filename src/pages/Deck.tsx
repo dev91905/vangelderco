@@ -68,12 +68,13 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "Research", yours: "Focus groups to test messages", theirs: "Monitor what's already resonating organically" },
-  { dimension: "Content", yours: "Polished ads, op-eds, documentaries", theirs: "Entire creator ecosystems and self-funded investigative journalism — content around the clock" },
-  { dimension: "Distribution", yours: "Buy placements on platforms", theirs: "Acquire the platforms and change the algorithms" },
-  { dimension: "Engagement", yours: "Pay handfuls of influencers to post", theirs: "Organize at massive scale — churches, campuses, veteran groups, local networks" },
-  { dimension: "Measurement", yours: "Count impressions and report reach", theirs: "Track what's shifting polls, moving legislation, growing their base" },
-  { dimension: "Iteration", yours: "Declare success and fund the next one", theirs: "Cut what's failing, pour resources into what's working" },
+  { dimension: "Research", yours: "Commission focus groups to test which messages poll best before launching.", theirs: "Monitor what's already resonating organically across platforms and communities." },
+  { dimension: "Content", yours: "Produce polished ads, op-eds, and documentaries on a campaign calendar.", theirs: "Fund entire creator ecosystems producing content around the clock." },
+  { dimension: "Distribution", yours: "Buy media placements and hope the right audiences see them.", theirs: "Acquire platforms and change the algorithms that decide what people see." },
+  { dimension: "Engagement", yours: "Pay a handful of influencers to post scripted content for a cycle.", theirs: "Organize at massive scale through churches, campuses, veterans, and local networks." },
+  { dimension: "Measurement", yours: "Count impressions, reach, and media mentions at the end of the grant.", theirs: "Track what's shifting polls, moving legislation, and growing their base in real time." },
+  { dimension: "Iteration", yours: "Declare success when the grant closes and move on to the next one.", theirs: "Cut what's failing mid-cycle and pour resources into what's actually working." },
+  { dimension: "Overall doctrine", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
 ];
 
 /* ─── Three domains ─── */
@@ -511,57 +512,67 @@ const Deck = () => {
             </p>
           </div>
 
-          {/* ── Two-card comparison ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={r3.stagger(2, 200)}>
-            {/* LEFT CARD — Your portfolio (muted, anemic) */}
-            <div style={{
-              background: f.ink(0.03),
-              borderRadius: "12px",
-              padding: "clamp(20px, 2.5vw, 32px)",
-            }}>
-              <p style={{ ...label("10px"), marginBottom: "20px", color: f.ink(0.35) }}>Your current portfolio</p>
-              <div className="flex flex-col gap-4">
-                {CONFRONTATION_ROWS.map((row, i) => (
-                  <div key={i}>
-                    <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 700, color: f.ink(0.25), letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: "4px" }}>
-                      {row.dimension}
-                    </p>
-                    <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.45), lineHeight: 1.6 }}>
-                      {row.yours}
-                    </p>
-                  </div>
-                ))}
-              </div>
+          {/* ── Comparison table in a single card ── */}
+          <div style={{
+            background: f.ink(0.03),
+            borderRadius: "12px",
+            padding: "clamp(20px, 2.5vw, 32px)",
+            ...r3.stagger(2, 200),
+          }}>
+            {/* Column headers */}
+            <div className="grid" style={{ gridTemplateColumns: "140px 1fr 1fr", gap: "16px", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "12px", marginBottom: "4px" }}>
+              <div />
+              <p style={{ ...label("10px"), color: f.ink(0.35) }}>Your current portfolio</p>
+              <p style={{ ...label("10px"), color: f.ink(0.6) }}>How the opposition operates</p>
             </div>
 
-            {/* RIGHT CARD — The opposition (dark, dominant) */}
-            <div style={{
-              background: f.ink(0.9),
-              borderRadius: "12px",
-              padding: "clamp(20px, 2.5vw, 32px)",
-            }}>
-              <p style={{ fontFamily: f.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase" as const, marginBottom: "20px", color: "hsl(40 30% 70%)" }}>How the opposition operates</p>
-              <div className="flex flex-col gap-4">
-                {CONFRONTATION_ROWS.map((row, i) => (
-                  <div key={i}>
-                    <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 700, color: "hsl(40 30% 60%)", letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: "4px" }}>
-                      {row.dimension}
-                    </p>
-                    <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 16px)", color: f.cream, lineHeight: 1.6, fontWeight: 500 }}>
-                      {row.theirs}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* ── Kicker — always visible ── */}
-          <div style={{ ...r3.stagger(3, 400), maxWidth: "720px" }}>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.5), lineHeight: 1.7 }}>
-              You test messages in a petri dish and pay people to watch the winners.{" "}
-              <span style={{ color: f.ink(0.85), fontWeight: 600 }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
-            </p>
+            {CONFRONTATION_ROWS.map((row, i) => {
+              const isLast = i === CONFRONTATION_ROWS.length - 1;
+              return (
+                <div
+                  key={i}
+                  className="grid"
+                  style={{
+                    gridTemplateColumns: "140px 1fr 1fr",
+                    gap: "16px",
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
+                    paddingTop: isLast ? "16px" : "12px",
+                    paddingBottom: "12px",
+                    borderTop: isLast ? `1px solid ${f.ink(0.12)}` : "none",
+                  }}
+                >
+                  <p style={{
+                    fontFamily: f.sans,
+                    fontSize: "clamp(11px, 1.1vw, 13px)",
+                    fontWeight: 700,
+                    color: isLast ? f.ink(0.7) : f.ink(0.35),
+                    textTransform: "uppercase" as const,
+                    letterSpacing: "0.06em",
+                    paddingTop: "2px",
+                  }}>
+                    {row.dimension}
+                  </p>
+                  <p style={{
+                    fontFamily: f.serif,
+                    fontSize: "clamp(13px, 1.3vw, 15px)",
+                    color: isLast ? f.ink(0.6) : f.ink(0.45),
+                    lineHeight: 1.65,
+                    fontWeight: isLast ? 500 : 400,
+                  }}>
+                    {row.yours}
+                  </p>
+                  <p style={{
+                    fontFamily: f.serif,
+                    fontSize: "clamp(13px, 1.3vw, 15px)",
+                    color: isLast ? f.ink(0.85) : f.ink(0.7),
+                    lineHeight: 1.65,
+                    fontWeight: isLast ? 600 : 400,
+                  }}>
+                    {row.theirs}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </DeckFrame>
