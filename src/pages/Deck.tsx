@@ -196,7 +196,7 @@ const Deck = () => {
 
   /* ─── Branching state ─── */
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
-  const [confrontationStep, setConfrontationStep] = useState(0);
+  
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
@@ -290,13 +290,7 @@ const Deck = () => {
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
-  useEffect(() => {
-    if (currentFrame !== 2) { setConfrontationStep(0); return; }
-    const timer = setInterval(() => {
-      setConfrontationStep((prev) => { if (prev >= CONFRONTATION_ROWS.length - 1) { clearInterval(timer); return prev; } return prev + 1; });
-    }, 900);
-    return () => clearInterval(timer);
-  }, [currentFrame]);
+  /* confrontation timer removed — all rows appear at once */
 
   return (
     <div
@@ -517,64 +511,58 @@ const Deck = () => {
             </p>
           </div>
 
-          {/* ── Comparison table ── */}
-          <div className="w-full" style={r3.stagger(2, 200)}>
-            {/* Column headers */}
-            <div className="grid" style={{ gridTemplateColumns: "120px 1fr 40px 1fr", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "12px", marginBottom: "4px" }}>
-              <div />
-              <div style={{ ...label("10px") }}>Your current portfolio</div>
-              <div />
-              <div style={{ ...label("10px"), color: f.ink(0.6) }}>How the opposition operates</div>
+          {/* ── Two-card comparison ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={r3.stagger(2, 200)}>
+            {/* LEFT CARD — Your portfolio (muted, anemic) */}
+            <div style={{
+              background: f.ink(0.03),
+              borderRadius: "12px",
+              padding: "clamp(20px, 2.5vw, 32px)",
+            }}>
+              <p style={{ ...label("10px"), marginBottom: "20px", color: f.ink(0.35) }}>Your current portfolio</p>
+              <div className="flex flex-col gap-4">
+                {CONFRONTATION_ROWS.map((row, i) => (
+                  <div key={i}>
+                    <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 700, color: f.ink(0.25), letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: "4px" }}>
+                      {row.dimension}
+                    </p>
+                    <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.45), lineHeight: 1.6 }}>
+                      {row.yours}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {CONFRONTATION_ROWS.map((row, i) => {
-              const isRevealed = r3.isActive && i <= confrontationStep;
-              const isFocused = i === confrontationStep;
-              return (
-                <div
-                  key={i}
-                  className="grid transition-all duration-500"
-                  style={{
-                    gridTemplateColumns: "120px 1fr 40px 1fr",
-                    borderBottom: i < CONFRONTATION_ROWS.length - 1 ? `1px solid ${f.ink(0.04)}` : "none",
-                    opacity: isRevealed ? 1 : 0,
-                    transform: isRevealed ? "translateX(0)" : "translateX(12px)",
-                  }}
-                >
-                  <div style={{ padding: "14px 0", fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 14px)", fontWeight: 700, color: isFocused ? f.ink(0.7) : f.ink(0.3) }}>
-                    {row.dimension}
+            {/* RIGHT CARD — The opposition (dark, dominant) */}
+            <div style={{
+              background: f.ink(0.9),
+              borderRadius: "12px",
+              padding: "clamp(20px, 2.5vw, 32px)",
+            }}>
+              <p style={{ fontFamily: f.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase" as const, marginBottom: "20px", color: "hsl(40 30% 70%)" }}>How the opposition operates</p>
+              <div className="flex flex-col gap-4">
+                {CONFRONTATION_ROWS.map((row, i) => (
+                  <div key={i}>
+                    <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 700, color: "hsl(40 30% 60%)", letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: "4px" }}>
+                      {row.dimension}
+                    </p>
+                    <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 16px)", color: f.cream, lineHeight: 1.6, fontWeight: 500 }}>
+                      {row.theirs}
+                    </p>
                   </div>
-                  <div style={{ padding: "14px 0", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 15px)", color: f.ink(0.4), lineHeight: 1.65 }}>
-                    {row.yours}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <div style={{ width: "1px", height: "60%", background: f.ink(0.06) }} />
-                  </div>
-                  <div style={{
-                    padding: "14px 0",
-                    fontFamily: f.serif,
-                    fontSize: "clamp(12px, 1.3vw, 15px)",
-                    color: isFocused ? f.ink(0.85) : f.ink(0.6),
-                    lineHeight: 1.65,
-                    fontWeight: isFocused ? 600 : 400,
-                    transition: "all 0.4s ease",
-                  }}>
-                    {row.theirs}
-                  </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* ── Kicker ── */}
-          {confrontationStep >= CONFRONTATION_ROWS.length - 1 && (
-            <div style={{ opacity: 0, animation: "deck-fade-up 0.6s ease 400ms forwards", maxWidth: "680px" }}>
-              <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.5), lineHeight: 1.7 }}>
-                You test messages in a petri dish and pay people to watch the winners.{" "}
-                <span style={{ color: f.ink(0.85), fontWeight: 600 }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
-              </p>
-            </div>
-          )}
+          {/* ── Kicker — always visible ── */}
+          <div style={{ ...r3.stagger(3, 400), maxWidth: "720px" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+              You test messages in a petri dish and pay people to watch the winners.{" "}
+              <span style={{ color: f.ink(0.85), fontWeight: 600 }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
+            </p>
+          </div>
         </div>
       </DeckFrame>
 
