@@ -55,7 +55,9 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
         className={`relative flex ${alignStyles[align]}`}
         style={{
           height: "100dvh",
-          width: "100%",
+          width: "100vw",
+          minWidth: "100vw",
+          flexShrink: 0,
           scrollSnapAlign: "start",
           minHeight: "100dvh",
         }}

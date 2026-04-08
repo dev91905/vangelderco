@@ -322,12 +322,15 @@ const Deck = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-background"
+      className="relative bg-background"
       style={{
         height: "100dvh",
-        overflowY: "auto",
-        overflowX: "hidden",
-        scrollSnapType: "y mandatory",
+        width: "100vw",
+        overflowX: "auto",
+        overflowY: "hidden",
+        scrollSnapType: "x mandatory",
+        display: "flex",
+        flexDirection: "row",
       }}
     >
       {/* Breathing red glow */}
@@ -360,7 +363,7 @@ const Deck = () => {
       <svg className="fixed bottom-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 16v7h-7" /></svg>
 
       {/* Progress dots */}
-      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-2" aria-label="Slide navigation">
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-row gap-2" aria-label="Slide navigation">
         {Array.from({ length: TOTAL_FRAMES - 1 }).map((_, i) => (
           <button
             key={i}
@@ -437,8 +440,8 @@ const Deck = () => {
             5 minutes
           </p>
           <div style={{ ...r1.stagger(4, 1200) }}>
-            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint 2s ease-in-out infinite", display: "block" }}>
-              ↓ scroll
+            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint-h 2s ease-in-out infinite", display: "block" }}>
+              → scroll
             </span>
           </div>
         </div>
@@ -509,7 +512,7 @@ const Deck = () => {
           </div>
           {!selectedPain && (
             <p style={{ ...mono("8px"), color: f.white(0.15), ...r2.stagger(3, 800) }}>
-              ↓ or skip and keep scrolling
+              → or skip and keep scrolling
             </p>
           )}
         </div>
@@ -1235,7 +1238,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(11)}>
         <div className="flex flex-col items-center text-center gap-6">
           <p style={{ ...mono("10px"), color: f.white(0.15) }}>
-            ↑ Scroll up to explore
+            ← Scroll back to explore
           </p>
           <h2
             style={{
