@@ -36,7 +36,7 @@ const AdminLogin = () => {
       </Link>
       <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-5">
         <div className="text-center space-y-1">
-          <h1 className="text-2xl font-medium tracking-tight" style={{ fontFamily: t.serif, color: t.ink(0.85) }}>Content Manager</h1>
+          <h1 className="text-2xl font-medium tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
           <p className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Sign in</p>
         </div>
         <div className="space-y-3">

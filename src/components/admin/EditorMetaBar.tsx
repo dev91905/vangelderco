@@ -79,7 +79,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
     <>
       <div className="px-4 md:px-8 pt-4 pb-2">
         <input value={props.title} onChange={(e) => props.onTitleChange(e.target.value)} placeholder="Untitled"
-          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-medium tracking-tight" style={{ fontFamily: t.serif, color: t.ink(0.9) }} />
+          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-medium tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.9) }} />
         <div className="flex items-center gap-2 mt-2">
           <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>/post/</span>
           <input value={props.slug} onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}

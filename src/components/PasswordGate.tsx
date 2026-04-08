@@ -24,7 +24,7 @@ const PasswordGate = ({ title, heroImageUrl, onUnlock }: PasswordGateProps) => {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center" style={{ background: t.cream }}>
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 max-w-md w-full">
-        <h1 className="text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ fontFamily: t.serif, color: t.ink(0.85) }}>
+        <h1 className="text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
           {title}
         </h1>
         <div className="flex flex-col items-center gap-3">
@@ -91,7 +91,7 @@ export const PasswordGateWrapper = ({ slug, title, heroImageUrl, capability, req
         ← Back
       </Link>
       <div className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 px-5 sm:px-6 py-8 max-w-sm sm:max-w-md w-full max-h-screen">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ fontFamily: t.serif, color: t.ink(0.85) }}>{title}</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-center leading-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{title}</h1>
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: t.border(0.1), background: t.ink(0.03) }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.ink(0.4)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

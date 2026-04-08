@@ -69,7 +69,7 @@ const Index = () => {
                 />
                 <span
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-normal leading-[1.15] transition-colors duration-150"
-                  style={{ fontFamily: t.serif, color: t.ink(0.8) }}
+                  style={{ fontFamily: t.sans, color: t.ink(0.8) }}
                 >
                   {link.label}
                 </span>

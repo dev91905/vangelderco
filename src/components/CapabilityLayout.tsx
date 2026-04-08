@@ -45,7 +45,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
             {label}
           </span>
 
-          <h1 className="text-[28px] md:text-[40px] lg:text-[44px] font-normal leading-[1.15] text-center" style={{ fontFamily: t.serif, color: t.ink(0.9), animation: "clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both" }}>
+          <h1 className="text-[28px] md:text-[40px] lg:text-[44px] font-normal leading-[1.15] text-center" style={{ fontFamily: t.sans, color: t.ink(0.9), animation: "clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both" }}>
             {title}
           </h1>
 
