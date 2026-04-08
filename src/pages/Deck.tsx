@@ -442,35 +442,37 @@ const Deck = () => {
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), maxWidth: "700px" }}>
-            What's getting in the way?
-          </p>
-          <p style={{ ...body(0.4), ...r2.stagger(1), maxWidth: "560px" }}>
-            These are the most common challenges we see in stratcomm portfolios. Select everything that resonates.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 200)}>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-12">
+            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), maxWidth: "600px", flex: "0 0 auto" }}>
+              What's getting in the way?
+            </p>
+            <p style={{ ...body(0.4), ...r2.stagger(1), maxWidth: "400px", flex: "0 0 auto", fontSize: "clamp(14px, 1.4vw, 16px)" }}>
+              These are the most common challenges we see in stratcomm portfolios. Select everything that resonates.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 100)}>
             {PAIN_POINTS.map((pain, i) => {
               const isSelected = selectedPains.includes(pain.id);
               return (
                 <button
                   key={pain.id}
                   onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
-                  className="text-left transition-all duration-300"
+                  className="text-left"
                   style={{
                     padding: "28px 24px",
-                    border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? f.ink(0.9) : "transparent",
+                    border: isSelected ? `1px solid ${f.ink(0.15)}` : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? f.ink(0.08) : "transparent",
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
-                    transform: r2.isActive ? "translateY(0)" : "translateY(16px)",
-                    transition: `all 0.5s ease ${300 + i * 120}ms`,
+                    transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
+                    transition: `opacity 0.3s ease ${100 + i * 60}ms, transform 0.3s ease ${100 + i * 60}ms, background 0.15s ease, border 0.15s ease`,
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.65), marginBottom: "8px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
                     {pain.short}
                   </p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
                     {pain.detail}
                   </p>
                   {isSelected && (
@@ -478,10 +480,10 @@ const Deck = () => {
                       style={{
                         marginTop: "16px",
                         paddingTop: "12px",
-                        borderTop: `1px solid ${f.ink(0.7)}`,
+                        borderTop: `1px solid ${f.ink(0.1)}`,
                         fontFamily: f.serif,
                         fontSize: "clamp(12px, 1.3vw, 14px)",
-                        color: "hsl(40 30% 75%)",
+                        color: f.ink(0.5),
                         lineHeight: 1.6,
                         fontStyle: "italic",
                       }}
