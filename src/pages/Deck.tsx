@@ -198,6 +198,21 @@ const Deck = () => {
 
   /* ─── Branching state ─── */
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customMessage, setCustomMessage] = useState("");
+  const [customSubmitted, setCustomSubmitted] = useState(false);
+  const [customSubmitting, setCustomSubmitting] = useState(false);
+
+  const handleCustomSubmit = async (e?: FormEvent) => {
+    e?.preventDefault();
+    if (!customMessage.trim() || customSubmitting) return;
+    setCustomSubmitting(true);
+    await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
+    setCustomSubmitting(false);
+    setCustomSubmitted(true);
+    setCustomMessage("");
+    setTimeout(() => { setCustomSubmitted(false); setCustomOpen(false); }, 2000);
+  };
   
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
