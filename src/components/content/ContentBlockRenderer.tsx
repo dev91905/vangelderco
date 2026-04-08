@@ -50,7 +50,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return <div key={i} className="w-full" dangerouslySetInnerHTML={{ __html: block.html }} />;
           case "quote":
             return (
-              <blockquote key={i} className="pl-4 md:pl-6 py-2">
+              <blockquote key={i} className="pl-4 md:pl-6 py-2" style={{ borderLeft: `2px solid ${t.ink(0.12)}` }}>
                 <p className="text-[15px] md:text-[17px] leading-[1.7] italic" style={{ fontFamily: t.serif, color: t.ink(0.6) }}>"{block.text}"</p>
                 {block.attribution && <cite className="text-[12px] not-italic mt-2 block" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>— {block.attribution}</cite>}
               </blockquote>
