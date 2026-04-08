@@ -44,6 +44,25 @@
     font-family: 'Inter', system-ui, sans-serif;
     overflow: hidden;
   }
+
+  /* Horizontal deck scrollbar */
+  .deck-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+  .deck-scroll::-webkit-scrollbar-track {
+    background: hsl(0 0% 5%);
+  }
+  .deck-scroll::-webkit-scrollbar-thumb {
+    background: hsl(0 80% 48% / 0.3);
+    border-radius: 2px;
+  }
+  .deck-scroll::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 80% 48% / 0.5);
+  }
+  .deck-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 80% 48% / 0.3) hsl(0 0% 5%);
+  }
 }
 
 /* Film grain overlay */

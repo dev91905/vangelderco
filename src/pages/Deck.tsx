@@ -280,6 +280,21 @@ const Deck = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
+  // Mouse wheel → horizontal scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      if (selectedCase !== null) return;
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [selectedCase]);
+
   const setRef = (i: number) => (el: HTMLDivElement | null) => {
     frameRefs.current[i] = el;
   };
@@ -322,7 +337,7 @@ const Deck = () => {
   return (
     <div
       ref={containerRef}
-      className="relative bg-background"
+      className="relative bg-background deck-scroll"
       style={{
         height: "100dvh",
         width: "100vw",
