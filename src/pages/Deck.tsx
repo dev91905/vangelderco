@@ -43,6 +43,25 @@ const mono = (size = "9px"): CSSProperties => ({
   textTransform: "uppercase" as const,
 });
 
+/* ─── StatChip (hoisted for use in CASE_STUDIES) ─── */
+const StatChip = ({ value, label }: { value: string; label: string }) => (
+  <div
+    className="flex flex-col px-4 py-3"
+    style={{
+      background: "hsl(0 0% 4%)",
+      border: `1px solid ${f.white(0.06)}`,
+      borderLeft: `2px solid ${f.redA(0.6)}`,
+    }}
+  >
+    <span style={{ ...mono("clamp(14px, 1.6vw, 20px)"), fontWeight: 500, color: f.redA(0.9) }}>
+      {value}
+    </span>
+    <span style={{ ...mono("9px"), color: f.white(0.35), marginTop: "4px" }}>
+      {label}
+    </span>
+  </div>
+);
+
 /* ─── Case Study Data ─── */
 const CASE_STUDIES: {
   name: string;
