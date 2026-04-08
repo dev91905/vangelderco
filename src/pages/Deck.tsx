@@ -486,11 +486,11 @@ const Deck = () => {
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-36">
-            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "1 1 50%" }}>
+          <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-24">
+            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "0 0 auto", maxWidth: "50%" }}>
               What's getting in your way?
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r2.stagger(1), flex: "1 1 50%" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1), flex: "1 1 auto", paddingTop: "clamp(4px, 0.5vw, 10px)" }}>
               More foundations are rethinking their stratcomm portfolios than ever. These are the challenges we see most — select all that resonate.
             </p>
           </div>
