@@ -291,7 +291,6 @@ const Deck = () => {
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
   /* confrontation timer removed — all rows appear at once */
-  }, [currentFrame]);
 
   return (
     <div
