@@ -200,7 +200,7 @@ const Deck = () => {
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
   const [customOpen, setCustomOpen] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
-  const [openRow, setOpenRow] = useState<number | null>(null);
+  const [openRows, setOpenRows] = useState<Set<number>>(new Set());
   const [customSubmitted, setCustomSubmitted] = useState(false);
   const [customSubmitting, setCustomSubmitting] = useState(false);
 
