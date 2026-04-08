@@ -741,8 +741,8 @@ const Deck = () => {
                 })}
               </div>
             </div>
-          );
-        })()}
+          </div>
+        </div>
       </DeckFrame>
 
       {/* ═══ FRAME 4: Hallmarks ═══ */}
