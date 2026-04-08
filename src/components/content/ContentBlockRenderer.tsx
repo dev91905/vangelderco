@@ -30,7 +30,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return <Tag key={i} className={`${sizes[block.level] || sizes[3]} font-medium leading-[1.3]`} style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{block.text}</Tag>;
           }
           case "paragraph":
-            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={{ ...t.body(0.55), fontSize: "clamp(15px, 1.6vw, 16px)" }}>{block.text}</p>;
+            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={t.body()}>{block.text}</p>;
           case "image":
             return (
               <figure key={i} className="flex flex-col gap-2">
@@ -51,14 +51,14 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
           case "quote":
             return (
               <blockquote key={i} className="pl-4 md:pl-6 py-2" style={{ borderLeft: `2px solid ${t.ink(0.12)}` }}>
-                <p className="text-[15px] md:text-[17px] leading-[1.7] italic" style={{ fontFamily: t.serif, color: t.ink(0.6) }}>"{block.text}"</p>
+                <p className="text-[15px] md:text-[17px] leading-[1.7] italic" style={{ fontFamily: t.serif, color: t.ink(0.86) }}>"{block.text}"</p>
                 {block.attribution && <cite className="text-[12px] not-italic mt-2 block" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>— {block.attribution}</cite>}
               </blockquote>
             );
           case "callout":
             return (
               <div key={i} className="p-4 md:p-5 rounded-xl" style={{ background: t.ink(0.02), border: t.border(0.04) }}>
-                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ ...t.body(0.5), fontSize: "clamp(13px, 1.4vw, 14px)" }}>{block.text}</p>
+                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ ...t.body(0.82), fontSize: "clamp(15px, 1.5vw, 16px)" }}>{block.text}</p>
               </div>
             );
           default:

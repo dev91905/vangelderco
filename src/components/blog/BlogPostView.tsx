@@ -49,7 +49,7 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
         <main className="flex flex-col items-center px-6 pb-20 max-w-[680px] mx-auto -mt-16 relative z-10">
           <div className="flex items-center gap-3 mb-6" style={{ animation: "fade-up 0.5s ease-out 0.2s both" }}>
             <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Blog Post</span>
-            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>·</span>
+            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>//</span>
             <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{capabilityLabel[post.capability] || post.capability}</span>
           </div>
 
@@ -58,7 +58,7 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
           </h1>
 
           {post.excerpt && (
-            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ ...t.body(0.5), fontSize: "clamp(15px, 1.7vw, 15px)", textAlign: "center", animation: "fade-up 0.5s ease-out 0.35s both" }}>
+            <p className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4" style={{ ...t.body(), fontSize: "clamp(17px, 1.9vw, 19px)", textAlign: "center", animation: "fade-up 0.5s ease-out 0.35s both" }}>
               {post.excerpt}
             </p>
           )}
@@ -73,7 +73,7 @@ const BlogPostView = ({ post }: BlogPostViewProps) => {
 
           <article className="w-full" style={{ animation: "fade-up 0.6s ease-out 0.6s both" }}>
             {post.content_blocks ? <ContentBlockRenderer blocks={post.content_blocks} /> : (
-              <p className="text-[15px] leading-[1.9]" style={{ ...t.body(0.4), fontSize: "clamp(15px, 1.7vw, 15px)" }}>No content available.</p>
+              <p className="text-[15px] leading-[1.9]" style={t.body()}>No content available.</p>
             )}
           </article>
         </main>
