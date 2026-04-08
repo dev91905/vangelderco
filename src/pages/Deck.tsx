@@ -235,7 +235,10 @@ const Deck = () => {
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [expandedHallmark, setExpandedHallmark] = useState<number | null>(null);
 
-  useEffect(() => {
+  /* Fetch booking link from settings */
+  const { data: siteSettings } = useSiteSettings();
+  const bookingLink = siteSettings?.booking_link || null;
+
     const observers: IntersectionObserver[] = [];
     frameRefs.current.forEach((el, i) => {
       if (!el) return;
