@@ -340,8 +340,6 @@ const Deck = () => {
     }
   }, [currentFrame]);
 
-  /* Whether slide 3 sequence should consume scroll/key input */
-  const confrontationConsuming = currentFrame === 2 && confrontationStep <= CONFRONTATION_ROWS.length;
 
   return (
     <div
