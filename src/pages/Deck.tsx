@@ -46,38 +46,38 @@ const mono = (size = "9px"): CSSProperties => ({
 /* ─── Pain points data ─── */
 const PAIN_POINTS = [
   {
-    id: "memory",
-    short: "No institutional memory",
-    detail: "No record of what was funded, why, or what it produced. Grants renewed because they've always been renewed.",
-    consequence: "You can't improve what you can't remember. Every new hire starts from zero.",
+    id: "history",
+    short: "No portfolio history",
+    detail: "Nobody tracks what was funded, what worked, or why. Every new hire starts from scratch.",
+    consequence: "You can't improve what you can't remember. Every cycle resets to zero.",
     capRelevance: "We build the institutional record that's never existed — audit everything, document what worked, create the baseline.",
   },
   {
-    id: "framework",
-    short: "No decision framework",
-    detail: "No structure for evaluating new proposals. The default is inertia.",
-    consequence: "Without a rubric, every grant is a gut call. Inertia wins by default.",
+    id: "evaluate",
+    short: "No way to evaluate proposals",
+    detail: "No rubric for what to fund next. The default is inertia — renew what's familiar.",
+    consequence: "Without a framework, every grant is a gut call. Inertia wins by default.",
     capRelevance: "We build customized decision-making frameworks your team owns and uses independently.",
   },
   {
     id: "access",
-    short: "No access beyond usual channels",
-    detail: "Grantees rely on comms firms, paid media, op-eds, and documentaries. Entire cultural sectors sit untouched.",
-    consequence: "The most powerful levers — music, faith, digital creators, campuses — aren't being touched.",
+    short: "Locked into the same channels",
+    detail: "The portfolio runs on op-eds, paid media, and docs. Entire cultural sectors sit untouched.",
+    consequence: "The most powerful levers — music, faith, digital creators, campuses — aren't being used.",
     capRelevance: "We connect you to every cultural sector you're missing — 480-member network across every industry.",
   },
   {
     id: "measurement",
-    short: "No real measurement",
-    detail: "Grantees report views and impressions. No framework connecting spend to outcomes.",
+    short: "Measuring the wrong things",
+    detail: "Grantees report views and impressions — or try to claim credit for wins that aren't attributable.",
     consequence: "You're counting scroll-bys while the other side is counting converts.",
     capRelevance: "We co-design measurement around power indicators — policy outcomes, coalition growth, capital unlocked.",
   },
   {
     id: "expertise",
-    short: "No media fluency in-house",
-    detail: "When leadership asks why the strategy isn't translating, it's hard to diagnose without media experience.",
-    consequence: "You're managing a media portfolio without anyone who's ever worked in media.",
+    short: "No media experience on staff",
+    detail: "When leadership asks why the strategy isn't landing, nobody in the room has ever worked in media.",
+    consequence: "You're managing a media portfolio without anyone who's ever built media.",
     capRelevance: "Our team comes from commercial media and entertainment — we transfer pattern recognition, not just advice.",
   },
 ];
@@ -227,7 +227,7 @@ const Deck = () => {
   const { playHoverGlitch } = useGlitchSFX();
 
   /* ─── Branching state ─── */
-  const [selectedPain, setSelectedPain] = useState<string | null>(null);
+  const [selectedPains, setSelectedPains] = useState<string[]>([]);
   const [confrontationStep, setConfrontationStep] = useState(0);
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
@@ -358,7 +358,7 @@ const Deck = () => {
   const r11 = useFrameReveal();
 
   /* ─── Derived state ─── */
-  const selectedPainData = PAIN_POINTS.find((p) => p.id === selectedPain);
+  const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
   // Auto-advance confrontation on frame 3 active
@@ -563,18 +563,18 @@ const Deck = () => {
               maxWidth: "700px",
             }}
           >
-            Which of these feels most true?
+            What's getting in the way?
           </p>
-          <p style={{ ...body(0.35), ...r2.stagger(1), maxWidth: "500px" }}>
-            Pick the one that resonates. It'll shape what we show you next.
+          <p style={{ ...body(0.35), ...r2.stagger(1), maxWidth: "560px" }}>
+            These are the most common challenges we see in stratcomm portfolios. Select everything that resonates.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0" style={r2.stagger(2, 200)}>
             {PAIN_POINTS.map((pain, i) => {
-              const isSelected = selectedPain === pain.id;
+              const isSelected = selectedPains.includes(pain.id);
               return (
                 <button
                   key={pain.id}
-                  onClick={() => setSelectedPain(isSelected ? null : pain.id)}
+                  onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
                   className="text-left transition-all duration-300"
                   style={{
                     padding: "28px 24px",
@@ -616,7 +616,7 @@ const Deck = () => {
               );
             })}
           </div>
-          {!selectedPain && (
+          {selectedPains.length === 0 && (
             <p style={{ ...mono("8px"), color: f.white(0.15), ...r2.stagger(3, 800) }}>
               → or skip and keep scrolling
             </p>
@@ -716,7 +716,7 @@ const Deck = () => {
               Three hallmarks of portfolios{" "}
               <span style={{ color: f.redA(0.8) }}>actually producing results.</span>
             </p>
-            {selectedPainData && (
+            {selectedPainDatas.length > 0 && (
               <p
                 style={{
                   marginTop: "20px",
@@ -729,7 +729,7 @@ const Deck = () => {
                   paddingLeft: "12px",
                 }}
               >
-                You said: "{selectedPainData.short}" — each of these addresses that directly.
+                You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
           </div>
@@ -886,12 +886,14 @@ const Deck = () => {
             </div>
           )}
 
-          {/* Connection to selected pain */}
-          {selectedPainData && activeDomainData && (
+          {/* Connection to selected pains */}
+          {selectedPainDatas.length > 0 && activeDomainData && (
             <div style={{ padding: "20px 24px", background: f.redA(0.03), borderBottom: `1px solid ${f.redA(0.1)}` }}>
-              <p style={{ fontFamily: f.sg, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.redA(0.7), lineHeight: 1.6 }}>
-                <span style={{ fontWeight: 600 }}>Re: "{selectedPainData.short}"</span> — {selectedPainData.capRelevance}
-              </p>
+              {selectedPainDatas.map((painData, i) => (
+                <p key={i} style={{ fontFamily: f.sg, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.redA(0.7), lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
+                  <span style={{ fontWeight: 600 }}>Re: "{painData.short}"</span> — {painData.capRelevance}
+                </p>
+              ))}
             </div>
           )}
         </div>
@@ -1236,7 +1238,7 @@ const Deck = () => {
           >
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
-          {selectedPainData && (
+          {selectedPainDatas.length > 0 && (
             <p
               style={{
                 ...r10.stagger(3, 900),
@@ -1248,7 +1250,7 @@ const Deck = () => {
                 maxWidth: "480px",
               }}
             >
-              "{selectedPainData.short}" — we've seen it before. We know how to fix it. And we'll show you how.
+              {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
         </div>
