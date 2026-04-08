@@ -50,9 +50,9 @@ const heading = (size = "clamp(18px, 2.6vw, 28px)"): React.CSSProperties => ({
   lineHeight: 1.3,
 });
 
-const body = (alpha = 0.88): React.CSSProperties => ({
+const body = (alpha = 0.55): React.CSSProperties => ({
   fontFamily: serif,
-  fontSize: "clamp(16px, 1.6vw, 19px)",
+  fontSize: "clamp(15px, 1.5vw, 17px)",
   color: ink(alpha),
   lineHeight: 1.8,
 });
