@@ -65,6 +65,24 @@ export type Database = {
         }
         Relationships: []
       }
+      deck_submissions: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           id: string
