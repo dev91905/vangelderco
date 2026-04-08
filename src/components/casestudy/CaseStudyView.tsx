@@ -45,7 +45,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
         <div className="w-full flex flex-col items-center justify-end px-6 pb-8" style={{ minHeight: "40vh" }}>
           <div className="flex items-center gap-3 mb-5" style={{ animation: "fade-up 0.5s ease-out 0.2s both" }}>
             <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Case Study</span>
-            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>·</span>
+            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>//</span>
             <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{capabilityLabel[post.capability] || post.capability}</span>
           </div>
 
