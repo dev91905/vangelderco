@@ -49,7 +49,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
             <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{capabilityLabel[post.capability] || post.capability}</span>
           </div>
 
-          <h1 className="text-[28px] md:text-[40px] font-medium leading-[1.15] text-center max-w-3xl mb-4" style={{ fontFamily: t.sans, color: t.ink(0.9), animation: "fade-up 0.5s ease-out 0.3s both" }}>
+          <h1 className="text-[28px] md:text-[40px] font-bold leading-[1.15] text-center max-w-3xl mb-4" style={{ fontFamily: t.sans, color: t.ink(0.9), animation: "fade-up 0.5s ease-out 0.3s both" }}>
             {post.title}
           </h1>
 

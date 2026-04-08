@@ -49,7 +49,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
             </span>
           )}
         </div>
-        <h3 data-title className="text-[15px] md:text-[17px] font-medium mb-2" style={{ fontFamily: t.sans, color: t.ink(0.8), transition: "color 300ms" }}>
+        <h3 data-title className="text-[15px] md:text-[17px] font-bold mb-2" style={{ fontFamily: t.sans, color: t.ink(0.8), transition: "color 300ms" }}>
           {post.title}
         </h3>
         {post.excerpt && (

@@ -28,7 +28,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended, compact }: ContentBlockR
           case "heading": {
             const Tag = `h${Math.min(block.level, 6)}` as keyof JSX.IntrinsicElements;
             const sizes: Record<number, string> = { 1: "text-[24px] md:text-[32px]", 2: "text-[20px] md:text-[26px]", 3: "text-[17px] md:text-[21px]" };
-            return <Tag key={i} className={`${sizes[block.level] || sizes[3]} font-medium leading-[1.3]`} style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{block.text}</Tag>;
+            return <Tag key={i} className={`${sizes[block.level] || sizes[3]} font-bold leading-[1.3]`} style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{block.text}</Tag>;
           }
           case "paragraph":
             return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={{ ...t.body(), ...(compact ? { fontSize: "clamp(15px, 1.5vw, 16px)" } : {}) }}>{block.text}</p>;

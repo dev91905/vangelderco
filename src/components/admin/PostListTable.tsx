@@ -46,7 +46,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
           onPointerEnter={(e) => { playHoverGlitch(); e.currentTarget.style.background = t.white; }}
           onPointerLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
           <div className="flex-1 min-w-0">
-            <h3 className="text-[15px] font-medium truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
+            <h3 className="text-[15px] font-bold truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
               {post.title}
               {(post as any).password && <Lock className="w-3 h-3 flex-shrink-0" style={{ color: t.ink(0.2) }} />}
             </h3>

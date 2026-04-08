@@ -12,7 +12,7 @@ const StatChips = ({ stats, visible }: StatChipsProps) => {
           background: t.ink(0.9), border: "none",
           animation: `fade-up 0.4s ease-out ${i * 0.1}s both`,
         }}>
-          <span className="text-[18px] md:text-[22px] font-medium" style={{ fontFamily: t.sans, color: t.cream }}>{stat.label}</span>
+          <span className="text-[18px] md:text-[22px] font-bold" style={{ fontFamily: t.sans, color: t.cream }}>{stat.label}</span>
           <span className="text-[10px] tracking-[0.08em] uppercase mt-1" style={{ fontFamily: t.sans, color: "hsl(40 30% 80%)" }}>{stat.description}</span>
         </div>
       ))}

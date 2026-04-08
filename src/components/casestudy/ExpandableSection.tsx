@@ -14,7 +14,7 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
     }}>
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 md:px-5 py-3 md:py-4 text-left group"
         style={{ background: open ? t.ink(0.9) : "transparent", transition: "background 0.2s ease" }}>
-        <span className="text-[14px] md:text-[15px] font-medium" style={{ fontFamily: t.sans, color: open ? t.cream : t.ink(0.5), transition: "color 0.2s ease" }}>
+        <span className="text-[14px] md:text-[15px] font-bold" style={{ fontFamily: t.sans, color: open ? t.cream : t.ink(0.5), transition: "color 0.2s ease" }}>
           {title}
         </span>
         <ChevronDown size={16} style={{ color: open ? t.cream : t.ink(0.3), transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease, color 0.2s ease" }} />
