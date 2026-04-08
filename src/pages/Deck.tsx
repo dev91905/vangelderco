@@ -643,251 +643,226 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 3: Confrontation — Animated Sequence ═══ */}
+      {/* ═══ FRAME 3: Confrontation — Scroll-Controlled Sequence ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} style={{ position: "relative", width: "100%", height: "100%" }}>
-          {/* ── Cinematic row-by-row walkthrough ── */}
-          {confrontationStep < CONFRONTATION_ROWS.length && (
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => setConfrontationStep(s => Math.min(s + 1, CONFRONTATION_ROWS.length))}
-            >
-              {/* Heading — visible on first step */}
-              <div style={{
-                opacity: confrontationStep === 0 ? 1 : 0,
-                transform: confrontationStep === 0 ? "translateY(0)" : "translateY(-12px)",
-                transition: "opacity 0.5s ease, transform 0.5s ease",
-                position: "absolute",
-                top: "clamp(24px, 4vw, 60px)",
-                left: 0,
-                right: 0,
-                textAlign: "center",
-              }}>
-                <p style={{ ...heading("clamp(22px, 3vw, 38px)"), fontWeight: 700 }}>
-                  What you're up against.
-                </p>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "12px" }}>
-                  Both sides try to shift public opinion and force policy outcomes — but they run completely different playbooks.
-                </p>
-              </div>
+        <div ref={r3.ref} className="flex flex-col justify-center" style={{ height: "100%", width: "100%" }}>
+          {(() => {
+            const isSequence = confrontationStep < CONFRONTATION_ROWS.length;
+            const isFinal = confrontationStep >= CONFRONTATION_ROWS.length;
+            const currentRow = isSequence ? CONFRONTATION_ROWS[confrontationStep] : null;
 
-              {/* Active row display */}
-              {CONFRONTATION_ROWS.map((row, i) => {
-                const isCurrent = i === confrontationStep;
-                const isPast = i < confrontationStep;
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      position: "absolute",
-                      left: "50%",
-                      top: "50%",
-                      transform: isCurrent
-                        ? "translate(-50%, -50%)"
-                        : isPast
-                          ? "translate(-50%, -50%) scale(0.95)"
-                          : "translate(-50%, -40%) scale(0.95)",
-                      opacity: isCurrent ? 1 : 0,
-                      transition: "opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-                      width: "min(90%, 900px)",
-                      pointerEvents: isCurrent ? "auto" : "none",
-                    }}
-                  >
-                    {/* Dimension label */}
+            return (
+              <>
+                {/* ── Persistent header ── */}
+                <div style={{
+                  marginBottom: isSequence ? "clamp(32px, 5vw, 64px)" : "clamp(16px, 2vw, 24px)",
+                  transition: "margin 0.4s ease",
+                }}>
+                  <div className="flex items-end justify-between">
                     <p style={{
+                      ...heading(isSequence ? "clamp(22px, 3vw, 38px)" : "clamp(18px, 2.2vw, 28px)"),
+                      fontWeight: 700,
+                      transition: "font-size 0.4s ease",
+                    }}>
+                      What you're up against.
+                    </p>
+                    {isFinal && (
+                      <button
+                        onClick={() => setConfrontationStep(0)}
+                        style={{
+                          fontFamily: f.sans,
+                          fontSize: "10px",
+                          letterSpacing: "0.08em",
+                          color: f.ink(0.35),
+                          background: "none",
+                          border: `1px solid ${f.ink(0.1)}`,
+                          borderRadius: "999px",
+                          padding: "5px 14px",
+                          cursor: "pointer",
+                          opacity: 1,
+                          animation: "fade-in 0.3s ease-out",
+                        }}
+                      >
+                        Replay
+                      </button>
+                    )}
+                  </div>
+                  {isSequence && (
+                    <p style={{
+                      fontFamily: f.serif,
+                      fontSize: "clamp(13px, 1.3vw, 16px)",
+                      color: f.ink(0.35),
+                      marginTop: "8px",
+                      lineHeight: 1.5,
+                    }}>
+                      Both sides try to shift public opinion and force policy outcomes — but they run completely different playbooks.
+                    </p>
+                  )}
+                </div>
+
+                {/* ── Sequence mode: one row at a time ── */}
+                {isSequence && currentRow && (
+                  <div style={{ position: "relative", minHeight: "clamp(160px, 20vw, 240px)" }}>
+                    {CONFRONTATION_ROWS.map((row, i) => {
+                      const isCurrent = i === confrontationStep;
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            position: i === confrontationStep ? "relative" : "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? "translateY(0)" : i > confrontationStep ? "translateY(20px)" : "translateY(-20px)",
+                            transition: "opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                            pointerEvents: isCurrent ? "auto" : "none",
+                          }}
+                        >
+                          {/* Dimension label */}
+                          <p style={{
+                            fontFamily: f.sans,
+                            fontSize: "10px",
+                            fontWeight: 600,
+                            textTransform: "uppercase" as const,
+                            letterSpacing: "0.15em",
+                            color: f.ink(0.25),
+                            marginBottom: "clamp(16px, 2vw, 28px)",
+                          }}>
+                            {row.dimension}
+                          </p>
+
+                          {/* Two-column comparison */}
+                          <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gap: "clamp(32px, 5vw, 80px)",
+                          }}>
+                            <div>
+                              <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "10px" }}>Your side</p>
+                              <p style={{
+                                fontFamily: f.serif,
+                                fontSize: "clamp(16px, 1.6vw, 21px)",
+                                color: f.ink(0.5),
+                                lineHeight: 1.65,
+                              }}>{row.yours}</p>
+                            </div>
+                            <div>
+                              <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, marginBottom: "10px" }}>Their side</p>
+                              <p style={{
+                                fontFamily: f.serif,
+                                fontSize: "clamp(16px, 1.6vw, 21px)",
+                                color: f.ink(0.85),
+                                lineHeight: 1.65,
+                                fontWeight: 500,
+                              }}>{row.theirs}</p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* ── Progress bar (sequence mode) ── */}
+                {isSequence && (
+                  <div style={{ marginTop: "clamp(32px, 5vw, 56px)", display: "flex", alignItems: "center", gap: "16px" }}>
+                    <div style={{
+                      flex: 1,
+                      height: "2px",
+                      background: f.ink(0.06),
+                      borderRadius: "1px",
+                      overflow: "hidden",
+                    }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
+                        background: f.ink(0.25),
+                        borderRadius: "1px",
+                        transition: "width 0.4s ease",
+                      }} />
+                    </div>
+                    <span style={{
                       fontFamily: f.sans,
                       fontSize: "10px",
-                      fontWeight: 600,
-                      textTransform: "uppercase" as const,
-                      letterSpacing: "0.15em",
-                      color: f.ink(0.3),
-                      marginBottom: "clamp(16px, 2vw, 28px)",
-                      textAlign: "center",
+                      color: f.ink(0.2),
+                      whiteSpace: "nowrap",
                     }}>
-                      {row.dimension} — {i + 1} of {CONFRONTATION_ROWS.length}
-                    </p>
+                      {confrontationStep + 1} / {CONFRONTATION_ROWS.length}
+                    </span>
+                  </div>
+                )}
 
-                    {/* Two-column comparison */}
+                {/* ── Final: full table view ── */}
+                {isFinal && (
+                  <div style={{ opacity: 1, animation: "fade-in 0.5s ease-out" }}>
+                    {/* Column headers */}
                     <div style={{
                       display: "grid",
                       gridTemplateColumns: "1fr 1fr",
-                      gap: "clamp(24px, 4vw, 60px)",
+                      paddingLeft: "clamp(80px, 8vw, 120px)",
+                      borderBottom: `1.5px solid ${f.ink(0.1)}`,
+                      paddingBottom: "6px",
                     }}>
-                      <div>
-                        <p style={{
-                          ...label("9px"),
-                          color: f.ink(0.3),
-                          marginBottom: "10px",
-                        }}>Your side</p>
-                        <p style={{
-                          fontFamily: f.serif,
-                          fontSize: "clamp(15px, 1.5vw, 19px)",
-                          color: f.ink(0.5),
-                          lineHeight: 1.65,
-                        }}>{row.yours}</p>
-                      </div>
-                      <div>
-                        <p style={{
-                          ...label("9px"),
-                          color: f.ink(0.55),
-                          fontWeight: 700,
-                          marginBottom: "10px",
-                        }}>Their side</p>
-                        <p style={{
-                          fontFamily: f.serif,
-                          fontSize: "clamp(15px, 1.5vw, 19px)",
-                          color: f.ink(0.85),
-                          lineHeight: 1.65,
-                          fontWeight: 500,
-                        }}>{row.theirs}</p>
-                      </div>
+                      <p style={{ ...label("9px"), color: f.ink(0.3) }}>Your side</p>
+                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700 }}>Their side</p>
                     </div>
+
+                    {/* Rows */}
+                    {CONFRONTATION_ROWS.map((row, i) => {
+                      const isLast = i === CONFRONTATION_ROWS.length - 1;
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr",
+                            borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
+                            borderTop: isLast ? `1.5px solid ${f.ink(0.1)}` : "none",
+                            opacity: 1,
+                            animation: `fade-in 0.3s ease-out ${i * 40}ms both`,
+                          }}
+                        >
+                          <div style={{ padding: "clamp(8px, 1vw, 12px) 0", paddingRight: "12px" }}>
+                            <p style={{
+                              fontFamily: f.sans,
+                              fontSize: "9px",
+                              fontWeight: 600,
+                              color: f.ink(0.3),
+                              textTransform: "uppercase" as const,
+                              letterSpacing: "0.1em",
+                              lineHeight: 1.4,
+                            }}>{row.dimension}</p>
+                          </div>
+                          <div style={{ padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)", borderLeft: `1px solid ${f.ink(0.05)}` }}>
+                            <p style={{
+                              fontFamily: f.serif,
+                              fontSize: "clamp(11px, 1vw, 13px)",
+                              color: f.ink(0.5),
+                              lineHeight: 1.55,
+                            }}>{row.yours}</p>
+                          </div>
+                          <div style={{
+                            padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)",
+                            borderLeft: `1px solid ${f.ink(0.05)}`,
+                            background: isLast ? f.ink(0.02) : "transparent",
+                          }}>
+                            <p style={{
+                              fontFamily: f.serif,
+                              fontSize: "clamp(11px, 1vw, 13px)",
+                              color: f.ink(0.75),
+                              lineHeight: 1.55,
+                              fontWeight: isLast ? 600 : 500,
+                            }}>{row.theirs}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-
-              {/* Progress dots */}
-              <div style={{
-                position: "absolute",
-                bottom: "clamp(24px, 4vw, 48px)",
-                left: "50%",
-                transform: "translateX(-50%)",
-                display: "flex",
-                gap: "8px",
-                alignItems: "center",
-              }}>
-                {CONFRONTATION_ROWS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => { e.stopPropagation(); setConfrontationStep(i); }}
-                    style={{
-                      width: i === confrontationStep ? "24px" : "6px",
-                      height: "6px",
-                      borderRadius: "999px",
-                      background: i <= confrontationStep ? f.ink(0.5) : f.ink(0.12),
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                      padding: 0,
-                    }}
-                  />
-                ))}
-                <span style={{
-                  fontFamily: f.sans,
-                  fontSize: "10px",
-                  color: f.ink(0.25),
-                  marginLeft: "8px",
-                }}>click to advance</span>
-              </div>
-            </div>
-          )}
-
-          {/* ── Final: full table view ── */}
-          {confrontationStep >= CONFRONTATION_ROWS.length && (
-            <div
-              className="flex flex-col"
-              style={{
-                gap: "clamp(16px, 2vw, 28px)",
-                opacity: 1,
-                animation: "fade-in 0.6s ease-out",
-              }}
-            >
-              <div className="flex items-end justify-between">
-                <p style={{ ...heading("clamp(18px, 2.2vw, 28px)"), fontWeight: 700 }}>
-                  What you're up against.
-                </p>
-                <button
-                  onClick={() => setConfrontationStep(0)}
-                  style={{
-                    fontFamily: f.sans,
-                    fontSize: "10px",
-                    letterSpacing: "0.08em",
-                    color: f.ink(0.35),
-                    background: "none",
-                    border: `1px solid ${f.ink(0.1)}`,
-                    borderRadius: "999px",
-                    padding: "5px 14px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Replay
-                </button>
-              </div>
-
-              {/* Column headers */}
-              <div>
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  paddingLeft: "clamp(80px, 8vw, 120px)",
-                  borderBottom: `1.5px solid ${f.ink(0.1)}`,
-                  paddingBottom: "6px",
-                }}>
-                  <p style={{ ...label("9px"), color: f.ink(0.3) }}>Your side</p>
-                  <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700 }}>Their side</p>
-                </div>
-
-                {/* Rows */}
-                {CONFRONTATION_ROWS.map((row, i) => {
-                  const isLast = i === CONFRONTATION_ROWS.length - 1;
-                  return (
-                    <div
-                      key={i}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr",
-                        borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                        borderTop: isLast ? `1.5px solid ${f.ink(0.1)}` : "none",
-                        opacity: 1,
-                        animation: `fade-in 0.3s ease-out ${i * 50}ms both`,
-                      }}
-                    >
-                      <div style={{ padding: "clamp(8px, 1vw, 12px) 0", paddingRight: "12px" }}>
-                        <p style={{
-                          fontFamily: f.sans,
-                          fontSize: "9px",
-                          fontWeight: 600,
-                          color: f.ink(0.3),
-                          textTransform: "uppercase" as const,
-                          letterSpacing: "0.1em",
-                          lineHeight: 1.4,
-                        }}>{row.dimension}</p>
-                      </div>
-                      <div style={{ padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)", borderLeft: `1px solid ${f.ink(0.05)}` }}>
-                        <p style={{
-                          fontFamily: f.serif,
-                          fontSize: "clamp(11px, 1vw, 13px)",
-                          color: f.ink(0.5),
-                          lineHeight: 1.55,
-                        }}>{row.yours}</p>
-                      </div>
-                      <div style={{
-                        padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)",
-                        borderLeft: `1px solid ${f.ink(0.05)}`,
-                        background: isLast ? f.ink(0.02) : "transparent",
-                      }}>
-                        <p style={{
-                          fontFamily: f.serif,
-                          fontSize: "clamp(11px, 1vw, 13px)",
-                          color: f.ink(0.75),
-                          lineHeight: 1.55,
-                          fontWeight: isLast ? 600 : 500,
-                        }}>{row.theirs}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+                )}
+              </>
+            );
+          })()}
         </div>
       </DeckFrame>
 
