@@ -294,7 +294,7 @@ const Deck = () => {
     if (currentFrame !== 2) { setConfrontationStep(0); return; }
     const timer = setInterval(() => {
       setConfrontationStep((prev) => { if (prev >= CONFRONTATION_ROWS.length - 1) { clearInterval(timer); return prev; } return prev + 1; });
-    }, 1800);
+    }, 900);
     return () => clearInterval(timer);
   }, [currentFrame]);
 
