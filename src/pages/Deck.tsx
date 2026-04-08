@@ -59,7 +59,7 @@ const PAIN_POINTS = [
   },
   {
     id: "expertise",
-    short: "No operators in the room",
+    short: "No media expertise",
     detail: "You're not a media expert. When something isn't working, you can't diagnose why — you've never operated in these sectors.",
     consequence: "When stakeholders ask what's broken, it takes operational experience most teams lack.",
     capRelevance: "Our team comes from commercial media — we bring pattern recognition, not just advice.",
