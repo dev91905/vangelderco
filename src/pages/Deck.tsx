@@ -75,7 +75,7 @@ const CONFRONTATION_ROWS = [
   { dimension: "Engagement", yours: "Pay a handful of influencers to post scripted content for a cycle.", theirs: "Organize at massive scale through churches, campuses, veterans, and local networks." },
   { dimension: "Measurement", yours: "Count impressions, reach, and media mentions at the end of the grant.", theirs: "Track what's shifting polls, moving legislation, and growing their base in real time." },
   { dimension: "Iteration", yours: "Declare success when the grant closes and move on to the next one.", theirs: "Cut what's failing mid-cycle and pour resources into what's actually working." },
-  { dimension: "Overall doctrine", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
+  { dimension: "Overall", yours: "Test messages in a controlled environment and pay people to watch the winners.", theirs: "Fund everything, watch what catches fire organically, and supercharge it." },
 ];
 
 /* ─── Three domains ─── */
