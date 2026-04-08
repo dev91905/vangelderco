@@ -40,7 +40,7 @@ const PAIN_POINTS = [
     id: "evaluate",
     short: "No strategic doctrine",
     detail: "You've got a landscape but no framework. When a proposal lands, you can't tell if it fits a strategy or just sounds good.",
-    consequence: "Every pitch is a gut call. You can't tell grantees what's missing or how to improve.",
+    consequence: "Every pitch becomes a gut call. It's hard to advise grantees without a shared framework.",
     capRelevance: "We build customized decision-making frameworks your team owns and uses independently.",
   },
   {
@@ -48,20 +48,20 @@ const PAIN_POINTS = [
     short: "Locked into familiar channels",
     detail: "Your grantees recycle the same playbook — op-eds, paid media, social, maybe a doc no one watches. No way to unlock more.",
     consequence: "The most powerful cultural sectors — music, faith, gaming, campuses — sit completely untouched.",
-    capRelevance: "We connect you to every cultural sector you're missing — 480-member network across every industry.",
+    capRelevance: "We open doors to every cultural sector that's currently out of reach — 480-member network across every industry.",
   },
   {
     id: "measurement",
     short: "Not sure how to measure",
     detail: "Grantees send views and impressions. Other donors tie funding to impossible benchmarks. You need to tell the impact story.",
-    consequence: "You can't defend the portfolio to leadership if you can't articulate what it's actually doing.",
+    consequence: "The impact story matters most — but the right framing is hard to build from reporting alone.",
     capRelevance: "We co-design measurement around power indicators — policy outcomes, coalition growth, capital unlocked.",
   },
   {
     id: "expertise",
     short: "No operators in the room",
     detail: "You're not a media expert. When something isn't working, you can't diagnose why — you've never operated in these sectors.",
-    consequence: "Your board, grantees, and partners ask what's wrong and you don't have the pattern recognition to answer.",
+    consequence: "When stakeholders ask what's not working, the diagnosis requires sector experience most teams don't carry.",
     capRelevance: "Our team comes from commercial media and entertainment — we transfer pattern recognition, not just advice.",
   },
 ];
