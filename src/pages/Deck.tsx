@@ -621,13 +621,16 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} className="flex flex-col" style={{ gap: "clamp(20px, 3vw, 36px)" }}>
+        <div ref={r3.ref} className="flex flex-col" style={{ gap: "clamp(24px, 3.5vw, 40px)" }}>
           {/* ── Editorial heading — split layout ── */}
           <div className="flex flex-col lg:flex-row lg:items-end" style={{ gap: "clamp(12px, 2vw, 32px)", ...r3.stagger(0) }}>
-            <p style={{ ...heading("clamp(22px, 3vw, 38px)"), fontWeight: 700, flex: "1 1 45%", lineHeight: 1.15 }}>
-              What you're up against.
-            </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.45), lineHeight: 1.55, flex: "1 1 55%" }}>
+            <div style={{ flex: "1 1 45%" }}>
+              <p style={{ ...heading("clamp(24px, 3.2vw, 42px)"), fontWeight: 700, lineHeight: 1.1 }}>
+                What you're up against.
+              </p>
+              <div style={{ width: "40px", height: "2px", background: f.ink(0.15), marginTop: "12px" }} />
+            </div>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.42), lineHeight: 1.55, flex: "1 1 55%" }}>
               Both sides of an issue try to do the same thing — shift public opinion, force policy outcomes. But they run completely different playbooks to get there.
             </p>
           </div>
@@ -637,14 +640,16 @@ const Deck = () => {
             {/* Column headers */}
             <div style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              paddingLeft: "clamp(90px, 9vw, 130px)",
-              borderBottom: `1.5px solid ${f.ink(0.12)}`,
-              paddingBottom: "8px",
-              marginBottom: "0",
+              gridTemplateColumns: "clamp(100px, 10vw, 140px) 1fr 1fr",
+              borderBottom: `2px solid ${f.ink(0.12)}`,
+              paddingBottom: "10px",
             }}>
-              <p style={{ ...label("9px"), color: f.ink(0.35) }}>Your side</p>
-              <p style={{ ...label("9px"), color: f.ink(0.55), fontWeight: 700 }}>Their side</p>
+              <div />
+              <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "clamp(12px, 1.5vw, 20px)" }}>Your side</p>
+              <div style={{ paddingLeft: "clamp(12px, 1.5vw, 20px)", display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ width: "12px", height: "1.5px", background: f.ink(0.4) }} />
+                <p style={{ ...label("9px"), color: f.ink(0.55), fontWeight: 700 }}>Their side</p>
+              </div>
             </div>
 
             {/* Rows */}
@@ -658,46 +663,67 @@ const Deck = () => {
               return (
                 <div
                   key={i}
+                  className="confrontation-row"
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "clamp(90px, 9vw, 130px) 1fr 1fr",
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
-                    borderTop: isLast ? `1.5px solid ${f.ink(0.12)}` : "none",
+                    gridTemplateColumns: "clamp(100px, 10vw, 140px) 1fr 1fr",
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
+                    borderTop: isLast ? `2px solid ${f.ink(0.12)}` : "none",
+                    transition: "background 0.15s ease",
+                    borderRadius: "2px",
                     ...anim,
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(0.02); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                 >
                   {/* Dimension label */}
-                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) 0", paddingRight: "16px" }}>
+                  <div style={{
+                    padding: "clamp(12px, 1.4vw, 18px) 0",
+                    paddingRight: "16px",
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "8px",
+                  }}>
+                    <span style={{
+                      fontFamily: f.sans,
+                      fontSize: "8px",
+                      fontWeight: 500,
+                      color: f.ink(0.18),
+                      fontVariantNumeric: "tabular-nums",
+                    }}>{String(i + 1).padStart(2, "0")}</span>
                     <p style={{
                       fontFamily: f.sans,
                       fontSize: "9px",
                       fontWeight: 600,
-                      color: f.ink(0.3),
+                      color: f.ink(isLast ? 0.5 : 0.3),
                       textTransform: "uppercase" as const,
                       letterSpacing: "0.1em",
                       lineHeight: 1.4,
                     }}>{row.dimension}</p>
                   </div>
                   {/* Your side */}
-                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)", borderLeft: `1px solid ${f.ink(0.06)}` }}>
+                  <div style={{
+                    padding: "clamp(12px, 1.4vw, 18px) clamp(14px, 1.8vw, 24px)",
+                    borderLeft: `1px solid ${f.ink(0.05)}`,
+                  }}>
                     <p style={{
                       fontFamily: f.serif,
-                      fontSize: "clamp(12px, 1.1vw, 14px)",
-                      color: f.ink(0.45),
-                      lineHeight: 1.55,
+                      fontSize: "clamp(12.5px, 1.15vw, 14.5px)",
+                      color: f.ink(0.42),
+                      lineHeight: 1.6,
                     }}>{row.yours}</p>
                   </div>
                   {/* Their side */}
                   <div style={{
-                    padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)",
-                    borderLeft: `1px solid ${f.ink(0.06)}`,
-                    background: isLast ? f.ink(0.03) : "transparent",
+                    padding: "clamp(12px, 1.4vw, 18px) clamp(14px, 1.8vw, 24px)",
+                    borderLeft: `1px solid ${f.ink(0.05)}`,
+                    background: isLast ? f.ink(0.025) : "transparent",
                   }}>
                     <p style={{
                       fontFamily: f.serif,
-                      fontSize: "clamp(12px, 1.1vw, 14px)",
-                      color: f.ink(0.75),
-                      lineHeight: 1.55,
+                      fontSize: "clamp(12.5px, 1.15vw, 14.5px)",
+                      color: f.ink(0.72),
+                      lineHeight: 1.6,
                       fontWeight: isLast ? 600 : 500,
                     }}>{row.theirs}</p>
                   </div>
