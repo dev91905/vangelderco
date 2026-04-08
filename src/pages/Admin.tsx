@@ -295,8 +295,7 @@ const ContactsFeed = () => {
     </div>
   );
 };
-
-
+const SubmissionsFeed = () => {
   const [open, setOpen] = useState(false);
   const { data: submissions, isLoading } = useQuery({
     queryKey: ["deck-submissions"],
