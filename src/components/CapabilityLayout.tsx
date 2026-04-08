@@ -35,7 +35,7 @@ const CapabilityLayout = ({
       <span
         className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
         style={{
-          color: "hsl(0 0% 100% / 0.15)",
+          color: "hsl(30 10% 12% / 0.3)",
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
@@ -48,13 +48,13 @@ const CapabilityLayout = ({
         className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.15em] uppercase transition-colors duration-300"
         style={{
           fontFamily: "'DM Sans', sans-serif",
-          color: "hsl(0 0% 100% / 0.3)",
+          color: "hsl(30 10% 12% / 0.35)",
         }}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)")
+          (e.currentTarget.style.color = "hsl(30 10% 12% / 0.8)")
         }
         onMouseLeave={(e) =>
-          (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")
+          (e.currentTarget.style.color = "hsl(30 10% 12% / 0.35)")
         }
       >
         ← Return
@@ -71,7 +71,7 @@ const CapabilityLayout = ({
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(40 50% 57% / 0.8)",
+              color: "hsl(30 10% 12% / 0.4)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -83,7 +83,7 @@ const CapabilityLayout = ({
             className="text-[28px] md:text-[40px] lg:text-[44px] font-normal leading-[1.15] text-center"
             style={{
               fontFamily: "'Instrument Serif', serif",
-              color: "hsl(0 0% 100% / 0.9)",
+              color: "hsl(30 10% 12% / 0.9)",
               animation: "clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both",
             }}
           >
@@ -95,7 +95,7 @@ const CapabilityLayout = ({
             className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl"
             style={{
               fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(0 0% 100% / 0.4)",
+              color: "hsl(30 10% 12% / 0.45)",
               animation: "fade-up 0.6s ease-out 0.9s both",
             }}
           >
@@ -107,7 +107,7 @@ const CapabilityLayout = ({
             className="w-16"
             style={{
               height: "1px",
-              background: "hsl(40 50% 57% / 0.25)",
+              background: "hsl(30 10% 12% / 0.1)",
               animation: "fade-up 0.6s ease-out 1.1s both",
             }}
           />
@@ -118,7 +118,7 @@ const CapabilityLayout = ({
               className="text-[10px] tracking-[0.15em] uppercase"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                color: "hsl(0 0% 100% / 0.2)",
+                color: "hsl(30 10% 12% / 0.25)",
               }}
             >
               Loading...
@@ -129,7 +129,7 @@ const CapabilityLayout = ({
                 className="text-[10px] tracking-[0.15em] uppercase mb-2"
                 style={{
                   fontFamily: "'DM Sans', sans-serif",
-                  color: "hsl(0 0% 100% / 0.2)",
+                  color: "hsl(30 10% 12% / 0.25)",
                   animation: "fade-up 0.5s ease-out 1.3s both",
                 }}
               >
@@ -144,7 +144,7 @@ const CapabilityLayout = ({
               className="text-[10px] tracking-[0.15em] uppercase"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                color: "hsl(0 0% 100% / 0.12)",
+                color: "hsl(30 10% 12% / 0.15)",
                 animation: "fade-up 0.5s ease-out 1.3s both",
               }}
             >

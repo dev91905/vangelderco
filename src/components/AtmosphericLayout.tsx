@@ -8,20 +8,6 @@ interface AtmosphericLayoutProps {
 const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-background">
-      {/* Breathing gold glow */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0"
-        style={{
-          width: "min(80vw, 700px)",
-          height: "min(80vh, 600px)",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse at center, hsl(40 50% 57% / 0.10) 0%, hsl(40 50% 57% / 0.05) 30%, hsl(40 50% 57% / 0.015) 55%, transparent 80%)",
-          animation: "breathe 8s ease-in-out infinite",
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
       <Link
         to="/admin"
         className="fixed bottom-6 right-6 z-30"
@@ -30,12 +16,12 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
           fontSize: "10px",
           letterSpacing: "0.15em",
           textTransform: "uppercase",
-          color: "hsl(0 0% 100% / 0.12)",
+          color: "hsl(30 10% 12% / 0.12)",
           transition: "color 300ms",
           textDecoration: "none",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(40 50% 57% / 0.7)")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.12)")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.5)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.12)")}
       >
         Admin
       </Link>
