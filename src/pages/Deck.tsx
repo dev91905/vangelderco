@@ -202,18 +202,32 @@ const Deck = () => {
   const [customMessage, setCustomMessage] = useState("");
   const [openRows, setOpenRows] = useState<Set<number>>(new Set());
   const [confrontationStep, setConfrontationStep] = useState(0);
-  const [customSubmitted, setCustomSubmitted] = useState(false);
-  const [customSubmitting, setCustomSubmitting] = useState(false);
+  const [customSaved, setCustomSaved] = useState(false); // local "saved" state — not DB
 
-  const handleCustomSubmit = async (e?: FormEvent) => {
+  /* CTA form state */
+  const [ctaMode, setCtaMode] = useState<"choose" | "email" | "thanks" | null>(null);
+  const [ctaForm, setCtaForm] = useState({ firstName: "", lastName: "", organization: "", email: "" });
+  const [ctaSubmitting, setCtaSubmitting] = useState(false);
+
+  const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
-    if (!customMessage.trim() || customSubmitting) return;
-    setCustomSubmitting(true);
-    await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
-    setCustomSubmitting(false);
-    setCustomSubmitted(true);
-    setCustomMessage("");
-    setTimeout(() => { setCustomSubmitted(false); setCustomOpen(false); }, 2000);
+    if (!ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim() || ctaSubmitting) return;
+    setCtaSubmitting(true);
+    // Save contact + custom challenge + selected pains
+    await supabase.from("deck_contacts" as any).insert({
+      first_name: ctaForm.firstName.trim(),
+      last_name: ctaForm.lastName.trim(),
+      organization: ctaForm.organization.trim() || null,
+      email: ctaForm.email.trim(),
+      custom_challenge: customSaved ? customMessage.trim() || null : null,
+      selected_pains: selectedPains.length > 0 ? selectedPains : null,
+    } as any);
+    // Also save the custom challenge to deck_submissions if present
+    if (customSaved && customMessage.trim()) {
+      await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
+    }
+    setCtaSubmitting(false);
+    setCtaMode("thanks");
   };
   
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
