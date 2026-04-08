@@ -421,7 +421,7 @@ const Deck = () => {
               maxWidth: "700px",
             }}
           >
-            For donor advisors and program officers who want a portfolio that{" "}
+            Everything we know — for donor advisors and program officers who want a portfolio that{" "}
             <em style={{ fontStyle: "italic", color: f.white(0.9) }}>hits harder.</em>
           </p>
           <p
@@ -434,7 +434,7 @@ const Deck = () => {
               maxWidth: "560px",
             }}
           >
-            The next few screens walk through how we think about strategic communications — and why most portfolios underperform. Takes about five minutes. Everything here is learnable, doable, and transferable.
+            5 minutes
           </p>
           <div style={{ ...r1.stagger(4, 1200) }}>
             <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint 2s ease-in-out infinite", display: "block" }}>
