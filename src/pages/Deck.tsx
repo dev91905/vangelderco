@@ -396,12 +396,11 @@ const Deck = () => {
           <p
             style={{
               ...r1.stagger(1, 300),
-              fontFamily: f.sans,
+              ...body(0.4),
               fontSize: "clamp(18px, 2.8vw, 32px)",
               fontWeight: 400,
-              color: f.ink(0.4),
-              lineHeight: 1.4,
               maxWidth: "700px",
+              lineHeight: 1.4,
             }}
           >
             For donor advisors and program officers who want a portfolio that{" "}
@@ -491,9 +490,8 @@ const Deck = () => {
                         marginTop: "16px",
                         paddingTop: "12px",
                         borderTop: `1px solid ${f.ink(0.06)}`,
-                        fontFamily: f.sans,
+                        ...body(0.55),
                         fontSize: "clamp(12px, 1.3vw, 14px)",
-                        color: f.ink(0.55),
                         lineHeight: 1.6,
                         fontStyle: "italic",
                       }}
@@ -584,7 +582,7 @@ const Deck = () => {
               <span style={{ color: f.ink(0.5) }}>actually producing results.</span>
             </p>
             {selectedPainDatas.length > 0 && (
-              <p style={{ marginTop: "20px", body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>
+              <p style={{ marginTop: "20px", ...body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>
                 You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
@@ -620,7 +618,7 @@ const Deck = () => {
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", color: isExpanded ? f.ink(0.9) : f.ink(0.65) }}>{h.title}</p>
                       <div style={{ maxHeight: isExpanded ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
                         <p style={{ ...body(0.5), marginTop: "12px", fontSize: "clamp(12px, 1.3vw, 14px)" }}>{h.rationale}</p>
-                        <p style={{ marginTop: "12px", body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
+                        <p style={{ marginTop: "12px", ...body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
                       </div>
                     </div>
                     <span style={{ fontFamily: f.sans, fontSize: "14px", color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(45deg)" : "rotate(0)" }}>+</span>
@@ -698,7 +696,7 @@ const Deck = () => {
           {selectedPainDatas.length > 0 && activeDomainData && (
             <div className="rounded-lg mt-4" style={{ padding: "20px 24px", background: f.ink(0.02), border: `1px solid ${f.ink(0.06)}` }}>
               {selectedPainDatas.map((painData, i) => (
-                <p key={i} style={{ body(0.5), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
+                <p key={i} style={{ ...body(0.5), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
                   <span style={{ fontWeight: 600, color: f.ink(0.7) }}>Re: "{painData.short}"</span> — {painData.capRelevance}
                 </p>
               ))}
@@ -749,7 +747,7 @@ const Deck = () => {
               Most grantee reports measure activity.{" "}
               <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", body(0.45), fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", lineHeight: 1.55 }}>
+            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", ...body(0.45), fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", lineHeight: 1.55 }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
@@ -916,11 +914,11 @@ const Deck = () => {
             Everything we know becomes everything you know.
           </p>
           <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.ink(0.1) }} />
-          <p style={{ ...r10.stagger(2, 600), body(0.4), fontSize: "clamp(15px, 2vw, 21px)", fontWeight: 400, maxWidth: "560px" }}>
+          <p style={{ ...r10.stagger(2, 600), ...body(0.4), fontSize: "clamp(15px, 2vw, 21px)", fontWeight: 400, maxWidth: "560px" }}>
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
           {selectedPainDatas.length > 0 && (
-            <p style={{ ...r10.stagger(3, 900), body(0.45), fontSize: "clamp(13px, 1.5vw, 16px)", lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
+            <p style={{ ...r10.stagger(3, 900), ...body(0.45), fontSize: "clamp(13px, 1.5vw, 16px)", lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
               {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
@@ -934,7 +932,7 @@ const Deck = () => {
             <h2 style={{ fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 400, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
               VGC StratComm
             </h2>
-            <p style={{ body(0.45), fontSize: "clamp(15px, 2vw, 21px)", lineHeight: 1.55, marginBottom: "28px" }}>
+            <p style={{ ...body(0.45), fontSize: "clamp(15px, 2vw, 21px)", lineHeight: 1.55, marginBottom: "28px" }}>
               Let's look at your portfolio together.
             </p>
             <a
