@@ -200,6 +200,7 @@ const Deck = () => {
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
   const [customOpen, setCustomOpen] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
+  const [openRow, setOpenRow] = useState<number | null>(null);
   const [customSubmitted, setCustomSubmitted] = useState(false);
   const [customSubmitting, setCustomSubmitting] = useState(false);
 
@@ -611,10 +612,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        {(() => {
-          const [openRow, setOpenRow] = useState<number | null>(null);
-          return (
-            <div ref={r3.ref} className="flex flex-col gap-5">
+        <div ref={r3.ref} className="flex flex-col gap-5">
               {/* ── Heading ── */}
               <div style={r3.stagger(0)}>
                 <p style={{ ...heading("clamp(20px, 2.6vw, 32px)"), fontWeight: 700, marginBottom: "6px" }}>
@@ -742,9 +740,7 @@ const Deck = () => {
                   );
                 })}
               </div>
-            </div>
-          );
-        })()}
+        </div>
       </DeckFrame>
 
       {/* ═══ FRAME 4: Hallmarks ═══ */}
