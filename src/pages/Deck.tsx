@@ -456,7 +456,7 @@ const Deck = () => {
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-36">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "1 1 50%" }}>
-              What's getting in you way?
+              What's getting in your way?
             </p>
             <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r2.stagger(1), flex: "1 1 50%" }}>
               More foundations are rethinking their stratcomm portfolios than ever. If you're here, you're probably one of them. These are the challenges we see most — select all that resonate.
