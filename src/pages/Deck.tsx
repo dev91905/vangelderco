@@ -586,29 +586,40 @@ const Deck = () => {
                   </button>
                 </div>
               ) : !customOpen ? (
-                <button
+                <div
                   onClick={() => setCustomOpen(true)}
-                  className="text-left w-full"
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                  style={{ cursor: "pointer" }}
                 >
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
                     Something else
                   </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
-                    Tell us what you're dealing with.
-                  </p>
-                </button>
+                  <div
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "14px",
+                      color: f.ink(0.3),
+                      background: "white",
+                      border: `1px solid ${f.ink(0.08)}`,
+                      borderRadius: "8px",
+                      padding: "12px",
+                      minHeight: "40px",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Tell us what you're dealing with…
+                  </div>
+                </div>
               ) : (
                 <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); setCustomOpen(false); } }} className="flex flex-col gap-3">
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
-                    What's your challenge?
+                    Something else
                   </p>
                   <textarea
                     autoFocus
                     value={customMessage}
                     onChange={(e) => setCustomMessage(e.target.value)}
-                    placeholder="Describe what you're up against…"
-                    rows={3}
+                    placeholder="Tell us what you're dealing with…"
+                    rows={4}
                     maxLength={500}
                     style={{
                       fontFamily: f.sans,
