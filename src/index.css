@@ -6,32 +6,32 @@
   :root {
     --background: 0 0% 2.5%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 4%;
+    --card: 0 0% 6%;
     --card-foreground: 0 0% 100%;
-    --popover: 0 0% 4%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
-    --primary: 0 80% 48%;
+    --primary: 40 50% 57%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 60%;
     --muted: 0 0% 10%;
     --muted-foreground: 0 0% 40%;
-    --accent: 0 80% 48%;
+    --accent: 40 50% 57%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 80% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 0 80% 48%;
-    --radius: 0rem;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 40 50% 57%;
+    --radius: 0.75rem;
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 60%;
-    --sidebar-primary: 0 80% 48%;
+    --sidebar-primary: 40 50% 57%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 8%;
     --sidebar-accent-foreground: 0 0% 60%;
-    --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 0 80% 48%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 40 50% 57%;
   }
 }
 
@@ -41,82 +41,36 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'DM Sans', system-ui, sans-serif;
     overflow: hidden;
   }
 
   /* Horizontal deck scrollbar */
   .deck-scroll::-webkit-scrollbar {
-    height: 4px;
+    height: 3px;
   }
   .deck-scroll::-webkit-scrollbar-track {
-    background: hsl(0 0% 5%);
+    background: hsl(0 0% 4%);
   }
   .deck-scroll::-webkit-scrollbar-thumb {
-    background: hsl(0 80% 48% / 0.3);
-    border-radius: 2px;
+    background: hsl(40 50% 57% / 0.25);
+    border-radius: 4px;
   }
   .deck-scroll::-webkit-scrollbar-thumb:hover {
-    background: hsl(0 80% 48% / 0.5);
+    background: hsl(40 50% 57% / 0.45);
   }
   .deck-scroll {
     scrollbar-width: thin;
-    scrollbar-color: hsl(0 80% 48% / 0.3) hsl(0 0% 5%);
+    scrollbar-color: hsl(40 50% 57% / 0.25) hsl(0 0% 4%);
   }
 }
 
-/* Film grain overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: -5%;
-  width: 110%;
-  height: 110%;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-  animation: grain 0.5s steps(1) infinite;
-}
-
-/* CRT scanlines */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.015;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    hsl(0 0% 100%) 2px,
-    hsl(0 0% 100%) 3px
-  );
-}
-
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  10% { transform: translate(-0.5%, -0.5%); }
-  20% { transform: translate(0.5%, 0.3%); }
-  30% { transform: translate(-0.3%, 0.5%); }
-  40% { transform: translate(0.5%, -0.3%); }
-  50% { transform: translate(-0.5%, 0.3%); }
-  60% { transform: translate(0.3%, -0.5%); }
-  70% { transform: translate(-0.5%, 0.3%); }
-  80% { transform: translate(0.3%, 0.5%); }
-  90% { transform: translate(0.5%, -0.3%); }
-  100% { transform: translate(-0.3%, 0.5%); }
-}
-
 @keyframes breathe {
-  0%, 100% { opacity: 0.12; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.22; transform: translate(-50%, -50%) scale(1.08); }
+  0%, 100% { opacity: 0.10; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.20; transform: translate(-50%, -50%) scale(1.08); }
 }
 
-/* Deck v2 — stagger reveal utilities */
+/* Deck reveal animations */
 @keyframes deck-fade-up {
   0% { opacity: 0; transform: translateY(18px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -129,18 +83,13 @@ body::after {
 }
 
 @keyframes deck-glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px hsl(0 80% 48% / 0.15), 0 0 40px hsl(0 80% 48% / 0.05); }
-  50% { box-shadow: 0 0 30px hsl(0 80% 48% / 0.3), 0 0 60px hsl(0 80% 48% / 0.1); }
+  0%, 100% { box-shadow: 0 0 20px hsl(40 50% 57% / 0.1), 0 0 40px hsl(40 50% 57% / 0.04); }
+  50% { box-shadow: 0 0 30px hsl(40 50% 57% / 0.2), 0 0 60px hsl(40 50% 57% / 0.08); }
 }
 
 @keyframes deck-row-slide {
   0% { opacity: 0; transform: translateX(12px); }
   100% { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes deck-scroll-hint {
-  0%, 100% { opacity: 0.3; transform: translateY(0); }
-  50% { opacity: 0.6; transform: translateY(6px); }
 }
 
 @keyframes deck-scroll-hint-h {
@@ -163,29 +112,14 @@ body::after {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes scan-beam {
-  0% { top: -2px; }
-  100% { top: 100%; }
-}
-
-@keyframes crt-boot {
-  0% { opacity: 0; }
-  10% { opacity: 0.8; }
-  15% { opacity: 0.2; }
-  25% { opacity: 0.9; }
-  30% { opacity: 0.3; }
-  40% { opacity: 1; }
-  100% { opacity: 1; }
-}
-
-/* Hero nav link hover effects — CONTROL style */
+/* Hero nav link hover effects */
 .hero-nav-link {
   cursor: pointer;
   text-decoration: none;
 }
 
 .hero-nav-link:hover .hero-nav-wash {
-  background: hsl(0 80% 48% / 0.04) !important;
+  background: hsl(40 50% 57% / 0.04) !important;
 }
 
 .hero-nav-link:hover .hero-nav-bar {

@@ -33,10 +33,10 @@ const CapabilityLayout = ({
     <AtmosphericLayout>
       {/* HUD: top-right */}
       <span
-        className="fixed top-6 right-6 z-30 font-mono text-[10px] tracking-[0.2em] uppercase"
+        className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
         style={{
-          color: "hsl(0 0% 100% / 0.18)",
-          fontFamily: "'JetBrains Mono', monospace",
+          color: "hsl(0 0% 100% / 0.15)",
+          fontFamily: "'DM Sans', sans-serif",
         }}
       >
         Van Gelder Co.
@@ -45,19 +45,19 @@ const CapabilityLayout = ({
       {/* Back link */}
       <Link
         to="/"
-        className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.2em] uppercase transition-colors duration-300"
+        className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.15em] uppercase transition-colors duration-300"
         style={{
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "'DM Sans', sans-serif",
           color: "hsl(0 0% 100% / 0.3)",
         }}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")
+          (e.currentTarget.style.color = "hsl(40 50% 57% / 0.9)")
         }
         onMouseLeave={(e) =>
           (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")
         }
       >
-        &lt; Return
+        ← Return
       </Link>
 
       {/* Main content — scrollable */}
@@ -68,10 +68,10 @@ const CapabilityLayout = ({
         <main className="flex flex-col items-center px-6 pt-20 pb-16 max-w-3xl mx-auto gap-8 md:gap-12">
           {/* Classification label */}
           <span
-            className="text-[11px] tracking-[0.3em] uppercase"
+            className="text-[11px] tracking-[0.25em] uppercase"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 80% 48% / 0.9)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(40 50% 57% / 0.8)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -80,9 +80,9 @@ const CapabilityLayout = ({
 
           {/* Title */}
           <h1
-            className="text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.15] text-center"
+            className="text-[28px] md:text-[40px] lg:text-[44px] font-normal leading-[1.15] text-center"
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Instrument Serif', serif",
               color: "hsl(0 0% 100% / 0.9)",
               animation: "clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both",
             }}
@@ -94,8 +94,8 @@ const CapabilityLayout = ({
           <p
             className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 0% 100% / 0.45)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(0 0% 100% / 0.4)",
               animation: "fade-up 0.6s ease-out 0.9s both",
             }}
           >
@@ -107,7 +107,7 @@ const CapabilityLayout = ({
             className="w-16"
             style={{
               height: "1px",
-              background: "hsl(0 80% 48% / 0.3)",
+              background: "hsl(40 50% 57% / 0.25)",
               animation: "fade-up 0.6s ease-out 1.1s both",
             }}
           />
@@ -115,9 +115,9 @@ const CapabilityLayout = ({
           {/* Posts */}
           {isLoading ? (
             <span
-              className="text-[10px] tracking-[0.2em] uppercase"
+              className="text-[10px] tracking-[0.15em] uppercase"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'DM Sans', sans-serif",
                 color: "hsl(0 0% 100% / 0.2)",
               }}
             >
@@ -126,10 +126,10 @@ const CapabilityLayout = ({
           ) : posts && posts.length > 0 ? (
             <div className="w-full flex flex-col gap-3">
               <span
-                className="text-[10px] tracking-[0.2em] uppercase mb-2"
+                className="text-[10px] tracking-[0.15em] uppercase mb-2"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: "hsl(0 0% 100% / 0.25)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: "hsl(0 0% 100% / 0.2)",
                   animation: "fade-up 0.5s ease-out 1.3s both",
                 }}
               >
@@ -141,10 +141,10 @@ const CapabilityLayout = ({
             </div>
           ) : (
             <span
-              className="text-[10px] tracking-[0.2em] uppercase"
+              className="text-[10px] tracking-[0.15em] uppercase"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                color: "hsl(0 0% 100% / 0.15)",
+                fontFamily: "'DM Sans', sans-serif",
+                color: "hsl(0 0% 100% / 0.12)",
                 animation: "fade-up 0.5s ease-out 1.3s both",
               }}
             >
