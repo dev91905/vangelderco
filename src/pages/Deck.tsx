@@ -32,7 +32,7 @@ const PAIN_POINTS = [
   {
     id: "history",
     short: "No portfolio history",
-    detail: "Nobody tracks what was funded, what worked, or why. Every new hire starts from scratch.",
+    detail: "Nobody tracks what was funded, what worked, or why. You're starting at ground zero.",
     consequence: "You can't improve what you can't remember. Every cycle resets to zero.",
     capRelevance: "We build the institutional record that's never existed — audit everything, document what worked, create the baseline.",
   },
