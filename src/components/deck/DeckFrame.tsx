@@ -24,9 +24,8 @@ const alignStyles: Record<FrameAlign, string> = {
 };
 
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
-  ({ children, label, mode = "narrow", align = "center", onActive }, ref) => {
+  ({ children, mode = "narrow", align = "center", onActive }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
-    const [isActive, setIsActive] = useState(false);
 
     const setRefs = (el: HTMLDivElement | null) => {
       (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
@@ -39,9 +38,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => {
-          const active = entry.isIntersecting;
-          setIsActive(active);
-          onActive?.(active);
+          onActive?.(entry.isIntersecting);
         },
         { threshold: 0.4 }
       );
@@ -62,24 +59,6 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
           minHeight: "100dvh",
         }}
       >
-        {label && (
-          <span
-            className="absolute top-8 left-8 z-10"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "9px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "hsl(40 50% 57% / 0.3)",
-              opacity: isActive ? 1 : 0,
-              transform: isActive ? "translateX(0)" : "translateX(-8px)",
-              transition: "opacity 0.5s ease 200ms, transform 0.5s ease 200ms",
-            }}
-          >
-            {label}
-          </span>
-        )}
-
         <div className={`relative z-10 w-full ${modeStyles[mode]}`}>
           {children}
         </div>

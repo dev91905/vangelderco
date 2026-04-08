@@ -12,37 +12,36 @@ import {
 
 const TOTAL_FRAMES = 12;
 
-/* ─── Style tokens ─── */
+/* ─── Style tokens — V4 editorial light ─── */
 const f = {
   serif: "'Instrument Serif', serif",
   sans: "'DM Sans', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-  gold: "hsl(40 50% 57%)",
-  white: (a: number) => `hsl(0 0% 100% / ${a})`,
-  goldA: (a: number) => `hsl(40 50% 57% / ${a})`,
-  surface: (pct: number) => `hsl(0 0% ${pct}%)`,
+  ink: (a: number) => `hsl(30 10% 12% / ${a})`,
+  cream: "hsl(40 30% 96%)",
+  rule: "hsl(30 10% 12% / 0.08)",
 };
 
 const heading = (size = "clamp(18px, 2.6vw, 28px)"): CSSProperties => ({
   fontFamily: f.serif,
   fontSize: size,
   fontWeight: 400,
-  color: f.white(0.88),
+  color: f.ink(0.9),
   lineHeight: 1.4,
 });
 
-const body = (alpha = 0.45): CSSProperties => ({
+const body = (alpha = 0.5): CSSProperties => ({
   fontFamily: f.sans,
   fontSize: "clamp(13px, 1.5vw, 16px)",
-  color: f.white(alpha),
+  color: f.ink(alpha),
   lineHeight: 1.65,
 });
 
-const mono = (size = "9px"): CSSProperties => ({
-  fontFamily: f.mono,
+const label = (size = "10px"): CSSProperties => ({
+  fontFamily: f.sans,
   fontSize: size,
   letterSpacing: "0.12em",
   textTransform: "uppercase" as const,
+  color: f.ink(0.3),
 });
 
 /* ─── Pain points data ─── */
@@ -136,69 +135,54 @@ const METRICS_ROWS = [
 ];
 
 /* ─── Case studies ─── */
-const StatChip = ({ value, label }: { value: string; label: string }) => (
-  <div
-    className="flex flex-col px-4 py-3 rounded-lg"
-    style={{
-      background: f.surface(5),
-      border: `1px solid ${f.white(0.05)}`,
-    }}
-  >
-    <span style={{ ...mono("clamp(14px, 1.6vw, 20px)"), fontWeight: 500, color: f.goldA(0.9) }}>
-      {value}
-    </span>
-    <span style={{ ...mono("9px"), color: f.white(0.3), marginTop: "4px" }}>
-      {label}
-    </span>
+const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
+  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: f.ink(0.03), border: `1px solid ${f.ink(0.06)}` }}>
+    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 600, color: f.ink(0.8) }}>{value}</span>
+    <span style={{ ...label("9px"), marginTop: "4px" }}>{lbl}</span>
   </div>
 );
 
-const CASE_STUDIES: {
-  name: string;
-  issue: string;
-  outcome: string;
-  content: React.ReactNode | null;
-}[] = [
+const CASE_STUDIES: { name: string; issue: string; outcome: string; content: React.ReactNode | null }[] = [
   {
     name: "Clean Energy Workforce",
     issue: "Skilled trades bottleneck threatening federal climate policy",
     outcome: "40K reached, 4,000 workers registered, model now replicating nationally",
     content: (
       <div className="flex flex-col gap-6">
-        <p style={{ fontFamily: f.serif, fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: f.white(0.95), lineHeight: 1.4 }}>
+        <p style={{ fontFamily: f.serif, fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.4 }}>
           Closing the clean energy workforce gap through culture, coalitions, and deep organizing.
         </p>
         <div className="flex flex-col gap-4">
           {[
-            { label: "Issue", text: "After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it." },
-            { label: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply." },
-            { label: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
+            { l: "Issue", text: "After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it." },
+            { l: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply." },
+            { l: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.45), lineHeight: 1.7 }}>
-              <strong style={{ color: f.white(0.9) }}>{item.label}:</strong> {item.text}
+            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+              <strong style={{ color: f.ink(0.85) }}>{item.l}:</strong> {item.text}
             </p>
           ))}
         </div>
-        <div style={{ width: "40px", height: "1px", background: f.goldA(0.25) }} />
+        <div style={{ width: "40px", height: "1px", background: f.ink(0.1) }} />
         <div className="flex flex-col gap-4">
           {[
-            { label: "Phase 1 — Research", text: "Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts." },
-            { label: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically." },
-            { label: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
+            { l: "Phase 1 — Research", text: "Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts." },
+            { l: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically." },
+            { l: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.45), lineHeight: 1.7 }}>
-              <strong style={{ color: f.white(0.9) }}>{item.label}.</strong> {item.text}
+            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+              <strong style={{ color: f.ink(0.85) }}>{item.l}.</strong> {item.text}
             </p>
           ))}
         </div>
-        <div style={{ width: "40px", height: "1px", background: f.goldA(0.25) }} />
+        <div style={{ width: "40px", height: "1px", background: f.ink(0.1) }} />
         <div className="flex flex-wrap gap-3 mt-2">
-          <StatChip value="40K" label="Reached" />
-          <StatChip value="4,000" label="Registered" />
-          <StatChip value="10–11%" label="Conversion Rate" />
-          <StatChip value="$40–80" label="Cost per Lead" />
+          <StatChip value="40K" lbl="Reached" />
+          <StatChip value="4,000" lbl="Registered" />
+          <StatChip value="10–11%" lbl="Conversion Rate" />
+          <StatChip value="$40–80" lbl="Cost per Lead" />
         </div>
-        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.5), marginTop: "4px" }}>
+        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), marginTop: "4px" }}>
           Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model.
         </p>
       </div>
@@ -216,7 +200,7 @@ const CASE_STUDIES: {
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   DECK COMPONENT — v3
+   DECK COMPONENT — v4 editorial
    ═══════════════════════════════════════════════════════════════ */
 
 const Deck = () => {
@@ -235,7 +219,6 @@ const Deck = () => {
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [expandedHallmark, setExpandedHallmark] = useState<number | null>(null);
 
-  // Frame observation
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     frameRefs.current.forEach((el, i) => {
@@ -250,7 +233,6 @@ const Deck = () => {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  // SFX on frame change
   useEffect(() => {
     if (currentFrame !== lastFrameRef.current) {
       playHoverGlitch();
@@ -263,51 +245,24 @@ const Deck = () => {
     frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Keyboard nav
+  // Keyboard nav — auto-focus
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-
-    const focusDeck = () => {
-      if (document.activeElement !== el) {
-        el.focus({ preventScroll: true });
-      }
-    };
-
+    const focusDeck = () => { if (document.activeElement !== el) el.focus({ preventScroll: true }); };
     focusDeck();
     const focusTimer = window.setTimeout(focusDeck, 50);
-
     const handler = (e: KeyboardEvent) => {
       if (selectedCase !== null) return;
-
       const target = e.target as HTMLElement | null;
-      const isTypingTarget =
-        target?.tagName === "INPUT" ||
-        target?.tagName === "TEXTAREA" ||
-        target?.tagName === "SELECT" ||
-        target?.isContentEditable;
-
-      if (isTypingTarget) return;
-
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        e.preventDefault();
-        scrollToFrame(currentFrame + 1);
-      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        e.preventDefault();
-        scrollToFrame(currentFrame - 1);
-      } else if (e.key === "Escape") {
-        navigate("/");
-      }
+      if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.tagName === "SELECT" || target?.isContentEditable) return;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); scrollToFrame(currentFrame + 1); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); scrollToFrame(currentFrame - 1); }
+      else if (e.key === "Escape") { navigate("/"); }
     };
-
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
-
-    return () => {
-      window.removeEventListener("keydown", handler);
-      window.removeEventListener("pointerdown", focusDeck);
-      window.clearTimeout(focusTimer);
-    };
+    return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
   // Mouse wheel → horizontal scroll
@@ -326,24 +281,17 @@ const Deck = () => {
           if (Math.abs(accumulated) > 30) {
             const direction = accumulated > 0 ? 1 : -1;
             const nextFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame + direction));
-            if (nextFrame !== currentFrame) {
-              scrollToFrame(nextFrame);
-            }
+            if (nextFrame !== currentFrame) scrollToFrame(nextFrame);
           }
           accumulated = 0;
         }, 80);
       }
     };
     el.addEventListener("wheel", handler, { passive: false });
-    return () => {
-      el.removeEventListener("wheel", handler);
-      if (wheelTimeout) clearTimeout(wheelTimeout);
-    };
+    return () => { el.removeEventListener("wheel", handler); if (wheelTimeout) clearTimeout(wheelTimeout); };
   }, [selectedCase, currentFrame, scrollToFrame]);
 
-  const setRef = (i: number) => (el: HTMLDivElement | null) => {
-    frameRefs.current[i] = el;
-  };
+  const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
   /* ─── Per-frame reveal hooks ─── */
   const r1 = useFrameReveal();
@@ -358,24 +306,14 @@ const Deck = () => {
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
 
-  /* ─── Derived state ─── */
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
-  // Auto-advance confrontation on frame 3 active
+  // Auto-advance confrontation
   useEffect(() => {
-    if (currentFrame !== 2) {
-      setConfrontationStep(0);
-      return;
-    }
+    if (currentFrame !== 2) { setConfrontationStep(0); return; }
     const timer = setInterval(() => {
-      setConfrontationStep((prev) => {
-        if (prev >= CONFRONTATION_ROWS.length - 1) {
-          clearInterval(timer);
-          return prev;
-        }
-        return prev + 1;
-      });
+      setConfrontationStep((prev) => { if (prev >= CONFRONTATION_ROWS.length - 1) { clearInterval(timer); return prev; } return prev + 1; });
     }, 1800);
     return () => clearInterval(timer);
   }, [currentFrame]);
@@ -385,7 +323,7 @@ const Deck = () => {
       ref={containerRef}
       tabIndex={0}
       aria-label="Interactive deck"
-      className="relative bg-background deck-scroll outline-none"
+      className="relative deck-scroll outline-none"
       style={{
         height: "100dvh",
         width: "100vw",
@@ -394,53 +332,9 @@ const Deck = () => {
         scrollSnapType: "x mandatory",
         display: "flex",
         flexDirection: "row",
+        background: f.cream,
       }}
     >
-      {/* Breathing gold glow */}
-      <div
-        className="pointer-events-none fixed left-1/2 top-1/2 -z-0"
-        style={{
-          width: "min(80vw, 700px)",
-          height: "min(80vh, 600px)",
-          borderRadius: "50%",
-          background: `radial-gradient(ellipse at center, ${f.goldA(0.08)} 0%, ${f.goldA(0.04)} 30%, ${f.goldA(0.01)} 55%, transparent 80%)`,
-          animation: "breathe 8s ease-in-out infinite",
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
-      {/* Progress dots */}
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-row gap-1.5" aria-label="Slide navigation">
-        {Array.from({ length: TOTAL_FRAMES - 1 }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => scrollToFrame(i)}
-            className="group relative flex items-center justify-center"
-            style={{ width: "20px", height: "20px" }}
-            aria-label={`Go to slide ${i + 1}`}
-          >
-            <span
-              className="block rounded-full transition-all duration-300"
-              style={{
-                width: currentFrame === i ? "8px" : "4px",
-                height: currentFrame === i ? "8px" : "4px",
-                background: currentFrame === i ? f.gold : f.white(0.15),
-                boxShadow: currentFrame === i ? `0 0 10px ${f.goldA(0.4)}` : "none",
-              }}
-            />
-          </button>
-        ))}
-      </nav>
-
-      {/* Frame counter */}
-      <div className="fixed bottom-8 right-8 z-30" style={{ ...mono("10px"), color: f.white(0.2) }}>
-        {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
-      </div>
-
-      {/* ESC hint */}
-      <div className="fixed top-8 right-8 z-30" style={{ ...mono("9px"), color: f.white(0.12) }}>
-        ESC to exit
-      </div>
 
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide">
@@ -449,9 +343,9 @@ const Deck = () => {
             style={{
               ...r1.stagger(0),
               fontFamily: f.serif,
-              fontSize: "clamp(36px, 7vw, 80px)",
+              fontSize: "clamp(40px, 7vw, 88px)",
               fontWeight: 400,
-              color: f.white(0.95),
+              color: f.ink(0.92),
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
               animation: r1.isActive ? "deck-clip-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards" : "none",
@@ -459,24 +353,23 @@ const Deck = () => {
           >
             Building a Next-Generation StratComm Portfolio
           </h1>
-          <div style={{ ...r1.stagger(1), width: "60px", height: "2px", background: f.goldA(0.5), borderRadius: "1px" }} />
           <p
             style={{
-              ...r1.stagger(2, 300),
+              ...r1.stagger(1, 300),
               fontFamily: f.sans,
               fontSize: "clamp(18px, 2.8vw, 32px)",
               fontWeight: 400,
-              color: f.white(0.5),
+              color: f.ink(0.4),
               lineHeight: 1.4,
               maxWidth: "700px",
             }}
           >
             For donor advisors and program officers who want a portfolio that{" "}
-            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.white(0.85) }}>hits harder.</em>
+            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.75) }}>hits harder.</em>
           </p>
           <div
             style={{
-              ...r1.stagger(3, 600),
+              ...r1.stagger(2, 600),
               display: "flex",
               flexWrap: "wrap",
               alignItems: "center",
@@ -486,54 +379,30 @@ const Deck = () => {
             <button
               type="button"
               onClick={() => scrollToFrame(1)}
-              className="rounded-xl"
               style={{
                 fontFamily: f.sans,
-                fontSize: "12px",
-                letterSpacing: "0.1em",
+                fontSize: "13px",
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: f.white(0.9),
-                background: f.goldA(0.12),
-                border: `1px solid ${f.goldA(0.3)}`,
-                padding: "16px 24px",
-                transition: "transform 180ms ease, background 180ms ease, border-color 180ms ease",
+                color: f.cream,
+                background: f.ink(0.88),
+                border: "none",
+                padding: "16px 32px",
+                borderRadius: "999px",
+                transition: "transform 180ms ease, background 180ms ease",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.background = f.goldA(0.2);
-                e.currentTarget.style.borderColor = f.goldA(0.5);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.background = f.goldA(0.12);
-                e.currentTarget.style.borderColor = f.goldA(0.3);
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = f.ink(1); }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = f.ink(0.88); }}
             >
               Start the walkthrough →
             </button>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <p
-                style={{
-                  fontFamily: f.sans,
-                  fontSize: "clamp(14px, 1.6vw, 18px)",
-                  color: f.white(0.3),
-                  lineHeight: 1.4,
-                  margin: 0,
-                }}
-              >
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", color: f.ink(0.3), lineHeight: 1.4, margin: 0 }}>
                 5 minutes
               </p>
-              <span
-                style={{
-                  fontFamily: f.sans,
-                  fontSize: "10px",
-                  color: f.white(0.2),
-                  animation: "deck-scroll-hint-h 2s ease-in-out infinite",
-                  display: "block",
-                }}
-              >
+              <span style={{ fontFamily: f.sans, fontSize: "10px", color: f.ink(0.2), animation: "deck-scroll-hint-h 2s ease-in-out infinite", display: "block" }}>
                 Use mouse wheel, trackpad, or ← → keys
               </span>
             </div>
@@ -542,45 +411,38 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
-      <DeckFrame ref={setRef(1)} label="Self-Diagnosis" mode="wide">
+      <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <p
-            style={{
-              ...heading("clamp(24px, 4vw, 44px)"),
-              ...r2.stagger(0),
-              maxWidth: "700px",
-            }}
-          >
+          <p style={{ ...heading("clamp(28px, 4vw, 52px)"), ...r2.stagger(0), maxWidth: "700px" }}>
             What's getting in the way?
           </p>
-          <p style={{ ...body(0.35), ...r2.stagger(1), maxWidth: "560px" }}>
+          <p style={{ ...body(0.4), ...r2.stagger(1), maxWidth: "560px" }}>
             These are the most common challenges we see in stratcomm portfolios. Select everything that resonates.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" style={r2.stagger(2, 200)}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 200)}>
             {PAIN_POINTS.map((pain, i) => {
               const isSelected = selectedPains.includes(pain.id);
               return (
                 <button
                   key={pain.id}
                   onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
-                  className="text-left transition-all duration-300 rounded-xl"
+                  className="text-left transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    border: `1px solid ${isSelected ? f.goldA(0.35) : f.white(0.04)}`,
-                    background: isSelected ? f.goldA(0.05) : f.surface(4),
+                    border: `1px solid ${isSelected ? f.ink(0.2) : f.ink(0.06)}`,
+                    background: isSelected ? "hsl(0 0% 100%)" : "transparent",
+                    borderRadius: "12px",
                     cursor: "pointer",
+                    boxShadow: isSelected ? `0 4px 20px ${f.ink(0.06)}` : "none",
                     opacity: r2.isActive ? 1 : 0,
                     transform: r2.isActive ? "translateY(0)" : "translateY(16px)",
                     transition: `all 0.5s ease ${300 + i * 120}ms`,
                   }}
                 >
-                  <span style={{ ...mono("9px"), color: isSelected ? f.goldA(0.8) : f.white(0.2), display: "block", marginBottom: "12px" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 400, color: isSelected ? f.white(1) : f.white(0.75), marginBottom: "8px" }}>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 400, color: isSelected ? f.ink(0.9) : f.ink(0.65), marginBottom: "8px" }}>
                     {pain.short}
                   </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.white(0.35), lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.6 }}>
                     {pain.detail}
                   </p>
                   {isSelected && (
@@ -588,10 +450,10 @@ const Deck = () => {
                       style={{
                         marginTop: "16px",
                         paddingTop: "12px",
-                        borderTop: `1px solid ${f.goldA(0.15)}`,
+                        borderTop: `1px solid ${f.ink(0.06)}`,
                         fontFamily: f.sans,
                         fontSize: "clamp(12px, 1.3vw, 14px)",
-                        color: f.goldA(0.7),
+                        color: f.ink(0.55),
                         lineHeight: 1.6,
                         fontStyle: "italic",
                       }}
@@ -604,41 +466,29 @@ const Deck = () => {
             })}
           </div>
           {selectedPains.length === 0 && (
-            <p style={{ ...mono("8px"), color: f.white(0.12), ...r2.stagger(3, 800) }}>
+            <p style={{ ...label("9px"), ...r2.stagger(3, 800) }}>
               → or skip and keep scrolling
             </p>
           )}
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 3: The Real Delta — Confrontation ═══ */}
-      <DeckFrame ref={setRef(2)} label="What You're Up Against" mode="full">
+      {/* ═══ FRAME 3: Confrontation ═══ */}
+      <DeckFrame ref={setRef(2)} mode="full">
         <div ref={r3.ref}>
-          <p style={{ ...heading("clamp(20px, 3vw, 32px)"), ...r3.stagger(0), marginBottom: "48px", maxWidth: "700px" }}>
+          <p style={{ ...heading("clamp(24px, 3.5vw, 40px)"), ...r3.stagger(0), marginBottom: "48px", maxWidth: "700px" }}>
             Both sides have the same goal — shift opinion, force outcomes.{" "}
-            <span style={{ color: f.goldA(0.8) }}>Completely different processes.</span>
+            <span style={{ color: f.ink(0.5) }}>Completely different processes.</span>
           </p>
 
-          {/* Full-width confrontation */}
-          <div className="w-full rounded-xl overflow-hidden" style={{ background: f.surface(3.5) }}>
+          <div className="w-full">
             {/* Headers */}
-            <div
-              className="grid gap-0"
-              style={{
-                gridTemplateColumns: "140px 1fr 1fr",
-                borderBottom: `1px solid ${f.white(0.06)}`,
-              }}
-            >
+            <div className="grid gap-0" style={{ gridTemplateColumns: "140px 1fr 1fr", borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ padding: "14px 20px" }} />
-              <div style={{ padding: "14px 20px", ...mono("10px"), color: f.white(0.25) }}>
-                Your current portfolio
-              </div>
-              <div style={{ padding: "14px 20px", ...mono("10px"), color: f.goldA(0.7) }}>
-                How the opposition operates
-              </div>
+              <div style={{ ...label("10px"), padding: "14px 20px" }}>Your current portfolio</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6) }}>How the opposition operates</div>
             </div>
 
-            {/* Rows */}
             {CONFRONTATION_ROWS.map((row, i) => {
               const isRevealed = r3.isActive && i <= confrontationStep;
               const isFocused = i === confrontationStep;
@@ -648,25 +498,24 @@ const Deck = () => {
                   className="grid gap-0 transition-all duration-700"
                   style={{
                     gridTemplateColumns: "140px 1fr 1fr",
-                    borderBottom: i < CONFRONTATION_ROWS.length - 1 ? `1px solid ${f.white(0.03)}` : "none",
+                    borderBottom: i < CONFRONTATION_ROWS.length - 1 ? `1px solid ${f.ink(0.04)}` : "none",
                     opacity: isRevealed ? 1 : 0,
                     transform: isRevealed ? "translateX(0)" : "translateX(20px)",
-                    background: isFocused ? f.white(0.015) : "transparent",
                   }}
                 >
-                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 600, color: isFocused ? f.white(0.85) : f.white(0.35) }}>
+                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 600, color: isFocused ? f.ink(0.8) : f.ink(0.35) }}>
                     {row.dimension}
                   </div>
-                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.white(0.2), lineHeight: 1.7 }}>
+                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.7, textDecoration: "line-through", textDecorationColor: f.ink(0.12) }}>
                     {row.yours}
                   </div>
                   <div style={{
                     padding: "18px 20px",
                     fontFamily: f.sans,
                     fontSize: "clamp(12px, 1.4vw, 15px)",
-                    color: isFocused ? f.white(0.8) : f.white(0.5),
+                    color: isFocused ? f.ink(0.8) : f.ink(0.55),
                     lineHeight: 1.7,
-                    borderLeft: `2px solid ${isFocused ? f.goldA(0.5) : f.goldA(0.1)}`,
+                    borderLeft: `2px solid ${isFocused ? f.ink(0.3) : f.ink(0.06)}`,
                     transition: "all 0.5s ease",
                   }}>
                     {row.theirs}
@@ -676,18 +525,11 @@ const Deck = () => {
             })}
           </div>
 
-          {/* Post-confrontation insight */}
           {confrontationStep >= CONFRONTATION_ROWS.length - 1 && (
-            <div
-              className="mt-10 max-w-[600px]"
-              style={{
-                opacity: 0,
-                animation: "deck-fade-up 0.8s ease 600ms forwards",
-              }}
-            >
-              <p style={{ ...body(0.45), borderLeft: `2px solid ${f.goldA(0.3)}`, paddingLeft: "16px", borderRadius: "1px" }}>
+            <div className="mt-10 max-w-[600px]" style={{ opacity: 0, animation: "deck-fade-up 0.8s ease 600ms forwards" }}>
+              <p style={{ ...body(0.5), borderLeft: `2px solid ${f.ink(0.15)}`, paddingLeft: "16px" }}>
                 You test messages in a petri dish and pay people to watch the winners.{" "}
-                <span style={{ color: f.white(0.75) }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
+                <span style={{ color: f.ink(0.8) }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
               </p>
             </div>
           )}
@@ -695,94 +537,54 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 4: Hallmarks ═══ */}
-      <DeckFrame ref={setRef(3)} label="Effective Portfolios" mode="wide">
-        <div ref={r4.ref} className="flex flex-col lg:flex-row gap-12 w-full">
-          {/* Left: Title */}
+      <DeckFrame ref={setRef(3)} mode="wide">
+        <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0)}>
-            <p style={heading("clamp(22px, 3.5vw, 38px)")}>
+            <p style={heading("clamp(26px, 3.5vw, 44px)")}>
               Three hallmarks of portfolios{" "}
-              <span style={{ color: f.goldA(0.8) }}>actually producing results.</span>
+              <span style={{ color: f.ink(0.5) }}>actually producing results.</span>
             </p>
             {selectedPainDatas.length > 0 && (
-              <p
-                style={{
-                  marginTop: "20px",
-                  fontFamily: f.sans,
-                  fontSize: "clamp(12px, 1.3vw, 14px)",
-                  color: f.goldA(0.55),
-                  lineHeight: 1.6,
-                  fontStyle: "italic",
-                  borderLeft: `2px solid ${f.goldA(0.25)}`,
-                  paddingLeft: "12px",
-                }}
-              >
+              <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", borderLeft: `2px solid ${f.ink(0.1)}`, paddingLeft: "12px" }}>
                 You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
           </div>
 
-          {/* Right: Hallmark cards */}
-          <div className="lg:w-[65%] flex flex-col gap-3">
+          <div className="lg:w-[65%] flex flex-col gap-4">
             {[
-              {
-                title: "They're using the full culture stack.",
-                rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.",
-                help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need.",
-              },
-              {
-                title: "They're coordinating across sectors.",
-                rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live.",
-                help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other.",
-              },
-              {
-                title: "They're organizing for growth.",
-                rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events.",
-                help: "Run live campaigns that engage new audiences. Audit grantees for real vs. performed organizing.",
-              },
+              { title: "They're using the full culture stack.", rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.", help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need." },
+              { title: "They're coordinating across sectors.", rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live.", help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other." },
+              { title: "They're organizing for growth.", rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events.", help: "Run live campaigns that engage new audiences. Audit grantees for real vs. performed organizing." },
             ].map((h, i) => {
               const isExpanded = expandedHallmark === i;
               return (
                 <button
                   key={i}
                   onClick={() => setExpandedHallmark(isExpanded ? null : i)}
-                  className="text-left w-full transition-all duration-300 rounded-xl"
+                  className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? f.surface(6) : f.surface(4),
-                    border: `1px solid ${isExpanded ? f.goldA(0.2) : f.white(0.04)}`,
+                    background: isExpanded ? "hsl(0 0% 100%)" : "transparent",
+                    border: `1px solid ${isExpanded ? f.ink(0.1) : f.ink(0.06)}`,
+                    borderRadius: "12px",
                     cursor: "pointer",
+                    boxShadow: isExpanded ? `0 4px 20px ${f.ink(0.04)}` : "none",
                     opacity: r4.isActive ? 1 : 0,
                     transform: r4.isActive ? "translateY(0)" : "translateY(12px)",
                     transition: `all 0.5s ease ${200 + i * 150}ms`,
                   }}
                 >
                   <div className="flex items-start gap-4">
-                    <span style={{ fontFamily: f.serif, fontSize: "clamp(20px, 2vw, 28px)", color: isExpanded ? f.goldA(0.7) : f.white(0.12), minWidth: "32px" }}>
-                      {i + 1}
-                    </span>
+                    <span style={{ fontFamily: f.serif, fontSize: "clamp(20px, 2vw, 28px)", color: isExpanded ? f.ink(0.5) : f.ink(0.15), minWidth: "32px" }}>{i + 1}</span>
                     <div className="flex-1">
-                      <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 22px)", color: isExpanded ? f.white(1) : f.white(0.75) }}>
-                        {h.title}
-                      </p>
-                      <div
-                        style={{
-                          maxHeight: isExpanded ? "300px" : "0",
-                          overflow: "hidden",
-                          transition: "max-height 0.5s ease, opacity 0.4s ease",
-                          opacity: isExpanded ? 1 : 0,
-                        }}
-                      >
-                        <p style={{ ...body(0.45), marginTop: "12px", fontSize: "clamp(12px, 1.3vw, 14px)" }}>
-                          {h.rationale}
-                        </p>
-                        <p style={{ marginTop: "12px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.goldA(0.6), lineHeight: 1.6, fontStyle: "italic" }}>
-                          How we help: {h.help}
-                        </p>
+                      <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 22px)", color: isExpanded ? f.ink(0.9) : f.ink(0.65) }}>{h.title}</p>
+                      <div style={{ maxHeight: isExpanded ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
+                        <p style={{ ...body(0.5), marginTop: "12px", fontSize: "clamp(12px, 1.3vw, 14px)" }}>{h.rationale}</p>
+                        <p style={{ marginTop: "12px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
                       </div>
                     </div>
-                    <span style={{ fontFamily: f.sans, fontSize: "14px", color: f.white(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(45deg)" : "rotate(0)" }}>
-                      +
-                    </span>
+                    <span style={{ fontFamily: f.sans, fontSize: "14px", color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(45deg)" : "rotate(0)" }}>+</span>
                   </div>
                 </button>
               );
@@ -792,96 +594,73 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 5: Three Service Domains ═══ */}
-      <DeckFrame ref={setRef(4)} label="What We Do" mode="full">
+      <DeckFrame ref={setRef(4)} mode="full">
         <div ref={r5.ref} className="flex flex-col gap-0 w-full">
-          <p style={{ ...heading("clamp(22px, 3.5vw, 38px)"), ...r5.stagger(0), marginBottom: "12px" }}>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), ...r5.stagger(0), marginBottom: "12px" }}>
             Three domains. One integrated system.
           </p>
-          <p style={{ ...body(0.35), ...r5.stagger(1), marginBottom: "32px", maxWidth: "500px" }}>
+          <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
             Click any domain to explore what it means for your portfolio.
           </p>
 
-          {/* Domain selector */}
-          <div className="flex w-full gap-2 mb-1">
+          <div className="flex w-full gap-3 mb-1">
             {DOMAINS.map((d, i) => {
               const isActive = activeDomain === d.id;
               return (
                 <button
                   key={d.id}
                   onClick={() => setActiveDomain(isActive ? null : d.id)}
-                  className="flex-1 text-left transition-all duration-300 rounded-t-xl"
+                  className="flex-1 text-left transition-all duration-300"
                   style={{
                     padding: "24px 20px",
-                    background: isActive ? f.surface(6) : f.surface(3.5),
-                    borderBottom: isActive ? `2px solid ${f.gold}` : `2px solid transparent`,
+                    background: isActive ? "hsl(0 0% 100%)" : "transparent",
+                    borderBottom: isActive ? `2px solid ${f.ink(0.8)}` : `2px solid ${f.ink(0.06)}`,
+                    borderRadius: isActive ? "12px 12px 0 0" : "12px 12px 0 0",
                     cursor: "pointer",
+                    boxShadow: isActive ? `0 -2px 20px ${f.ink(0.04)}` : "none",
                     opacity: r5.isActive ? 1 : 0,
                     transform: r5.isActive ? "translateY(0)" : "translateY(12px)",
                     transition: `all 0.5s ease ${300 + i * 150}ms`,
                   }}
                 >
-                  <span style={{ ...mono("9px"), color: isActive ? f.goldA(0.7) : f.white(0.15), display: "block", marginBottom: "8px" }}>
-                    0{i + 1}
-                  </span>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2.2vw, 24px)", color: isActive ? f.white(1) : f.white(0.55) }}>
-                    {d.title}
-                  </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 14px)", color: f.white(0.25), marginTop: "4px", lineHeight: 1.5 }}>
-                    {d.tagline}
-                  </p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2.2vw, 24px)", color: isActive ? f.ink(0.9) : f.ink(0.45) }}>{d.title}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 14px)", color: f.ink(0.3), marginTop: "4px", lineHeight: 1.5 }}>{d.tagline}</p>
                 </button>
               );
             })}
           </div>
 
-          {/* Domain detail panel */}
           {activeDomainData && (
             <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full rounded-b-xl overflow-hidden"
-              style={{
-                animation: "deck-fade-up 0.5s ease forwards",
-                background: f.surface(5),
-              }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full overflow-hidden"
+              style={{ animation: "deck-fade-up 0.5s ease forwards", background: "hsl(0 0% 100%)", borderRadius: "0 0 12px 12px", border: `1px solid ${f.ink(0.06)}`, borderTop: "none" }}
             >
-              <div style={{ padding: "32px 28px", borderRight: `1px solid ${f.white(0.03)}` }}>
-                <span style={{ ...mono("9px"), color: f.goldA(0.55), display: "block", marginBottom: "12px" }}>
-                  What it is
-                </span>
-                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.what}</p>
-                <span style={{ ...mono("9px"), color: f.goldA(0.55), display: "block", marginTop: "24px", marginBottom: "12px" }}>
-                  What it unlocks
-                </span>
-                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.unlocks}</p>
+              <div style={{ padding: "32px 28px", borderRight: `1px solid ${f.ink(0.04)}` }}>
+                <span style={{ ...label("10px"), display: "block", marginBottom: "12px" }}>What it is</span>
+                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.what}</p>
+                <span style={{ ...label("10px"), display: "block", marginTop: "24px", marginBottom: "12px" }}>What it unlocks</span>
+                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.unlocks}</p>
               </div>
               <div style={{ padding: "32px 28px" }}>
-                <span style={{ ...mono("9px"), color: f.white(0.2), display: "block", marginBottom: "12px" }}>
-                  What donor advisors usually miss
-                </span>
-                <p style={{ ...body(0.4), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.missed}</p>
-                <span style={{ ...mono("9px"), color: f.white(0.2), display: "block", marginTop: "24px", marginBottom: "12px" }}>
-                  In practice
-                </span>
-                <p style={{ ...body(0.5), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic", borderLeft: `2px solid ${f.goldA(0.2)}`, paddingLeft: "12px" }}>
-                  {activeDomainData.example}
-                </p>
+                <span style={{ ...label("10px"), display: "block", marginBottom: "12px" }}>What donor advisors usually miss</span>
+                <p style={{ ...body(0.5), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.missed}</p>
+                <span style={{ ...label("10px"), display: "block", marginTop: "24px", marginBottom: "12px" }}>In practice</span>
+                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic", borderLeft: `2px solid ${f.ink(0.08)}`, paddingLeft: "12px" }}>{activeDomainData.example}</p>
               </div>
             </div>
           )}
 
           {!activeDomain && (
-            <div className="flex items-center justify-center py-16 rounded-b-xl" style={{ background: f.surface(3.5) }}>
-              <p style={{ ...mono("10px"), color: f.white(0.12) }}>
-                ↑ Select a domain to explore
-              </p>
+            <div className="flex items-center justify-center py-16" style={{ borderBottom: `1px solid ${f.ink(0.04)}` }}>
+              <p style={{ ...label("10px") }}>↑ Select a domain to explore</p>
             </div>
           )}
 
-          {/* Connection to selected pains */}
           {selectedPainDatas.length > 0 && activeDomainData && (
-            <div className="rounded-lg mt-3" style={{ padding: "20px 24px", background: f.goldA(0.03), border: `1px solid ${f.goldA(0.08)}` }}>
+            <div className="rounded-lg mt-4" style={{ padding: "20px 24px", background: f.ink(0.02), border: `1px solid ${f.ink(0.06)}` }}>
               {selectedPainDatas.map((painData, i) => (
-                <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.goldA(0.6), lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
-                  <span style={{ fontWeight: 600 }}>Re: "{painData.short}"</span> — {painData.capRelevance}
+                <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.5), lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
+                  <span style={{ fontWeight: 600, color: f.ink(0.7) }}>Re: "{painData.short}"</span> — {painData.capRelevance}
                 </p>
               ))}
             </div>
@@ -890,12 +669,12 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 6: Capabilities ═══ */}
-      <DeckFrame ref={setRef(5)} label="Capabilities" mode="wide">
+      <DeckFrame ref={setRef(5)} mode="wide">
         <div ref={r6.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(20px, 3vw, 32px)"), ...r6.stagger(0) }}>
+          <p style={{ ...heading("clamp(24px, 3vw, 40px)"), ...r6.stagger(0) }}>
             How people typically engage with us.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { title: "Portfolio Audit", desc: "Deep dive into your grantees, past investments, and records. We interview grantees directly. You get the institutional record that's never existed." },
               { title: "Strategic Framework", desc: "Customized decision-making rubric for evaluating grants against strategy, not inertia. A tool your team owns and uses independently." },
@@ -906,22 +685,17 @@ const Deck = () => {
             ].map((cap, i) => (
               <div
                 key={i}
-                className="group transition-all duration-300 rounded-xl"
+                className="transition-all duration-300"
                 style={{
                   padding: "28px 24px",
-                  background: f.surface(4),
-                  border: `1px solid ${f.white(0.04)}`,
+                  borderTop: `1px solid ${f.ink(0.06)}`,
                   opacity: r6.isActive ? 1 : 0,
                   transform: r6.isActive ? "translateY(0)" : "translateY(12px)",
                   transition: `all 0.5s ease ${200 + i * 100}ms`,
                 }}
               >
-                <div className="flex flex-col gap-2">
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.8vw, 19px)", color: f.white(0.85), marginBottom: "4px" }}>
-                    {cap.title}
-                  </p>
-                  <p style={{ ...body(0.35), fontSize: "clamp(12px, 1.3vw, 14px)" }}>{cap.desc}</p>
-                </div>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.8vw, 19px)", color: f.ink(0.8), marginBottom: "8px" }}>{cap.title}</p>
+                <p style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)" }}>{cap.desc}</p>
               </div>
             ))}
           </div>
@@ -929,34 +703,22 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 7: Impact Measurement ═══ */}
-      <DeckFrame ref={setRef(6)} label="Impact Measurement" mode="wide">
-        <div ref={r7.ref} className="flex flex-col lg:flex-row gap-12 w-full">
+      <DeckFrame ref={setRef(6)} mode="wide">
+        <div ref={r7.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0)}>
-            <p style={heading("clamp(22px, 3.5vw, 38px)")}>
+            <p style={heading("clamp(26px, 3.5vw, 44px)")}>
               Most grantee reports measure activity.{" "}
-              <span style={{ color: f.goldA(0.8) }}>We measure power.</span>
+              <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p
-              style={{
-                ...r7.stagger(1, 600),
-                marginTop: "24px",
-                fontFamily: f.sans,
-                fontSize: "clamp(13px, 1.6vw, 17px)",
-                fontStyle: "italic",
-                color: f.goldA(0.6),
-                lineHeight: 1.55,
-                borderLeft: `2px solid ${f.goldA(0.3)}`,
-                paddingLeft: "16px",
-              }}
-            >
+            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", color: f.ink(0.45), lineHeight: 1.55, borderLeft: `2px solid ${f.ink(0.1)}`, paddingLeft: "16px" }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
 
-          <div className="lg:w-[60%] rounded-xl overflow-hidden" style={{ background: f.surface(3.5) }}>
-            <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.white(0.05)}` }}>
-              <div style={{ ...mono("9px"), padding: "14px 20px", color: f.white(0.25) }}>What most grantees report</div>
-              <div style={{ ...mono("9px"), padding: "14px 20px", color: f.goldA(0.7), borderLeft: `2px solid ${f.goldA(0.1)}` }}>What we track</div>
+          <div className="lg:w-[60%]">
+            <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.ink(0.08)}` }}>
+              <div style={{ ...label("10px"), padding: "14px 20px" }}>What most grantees report</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6), borderLeft: `2px solid ${f.ink(0.06)}` }}>What we track</div>
             </div>
             {METRICS_ROWS.map((row, i) => {
               const delay = 300 + i * 200;
@@ -965,33 +727,14 @@ const Deck = () => {
                   key={i}
                   className="grid grid-cols-2 gap-0"
                   style={{
-                    borderBottom: i < METRICS_ROWS.length - 1 ? `1px solid ${f.white(0.03)}` : "none",
+                    borderBottom: i < METRICS_ROWS.length - 1 ? `1px solid ${f.ink(0.04)}` : "none",
                     opacity: r7.isActive ? 1 : 0,
                     transform: r7.isActive ? "translateX(0)" : "translateX(12px)",
                     transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
                   }}
                 >
-                  <div style={{
-                    padding: "16px 20px",
-                    fontFamily: f.sans,
-                    fontSize: "clamp(12px, 1.4vw, 15px)",
-                    color: f.white(0.2),
-                    lineHeight: 1.6,
-                    textDecoration: r7.isActive ? "line-through" : "none",
-                    textDecorationColor: f.goldA(0.25),
-                  }}>
-                    {row.left}
-                  </div>
-                  <div style={{
-                    padding: "16px 20px",
-                    fontFamily: f.sans,
-                    fontSize: "clamp(12px, 1.4vw, 15px)",
-                    color: f.white(0.65),
-                    lineHeight: 1.6,
-                    borderLeft: `2px solid ${f.goldA(0.1)}`,
-                  }}>
-                    {row.right}
-                  </div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6, borderLeft: `2px solid ${f.ink(0.06)}` }}>{row.right}</div>
                 </div>
               );
             })}
@@ -1000,14 +743,11 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 8: Working Together ═══ */}
-      <DeckFrame ref={setRef(7)} label="Working Together" mode="wide">
+      <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="flex flex-col gap-8 w-full">
-          <p style={{ ...heading("clamp(22px, 3.5vw, 38px)"), ...r8.stagger(0) }}>
-            How do you want to start?
-          </p>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), ...r8.stagger(0) }}>How do you want to start?</p>
 
-          {/* Path selector */}
-          <div className="flex flex-col sm:flex-row gap-3 w-full" style={r8.stagger(1, 200)}>
+          <div className="flex flex-col sm:flex-row gap-4 w-full" style={r8.stagger(1, 200)}>
             {([
               { id: "fresh" as const, title: "Starting fresh", desc: "You need to understand the landscape before you act." },
               { id: "experienced" as const, title: "Already up to speed", desc: "You know the gaps. You need capacity and connections." },
@@ -1018,152 +758,91 @@ const Deck = () => {
                 <button
                   key={path.id}
                   onClick={() => setEngagementPath(isSelected ? null : path.id)}
-                  className="flex-1 text-left transition-all duration-300 rounded-xl"
+                  className="flex-1 text-left transition-all duration-300"
                   style={{
                     padding: "32px 28px",
-                    border: `1px solid ${isSelected ? f.goldA(0.35) : f.white(0.04)}`,
-                    background: isSelected ? f.goldA(0.05) : f.surface(4),
+                    border: `1px solid ${isSelected ? f.ink(0.2) : f.ink(0.06)}`,
+                    background: isSelected ? "hsl(0 0% 100%)" : "transparent",
+                    borderRadius: "12px",
                     opacity: isDimmed ? 0.4 : 1,
-                    transform: isSelected ? "scale(1)" : isDimmed ? "scale(0.98)" : "scale(1)",
+                    boxShadow: isSelected ? `0 4px 20px ${f.ink(0.04)}` : "none",
                     cursor: "pointer",
                   }}
                 >
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(17px, 2.2vw, 24px)", color: isSelected ? f.white(1) : f.white(0.65), marginBottom: "8px" }}>
-                    {path.title}
-                  </p>
-                  <p style={body(0.35)}>{path.desc}</p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(17px, 2.2vw, 24px)", color: isSelected ? f.ink(0.9) : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
+                  <p style={body(0.4)}>{path.desc}</p>
                 </button>
               );
             })}
           </div>
 
-          {/* Conditional content */}
           {engagementPath === "fresh" && (
-            <div
-              className="flex flex-col lg:flex-row gap-3 w-full"
-              style={{ animation: "deck-fade-up 0.6s ease forwards" }}
-            >
-              {/* Phase 1 */}
-              <div className="flex-1 rounded-xl" style={{ padding: "28px 24px", background: f.surface(4.5), border: `1px solid ${f.white(0.04)}` }}>
-                <div className="flex items-baseline gap-3 mb-4">
-                  <span style={{ ...mono("9px"), color: f.goldA(0.6) }}>Phase 1</span>
-                  <span style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.white(0.85) }}>Internal Review</span>
-                  <span style={{ ...mono("9px"), color: f.white(0.2) }}>4–6 weeks</span>
-                </div>
-                {[
-                  "Go through everything — grantees, systems, assumptions, goals.",
-                  "Voice-track what's been funded and where things feel stuck.",
-                  "Identify the gap between where you are and where you need to be.",
-                ].map((b, i) => (
-                  <p key={i} style={{ ...body(0.35), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.white(0.05)}` }}>
-                    {b}
+            <div className="flex flex-col lg:flex-row gap-4 w-full" style={{ animation: "deck-fade-up 0.6s ease forwards" }}>
+              {[
+                { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
+                { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
+              ].map((p, pi) => (
+                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.06)}`, borderRadius: "12px" }}>
+                  <div className="flex items-baseline gap-3 mb-4">
+                    <span style={{ ...label("10px"), color: f.ink(0.4) }}>{p.phase}</span>
+                    <span style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8) }}>{p.title}</span>
+                    <span style={{ ...label("9px") }}>{p.time}</span>
+                  </div>
+                  {p.bullets.map((b, i) => (
+                    <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.ink(0.06)}` }}>{b}</p>
+                  ))}
+                  <p style={{ ...body(0.55), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
+                    <strong style={{ color: f.ink(0.75) }}>Output:</strong> {p.output}
                   </p>
-                ))}
-                <p style={{ ...body(0.5), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
-                  <strong style={{ color: f.white(0.75) }}>Output:</strong> Diagnostic — here's what we're hearing, here's the delta, here's the plan.
-                </p>
-              </div>
-
-              {/* Phase 2 */}
-              <div className="flex-1 rounded-xl" style={{ padding: "28px 24px", background: f.surface(4.5), border: `1px solid ${f.white(0.04)}` }}>
-                <div className="flex items-baseline gap-3 mb-4">
-                  <span style={{ ...mono("9px"), color: f.goldA(0.6) }}>Phase 2</span>
-                  <span style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.white(0.85) }}>External Engagement</span>
-                  <span style={{ ...mono("9px"), color: f.white(0.2) }}>6–8 weeks</span>
                 </div>
-                {[
-                  "Interview existing grantees. Flag what should concern you.",
-                  "Map cultural infrastructure you're not using.",
-                  "Introduce partners from sectors you haven't accessed.",
-                ].map((b, i) => (
-                  <p key={i} style={{ ...body(0.35), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.white(0.05)}` }}>
-                    {b}
-                  </p>
-                ))}
-                <p style={{ ...body(0.5), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
-                  <strong style={{ color: f.white(0.75) }}>Output:</strong> Actionable roadmap — restructured strategy, evaluation rubric, introduction list.
-                </p>
-              </div>
+              ))}
             </div>
           )}
 
           {engagementPath === "experienced" && (
-            <div
-              className="w-full rounded-xl"
-              style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: f.surface(4.5), border: `1px solid ${f.white(0.04)}` }}
-            >
-              <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.white(0.85), marginBottom: "12px" }}>
-                Custom scope, fast start.
-              </p>
-              <p style={{ ...body(0.45), maxWidth: "600px" }}>
-                We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.
-              </p>
+            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.06)}`, borderRadius: "12px" }}>
+              <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8), marginBottom: "12px" }}>Custom scope, fast start.</p>
+              <p style={{ ...body(0.5), maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
           )}
 
-          {/* Fork: what happens after */}
           {engagementPath && (
-            <div className="flex flex-col sm:flex-row gap-3 w-full" style={{ animation: "deck-fade-up 0.6s ease 300ms forwards", opacity: 0 }}>
+            <div className="flex flex-col sm:flex-row gap-4 w-full" style={{ animation: "deck-fade-up 0.6s ease 300ms forwards", opacity: 0 }}>
               {[
-                { label: "Option A", title: "Strategic Advisory Retainer", desc: "Ongoing partnership. We stay embedded as a sounding board, connector, and diagnostic resource. Monthly cadence, quarterly reviews, direct access." },
-                { label: "Option B", title: "Transition to Independence", desc: "We hand over the playbook, train your team, and step back. You keep the frameworks, the network, and the knowledge." },
+                { lbl: "Option A", title: "Strategic Advisory Retainer", desc: "Ongoing partnership. We stay embedded as a sounding board, connector, and diagnostic resource. Monthly cadence, quarterly reviews, direct access." },
+                { lbl: "Option B", title: "Transition to Independence", desc: "We hand over the playbook, train your team, and step back. You keep the frameworks, the network, and the knowledge." },
               ].map((opt, i) => (
-                <div
-                  key={i}
-                  className="flex-1 transition-all duration-300 rounded-xl"
-                  style={{
-                    padding: "28px 24px",
-                    background: f.surface(4),
-                    border: `1px solid ${f.white(0.04)}`,
-                  }}
-                >
-                  <span style={{ ...mono("9px"), color: f.goldA(0.6) }}>{opt.label}</span>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.white(0.85), marginTop: "8px", marginBottom: "8px" }}>
-                    {opt.title}
-                  </p>
-                  <p style={body(0.35)}>{opt.desc}</p>
+                <div key={i} className="flex-1 transition-all duration-300" style={{ padding: "28px 24px", borderTop: `1px solid ${f.ink(0.06)}` }}>
+                  <span style={{ ...label("10px"), color: f.ink(0.35) }}>{opt.lbl}</span>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8), marginTop: "8px", marginBottom: "8px" }}>{opt.title}</p>
+                  <p style={body(0.4)}>{opt.desc}</p>
                 </div>
               ))}
             </div>
           )}
 
           {!engagementPath && (
-            <p style={{ ...mono("8px"), color: f.white(0.12), ...r8.stagger(2, 600) }}>
-              ↑ Choose a path to see the process
-            </p>
+            <p style={{ ...label("9px"), ...r8.stagger(2, 600) }}>↑ Choose a path to see the process</p>
           )}
         </div>
       </DeckFrame>
 
       {/* ═══ FRAME 9: Who We Are ═══ */}
-      <DeckFrame ref={setRef(8)} label="Who We Are" mode="wide">
-        <div ref={r9.ref} className="flex flex-col lg:flex-row gap-12 w-full">
+      <DeckFrame ref={setRef(8)} mode="wide">
+        <div ref={r9.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[45%] flex flex-col justify-center">
-            <p
-              style={{
-                ...r9.stagger(0),
-                fontFamily: f.serif,
-                fontSize: "clamp(24px, 4vw, 44px)",
-                fontWeight: 400,
-                color: f.white(0.9),
-                lineHeight: 1.3,
-              }}
-            >
+            <p style={{ ...r9.stagger(0), fontFamily: f.serif, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.3 }}>
               We've been where you are.
             </p>
             <p style={{ ...body(0.5), ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
-              Our team is built from careers in{" "}
-              <strong style={{ color: f.white(0.8) }}>commercial media and entertainment</strong>{" "}
-              — the industries your grantees are trying to reach.
+              Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
             </p>
-            <p style={{ ...body(0.4), ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
-              What's holding most donor advisors back isn't effort — it's{" "}
-              <strong style={{ color: f.white(0.8) }}>access and pattern recognition</strong>{" "}
-              across these industries. That's what we transfer.
+            <p style={{ ...body(0.45), ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
+              What's holding most donor advisors back isn't effort — it's <strong style={{ color: f.ink(0.8) }}>access and pattern recognition</strong> across these industries. That's what we transfer.
             </p>
           </div>
 
-          <div className="lg:w-[55%] grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="lg:w-[55%] grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { name: "News", desc: "Local and national — how stories get placed and why" },
               { name: "Music", desc: "Labels, touring, festivals, artist strategy" },
@@ -1174,22 +853,17 @@ const Deck = () => {
             ].map((s, i) => (
               <div
                 key={i}
-                className="transition-all duration-300 rounded-xl"
+                className="transition-all duration-300"
                 style={{
                   padding: "20px 16px",
-                  background: f.surface(4.5),
-                  border: `1px solid ${f.white(0.04)}`,
+                  borderTop: `1px solid ${f.ink(0.06)}`,
                   opacity: r9.isActive ? 1 : 0,
                   transform: r9.isActive ? "translateY(0)" : "translateY(8px)",
                   transition: `all 0.5s ease ${400 + i * 100}ms`,
                 }}
               >
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.white(0.75), marginBottom: "6px" }}>
-                  {s.name}
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.white(0.25), lineHeight: 1.5 }}>
-                  {s.desc}
-                </p>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.35), lineHeight: 1.5 }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -1199,45 +873,15 @@ const Deck = () => {
       {/* ═══ FRAME 10: The Promise ═══ */}
       <DeckFrame ref={setRef(9)} mode="narrow">
         <div ref={r10.ref} className="flex flex-col gap-8 items-center text-center">
-          <p
-            style={{
-              ...r10.stagger(0),
-              fontFamily: f.serif,
-              fontSize: "clamp(28px, 5vw, 56px)",
-              fontWeight: 400,
-              color: f.white(0.92),
-              lineHeight: 1.2,
-              letterSpacing: "-0.02em",
-            }}
-          >
+          <p style={{ ...r10.stagger(0), fontFamily: f.serif, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
             Everything we know becomes everything you know.
           </p>
-          <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.goldA(0.25), borderRadius: "1px" }} />
-          <p
-            style={{
-              ...r10.stagger(2, 600),
-              fontFamily: f.sans,
-              fontSize: "clamp(15px, 2vw, 21px)",
-              fontWeight: 400,
-              color: f.white(0.4),
-              lineHeight: 1.65,
-              maxWidth: "560px",
-            }}
-          >
+          <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.ink(0.1) }} />
+          <p style={{ ...r10.stagger(2, 600), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", fontWeight: 400, color: f.ink(0.4), lineHeight: 1.65, maxWidth: "560px" }}>
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
           {selectedPainDatas.length > 0 && (
-            <p
-              style={{
-                ...r10.stagger(3, 900),
-                fontFamily: f.sans,
-                fontSize: "clamp(13px, 1.5vw, 16px)",
-                color: f.goldA(0.55),
-                lineHeight: 1.6,
-                fontStyle: "italic",
-                maxWidth: "480px",
-              }}
-            >
+            <p style={{ ...r10.stagger(3, 900), fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
               {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
@@ -1245,87 +889,63 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 11: CTA + Proof ═══ */}
-      <DeckFrame ref={setRef(10)} label="Let's Talk" mode="wide">
-        <div ref={r11.ref} className="flex flex-col lg:flex-row gap-12 w-full">
-          {/* Left: CTA */}
+      <DeckFrame ref={setRef(10)} mode="wide">
+        <div ref={r11.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r11.stagger(0)}>
-            <h2
-              style={{
-                fontFamily: f.serif,
-                fontSize: "clamp(28px, 4.5vw, 52px)",
-                fontWeight: 400,
-                color: f.white(0.95),
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                marginBottom: "16px",
-              }}
-            >
+            <h2 style={{ fontFamily: f.serif, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 400, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
               VGC StratComm
             </h2>
-            <p
-              style={{
-                fontFamily: f.sans,
-                fontSize: "clamp(15px, 2vw, 21px)",
-                color: f.white(0.45),
-                lineHeight: 1.55,
-                marginBottom: "28px",
-              }}
-            >
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.45), lineHeight: 1.55, marginBottom: "28px" }}>
               Let's look at your portfolio together.
             </p>
             <a
               href="mailto:info@vgcstratcomm.com"
-              className="deck-glow-pulse inline-block rounded-xl"
+              className="inline-block"
               style={{
                 fontFamily: f.sans,
-                fontSize: "12px",
-                letterSpacing: "0.1em",
+                fontSize: "13px",
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: f.goldA(0.9),
-                border: `1px solid ${f.goldA(0.3)}`,
+                color: f.cream,
+                background: f.ink(0.88),
                 padding: "16px 36px",
+                borderRadius: "999px",
                 textDecoration: "none",
                 textAlign: "center",
-                transition: "border-color 300ms, color 300ms",
+                transition: "background 300ms, transform 180ms",
                 maxWidth: "200px",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.goldA(0.7); e.currentTarget.style.color = f.goldA(1); }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.goldA(0.3); e.currentTarget.style.color = f.goldA(0.9); }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(1); e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = f.ink(0.88); e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Get in touch
             </a>
           </div>
 
-          {/* Right: Case studies */}
           <div className="lg:w-[60%]">
-            <p style={{ ...mono("9px"), color: f.white(0.2), marginBottom: "16px", ...r11.stagger(1, 200) }}>
-              Selected case work
-            </p>
-            <div className="grid grid-cols-2 gap-2">
+            <p style={{ ...label("10px"), marginBottom: "16px", ...r11.stagger(1, 200) }}>Selected case work</p>
+            <div className="grid grid-cols-2 gap-3">
               {CASE_STUDIES.map((cs, i) => (
                 <button
                   key={i}
                   onClick={() => setSelectedCase(i)}
-                  className="text-left transition-all duration-300 rounded-lg"
+                  className="text-left transition-all duration-300"
                   style={{
                     padding: "16px 14px",
-                    background: cs.content ? f.surface(5) : f.surface(3.5),
-                    border: `1px solid ${f.white(0.04)}`,
+                    background: cs.content ? "hsl(0 0% 100%)" : "transparent",
+                    border: `1px solid ${f.ink(0.06)}`,
+                    borderRadius: "8px",
                     cursor: "pointer",
                     opacity: r11.isActive ? 1 : 0,
                     transform: r11.isActive ? "translateY(0)" : "translateY(8px)",
                     transition: `all 0.4s ease ${300 + i * 60}ms`,
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = f.surface(7); e.currentTarget.style.borderColor = f.white(0.08); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = cs.content ? f.surface(5) : f.surface(3.5); e.currentTarget.style.borderColor = f.white(0.04); }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.boxShadow = `0 2px 12px ${f.ink(0.04)}`; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.06); e.currentTarget.style.boxShadow = "none"; }}
                 >
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: cs.content ? f.white(0.75) : f.white(0.35), marginBottom: "4px" }}>
-                    {cs.name}
-                  </p>
-                  <p style={{ ...mono("9px"), color: cs.content ? f.goldA(0.45) : f.white(0.15), lineHeight: "1.4" }}>
-                    {cs.outcome}
-                  </p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: cs.content ? f.ink(0.7) : f.ink(0.35), marginBottom: "4px" }}>{cs.name}</p>
+                  <p style={{ ...label("9px"), lineHeight: "1.4", color: cs.content ? f.ink(0.4) : f.ink(0.2) }}>{cs.outcome}</p>
                 </button>
               ))}
             </div>
@@ -1336,20 +956,8 @@ const Deck = () => {
       {/* ═══ FRAME 12: Spacer ═══ */}
       <DeckFrame ref={setRef(11)}>
         <div className="flex flex-col items-center text-center gap-6">
-          <p style={{ ...mono("10px"), color: f.white(0.12) }}>
-            ← Scroll back to explore
-          </p>
-          <h2
-            style={{
-              fontFamily: f.serif,
-              fontSize: "clamp(24px, 4vw, 44px)",
-              fontWeight: 400,
-              color: f.white(0.06),
-              letterSpacing: "-0.02em",
-            }}
-          >
-            VGC StratComm
-          </h2>
+          <p style={{ ...label("10px") }}>← Scroll back to explore</p>
+          <h2 style={{ fontFamily: f.serif, fontSize: "clamp(24px, 4vw, 44px)", fontWeight: 400, color: f.ink(0.06), letterSpacing: "-0.02em" }}>VGC StratComm</h2>
         </div>
       </DeckFrame>
 
@@ -1357,20 +965,10 @@ const Deck = () => {
       <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
         <DialogContent
           className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl"
-          style={{
-            background: f.surface(5),
-            border: `1px solid ${f.white(0.06)}`,
-          }}
+          style={{ background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.08)}` }}
         >
           <DialogHeader>
-            <DialogTitle
-              style={{
-                fontFamily: f.serif,
-                fontSize: "clamp(18px, 2.5vw, 24px)",
-                fontWeight: 400,
-                color: f.white(0.9),
-              }}
-            >
+            <DialogTitle style={{ fontFamily: f.serif, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 400, color: f.ink(0.9) }}>
               {selectedCase !== null ? CASE_STUDIES[selectedCase].name : ""}
             </DialogTitle>
           </DialogHeader>
@@ -1378,12 +976,8 @@ const Deck = () => {
             CASE_STUDIES[selectedCase].content
           ) : (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
-              <p style={{ fontFamily: f.sans, fontSize: "16px", color: f.white(0.45) }}>
-                Full case study coming soon.
-              </p>
-              <p style={{ ...mono("11px"), color: f.white(0.2) }}>
-                {selectedCase !== null ? CASE_STUDIES[selectedCase].outcome : ""}
-              </p>
+              <p style={{ fontFamily: f.sans, fontSize: "16px", color: f.ink(0.5) }}>Full case study coming soon.</p>
+              <p style={{ ...label("11px") }}>{selectedCase !== null ? CASE_STUDIES[selectedCase].outcome : ""}</p>
             </div>
           )}
         </DialogContent>

@@ -25,7 +25,7 @@ const Index = () => {
         {/* HUD: top-right */}
         <span
           className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
-          style={{ color: "hsl(0 0% 100% / 0.15)", fontFamily: "'DM Sans', sans-serif" }}
+          style={{ color: "hsl(30 10% 12% / 0.3)", fontFamily: "'DM Sans', sans-serif" }}
         >
           Van Gelder Co.
         </span>
@@ -37,7 +37,7 @@ const Index = () => {
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(40 50% 57% / 0.8)",
+              color: "hsl(30 10% 12% / 0.4)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -62,7 +62,7 @@ const Index = () => {
                 <span
                   className="hero-nav-wash absolute inset-0 pointer-events-none rounded-lg"
                   style={{
-                    background: "hsl(40 50% 57% / 0)",
+                    background: "transparent",
                     transition: "background 0.15s ease",
                   }}
                 />
@@ -72,7 +72,7 @@ const Index = () => {
                   className="hero-nav-bar absolute left-0 top-2 bottom-2 pointer-events-none rounded-full"
                   style={{
                     width: "2px",
-                    background: "hsl(40 50% 57% / 0.6)",
+                    background: "hsl(30 10% 12% / 0.3)",
                     opacity: 0,
                     transition: "opacity 0.1s ease",
                   }}
@@ -83,7 +83,7 @@ const Index = () => {
                   className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-normal leading-[1.15] transition-colors duration-150"
                   style={{
                     fontFamily: "'Instrument Serif', serif",
-                    color: "hsl(0 0% 100% / 0.88)",
+                    color: "hsl(30 10% 12% / 0.8)",
                   }}
                 >
                   {link.label}
@@ -103,9 +103,9 @@ const Index = () => {
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
                   fontFamily: "'DM Sans', sans-serif",
-                  color: "hsl(0 0% 100% / 0.4)",
-                  background: "hsl(0 0% 100% / 0.03)",
-                  border: "1px solid hsl(0 0% 100% / 0.06)",
+                  color: "hsl(30 10% 12% / 0.35)",
+                  background: "hsl(30 10% 12% / 0.04)",
+                  border: "1px solid hsl(30 10% 12% / 0.08)",
                 }}
               >
                 {sector}
@@ -118,7 +118,7 @@ const Index = () => {
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
               fontFamily: "'DM Sans', sans-serif",
-              color: "hsl(0 0% 100% / 0.2)",
+              color: "hsl(30 10% 12% / 0.25)",
               animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
