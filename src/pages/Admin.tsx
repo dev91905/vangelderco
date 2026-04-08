@@ -137,6 +137,33 @@ const Admin = () => {
               onSave={() => { updateSetting.mutate({ key: "global_article_password", value: globalPw || null }); setSettingsOpen(false); }}
               onRemove={() => { setGlobalPw(""); updateSetting.mutate({ key: "global_article_password", value: null }); setSettingsOpen(false); }}
             />
+            {/* Booking Link */}
+            <div className="p-5 space-y-3" style={{ borderTop: t.border(0.06) }}>
+              <label className="text-[11px] uppercase tracking-[0.08em] flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
+                <LinkIcon className="w-3 h-3" /> Booking Link
+              </label>
+              <input
+                type="url"
+                value={bookingLink}
+                onChange={(e) => setBookingLink(e.target.value)}
+                placeholder="https://calendly.com/your-link"
+                className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
+                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.white }}
+              />
+              <p className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
+                Used for "Schedule a Meeting" on the deck CTA page.
+              </p>
+              <button
+                onClick={() => {
+                  updateSetting.mutate({ key: "booking_link", value: bookingLink || null });
+                  setSettingsOpen(false);
+                }}
+                className="w-full px-4 py-2.5 text-sm transition-all rounded-full"
+                style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream }}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </>
       )}
