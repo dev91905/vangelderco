@@ -956,10 +956,10 @@ const Deck = () => {
       <DeckFrame ref={setRef(4)} mode="full">
         <div ref={r5.ref} className="flex flex-col gap-0 w-full">
           <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0), marginBottom: "12px" }}>
-            We can help you level up. Here's how.
+            Here's how we can help.
           </p>
           <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
-            Click any domain to explore what it means for your portfolio.
+            We know this works because we've done it ourselves.
           </p>
 
           <div className="flex w-full gap-3 mb-1">
