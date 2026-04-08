@@ -5,6 +5,7 @@ import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown } from "lucide-react";
 import {
   Dialog,
