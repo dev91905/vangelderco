@@ -69,13 +69,13 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "Research", yours: "Focus-group messages before launching.", theirs: "Monitor what's already resonating organically." },
-  { dimension: "Content", yours: "Produce polished ads on a campaign calendar.", theirs: "Fund creator ecosystems producing around the clock." },
-  { dimension: "Distribution", yours: "Buy placements and hope the right people see them.", theirs: "Acquire platforms and change the algorithms." },
-  { dimension: "Engagement", yours: "Pay influencers to post scripted content for a cycle.", theirs: "Organize at scale through churches, campuses, and networks." },
-  { dimension: "Measurement", yours: "Count impressions and mentions at grant close.", theirs: "Track what's shifting polls and moving legislation in real time." },
-  { dimension: "Iteration", yours: "Declare success when the grant closes and move on.", theirs: "Cut what's failing mid-cycle and pour into what's working." },
-  { dimension: "Overall", yours: "Test messages, then pay people to watch the winners.", theirs: "Fund everything, watch what catches fire, and supercharge it." },
+  { dimension: "Research", yours: "Commission focus groups and test messages before launching a campaign.", theirs: "Monitor what's already resonating organically across platforms and communities." },
+  { dimension: "Content", yours: "Produce polished ads, place op-eds, and fund a documentary on a campaign calendar.", theirs: "Invest in digital creator economies where ideology forms in real time — and fund investigative journalism to develop new media talent." },
+  { dimension: "Distribution", yours: "Buy placements on platforms and hope the right audiences see them.", theirs: "Acquire the platforms themselves and change the programming, algorithms, and editorial direction." },
+  { dimension: "Engagement", yours: "Hire influencers to post scripted content for a single grant cycle.", theirs: "Organize at scale through churches, veteran groups, campuses, and local business networks — building durable infrastructure." },
+  { dimension: "Measurement", yours: "Count impressions and media mentions when the grant closes.", theirs: "Run public polls designed to shift policy baselines and track what's actually moving legislation in real time." },
+  { dimension: "Iteration", yours: "Declare success when the grant period ends and move to the next proposal.", theirs: "Cut what's failing mid-cycle, pour resources into what's working, and compound gains across years." },
+  { dimension: "Overall", yours: "Test messages in a controlled environment, then pay people to watch the winners.", theirs: "Fund everything, find what catches fire organically, and supercharge it with infrastructure and capital." },
 ];
 
 /* ─── Three domains ─── */
@@ -646,8 +646,8 @@ const Deck = () => {
                     gridTemplateColumns: "100px 1fr 1fr",
                     gap: "clamp(12px, 2vw, 24px)",
                     borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                    paddingTop: isLast ? "14px" : "10px",
-                    paddingBottom: "10px",
+                    paddingTop: isLast ? "16px" : "12px",
+                    paddingBottom: "12px",
                     borderTop: isLast ? `1px solid ${f.ink(0.12)}` : "none",
                     opacity: r3.isActive ? 1 : 0,
                     transform: r3.isActive ? "translateY(0)" : "translateY(8px)",
@@ -667,19 +667,19 @@ const Deck = () => {
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(12px, 1.2vw, 14px)",
+                    fontSize: "clamp(13px, 1.3vw, 15px)",
                     color: f.ink(0.7),
-                    lineHeight: 1.6,
+                    lineHeight: 1.65,
                     fontWeight: isLast ? 500 : 400,
                   }}>
                     {row.yours}
                   </p>
                   <p style={{
                     fontFamily: f.serif,
-                    fontSize: "clamp(12px, 1.2vw, 14px)",
+                    fontSize: "clamp(13px, 1.3vw, 15px)",
                     color: f.ink(0.7),
-                    lineHeight: 1.6,
-                    fontWeight: isLast ? 600 : 400,
+                    lineHeight: 1.65,
+                    fontWeight: isLast ? 600 : 500,
                   }}>
                     {row.theirs}
                   </p>
