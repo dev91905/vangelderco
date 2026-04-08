@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, FormEvent } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
@@ -197,6 +198,21 @@ const Deck = () => {
 
   /* ─── Branching state ─── */
   const [selectedPains, setSelectedPains] = useState<string[]>([]);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customMessage, setCustomMessage] = useState("");
+  const [customSubmitted, setCustomSubmitted] = useState(false);
+  const [customSubmitting, setCustomSubmitting] = useState(false);
+
+  const handleCustomSubmit = async (e?: FormEvent) => {
+    e?.preventDefault();
+    if (!customMessage.trim() || customSubmitting) return;
+    setCustomSubmitting(true);
+    await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
+    setCustomSubmitting(false);
+    setCustomSubmitted(true);
+    setCustomMessage("");
+    setTimeout(() => { setCustomSubmitted(false); setCustomOpen(false); }, 2000);
+  };
   
   const [activeDomain, setActiveDomain] = useState<string | null>(null);
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
@@ -490,6 +506,100 @@ const Deck = () => {
                 </button>
               );
             })}
+            {/* 6th card — Something else */}
+            <div
+              style={{
+                padding: "28px 24px",
+                border: `1px dashed ${f.ink(0.12)}`,
+                background: customOpen ? f.ink(0.03) : "transparent",
+                borderRadius: "12px",
+                opacity: r2.isActive ? 1 : 0,
+                transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
+                transition: "opacity 0.3s ease 400ms, transform 0.3s ease 400ms, background 0.15s ease",
+              }}
+            >
+              {customSubmitted ? (
+                <p style={{ fontFamily: f.sans, fontSize: "15px", fontWeight: 600, color: f.ink(0.7) }}>
+                  Thanks — noted. ✓
+                </p>
+              ) : !customOpen ? (
+                <button
+                  onClick={() => setCustomOpen(true)}
+                  className="text-left w-full"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
+                    Something else
+                  </p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
+                    Tell us what you're dealing with.
+                  </p>
+                </button>
+              ) : (
+                <form onSubmit={handleCustomSubmit} className="flex flex-col gap-3">
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
+                    What's your challenge?
+                  </p>
+                  <textarea
+                    autoFocus
+                    value={customMessage}
+                    onChange={(e) => setCustomMessage(e.target.value)}
+                    placeholder="Describe what you're up against…"
+                    rows={3}
+                    maxLength={500}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "14px",
+                      color: f.ink(0.8),
+                      background: "white",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      borderRadius: "8px",
+                      padding: "12px",
+                      resize: "none",
+                      outline: "none",
+                    }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
+                  />
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="submit"
+                      disabled={!customMessage.trim() || customSubmitting}
+                      style={{
+                        fontFamily: f.sans,
+                        fontSize: "12px",
+                        letterSpacing: "0.04em",
+                        fontWeight: 600,
+                        color: f.cream,
+                        background: customMessage.trim() ? f.ink(0.85) : f.ink(0.2),
+                        border: "none",
+                        padding: "8px 20px",
+                        borderRadius: "999px",
+                        cursor: customMessage.trim() ? "pointer" : "default",
+                        transition: "background 0.15s ease",
+                      }}
+                    >
+                      {customSubmitting ? "Sending…" : "Submit"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setCustomOpen(false); setCustomMessage(""); }}
+                      style={{
+                        fontFamily: f.sans,
+                        fontSize: "12px",
+                        color: f.ink(0.35),
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: "8px 12px",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
           {selectedPains.length === 0 && (
             <p style={{ ...label("9px"), ...r2.stagger(3, 800) }}>

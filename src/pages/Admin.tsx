@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
+import { formatDistanceToNow } from "date-fns";
 
 const generatePassword = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -159,6 +161,79 @@ const Admin = () => {
       <div className="px-4 md:px-8 py-2">
         <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
       </div>
+
+      <SubmissionsFeed />
+    </div>
+  );
+};
+
+const SubmissionsFeed = () => {
+  const [open, setOpen] = useState(false);
+  const { data: submissions, isLoading } = useQuery({
+    queryKey: ["deck-submissions"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deck_submissions" as any)
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as unknown as Array<{ id: string; message: string; created_at: string }>;
+    },
+  });
+
+  const count = submissions?.length ?? 0;
+
+  return (
+    <div className="px-4 md:px-8 py-4" style={{ borderTop: t.border(0.06) }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-3 w-full text-left py-2"
+        style={{ background: "none", border: "none", cursor: "pointer" }}
+      >
+        <MessageSquare className="w-4 h-4" style={{ color: t.ink(0.35) }} />
+        <span style={{ fontFamily: t.sans, fontSize: "13px", fontWeight: 600, color: t.ink(0.6) }}>
+          Deck Submissions
+        </span>
+        {count > 0 && (
+          <span style={{
+            fontFamily: t.sans, fontSize: "11px", fontWeight: 600,
+            color: t.cream, background: t.ink(0.7),
+            padding: "1px 8px", borderRadius: "999px",
+          }}>
+            {count}
+          </span>
+        )}
+        {open ? <ChevronUp className="w-3.5 h-3.5 ml-auto" style={{ color: t.ink(0.3) }} /> : <ChevronDown className="w-3.5 h-3.5 ml-auto" style={{ color: t.ink(0.3) }} />}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-2 max-h-[400px] overflow-y-auto pr-1">
+          {isLoading && <p style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.3) }}>Loading…</p>}
+          {!isLoading && count === 0 && (
+            <p style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.3), padding: "12px 0" }}>
+              No submissions yet.
+            </p>
+          )}
+          {submissions?.map((s) => (
+            <div
+              key={s.id}
+              style={{
+                padding: "14px 16px",
+                borderRadius: "10px",
+                border: t.border(0.06),
+                background: t.white,
+              }}
+            >
+              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.75), lineHeight: 1.6 }}>
+                {s.message}
+              </p>
+              <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.3), marginTop: "8px" }}>
+                {formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
