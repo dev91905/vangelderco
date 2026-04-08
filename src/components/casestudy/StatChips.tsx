@@ -17,28 +17,28 @@ const StatChips = ({ stats, visible }: StatChipsProps) => {
       {stats.map((stat, i) => (
         <div
           key={i}
-          className="flex flex-col px-4 py-3"
+          className="flex flex-col px-4 py-3 rounded-xl"
           style={{
-            background: "hsl(0 0% 4%)",
-            border: "1px solid hsl(0 0% 100% / 0.06)",
-            borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
+            background: "hsl(0 0% 100%)",
+            border: "1px solid hsl(30 10% 12% / 0.06)",
+            borderLeft: "2px solid hsl(30 10% 12% / 0.2)",
             animation: `fade-up 0.4s ease-out ${i * 0.1}s both`,
           }}
         >
           <span
             className="text-[18px] md:text-[22px] font-medium"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 80% 48% / 0.9)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(30 10% 12% / 0.8)",
             }}
           >
             {stat.label}
           </span>
           <span
-            className="text-[9px] tracking-[0.15em] uppercase mt-1"
+            className="text-[10px] tracking-[0.08em] uppercase mt-1"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 0% 100% / 0.4)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(30 10% 12% / 0.35)",
             }}
           >
             {stat.description}

@@ -31,6 +31,9 @@ const capabilityLabel: Record<string, string> = {
   "deep-organizing": "Deep Organizing",
 };
 
+const labelStyle: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+const serif: React.CSSProperties = { fontFamily: "'Instrument Serif', serif" };
+
 const CaseStudyView = ({ post }: CaseStudyViewProps) => {
   const [showStats, setShowStats] = useState(true);
 
@@ -49,23 +52,15 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
   return (
     <AtmosphericLayout>
-      {/* HUD */}
-      <span
-        className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.2em] uppercase"
-        style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.18)" }}
-      >
-        Van Gelder Co.
-      </span>
-
       {/* Back */}
       <Link
         to={capabilityRoute[post.capability] || "/"}
-        className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.2em] uppercase transition-colors duration-300"
-        style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.3)" }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(0 80% 48% / 0.9)")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(0 0% 100% / 0.3)")}
+        className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+        style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.35)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.8)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.35)")}
       >
-        &lt; Return
+        ← Back
       </Link>
 
       <div
@@ -75,41 +70,25 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
         {/* Hero */}
         <div
           className="w-full flex flex-col items-center justify-end px-6 pb-8"
-          style={{
-            minHeight: "50vh",
-            background: post.hero_image_url
-              ? undefined
-              : "linear-gradient(180deg, hsl(0 80% 48% / 0.08) 0%, hsl(0 0% 2.5%) 100%)",
-          }}
+          style={{ minHeight: "40vh" }}
         >
           {/* Meta */}
           <div className="flex items-center gap-3 mb-5" style={{ animation: "fade-up 0.5s ease-out 0.2s both" }}>
-            <span
-              className="text-[10px] tracking-[0.15em] uppercase"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 80% 48% / 0.7)" }}
-            >
+            <span className="text-[12px]" style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.4)" }}>
               Case Study
             </span>
-            <span
-              className="text-[10px]"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.15)" }}
-            >
-              //
-            </span>
-            <span
-              className="text-[10px] tracking-[0.1em] uppercase"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.3)" }}
-            >
+            <span className="text-[12px]" style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.15)" }}>·</span>
+            <span className="text-[12px]" style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.35)" }}>
               {capabilityLabel[post.capability] || post.capability}
             </span>
           </div>
 
           {/* Title */}
           <h1
-            className="text-[24px] md:text-[34px] font-medium leading-[1.2] text-center max-w-3xl mb-4"
+            className="text-[28px] md:text-[40px] font-medium leading-[1.15] text-center max-w-3xl mb-4"
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              color: "hsl(0 0% 100% / 0.92)",
+              ...serif,
+              color: "hsl(30 10% 12% / 0.9)",
               animation: "fade-up 0.5s ease-out 0.3s both",
             }}
           >
@@ -118,10 +97,10 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
           {post.excerpt && (
             <p
-              className="text-[13px] leading-[1.7] text-center max-w-2xl mb-4"
+              className="text-[15px] leading-[1.7] text-center max-w-2xl mb-4"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                color: "hsl(0 0% 100% / 0.5)",
+                ...labelStyle,
+                color: "hsl(30 10% 12% / 0.5)",
                 animation: "fade-up 0.5s ease-out 0.35s both",
               }}
             >
@@ -131,10 +110,10 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
           {post.published_at && (
             <span
-              className="text-[10px] tracking-[0.15em]"
+              className="text-[13px]"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                color: "hsl(0 0% 100% / 0.25)",
+                ...labelStyle,
+                color: "hsl(30 10% 12% / 0.3)",
                 animation: "fade-up 0.5s ease-out 0.4s both",
               }}
             >
@@ -145,7 +124,6 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
         {/* Content */}
         <main className="flex flex-col items-center px-6 pb-20 max-w-[720px] mx-auto gap-8">
-          {/* Stat toggle + chips */}
           {post.stats && post.stats.length > 0 && (
             <div className="w-full flex flex-col gap-4" style={{ animation: "fade-up 0.5s ease-out 0.5s both" }}>
               <button
@@ -153,24 +131,18 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
                 className="flex items-center gap-2 self-start"
               >
                 <span
-                  className="w-3 h-3 flex items-center justify-center"
+                  className="w-3 h-3 flex items-center justify-center rounded-sm"
                   style={{
-                    border: "1px solid hsl(0 80% 48% / 0.5)",
-                    background: showStats ? "hsl(0 80% 48% / 0.3)" : "transparent",
+                    border: "1px solid hsl(30 10% 12% / 0.2)",
+                    background: showStats ? "hsl(30 10% 12% / 0.1)" : "transparent",
                     transition: "background 0.15s ease",
                   }}
                 >
                   {showStats && (
-                    <span className="block w-1.5 h-1.5" style={{ background: "hsl(0 80% 48% / 0.9)" }} />
+                    <span className="block w-1.5 h-1.5 rounded-sm" style={{ background: "hsl(30 10% 12% / 0.6)" }} />
                   )}
                 </span>
-                <span
-                  className="text-[10px] tracking-[0.15em] uppercase"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    color: "hsl(0 0% 100% / 0.35)",
-                  }}
-                >
+                <span className="text-[12px]" style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.4)" }}>
                   Key Metrics
                 </span>
               </button>
@@ -178,18 +150,13 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
             </div>
           )}
 
-          {/* Divider */}
-          <div className="w-12" style={{ height: "1px", background: "hsl(0 80% 48% / 0.3)" }} />
+          <div className="w-12" style={{ height: "1px", background: "hsl(30 10% 12% / 0.08)" }} />
 
-          {/* Article */}
           <article className="w-full" style={{ animation: "fade-up 0.6s ease-out 0.7s both" }}>
             {post.content_blocks ? (
               <ContentBlockRenderer blocks={post.content_blocks} renderExtended={renderExtended} />
             ) : (
-              <p
-                className="text-[13px] leading-[1.9]"
-                style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.5)" }}
-              >
+              <p className="text-[15px] leading-[1.9]" style={{ ...labelStyle, color: "hsl(30 10% 12% / 0.4)" }}>
                 No content available.
               </p>
             )}

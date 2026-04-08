@@ -29,41 +29,41 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
 
   return (
     <div className="space-y-2">
-      <label className="text-[10px] uppercase tracking-[0.12em] flex items-center gap-1.5" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>
+      <label className="text-[11px] uppercase tracking-[0.06em] flex items-center gap-1.5" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
         <Lock className="w-3 h-3" /> Password Protection
       </label>
-      <div className="rounded-lg overflow-hidden" style={{ border: "1px solid hsl(0 0% 12%)", background: "hsl(0 0% 4%)" }}>
+      <div className="rounded-xl overflow-hidden" style={{ border: "1px solid hsl(30 10% 12% / 0.08)", background: "hsl(0 0% 100%)" }}>
         <div className="flex items-center">
           <input
             type={show ? "text" : "password"}
             value={value || ""}
             onChange={(e) => onChange(e.target.value || null)}
             placeholder="No password set"
-            className="flex-1 px-3 py-2.5 text-xs bg-transparent outline-none min-w-0"
-            style={{ ...mono, color: "hsl(0 0% 100% / 0.7)" }}
+            className="flex-1 px-3 py-2.5 text-sm bg-transparent outline-none min-w-0"
+            style={{ ...label, color: "hsl(30 10% 12% / 0.7)" }}
           />
         </div>
         <div className="flex items-center gap-px px-1 pb-1">
-          <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+          <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
             {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
             {show ? "Hide" : "Show"}
           </button>
-          <button onClick={handleGenerate} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+          <button onClick={handleGenerate} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
             <RefreshCw className="w-3 h-3" /> Generate
           </button>
-          <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_0%_10%)] disabled:opacity-20" style={{ ...mono, color: copied ? "hsl(120 40% 50% / 0.7)" : "hsl(0 0% 100% / 0.3)" }}>
+          <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] disabled:opacity-20" style={{ ...label, color: copied ? "hsl(150 40% 40%)" : "hsl(30 10% 12% / 0.35)" }}>
             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
             {copied ? "Copied" : "Copy"}
           </button>
           {value && (
-            <button onClick={() => { onChange(null); setShow(false); }} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[9px] uppercase tracking-[0.1em] transition-colors hover:bg-[hsl(0_80%_48%_/_0.08)] ml-auto" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
+            <button onClick={() => { onChange(null); setShow(false); }} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors hover:bg-[hsl(0_60%_50%_/_0.06)] ml-auto" style={{ ...label, color: "hsl(0 60% 45% / 0.5)" }}>
               <Trash2 className="w-3 h-3" /> Remove
             </button>
           )}
         </div>
       </div>
       {value && (
-        <span className="text-[9px] flex items-center gap-1.5" style={{ ...mono, color: "hsl(0 80% 48% / 0.5)" }}>
+        <span className="text-[11px] flex items-center gap-1.5" style={{ ...label, color: "hsl(30 10% 12% / 0.4)" }}>
           <Lock className="w-2.5 h-2.5" /> This article is password protected
         </span>
       )}
@@ -102,8 +102,8 @@ const CAPABILITIES = [
 const slugify = (text: string) =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
-const grotesk: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+const serif: React.CSSProperties = { fontFamily: "'Instrument Serif', serif" };
 
 const EditorMetaBar = (props: EditorMetaBarProps) => {
   const [slugManual, setSlugManual] = useState(false);
@@ -124,31 +124,31 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
           value={props.title}
           onChange={(e) => props.onTitleChange(e.target.value)}
           placeholder="Untitled"
-          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-bold tracking-tight"
-          style={{ ...grotesk, color: "hsl(0 0% 100% / 0.95)" }}
+          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-medium tracking-tight"
+          style={{ ...serif, color: "hsl(30 10% 12% / 0.9)" }}
         />
         <div className="flex items-center gap-2 mt-2">
-          <span className="text-[10px]" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>/post/</span>
+          <span className="text-[12px]" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>/post/</span>
           <input
             value={props.slug}
             onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
-            className="bg-transparent outline-none text-xs flex-1"
-            style={{ ...mono, color: "hsl(0 0% 100% / 0.4)" }}
+            className="bg-transparent outline-none text-sm flex-1"
+            style={{ ...label, color: "hsl(30 10% 12% / 0.4)" }}
           />
           <button
             onClick={() => setDrawerOpen(true)}
-            className="p-2 rounded-lg transition-colors hover:bg-[hsl(0_0%_10%)]"
+            className="p-2 rounded-xl transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)]"
             title="Post settings"
           >
-            <Settings className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.3)" }} />
+            <Settings className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.3)" }} />
           </button>
         </div>
         {/* DEK */}
         <div className="mt-3">
-          <label className="text-[10px] uppercase tracking-[0.12em] mb-1 flex items-center gap-2" style={{ ...mono, color: "hsl(0 0% 100% / 0.2)" }}>
+          <label className="text-[11px] uppercase tracking-[0.06em] mb-1 flex items-center gap-2" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>
             DEK
             {!props.excerpt?.trim() && props.isPublished && (
-              <span style={{ color: "hsl(0 80% 48% / 0.6)", fontSize: "9px", letterSpacing: "0.1em" }}>MISSING</span>
+              <span style={{ color: "hsl(0 60% 45% / 0.6)", fontSize: "10px" }}>MISSING</span>
             )}
           </label>
           <textarea
@@ -156,8 +156,8 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
             onChange={(e) => props.onExcerptChange(e.target.value)}
             placeholder="Short description shown on listing cards and below the title"
             rows={2}
-            className="w-full bg-transparent outline-none text-xs resize-none"
-            style={{ ...mono, color: "hsl(0 0% 100% / 0.5)", lineHeight: "1.6" }}
+            className="w-full bg-transparent outline-none text-sm resize-none"
+            style={{ ...label, color: "hsl(30 10% 12% / 0.55)", lineHeight: "1.6" }}
           />
         </div>
       </div>
@@ -165,35 +165,35 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
       {/* Settings drawer overlay */}
       {drawerOpen && (
         <>
-          <div className="fixed inset-0 z-50" style={{ background: "hsl(0 0% 0% / 0.5)" }} onClick={() => setDrawerOpen(false)} />
+          <div className="fixed inset-0 z-50" style={{ background: "hsl(30 10% 12% / 0.15)" }} onClick={() => setDrawerOpen(false)} />
           <div
             className={`fixed z-50 overflow-y-auto ${isMobile ? "inset-x-0 bottom-0 rounded-t-2xl max-h-[85vh]" : "top-0 right-0 h-full w-96"}`}
-            style={{ background: "hsl(0 0% 5%)", borderLeft: isMobile ? undefined : "1px solid hsl(0 0% 12%)", borderTop: isMobile ? "1px solid hsl(0 0% 12%)" : undefined }}
+            style={{ background: "hsl(40 30% 96%)", borderLeft: isMobile ? undefined : "1px solid hsl(30 10% 12% / 0.06)", borderTop: isMobile ? "1px solid hsl(30 10% 12% / 0.06)" : undefined, boxShadow: "-8px 0 30px hsl(30 10% 12% / 0.06)" }}
           >
             {/* Drawer header */}
-            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid hsl(0 0% 10%)" }}>
-              <span className="text-[10px] uppercase tracking-[0.15em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.3)" }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
+              <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.4)" }}>
                 Post Settings
               </span>
-              <button onClick={() => setDrawerOpen(false)} className="p-1.5 rounded hover:bg-[hsl(0_0%_10%)] transition-colors">
-                <X className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.4)" }} />
+              <button onClick={() => setDrawerOpen(false)} className="p-1.5 rounded-lg hover:bg-[hsl(30_10%_12%_/_0.04)] transition-colors">
+                <X className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.4)" }} />
               </button>
             </div>
 
             <div className="p-5 space-y-6">
               {/* Type */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Type</label>
-                <div className="flex gap-1" style={{ border: "1px solid hsl(0 0% 15%)" }}>
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Type</label>
+                <div className="flex gap-1 rounded-xl overflow-hidden" style={{ border: "1px solid hsl(30 10% 12% / 0.08)" }}>
                   {["blog-post", "case-study"].map((t) => (
                     <button
                       key={t}
                       onClick={() => props.onTypeChange(t)}
-                      className="flex-1 px-3 py-2.5 text-[11px] tracking-[0.1em] uppercase transition-colors"
+                      className="flex-1 px-3 py-2.5 text-[12px] transition-colors"
                       style={{
-                        ...mono,
-                        background: props.type === t ? "hsl(0 80% 48% / 0.12)" : "transparent",
-                        color: props.type === t ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.35)",
+                        ...label,
+                        background: props.type === t ? "hsl(30 10% 12%)" : "transparent",
+                        color: props.type === t ? "hsl(40 30% 96%)" : "hsl(30 10% 12% / 0.4)",
                       }}
                     >
                       {t === "blog-post" ? "Blog Post" : "Case Study"}
@@ -204,18 +204,18 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
 
               {/* Capability */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Capability</label>
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Capability</label>
                 <div className="space-y-1">
                   {CAPABILITIES.map((c) => (
                     <button
                       key={c.value}
                       onClick={() => props.onCapabilityChange(c.value)}
-                      className="w-full text-left px-3 py-2 text-xs transition-colors"
+                      className="w-full text-left px-3 py-2 text-sm transition-colors rounded-lg"
                       style={{
-                        ...mono,
-                        background: props.capability === c.value ? "hsl(0 80% 48% / 0.08)" : "transparent",
-                        color: props.capability === c.value ? "hsl(0 0% 100% / 0.8)" : "hsl(0 0% 100% / 0.35)",
-                        borderLeft: props.capability === c.value ? "2px solid hsl(0 80% 48% / 0.5)" : "2px solid transparent",
+                        ...label,
+                        background: props.capability === c.value ? "hsl(30 10% 12% / 0.05)" : "transparent",
+                        color: props.capability === c.value ? "hsl(30 10% 12% / 0.8)" : "hsl(30 10% 12% / 0.4)",
+                        borderLeft: props.capability === c.value ? "2px solid hsl(30 10% 12% / 0.3)" : "2px solid transparent",
                       }}
                     >
                       {c.label}
@@ -226,27 +226,27 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
 
               {/* Publish toggle */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Status</label>
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Status</label>
                 <button
                   onClick={() => {
                     const next = !props.isPublished;
                     props.onPublishedChange(next);
                     if (next && !props.publishedAt) props.onPublishedAtChange(new Date().toISOString());
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 transition-colors"
-                  style={{ border: "1px solid hsl(0 0% 15%)" }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 transition-colors rounded-xl"
+                  style={{ border: "1px solid hsl(30 10% 12% / 0.08)" }}
                 >
-                  <span className="text-xs" style={{ ...mono, color: props.isPublished ? "hsl(0 80% 48%)" : "hsl(0 0% 100% / 0.4)" }}>
+                  <span className="text-sm" style={{ ...label, color: props.isPublished ? "hsl(30 10% 12% / 0.8)" : "hsl(30 10% 12% / 0.4)" }}>
                     {props.isPublished ? "Published" : "Draft"}
                   </span>
                   <div
                     className="w-9 h-5 rounded-full relative transition-colors"
-                    style={{ background: props.isPublished ? "hsl(0 80% 48%)" : "hsl(0 0% 20%)" }}
+                    style={{ background: props.isPublished ? "hsl(30 10% 12%)" : "hsl(30 10% 12% / 0.12)" }}
                   >
                     <div
                       className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
                       style={{
-                        background: "hsl(0 0% 100%)",
+                        background: "hsl(40 30% 96%)",
                         left: "2px",
                         transform: props.isPublished ? "translateX(16px)" : "translateX(0)",
                       }}
@@ -257,7 +257,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
 
               {/* Hero image */}
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.12em]" style={{ ...mono, color: "hsl(0 0% 100% / 0.25)" }}>Hero Image</label>
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Hero Image</label>
                 <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
               </div>
 

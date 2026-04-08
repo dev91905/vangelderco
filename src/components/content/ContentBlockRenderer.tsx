@@ -15,6 +15,9 @@ interface ContentBlockRendererProps {
   renderExtended?: (block: ContentBlock, index: number) => React.ReactNode | null;
 }
 
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+const serif: React.CSSProperties = { fontFamily: "'Instrument Serif', serif" };
+
 const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererProps) => {
   return (
     <div className="flex flex-col gap-6 md:gap-8">
@@ -36,10 +39,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
               <Tag
                 key={i}
                 className={`${sizes[block.level] || sizes[3]} font-medium leading-[1.3]`}
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  color: "hsl(0 0% 100% / 0.9)",
-                }}
+                style={{ ...serif, color: "hsl(30 10% 12% / 0.85)" }}
               >
                 {block.text}
               </Tag>
@@ -50,11 +50,8 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return (
               <p
                 key={i}
-                className="text-[14px] md:text-[15px] leading-[2]"
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  color: "hsl(0 0% 100% / 0.6)",
-                }}
+                className="text-[15px] md:text-[16px] leading-[1.9]"
+                style={{ ...label, color: "hsl(30 10% 12% / 0.55)" }}
               >
                 {block.text}
               </p>
@@ -64,10 +61,10 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return (
               <figure key={i} className="flex flex-col gap-2">
                 <div
-                  className="w-full aspect-video flex items-center justify-center"
+                  className="w-full aspect-video flex items-center justify-center rounded-xl overflow-hidden"
                   style={{
-                    background: "hsl(0 0% 6%)",
-                    border: "1px solid hsl(0 0% 100% / 0.06)",
+                    background: "hsl(0 0% 100%)",
+                    border: "1px solid hsl(30 10% 12% / 0.06)",
                   }}
                 >
                   {block.src ? (
@@ -77,25 +74,13 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span
-                      className="text-[10px] tracking-[0.2em] uppercase"
-                      style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        color: "hsl(0 0% 100% / 0.15)",
-                      }}
-                    >
+                    <span className="text-[12px]" style={{ ...label, color: "hsl(30 10% 12% / 0.2)" }}>
                       {block.alt || "Image"}
                     </span>
                   )}
                 </div>
                 {block.caption && (
-                  <figcaption
-                    className="text-[10px] tracking-[0.1em]"
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color: "hsl(0 0% 100% / 0.3)",
-                    }}
-                  >
+                  <figcaption className="text-[12px]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
                     {block.caption}
                   </figcaption>
                 )}
@@ -106,19 +91,14 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return (
               <div
                 key={i}
-                className="w-full aspect-video"
+                className="w-full aspect-video rounded-xl overflow-hidden"
                 style={{
-                  background: "hsl(0 0% 4%)",
-                  border: "1px solid hsl(0 0% 100% / 0.06)",
+                  background: "hsl(30 10% 12% / 0.03)",
+                  border: "1px solid hsl(30 10% 12% / 0.06)",
                 }}
               >
                 {block.provider === "youtube" || block.src.includes("youtube") ? (
-                  <iframe
-                    src={block.src}
-                    className="w-full h-full"
-                    allowFullScreen
-                    title="Video"
-                  />
+                  <iframe src={block.src} className="w-full h-full" allowFullScreen title="Video" />
                 ) : (
                   <video src={block.src} controls className="w-full h-full" />
                 )}
@@ -127,11 +107,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
 
           case "embed":
             return (
-              <div
-                key={i}
-                className="w-full"
-                dangerouslySetInnerHTML={{ __html: block.html }}
-              />
+              <div key={i} className="w-full" dangerouslySetInnerHTML={{ __html: block.html }} />
             );
 
           case "quote":
@@ -139,26 +115,18 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
               <blockquote
                 key={i}
                 className="pl-4 md:pl-6 py-2"
-                style={{
-                  borderLeft: "2px solid hsl(0 80% 48% / 0.6)",
-                }}
+                style={{ borderLeft: "2px solid hsl(30 10% 12% / 0.12)" }}
               >
                 <p
-                  className="text-[14px] md:text-[16px] leading-[1.7] italic"
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    color: "hsl(0 0% 100% / 0.7)",
-                  }}
+                  className="text-[15px] md:text-[17px] leading-[1.7] italic"
+                  style={{ ...serif, color: "hsl(30 10% 12% / 0.6)" }}
                 >
                   "{block.text}"
                 </p>
                 {block.attribution && (
                   <cite
-                    className="text-[10px] tracking-[0.15em] uppercase not-italic mt-2 block"
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color: "hsl(0 80% 48% / 0.6)",
-                    }}
+                    className="text-[12px] not-italic mt-2 block"
+                    style={{ ...label, color: "hsl(30 10% 12% / 0.4)" }}
                   >
                     — {block.attribution}
                   </cite>
@@ -170,21 +138,18 @@ const ContentBlockRenderer = ({ blocks, renderExtended }: ContentBlockRendererPr
             return (
               <div
                 key={i}
-                className="p-4 md:p-5"
+                className="p-4 md:p-5 rounded-xl"
                 style={{
-                  background: "hsl(0 80% 48% / 0.04)",
-                  borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
-                  border: "1px solid hsl(0 0% 100% / 0.05)",
+                  background: "hsl(30 10% 12% / 0.02)",
+                  borderLeft: "2px solid hsl(30 10% 12% / 0.12)",
+                  border: "1px solid hsl(30 10% 12% / 0.04)",
                   borderLeftWidth: "2px",
-                  borderLeftColor: "hsl(0 80% 48% / 0.5)",
+                  borderLeftColor: "hsl(30 10% 12% / 0.12)",
                 }}
               >
                 <p
-                  className="text-[12px] md:text-[13px] leading-[1.8]"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    color: "hsl(0 0% 100% / 0.55)",
-                  }}
+                  className="text-[13px] md:text-[14px] leading-[1.8]"
+                  style={{ ...label, color: "hsl(30 10% 12% / 0.5)" }}
                 >
                   {block.text}
                 </p>

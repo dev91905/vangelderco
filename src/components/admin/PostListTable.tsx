@@ -7,6 +7,8 @@ import { useTogglePublish } from "@/hooks/usePostMutations";
 import { useState } from "react";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 
+const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+
 interface PostListTableProps {
   filter: { type: string; capability: string };
 }
@@ -37,7 +39,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <span className="text-xs" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.3)" }}>
+        <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>
           Loading...
         </span>
       </div>
@@ -50,41 +52,37 @@ const PostListTable = ({ filter }: PostListTableProps) => {
         <Link
           key={post.id}
           to={`/admin/edit/${post.id}`}
-          className="flex items-center gap-4 p-4 transition-all group"
+          className="flex items-center gap-4 p-4 transition-all group rounded-xl"
           style={{
-            background: "hsl(0 0% 4%)",
-            borderBottom: "1px solid hsl(0 0% 8%)",
-            borderLeft: "2px solid transparent",
-            transition: "background 200ms, border-left-color 200ms",
+            background: "transparent",
+            borderBottom: "1px solid hsl(30 10% 12% / 0.04)",
           }}
           onPointerEnter={(e) => {
             playHoverGlitch();
-            e.currentTarget.style.background = "hsl(0 0% 6%)";
-            e.currentTarget.style.borderLeftColor = "hsl(0 80% 48% / 0.5)";
+            e.currentTarget.style.background = "hsl(0 0% 100%)";
           }}
           onPointerLeave={(e) => {
-            e.currentTarget.style.background = "hsl(0 0% 4%)";
-            e.currentTarget.style.borderLeftColor = "transparent";
+            e.currentTarget.style.background = "transparent";
           }}
         >
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "hsl(0 0% 100% / 0.9)" }}>
+            <h3 className="text-[15px] font-medium truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ ...label, color: "hsl(30 10% 12% / 0.85)" }}>
               {post.title}
-              {(post as any).password && <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(0 0% 100% / 0.15)" }} />}
+              {(post as any).password && <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "hsl(30 10% 12% / 0.2)" }} />}
             </h3>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-[9px] tracking-[0.15em] uppercase px-1.5 py-0.5" style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                color: post.type === "case-study" ? "hsl(0 80% 48% / 0.8)" : "hsl(0 0% 100% / 0.4)",
-                border: `1px solid ${post.type === "case-study" ? "hsl(0 80% 48% / 0.3)" : "hsl(0 0% 20%)"}`,
+              <span className="text-[11px] tracking-[0.02em] px-2 py-0.5 rounded-full" style={{
+                ...label,
+                color: post.type === "case-study" ? "hsl(30 10% 12% / 0.6)" : "hsl(30 10% 12% / 0.4)",
+                background: post.type === "case-study" ? "hsl(30 10% 12% / 0.06)" : "hsl(30 10% 12% / 0.03)",
               }}>
                 {post.type === "case-study" ? "Case Study" : "Blog"}
               </span>
-              <span className="text-[9px] tracking-[0.1em] uppercase" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.25)" }}>
+              <span className="text-[11px]" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>
                 {post.capability.replace(/-/g, " ")}
               </span>
               {post.published_at && (
-                <span className="text-[9px]" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.2)" }}>
+                <span className="text-[11px]" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>
                   {format(new Date(post.published_at), "yyyy.MM.dd")}
                 </span>
               )}
@@ -98,13 +96,13 @@ const PostListTable = ({ filter }: PostListTableProps) => {
               playClickGlitch();
               togglePublish.mutate({ id: post.id, is_published: !post.is_published });
             }}
-            className="p-2 rounded transition-all hover:bg-[hsl(0_0%_12%)]"
+            className="p-2 rounded-lg transition-all hover:bg-[hsl(30_10%_12%_/_0.06)]"
             title={post.is_published ? "Unpublish" : "Publish"}
           >
             {post.is_published ? (
-              <Eye className="w-4 h-4" style={{ color: "hsl(0 80% 48% / 0.6)" }} />
+              <Eye className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.5)" }} />
             ) : (
-              <EyeOff className="w-4 h-4" style={{ color: "hsl(0 0% 100% / 0.2)" }} />
+              <EyeOff className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.2)" }} />
             )}
           </button>
         </Link>
@@ -112,7 +110,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
 
       {filtered.length === 0 && (
         <div className="flex items-center justify-center py-20">
-          <span className="text-xs" style={{ fontFamily: "'JetBrains Mono', monospace", color: "hsl(0 0% 100% / 0.25)" }}>
+          <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>
             No posts found
           </span>
         </div>

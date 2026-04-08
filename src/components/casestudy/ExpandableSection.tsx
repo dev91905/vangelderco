@@ -12,22 +12,23 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
 
   return (
     <div
+      className="rounded-xl overflow-hidden"
       style={{
-        border: "1px solid hsl(0 0% 100% / 0.06)",
-        borderLeft: open ? "2px solid hsl(0 80% 48% / 0.6)" : "2px solid hsl(0 0% 100% / 0.1)",
+        border: "1px solid hsl(30 10% 12% / 0.06)",
+        borderLeft: open ? "2px solid hsl(30 10% 12% / 0.2)" : "2px solid hsl(30 10% 12% / 0.08)",
         transition: "border-color 0.2s ease",
       }}
     >
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-4 md:px-5 py-3 md:py-4 text-left group"
-        style={{ background: open ? "hsl(0 0% 5%)" : "hsl(0 0% 4%)" }}
+        style={{ background: open ? "hsl(0 0% 100%)" : "transparent" }}
       >
         <span
-          className="text-[13px] md:text-[15px] font-medium"
+          className="text-[14px] md:text-[15px] font-medium"
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            color: open ? "hsl(0 0% 100% / 0.9)" : "hsl(0 0% 100% / 0.6)",
+            fontFamily: "'DM Sans', sans-serif",
+            color: open ? "hsl(30 10% 12% / 0.85)" : "hsl(30 10% 12% / 0.5)",
             transition: "color 0.2s ease",
           }}
         >
@@ -36,7 +37,7 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
         <ChevronDown
           size={16}
           style={{
-            color: "hsl(0 0% 100% / 0.3)",
+            color: "hsl(30 10% 12% / 0.3)",
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
           }}
@@ -46,7 +47,7 @@ const ExpandableSection = ({ title, blocks }: ExpandableSectionProps) => {
         <div
           className="px-4 md:px-5 pb-4 md:pb-5"
           style={{
-            borderTop: "1px solid hsl(0 0% 100% / 0.04)",
+            borderTop: "1px solid hsl(30 10% 12% / 0.04)",
           }}
         >
           <div className="pt-4">
