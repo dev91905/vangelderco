@@ -4,6 +4,7 @@ import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
+import { ChevronDown } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -118,9 +119,9 @@ const METRICS_ROWS = [
 
 /* ─── Case studies ─── */
 const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
-  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: f.ink(0.03), border: `1px solid ${f.ink(0.06)}` }}>
-    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 600, color: f.ink(0.8) }}>{value}</span>
-    <span style={{ ...label("9px"), marginTop: "4px" }}>{lbl}</span>
+  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: f.ink(0.9), border: "none" }}>
+    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: f.cream }}>{value}</span>
+    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(40 30% 80%)" }}>{lbl}</span>
   </div>
 );
 
@@ -131,7 +132,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
     outcome: "40K reached, 4,000 workers registered, model now replicating nationally",
     content: (
       <div className="flex flex-col gap-6">
-        <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.4 }}>
+        <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.4 }}>
           Closing the clean energy workforce gap through culture, coalitions, and deep organizing.
         </p>
         <div className="flex flex-col gap-4">
@@ -140,7 +141,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
             { l: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply." },
             { l: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
               <strong style={{ color: f.ink(0.85) }}>{item.l}:</strong> {item.text}
             </p>
           ))}
@@ -152,7 +153,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
             { l: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically." },
             { l: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
               <strong style={{ color: f.ink(0.85) }}>{item.l}.</strong> {item.text}
             </p>
           ))}
@@ -164,7 +165,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
           <StatChip value="10–11%" lbl="Conversion Rate" />
           <StatChip value="$40–80" lbl="Cost per Lead" />
         </div>
-        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.5), marginTop: "4px" }}>
+        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), marginTop: "4px", lineHeight: 1.7 }}>
           Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model.
         </p>
       </div>
@@ -182,7 +183,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   DECK COMPONENT — v4 editorial
+   DECK COMPONENT — v5 Anthropic-style audit
    ═══════════════════════════════════════════════════════════════ */
 
 const Deck = () => {
@@ -227,7 +228,6 @@ const Deck = () => {
     frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Keyboard nav — auto-focus
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -247,7 +247,6 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase]);
 
-  // Mouse wheel → horizontal scroll
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -291,7 +290,6 @@ const Deck = () => {
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
   const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
 
-  // Auto-advance confrontation
   useEffect(() => {
     if (currentFrame !== 2) { setConfrontationStep(0); return; }
     const timer = setInterval(() => {
@@ -321,11 +319,9 @@ const Deck = () => {
       {/* ─── Fixed UI Chrome ─── */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
         <div className="flex items-center justify-between pointer-events-auto">
-          {/* Frame counter */}
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
             {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
           </span>
-          {/* ESC hint */}
           <button
             onClick={() => navigate("/")}
             className="transition-colors duration-200"
@@ -351,7 +347,6 @@ const Deck = () => {
             }}
           />
         </div>
-        {/* Nav arrows */}
         <div className="flex items-center justify-center gap-4 mt-2 pointer-events-auto">
           <button
             onClick={() => scrollToFrame(currentFrame - 1)}
@@ -447,7 +442,7 @@ const Deck = () => {
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(28px, 4vw, 52px)"), ...r2.stagger(0), maxWidth: "700px" }}>
+          <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), maxWidth: "700px" }}>
             What's getting in the way?
           </p>
           <p style={{ ...body(0.4), ...r2.stagger(1), maxWidth: "560px" }}>
@@ -463,20 +458,19 @@ const Deck = () => {
                   className="text-left transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    border: `1px solid ${isSelected ? f.ink(0.2) : f.ink(0.06)}`,
-                    background: isSelected ? "hsl(0 0% 100%)" : "transparent",
+                    border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? f.ink(0.9) : "transparent",
                     borderRadius: "12px",
                     cursor: "pointer",
-                    boxShadow: isSelected ? `0 4px 20px ${f.ink(0.06)}` : "none",
                     opacity: r2.isActive ? 1 : 0,
                     transform: r2.isActive ? "translateY(0)" : "translateY(16px)",
                     transition: `all 0.5s ease ${300 + i * 120}ms`,
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 400, color: isSelected ? f.ink(0.9) : f.ink(0.65), marginBottom: "8px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.65), marginBottom: "8px" }}>
                     {pain.short}
                   </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.6 }}>
                     {pain.detail}
                   </p>
                   {isSelected && (
@@ -484,9 +478,10 @@ const Deck = () => {
                       style={{
                         marginTop: "16px",
                         paddingTop: "12px",
-                        borderTop: `1px solid ${f.ink(0.06)}`,
-                        ...body(0.55),
+                        borderTop: `1px solid ${f.ink(0.7)}`,
+                        fontFamily: f.serif,
                         fontSize: "clamp(12px, 1.3vw, 14px)",
+                        color: "hsl(40 30% 75%)",
                         lineHeight: 1.6,
                         fontStyle: "italic",
                       }}
@@ -509,13 +504,12 @@ const Deck = () => {
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="full">
         <div ref={r3.ref}>
-          <p style={{ ...heading("clamp(24px, 3.5vw, 40px)"), ...r3.stagger(0), marginBottom: "48px", maxWidth: "700px" }}>
+          <p style={{ ...heading("clamp(24px, 3.5vw, 40px)"), fontWeight: 700, ...r3.stagger(0), marginBottom: "48px", maxWidth: "700px" }}>
             Both sides have the same goal — shift opinion, force outcomes.{" "}
             <span style={{ color: f.ink(0.5) }}>Completely different processes.</span>
           </p>
 
           <div className="w-full">
-            {/* Headers */}
             <div className="grid gap-0" style={{ gridTemplateColumns: "140px 1fr 1fr", borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ padding: "14px 20px" }} />
               <div style={{ ...label("10px"), padding: "14px 20px" }}>Your current portfolio</div>
@@ -536,15 +530,15 @@ const Deck = () => {
                     transform: isRevealed ? "translateX(0)" : "translateX(20px)",
                   }}
                 >
-                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 600, color: isFocused ? f.ink(0.8) : f.ink(0.35) }}>
+                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 700, color: isFocused ? f.ink(0.8) : f.ink(0.35) }}>
                     {row.dimension}
                   </div>
-                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.7, textDecoration: "line-through", textDecorationColor: f.ink(0.12) }}>
+                  <div style={{ padding: "18px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.7, textDecoration: "line-through", textDecorationColor: f.ink(0.12) }}>
                     {row.yours}
                   </div>
                   <div style={{
                     padding: "18px 20px",
-                    fontFamily: f.sans,
+                    fontFamily: f.serif,
                     fontSize: "clamp(12px, 1.4vw, 15px)",
                     color: isFocused ? f.ink(0.8) : f.ink(0.55),
                     lineHeight: 1.7,
@@ -572,12 +566,12 @@ const Deck = () => {
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0)}>
-            <p style={heading("clamp(26px, 3.5vw, 44px)")}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Three hallmarks of portfolios{" "}
               <span style={{ color: f.ink(0.5) }}>actually producing results.</span>
             </p>
             {selectedPainDatas.length > 0 && (
-              <p style={{ marginTop: "20px", ...body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>
+              <p style={{ marginTop: "20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
                 You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
@@ -597,26 +591,25 @@ const Deck = () => {
                   className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? "hsl(0 0% 100%)" : "transparent",
-                    border: `1px solid ${isExpanded ? f.ink(0.1) : f.ink(0.06)}`,
+                    background: isExpanded ? f.ink(0.9) : "transparent",
+                    border: isExpanded ? "none" : `1px solid ${f.ink(0.06)}`,
                     borderRadius: "12px",
                     cursor: "pointer",
-                    boxShadow: isExpanded ? `0 4px 20px ${f.ink(0.04)}` : "none",
                     opacity: r4.isActive ? 1 : 0,
                     transform: r4.isActive ? "translateY(0)" : "translateY(12px)",
                     transition: `all 0.5s ease ${200 + i * 150}ms`,
                   }}
                 >
                   <div className="flex items-start gap-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2vw, 28px)", color: isExpanded ? f.ink(0.5) : f.ink(0.15), minWidth: "32px" }}>{i + 1}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 700, color: isExpanded ? "hsl(40 30% 70%)" : f.ink(0.15), minWidth: "32px" }}>{i + 1}</span>
                     <div className="flex-1">
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", color: isExpanded ? f.ink(0.9) : f.ink(0.65) }}>{h.title}</p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 700, color: isExpanded ? f.cream : f.ink(0.65) }}>{h.title}</p>
                       <div style={{ maxHeight: isExpanded ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
-                        <p style={{ ...body(0.5), marginTop: "12px", fontSize: "clamp(12px, 1.3vw, 14px)" }}>{h.rationale}</p>
-                        <p style={{ marginTop: "12px", ...body(0.45), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
+                        <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginTop: "12px", lineHeight: 1.7 }}>{h.rationale}</p>
+                        <p style={{ marginTop: "12px", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", lineHeight: 1.6, fontStyle: "italic" }}>How we help: {h.help}</p>
                       </div>
                     </div>
-                    <span style={{ fontFamily: f.sans, fontSize: "14px", color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(45deg)" : "rotate(0)" }}>+</span>
+                    <ChevronDown size={16} style={{ color: isExpanded ? f.cream : f.ink(0.2), transition: "transform 0.3s ease, color 0.3s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0, marginTop: "4px" }} />
                   </div>
                 </button>
               );
@@ -628,7 +621,7 @@ const Deck = () => {
       {/* ═══ FRAME 5: Three Service Domains ═══ */}
       <DeckFrame ref={setRef(4)} mode="full">
         <div ref={r5.ref} className="flex flex-col gap-0 w-full">
-          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), ...r5.stagger(0), marginBottom: "12px" }}>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0), marginBottom: "12px" }}>
             Three domains. One integrated system.
           </p>
           <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: "40px", maxWidth: "500px" }}>
@@ -645,18 +638,17 @@ const Deck = () => {
                   className="flex-1 text-left transition-all duration-300"
                   style={{
                     padding: "24px 20px",
-                    background: isActive ? "hsl(0 0% 100%)" : "transparent",
+                    background: isActive ? f.ink(0.9) : "transparent",
                     borderBottom: isActive ? `2px solid ${f.ink(0.8)}` : `2px solid ${f.ink(0.06)}`,
-                    borderRadius: isActive ? "12px 12px 0 0" : "12px 12px 0 0",
+                    borderRadius: "12px 12px 0 0",
                     cursor: "pointer",
-                    boxShadow: isActive ? `0 -2px 20px ${f.ink(0.04)}` : "none",
                     opacity: r5.isActive ? 1 : 0,
                     transform: r5.isActive ? "translateY(0)" : "translateY(12px)",
                     transition: `all 0.5s ease ${300 + i * 150}ms`,
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2.2vw, 24px)", color: isActive ? f.ink(0.9) : f.ink(0.45) }}>{d.title}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 14px)", color: f.ink(0.3), marginTop: "4px", lineHeight: 1.5 }}>{d.tagline}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2.2vw, 24px)", fontWeight: 700, color: isActive ? f.cream : f.ink(0.45) }}>{d.title}</p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(11px, 1.2vw, 14px)", color: isActive ? "hsl(40 30% 75%)" : f.ink(0.3), marginTop: "4px", lineHeight: 1.5 }}>{d.tagline}</p>
                 </button>
               );
             })}
@@ -665,36 +657,20 @@ const Deck = () => {
           {activeDomainData && (
             <div
               className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full overflow-hidden"
-              style={{ animation: "deck-fade-up 0.5s ease forwards", background: "hsl(0 0% 100%)", borderRadius: "0 0 12px 12px", border: `1px solid ${f.ink(0.06)}`, borderTop: "none" }}
+              style={{ animation: "deck-fade-up 0.5s ease forwards", background: f.ink(0.9), borderRadius: "0 0 12px 12px" }}
             >
-              <div style={{ padding: "32px 28px", borderRight: `1px solid ${f.ink(0.04)}` }}>
-                <span style={{ ...label("10px"), display: "block", marginBottom: "12px" }}>What it is</span>
-                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.what}</p>
-                <span style={{ ...label("10px"), display: "block", marginTop: "24px", marginBottom: "12px" }}>What it unlocks</span>
-                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.unlocks}</p>
+              <div style={{ padding: "32px 28px", borderRight: `1px solid ${f.ink(0.8)}` }}>
+                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What it is</span>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.what}</p>
+                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginTop: "24px", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What it unlocks</span>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.unlocks}</p>
               </div>
               <div style={{ padding: "32px 28px" }}>
-                <span style={{ ...label("10px"), display: "block", marginBottom: "12px" }}>What donor advisors usually miss</span>
-                <p style={{ ...body(0.5), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.missed}</p>
-                <span style={{ ...label("10px"), display: "block", marginTop: "24px", marginBottom: "12px" }}>In practice</span>
-                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic" }}>{activeDomainData.example}</p>
+                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>What donor advisors usually miss</span>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 80%)", lineHeight: 1.7 }}>{activeDomainData.missed}</p>
+                <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", display: "block", marginTop: "24px", marginBottom: "12px", color: "hsl(40 30% 65%)" }}>Example</span>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: "hsl(40 30% 75%)", lineHeight: 1.7, fontStyle: "italic" }}>{activeDomainData.example}</p>
               </div>
-            </div>
-          )}
-
-          {!activeDomain && (
-            <div className="flex items-center justify-center py-16" style={{ borderBottom: `1px solid ${f.ink(0.04)}` }}>
-              <p style={{ ...label("10px") }}>↑ Select a domain to explore</p>
-            </div>
-          )}
-
-          {selectedPainDatas.length > 0 && activeDomainData && (
-            <div className="rounded-lg mt-4" style={{ padding: "20px 24px", background: f.ink(0.02), border: `1px solid ${f.ink(0.06)}` }}>
-              {selectedPainDatas.map((painData, i) => (
-                <p key={i} style={{ ...body(0.5), fontSize: "clamp(12px, 1.3vw, 14px)", lineHeight: 1.6, marginBottom: i < selectedPainDatas.length - 1 ? "8px" : 0 }}>
-                  <span style={{ fontWeight: 600, color: f.ink(0.7) }}>Re: "{painData.short}"</span> — {painData.capRelevance}
-                </p>
-              ))}
             </div>
           )}
         </div>
@@ -703,7 +679,7 @@ const Deck = () => {
       {/* ═══ FRAME 6: Capabilities ═══ */}
       <DeckFrame ref={setRef(5)} mode="wide">
         <div ref={r6.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(24px, 3vw, 40px)"), ...r6.stagger(0) }}>
+          <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r6.stagger(0) }}>
             How people typically engage with us.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -726,8 +702,8 @@ const Deck = () => {
                   transition: `all 0.5s ease ${200 + i * 100}ms`,
                 }}
               >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", color: f.ink(0.8), marginBottom: "8px" }}>{cap.title}</p>
-                <p style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)" }}>{cap.desc}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "8px" }}>{cap.title}</p>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.8 }}>{cap.desc}</p>
               </div>
             ))}
           </div>
@@ -738,11 +714,11 @@ const Deck = () => {
       <DeckFrame ref={setRef(6)} mode="wide">
         <div ref={r7.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0)}>
-            <p style={heading("clamp(26px, 3.5vw, 44px)")}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Most grantee reports measure activity.{" "}
               <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", ...body(0.45), fontSize: "clamp(13px, 1.6vw, 17px)", fontStyle: "italic", lineHeight: 1.55 }}>
+            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.serif, fontSize: "clamp(13px, 1.6vw, 17px)", color: f.ink(0.55), fontStyle: "italic", lineHeight: 1.7 }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
@@ -765,8 +741,8 @@ const Deck = () => {
                     transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
                   }}
                 >
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
@@ -777,7 +753,7 @@ const Deck = () => {
       {/* ═══ FRAME 8: Working Together ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="flex flex-col gap-8 w-full">
-          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), ...r8.stagger(0) }}>How do you want to start?</p>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r8.stagger(0) }}>How do you want to start?</p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full" style={r8.stagger(1, 200)}>
             {([
@@ -793,16 +769,15 @@ const Deck = () => {
                   className="flex-1 text-left transition-all duration-300"
                   style={{
                     padding: "32px 28px",
-                    border: `1px solid ${isSelected ? f.ink(0.2) : f.ink(0.06)}`,
-                    background: isSelected ? "hsl(0 0% 100%)" : "transparent",
+                    border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? f.ink(0.9) : "transparent",
                     borderRadius: "12px",
                     opacity: isDimmed ? 0.4 : 1,
-                    boxShadow: isSelected ? `0 4px 20px ${f.ink(0.04)}` : "none",
                     cursor: "pointer",
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", color: isSelected ? f.ink(0.9) : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
-                  <p style={body(0.4)}>{path.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
                 </button>
               );
             })}
@@ -814,17 +789,17 @@ const Deck = () => {
                 { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
                 { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
               ].map((p, pi) => (
-                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.06)}`, borderRadius: "12px" }}>
+                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
                   <div className="flex items-baseline gap-3 mb-4">
-                    <span style={{ ...label("10px"), color: f.ink(0.4) }}>{p.phase}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8) }}>{p.title}</span>
-                    <span style={{ ...label("9px") }}>{p.time}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 65%)" }}>{p.phase}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream }}>{p.title}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 60%)" }}>{p.time}</span>
                   </div>
                   {p.bullets.map((b, i) => (
-                    <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px" }}>{b}</p>
+                    <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
                   ))}
-                  <p style={{ ...body(0.55), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
-                    <strong style={{ color: f.ink(0.75) }}>Output:</strong> {p.output}
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", marginTop: "12px", lineHeight: 1.7 }}>
+                    <strong style={{ color: f.cream }}>Output:</strong> {p.output}
                   </p>
                 </div>
               ))}
@@ -832,9 +807,9 @@ const Deck = () => {
           )}
 
           {engagementPath === "experienced" && (
-            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.06)}`, borderRadius: "12px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8), marginBottom: "12px" }}>Custom scope, fast start.</p>
-              <p style={{ ...body(0.5), maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
+            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream, marginBottom: "12px" }}>Custom scope, fast start.</p>
+              <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(40 30% 80%)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
           )}
 
@@ -846,8 +821,8 @@ const Deck = () => {
               ].map((opt, i) => (
                 <div key={i} className="flex-1 transition-all duration-300" style={{ padding: "28px 24px", borderTop: `1px solid ${f.ink(0.06)}` }}>
                   <span style={{ ...label("10px"), color: f.ink(0.35) }}>{opt.lbl}</span>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", color: f.ink(0.8), marginTop: "8px", marginBottom: "8px" }}>{opt.title}</p>
-                  <p style={body(0.4)}>{opt.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginTop: "8px", marginBottom: "8px" }}>{opt.title}</p>
+                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.8 }}>{opt.desc}</p>
                 </div>
               ))}
             </div>
@@ -863,13 +838,13 @@ const Deck = () => {
       <DeckFrame ref={setRef(8)} mode="wide">
         <div ref={r9.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[45%] flex flex-col justify-center">
-            <p style={{ ...r9.stagger(0), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.3 }}>
+            <p style={{ ...r9.stagger(0), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
               We've been where you are.
             </p>
-            <p style={{ ...body(0.5), ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
               Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
             </p>
-            <p style={{ ...body(0.45), ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
               What's holding most donor advisors back isn't effort — it's <strong style={{ color: f.ink(0.8) }}>access and pattern recognition</strong> across these industries. That's what we transfer.
             </p>
           </div>
@@ -894,8 +869,8 @@ const Deck = () => {
                   transition: `all 0.5s ease ${400 + i * 100}ms`,
                 }}
               >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.35), lineHeight: 1.5 }}>{s.desc}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 700, color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
+                <p style={{ fontFamily: f.serif, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -905,15 +880,15 @@ const Deck = () => {
       {/* ═══ FRAME 10: The Promise ═══ */}
       <DeckFrame ref={setRef(9)} mode="narrow">
         <div ref={r10.ref} className="flex flex-col gap-8 items-center text-center">
-          <p style={{ ...r10.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 400, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+          <p style={{ ...r10.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
             Everything we know becomes everything you know.
           </p>
           <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.ink(0.1) }} />
-          <p style={{ ...r10.stagger(2, 600), ...body(0.4), fontSize: "clamp(15px, 2vw, 21px)", fontWeight: 400, maxWidth: "560px" }}>
+          <p style={{ ...r10.stagger(2, 600), fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
           {selectedPainDatas.length > 0 && (
-            <p style={{ ...r10.stagger(3, 900), ...body(0.45), fontSize: "clamp(13px, 1.5vw, 16px)", lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
+            <p style={{ ...r10.stagger(3, 900), fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
               {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
@@ -924,10 +899,10 @@ const Deck = () => {
       <DeckFrame ref={setRef(10)} mode="wide">
         <div ref={r11.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r11.stagger(0)}>
-            <h2 style={{ fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 400, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
+            <h2 style={{ fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
               VGC StratComm
             </h2>
-            <p style={{ ...body(0.45), fontSize: "clamp(15px, 2vw, 21px)", lineHeight: 1.55, marginBottom: "28px" }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, marginBottom: "28px" }}>
               Let's look at your portfolio together.
             </p>
             <a
@@ -965,19 +940,19 @@ const Deck = () => {
                   className="text-left transition-all duration-300"
                   style={{
                     padding: "16px 14px",
-                    background: cs.content ? "hsl(0 0% 100%)" : "transparent",
-                    border: `1px solid ${f.ink(0.06)}`,
+                    background: cs.content ? f.ink(0.9) : "transparent",
+                    border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
                     borderRadius: "8px",
                     cursor: "pointer",
                     opacity: r11.isActive ? 1 : 0,
                     transform: r11.isActive ? "translateY(0)" : "translateY(8px)",
                     transition: `all 0.4s ease ${300 + i * 60}ms`,
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.boxShadow = `0 2px 12px ${f.ink(0.04)}`; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.06); e.currentTarget.style.boxShadow = "none"; }}
+                  onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } }}
+                  onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: cs.content ? f.ink(0.7) : f.ink(0.35), marginBottom: "4px" }}>{cs.name}</p>
-                  <p style={{ ...label("9px"), lineHeight: "1.4", color: cs.content ? f.ink(0.4) : f.ink(0.2) }}>{cs.outcome}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", fontWeight: 700, color: cs.content ? f.cream : f.ink(0.35), marginBottom: "4px" }}>{cs.name}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(40 30% 70%)" : f.ink(0.2) }}>{cs.outcome}</p>
                 </button>
               ))}
             </div>
@@ -989,7 +964,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(11)}>
         <div className="flex flex-col items-center text-center gap-6">
           <p style={{ ...label("10px") }}>← Scroll back to explore</p>
-          <h2 style={{ fontFamily: f.sans, fontSize: "clamp(24px, 4vw, 44px)", fontWeight: 400, color: f.ink(0.06), letterSpacing: "-0.02em" }}>VGC StratComm</h2>
+          <h2 style={{ fontFamily: f.sans, fontSize: "clamp(24px, 4vw, 44px)", fontWeight: 700, color: f.ink(0.06), letterSpacing: "-0.02em" }}>VGC StratComm</h2>
         </div>
       </DeckFrame>
 
@@ -997,10 +972,10 @@ const Deck = () => {
       <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
         <DialogContent
           className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl"
-          style={{ background: "hsl(0 0% 100%)", border: `1px solid ${f.ink(0.08)}` }}
+          style={{ background: f.cream, border: `1px solid ${f.ink(0.08)}` }}
         >
           <DialogHeader>
-            <DialogTitle style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 400, color: f.ink(0.9) }}>
+            <DialogTitle style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.9) }}>
               {selectedCase !== null ? CASE_STUDIES[selectedCase].name : ""}
             </DialogTitle>
           </DialogHeader>
