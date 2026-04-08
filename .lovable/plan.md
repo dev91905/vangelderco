@@ -1,66 +1,43 @@
 
 
-# V4 Design Pass — Remaining Pages & Components
+# Font System Overhaul — Anthropic Pattern
 
-## What's still broken
+## Current vs. Target
 
-Every file below still uses the old dark-mode tokens: near-black backgrounds (`hsl(0 0% 2.5%)`), white text at various opacities, red accents (`hsl(0 80% 48%)`), JetBrains Mono everywhere, and Space Grotesk for headings. The V4 palette is warm cream bg, near-black ink, Instrument Serif headings, DM Sans body — none of these files got updated.
+| Role | Current | Target |
+|------|---------|--------|
+| Headings/UI | Instrument Serif (serif) | **Inter** (sans-serif) — clean geometric sans, free Google Font closest to Styrene A |
+| Body text | DM Sans (sans-serif) | **Source Serif 4** (serif) — warm, readable serif, free Google Font closest to Tiempos Text |
 
-## Files to update (18 files)
+Styrene A and Tiempos Text are licensed commercial fonts. The closest free equivalents that nail the same vibe:
+- **Inter** for Styrene A — clean, slightly humanist sans with excellent weight range. Alternative: **Söhne** isn't on Google Fonts either, so Inter is the pragmatic pick.
+- **Source Serif 4** for Tiempos Text — warm, traditional serif with great readability at body sizes. It has the same "bookish but modern" character. Alternative: **Libre Baskerville** if you want something rounder.
 
-### Admin pages
-- **`src/pages/Admin.tsx`** — dark bg, red accents, JetBrains Mono, Space Grotesk heading. Flip to cream bg, ink borders, DM Sans labels, Instrument Serif title.
-- **`src/pages/AdminLogin.tsx`** — dark bg, red button, monospace inputs. Flip to cream bg, black pill button, DM Sans inputs.
-- **`src/pages/AdminEditor.tsx`** — dark bg toolbar, red save button, monospace labels. Flip to cream bg, ink-colored toolbar, black pill save.
+## What changes
 
-### Admin components
-- **`src/components/admin/PostListTable.tsx`** — dark row backgrounds, red hover accents, JetBrains Mono. Flip to white rows on cream, ink hover, DM Sans.
-- **`src/components/admin/EditorMetaBar.tsx`** — dark drawer, red toggles, JetBrains Mono/Space Grotesk. Flip to white drawer on cream, ink toggles, DM Sans.
-- **`src/components/admin/BlockCanvas.tsx`** — dark insert points, red plus icons, JetBrains Mono. Flip to cream palette.
-- **`src/components/admin/BlockEditor.tsx`** — dark focus bg, red borders on quotes/callouts, JetBrains Mono/Space Grotesk. Flip to cream palette.
-- **`src/components/admin/BlockTypePicker.tsx`** — dark dropdown, red selection highlights, JetBrains Mono. Flip to white dropdown, ink selection.
-- **`src/components/admin/ImageUploader.tsx`** — dark dashed borders, red remove buttons, JetBrains Mono. Flip to cream palette.
-- **`src/components/admin/StatChipsEditor.tsx`** — dark cards, red stat values, JetBrains Mono. Flip to cream palette.
+### 1. `index.html` — Swap Google Fonts import
+Replace `Instrument+Serif` and `DM+Sans` with `Inter:wght@400;500;600;700` and `Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400`. Remove JetBrains Mono (already dead).
 
-### Public content views
-- **`src/components/blog/BlogPostView.tsx`** — dark bg gradient, red meta labels, JetBrains Mono, Space Grotesk headings. Flip to cream bg, ink meta, Instrument Serif headings, DM Sans body.
-- **`src/components/casestudy/CaseStudyView.tsx`** — same dark treatment. Flip to cream editorial.
-- **`src/components/casestudy/StatChips.tsx`** — dark cards, red values. Flip to cream cards, ink values.
-- **`src/components/casestudy/ExpandableSection.tsx`** — dark bg, red left border. Flip to white/cream, ink border.
-- **`src/components/casestudy/ContentCarousel.tsx`** — dark bg, red dot indicators. Flip to cream.
-- **`src/components/content/ContentBlockRenderer.tsx`** — dark surfaces, red quote borders, JetBrains Mono/Space Grotesk. Flip to cream palette, Instrument Serif headings, DM Sans body.
-- **`src/components/PasswordGate.tsx`** — dark bg, red glow, corner brackets, scan beam, JetBrains Mono/Space Grotesk. Strip all retro effects, flip to cream bg with clean editorial gate.
+### 2. `src/lib/theme.ts` — Flip the token roles
+```
+serif = "'Source Serif 4', Georgia, serif"   // body text, quotes, long-form
+sans  = "'Inter', system-ui, sans-serif"     // headings, UI labels, buttons
+```
 
-### Other pages
-- **`src/pages/NotFound.tsx`** — dark bg, red "Signal Lost", Space Grotesk 404, JetBrains Mono. Flip to cream, Instrument Serif 404, DM Sans labels.
-- **`src/pages/PostDetail.tsx`** — loading states use JetBrains Mono + white-on-dark. Flip to DM Sans + ink-on-cream.
+Update `heading()` to use `sans` (not serif) and `body()` to use `serif` (not sans). This is the Anthropic inversion — display type is sans, reading type is serif.
 
-## Token reference (consistent across all files)
+Update `label()` and `pill` to keep using `sans` (they're UI elements).
 
-| Token | Old | New |
-|-------|-----|-----|
-| Background | `hsl(0 0% 2.5%)` | `hsl(40 30% 96%)` |
-| Card/surface | `hsl(0 0% 4-6%)` | `hsl(0 0% 100%)` |
-| Text primary | `hsl(0 0% 100% / 0.9)` | `hsl(30 10% 12% / 0.9)` |
-| Text secondary | `hsl(0 0% 100% / 0.3-0.5)` | `hsl(30 10% 12% / 0.3-0.5)` |
-| Accent | `hsl(0 80% 48%)` | `hsl(30 10% 12%)` (black pill/ink) |
-| Border | `hsl(0 0% 8-15%)` | `hsl(30 10% 12% / 0.06-0.1)` |
-| Heading font | Space Grotesk | Instrument Serif |
-| Body/label font | JetBrains Mono | DM Sans |
-| Button style | Red bg | Black pill (border-radius: 999px) |
+### 3. `src/index.css` — Update body font-family
+Change `font-family: 'DM Sans'` to `font-family: 'Source Serif 4', Georgia, serif` as the default body font.
 
-## What gets removed
-- Corner bracket SVGs in PasswordGate
-- Red breathing glow in PasswordGate
-- Scan beam in PasswordGate
-- All `'JetBrains Mono'` references
-- All `'Space Grotesk'` references
-- All red accent colors (`hsl(0 80% 48%)`)
+### 4. Every component already imports `t.serif` / `t.sans`
+Because the theme system is centralized, this swap propagates automatically. No individual component edits needed — the tokens just point to different fonts now.
 
-## What stays the same
-- All functionality, logic, and data flow
-- Component structure and props
-- Admin CRUD operations
-- Password verification flow
-- Drag-and-drop block editing
+## Files modified
+- `index.html` — font import URL
+- `src/lib/theme.ts` — font family strings + heading/body role swap
+- `src/index.css` — body default font
+
+3 files total. The centralized theme system means this is a site-wide change from 3 edits.
 
