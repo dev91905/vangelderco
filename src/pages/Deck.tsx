@@ -43,7 +43,97 @@ const mono = (size = "9px"): CSSProperties => ({
   textTransform: "uppercase" as const,
 });
 
-/* ─── StatChip (hoisted for use in CASE_STUDIES) ─── */
+/* ─── Pain points data ─── */
+const PAIN_POINTS = [
+  {
+    id: "memory",
+    short: "No institutional memory",
+    detail: "No record of what was funded, why, or what it produced. Grants renewed because they've always been renewed.",
+    consequence: "You can't improve what you can't remember. Every new hire starts from zero.",
+    capRelevance: "We build the institutional record that's never existed — audit everything, document what worked, create the baseline.",
+  },
+  {
+    id: "framework",
+    short: "No decision framework",
+    detail: "No structure for evaluating new proposals. The default is inertia.",
+    consequence: "Without a rubric, every grant is a gut call. Inertia wins by default.",
+    capRelevance: "We build customized decision-making frameworks your team owns and uses independently.",
+  },
+  {
+    id: "access",
+    short: "No access beyond usual channels",
+    detail: "Grantees rely on comms firms, paid media, op-eds, and documentaries. Entire cultural sectors sit untouched.",
+    consequence: "The most powerful levers — music, faith, digital creators, campuses — aren't being touched.",
+    capRelevance: "We connect you to every cultural sector you're missing — 480-member network across every industry.",
+  },
+  {
+    id: "measurement",
+    short: "No real measurement",
+    detail: "Grantees report views and impressions. No framework connecting spend to outcomes.",
+    consequence: "You're counting scroll-bys while the other side is counting converts.",
+    capRelevance: "We co-design measurement around power indicators — policy outcomes, coalition growth, capital unlocked.",
+  },
+  {
+    id: "expertise",
+    short: "No media fluency in-house",
+    detail: "When leadership asks why the strategy isn't translating, it's hard to diagnose without media experience.",
+    consequence: "You're managing a media portfolio without anyone who's ever worked in media.",
+    capRelevance: "Our team comes from commercial media and entertainment — we transfer pattern recognition, not just advice.",
+  },
+];
+
+/* ─── Confrontation rows ─── */
+const CONFRONTATION_ROWS = [
+  { dimension: "Research", yours: "Focus groups to test messages", theirs: "Monitor what's already resonating organically" },
+  { dimension: "Content", yours: "Polished ads, op-eds, documentaries", theirs: "Entire creator ecosystems and self-funded investigative journalism — content around the clock" },
+  { dimension: "Distribution", yours: "Buy placements on platforms", theirs: "Acquire the platforms and change the algorithms" },
+  { dimension: "Engagement", yours: "Pay handfuls of influencers to post", theirs: "Organize at massive scale — churches, campuses, veteran groups, local networks" },
+  { dimension: "Measurement", yours: "Count impressions and report reach", theirs: "Track what's shifting polls, moving legislation, growing their base" },
+  { dimension: "Iteration", yours: "Declare success and fund the next one", theirs: "Cut what's failing, pour resources into what's working" },
+];
+
+/* ─── Three domains ─── */
+const DOMAINS = [
+  {
+    id: "cultural",
+    title: "Cultural Strategy",
+    tagline: "Use the full culture stack — not just news and documentary.",
+    what: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.",
+    unlocks: "Access to audiences your current grantees can't reach. Campaigns that feel organic because they are.",
+    missed: "If a portfolio is only in news and documentary, the most powerful levers aren't being touched. Culture is where opinion forms — not where it gets reported.",
+    example: "We matched artists to markets using streaming data and voter files. Communities came to learn about careers and signed up as a form of mass action.",
+  },
+  {
+    id: "cross-sector",
+    title: "Cross-Sector Intelligence",
+    tagline: "Coordinate across sectors — policy pathway pre-engineered.",
+    what: "Industry, labor, grassroots, and culture lined up before any content goes live. Multi-sector strategies where every partner knows their role.",
+    unlocks: "Durable outcomes that survive the news cycle. Coalition power that compounds over time.",
+    missed: "Grantees in silos can't deliver durable outcomes alone. A comms campaign without a policy pathway is noise.",
+    example: "We briefed senior government officials alongside talent agencies. The coalition spanned industry, labor, government, community organizations, and cultural sectors.",
+  },
+  {
+    id: "organizing",
+    title: "Deep Organizing",
+    tagline: "Organize for growth — not recycled engagement.",
+    what: "Sustained base-building with trusted local leaders. Not cycling the same people through the same events.",
+    unlocks: "A growing base that is the power everyone needs to win and protect the win.",
+    missed: "Most campaigns reach the same audiences with the same messages. Real organizing identifies emerging leaders and builds new constituencies.",
+    example: "4,000 workers registered through live events in four cities. Whisper campaigns filled 25% of one event before it was announced.",
+  },
+];
+
+/* ─── Metrics ─── */
+const METRICS_ROWS = [
+  { left: "Impressions and reach", right: "New sectors at the table" },
+  { left: "Video views (3-second scroll-bys)", right: "Decision-makers convened" },
+  { left: "Media mentions", right: "Coalition growth — expanding or static?" },
+  { left: "Social engagement", right: "Policy outcomes — legislation, executive action" },
+  { left: "Website traffic", right: "Capital unlocked from new sources" },
+  { left: '"Awareness"', right: "Infrastructure that outlasts the campaign" },
+];
+
+/* ─── Case studies ─── */
 const StatChip = ({ value, label }: { value: string; label: string }) => (
   <div
     className="flex flex-col px-4 py-3"
@@ -62,7 +152,6 @@ const StatChip = ({ value, label }: { value: string; label: string }) => (
   </div>
 );
 
-/* ─── Case Study Data ─── */
 const CASE_STUDIES: {
   name: string;
   issue: string;
@@ -80,9 +169,9 @@ const CASE_STUDIES: {
         </p>
         <div className="flex flex-col gap-4">
           {[
-            { label: "Issue", text: "After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it. For every electrician leaving, only one was replacing them. A bottleneck was forming that could turn into a political liability — not enough workers becomes this policy is failing." },
+            { label: "Issue", text: "After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it." },
             { label: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply." },
-            { label: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy. Test whether that could create durable public support that crosses party lines." },
+            { label: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
           ].map((item, i) => (
             <p key={i} style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.45), lineHeight: 1.7 }}>
               <strong style={{ color: f.white(0.9) }}>{item.label}:</strong> {item.text}
@@ -92,33 +181,14 @@ const CASE_STUDIES: {
         <div style={{ width: "40px", height: "1px", background: f.redA(0.3) }} />
         <div className="flex flex-col gap-4">
           {[
-            { label: "Phase 1 — Research", text: "Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts across music, digital, radio, and news." },
-            { label: "Phase 2 — Coalition & cultural strategy", text: "Briefed senior government officials alongside talent agencies. Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically. Country, hip-hop, and digital creators who would never engage a climate campaign were now in. Built a working coalition across industry, labor, government, community organizations, nonprofits, and cultural sectors." },
-            { label: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files. Communities came to learn about careers and signed up for jobs as a form of mass action." },
+            { label: "Phase 1 — Research", text: "Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts." },
+            { label: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically." },
+            { label: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
           ].map((item, i) => (
             <p key={i} style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.45), lineHeight: 1.7 }}>
               <strong style={{ color: f.white(0.9) }}>{item.label}.</strong> {item.text}
             </p>
           ))}
-        </div>
-        <div style={{ width: "40px", height: "1px", background: f.redA(0.3) }} />
-        <div className="flex flex-col gap-3">
-          <p style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.7), lineHeight: 1.7 }}>
-            <strong style={{ color: f.white(0.9) }}>Every lever activated — at the same time:</strong>
-          </p>
-          {[
-            "National artists. Local radio. Local digital creators. Targeted digital ads.",
-            "Whisper campaigns leaked to artist fan bases in high schools — 25% of one event filled before it was announced.",
-            "Local news, blogs, and national media covering it.",
-            "Spotify push notifications to fans. Google integrating events into search results.",
-          ].map((line, i) => (
-            <p key={i} style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.45), lineHeight: 1.7, paddingLeft: "12px", borderLeft: `1px solid ${f.redA(0.2)}` }}>
-              {line}
-            </p>
-          ))}
-          <p style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", fontStyle: "italic", color: f.white(0.6), marginTop: "8px" }}>
-            This wasn't an op-ed and a digital ad. It was every available channel firing simultaneously.
-          </p>
         </div>
         <div style={{ width: "40px", height: "1px", background: f.redA(0.3) }} />
         <div className="flex flex-wrap gap-4 mt-2">
@@ -128,7 +198,7 @@ const CASE_STUDIES: {
           <StatChip value="$40–80" label="Cost per Lead" />
         </div>
         <p style={{ fontFamily: f.sg, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.white(0.5), marginTop: "4px" }}>
-          Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model. The coalition is now applying it to deep community organizing, permitting, and other issues beyond job recruitment.
+          Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model.
         </p>
       </div>
     ),
@@ -144,27 +214,8 @@ const CASE_STUDIES: {
   { name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", content: null },
 ];
 
-/* ─── Comparison table rows ─── */
-const COMPARISON_ROWS = [
-  { step: "Research", left: "Focus groups to test messages", right: "Monitor what's already resonating organically" },
-  { step: "Content", left: "Polished ads, op-eds, documentaries", right: "Entire creator ecosystems, talent pipelines, and self-funded investigative journalism — content around the clock" },
-  { step: "Distribution", left: "Buy placements on platforms", right: "Acquire the platforms and change the algorithms" },
-  { step: "Engagement", left: "Pay handfuls of influencers to post", right: "Organize at massive scale — churches, campuses, veteran groups, local networks" },
-  { step: "Measurement", left: "Count impressions and report reach", right: "Track what's shifting polls, moving legislation, growing their base" },
-  { step: "Iteration", left: "Declare success and fund the next one", right: "Cut what's failing, pour resources into what's working" },
-];
-
-const METRICS_ROWS = [
-  { left: "Impressions and reach", right: "New sectors at the table" },
-  { left: "Video views (3-second scroll-bys)", right: "Decision-makers convened" },
-  { left: "Media mentions", right: "Coalition growth — expanding or static?" },
-  { left: "Social engagement", right: "Policy outcomes — legislation, executive action, regulation" },
-  { left: "Website traffic", right: "Capital unlocked from new sources" },
-  { left: '"Awareness"', right: "Infrastructure that outlasts the campaign" },
-];
-
 /* ═══════════════════════════════════════════════════════════════
-   DECK COMPONENT
+   DECK COMPONENT — v3
    ═══════════════════════════════════════════════════════════════ */
 
 const Deck = () => {
@@ -174,23 +225,22 @@ const Deck = () => {
   const [currentFrame, setCurrentFrame] = useState(0);
   const lastFrameRef = useRef(0);
   const { playHoverGlitch } = useGlitchSFX();
-  const [selectedCase, setSelectedCase] = useState<number | null>(null);
 
-  // Hallmark accordion state
+  /* ─── Branching state ─── */
+  const [selectedPain, setSelectedPain] = useState<string | null>(null);
+  const [confrontationStep, setConfrontationStep] = useState(0);
+  const [activeDomain, setActiveDomain] = useState<string | null>(null);
+  const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
+  const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [expandedHallmark, setExpandedHallmark] = useState<number | null>(null);
 
-  // Fork hover state
-  const [hoveredFork, setHoveredFork] = useState<"a" | "b" | null>(null);
-
-  // Frame observation for currentFrame tracking
+  // Frame observation
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     frameRefs.current.forEach((el, i) => {
       if (!el) return;
       const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setCurrentFrame(i);
-        },
+        ([entry]) => { if (entry.isIntersecting) setCurrentFrame(i); },
         { threshold: 0.5 }
       );
       obs.observe(el);
@@ -247,6 +297,28 @@ const Deck = () => {
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
 
+  /* ─── Derived state ─── */
+  const selectedPainData = PAIN_POINTS.find((p) => p.id === selectedPain);
+  const activeDomainData = DOMAINS.find((d) => d.id === activeDomain);
+
+  // Auto-advance confrontation on frame 3 active
+  useEffect(() => {
+    if (currentFrame !== 2) {
+      setConfrontationStep(0);
+      return;
+    }
+    const timer = setInterval(() => {
+      setConfrontationStep((prev) => {
+        if (prev >= CONFRONTATION_ROWS.length - 1) {
+          clearInterval(timer);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 1800);
+    return () => clearInterval(timer);
+  }, [currentFrame]);
+
   return (
     <div
       ref={containerRef}
@@ -287,11 +359,8 @@ const Deck = () => {
       <svg className="fixed bottom-4 left-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M1 16v7h7" /></svg>
       <svg className="fixed bottom-4 right-4 z-30 opacity-[0.12]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 0% 100%)" strokeWidth="1"><path d="M23 16v7h-7" /></svg>
 
-      {/* Progress dots — right side nav */}
-      <nav
-        className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-2"
-        aria-label="Slide navigation"
-      >
+      {/* Progress dots */}
+      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-2" aria-label="Slide navigation">
         {Array.from({ length: TOTAL_FRAMES - 1 }).map((_, i) => (
           <button
             key={i}
@@ -313,7 +382,7 @@ const Deck = () => {
         ))}
       </nav>
 
-      {/* Frame counter HUD */}
+      {/* Frame counter */}
       <div className="fixed bottom-8 right-8 z-30" style={{ ...mono("11px"), color: f.white(0.25) }}>
         {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
       </div>
@@ -323,278 +392,680 @@ const Deck = () => {
         ESC to exit
       </div>
 
-      {/* ═══ FRAME 1: Title ═══ */}
-      <DeckFrame ref={setRef(0)}>
-        <div ref={r1.ref} className="flex flex-col items-center text-center gap-6">
+      {/* ═══ FRAME 1: Hero ═══ */}
+      <DeckFrame ref={setRef(0)} mode="wide">
+        <div ref={r1.ref} className="flex flex-col items-start gap-6 min-h-[60vh] justify-center">
           <h1
             style={{
               ...r1.stagger(0),
               fontFamily: f.sg,
-              fontSize: "clamp(28px, 5vw, 56px)",
+              fontSize: "clamp(36px, 7vw, 80px)",
               fontWeight: 500,
               color: f.white(1),
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.05,
               animation: r1.isActive ? "deck-clip-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards" : "none",
             }}
           >
             VGC StratComm
           </h1>
-          <div style={{ ...r1.stagger(1), width: "40px", height: "1px", background: f.redA(0.6) }} />
+          <div style={{ ...r1.stagger(1), width: "60px", height: "2px", background: f.redA(0.6) }} />
           <p
             style={{
-              ...r1.stagger(2, 200),
+              ...r1.stagger(2, 300),
               fontFamily: f.sg,
-              fontSize: "clamp(16px, 2.2vw, 24px)",
+              fontSize: "clamp(18px, 2.8vw, 32px)",
               fontWeight: 400,
-              color: f.white(0.7),
-              lineHeight: 1.5,
-              maxWidth: "600px",
+              color: f.white(0.6),
+              lineHeight: 1.4,
+              maxWidth: "700px",
             }}
           >
-            Strategic communications for donor advisors and program officers who need <em style={{ fontStyle: "italic", color: f.white(0.9) }}>more than comms.</em>
+            Strategic communications for donor advisors who need{" "}
+            <em style={{ fontStyle: "italic", color: f.white(0.9) }}>more than comms.</em>
           </p>
           <p
             style={{
-              ...r1.stagger(3, 400),
+              ...r1.stagger(3, 600),
               fontFamily: f.sg,
-              fontSize: "clamp(13px, 1.6vw, 17px)",
-              fontWeight: 400,
-              color: f.white(0.4),
-              lineHeight: 1.55,
+              fontSize: "clamp(14px, 1.6vw, 18px)",
+              color: f.white(0.35),
+              lineHeight: 1.6,
               maxWidth: "520px",
             }}
           >
             Advice, connections, and hands-on support to make your stratcomm strategy actually work.
           </p>
-          {/* Scroll hint */}
-          <div
-            style={{
-              ...r1.stagger(4, 1200),
-              marginTop: "32px",
-            }}
-          >
-            <span
-              style={{
-                ...mono("8px"),
-                color: f.white(0.2),
-                animation: "deck-scroll-hint 2s ease-in-out infinite",
-                display: "block",
-              }}
-            >
+          <div style={{ ...r1.stagger(4, 1200) }}>
+            <span style={{ ...mono("8px"), color: f.white(0.2), animation: "deck-scroll-hint 2s ease-in-out infinite", display: "block" }}>
               ↓ scroll
             </span>
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 2: The Problem ═══ */}
-      <DeckFrame ref={setRef(1)} label="The Problem">
+      {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
+      <DeckFrame ref={setRef(1)} label="Self-Diagnosis" mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r2.stagger(0) }}>
-            Common problems for anyone overseeing a stratcomm portfolio.
+          <p
+            style={{
+              ...heading("clamp(24px, 4vw, 44px)"),
+              ...r2.stagger(0),
+              maxWidth: "700px",
+            }}
+          >
+            Which of these feels most true?
           </p>
-          <div className="flex flex-col gap-1">
-            {[
-              { n: 1, title: "No institutional memory.", desc: "No record of what was funded, why, or what it produced. Grants renewed because they've always been renewed." },
-              { n: 2, title: "No decision-making framework.", desc: "No structure for evaluating new proposals. The default is inertia." },
-              { n: 3, title: "No access beyond the usual channels.", desc: "Grantees rely on comms firms, paid media, op-eds, and documentaries. Entire cultural sectors — music, digital creators, faith communities, veteran groups, campuses — sit untouched." },
-              { n: 4, title: "No real impact measurement.", desc: "Grantees report views and impressions. No framework connecting spend to policy outcomes, coalition growth, or anything durable." },
-              { n: 5, title: "No one on the team comes from media.", desc: "When leadership asks why the strategy isn't translating into results, it's hard to diagnose without experience inside the sectors you're trying to activate." },
-            ].map((p, i) => (
-              <NumberedProblem key={i} n={p.n} title={p.title} desc={p.desc} style={r2.stagger(i + 1, 100)} />
-            ))}
+          <p style={{ ...body(0.35), ...r2.stagger(1), maxWidth: "500px" }}>
+            Pick the one that resonates. It'll shape what we show you next.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0" style={r2.stagger(2, 200)}>
+            {PAIN_POINTS.map((pain, i) => {
+              const isSelected = selectedPain === pain.id;
+              return (
+                <button
+                  key={pain.id}
+                  onClick={() => setSelectedPain(isSelected ? null : pain.id)}
+                  className="text-left transition-all duration-300"
+                  style={{
+                    padding: "28px 24px",
+                    border: `1px solid ${isSelected ? f.redA(0.5) : f.white(0.06)}`,
+                    borderLeft: isSelected ? `3px solid ${f.red}` : `1px solid ${f.white(0.06)}`,
+                    background: isSelected ? f.redA(0.06) : "transparent",
+                    cursor: "pointer",
+                    opacity: r2.isActive ? 1 : 0,
+                    transform: r2.isActive ? "translateY(0)" : "translateY(16px)",
+                    transition: `all 0.5s ease ${300 + i * 120}ms`,
+                  }}
+                >
+                  <span style={{ ...mono("9px"), color: isSelected ? f.redA(0.9) : f.white(0.25), display: "block", marginBottom: "12px" }}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 500, color: isSelected ? f.white(1) : f.white(0.75), marginBottom: "8px" }}>
+                    {pain.short}
+                  </p>
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.white(0.35), lineHeight: 1.6 }}>
+                    {pain.detail}
+                  </p>
+                  {isSelected && (
+                    <p
+                      style={{
+                        marginTop: "16px",
+                        paddingTop: "12px",
+                        borderTop: `1px solid ${f.redA(0.2)}`,
+                        fontFamily: f.sg,
+                        fontSize: "clamp(12px, 1.3vw, 14px)",
+                        color: f.redA(0.8),
+                        lineHeight: 1.6,
+                        fontStyle: "italic",
+                      }}
+                    >
+                      {pain.consequence}
+                    </p>
+                  )}
+                </button>
+              );
+            })}
           </div>
+          {!selectedPain && (
+            <p style={{ ...mono("8px"), color: f.white(0.15), ...r2.stagger(3, 800) }}>
+              ↓ or skip and keep scrolling
+            </p>
+          )}
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 3: What You're Up Against ═══ */}
-      <DeckFrame ref={setRef(2)} label="What You're Up Against">
-        <div ref={r3.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r3.stagger(0) }}>
-            Both sides of every issue have the same goal — shift public opinion and force policy outcomes. They're running completely different processes to get there.
+      {/* ═══ FRAME 3: The Real Delta — Confrontation ═══ */}
+      <DeckFrame ref={setRef(2)} label="What You're Up Against" mode="full">
+        <div ref={r3.ref}>
+          <p style={{ ...heading("clamp(20px, 3vw, 32px)"), ...r3.stagger(0), marginBottom: "40px", maxWidth: "700px" }}>
+            Both sides have the same goal — shift opinion, force outcomes.{" "}
+            <span style={{ color: f.redA(0.8) }}>Completely different processes.</span>
           </p>
-          <AnimatedComparisonRows rows={COMPARISON_ROWS} isActive={r3.isActive} />
-          <div className="flex flex-col gap-4 mt-2" style={r3.stagger(8, 800)}>
-            <p style={body()}>
-              You test messages in a petri dish and pay people to watch the winners. Facebook counts a <strong style={{ color: f.white(0.8) }}>three-second scroll-by</strong> as a view.
-            </p>
-            <p style={body()}>
-              They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.
-            </p>
+
+          {/* Full-width confrontation */}
+          <div className="w-full">
+            {/* Headers */}
+            <div
+              className="grid gap-0"
+              style={{
+                gridTemplateColumns: "140px 1fr 1fr",
+                borderBottom: `1px solid ${f.white(0.1)}`,
+              }}
+            >
+              <div style={{ padding: "12px 16px" }} />
+              <div style={{ padding: "12px 16px", ...mono("10px"), color: f.white(0.3) }}>
+                Your current portfolio
+              </div>
+              <div style={{ padding: "12px 16px", ...mono("10px"), color: f.redA(0.8) }}>
+                How the opposition operates
+              </div>
+            </div>
+
+            {/* Rows — reveal one at a time */}
+            {CONFRONTATION_ROWS.map((row, i) => {
+              const isRevealed = r3.isActive && i <= confrontationStep;
+              const isFocused = i === confrontationStep;
+              return (
+                <div
+                  key={i}
+                  className="grid gap-0 transition-all duration-700"
+                  style={{
+                    gridTemplateColumns: "140px 1fr 1fr",
+                    borderBottom: `1px solid ${f.white(0.04)}`,
+                    opacity: isRevealed ? 1 : 0,
+                    transform: isRevealed ? "translateX(0)" : "translateX(20px)",
+                    background: isFocused ? f.white(0.02) : "transparent",
+                  }}
+                >
+                  <div style={{ padding: "16px", fontFamily: f.sg, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 600, color: isFocused ? f.white(0.9) : f.white(0.4) }}>
+                    {row.dimension}
+                  </div>
+                  <div style={{ padding: "16px", fontFamily: f.sg, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.white(0.25), lineHeight: 1.7 }}>
+                    {row.yours}
+                  </div>
+                  <div style={{
+                    padding: "16px",
+                    fontFamily: f.sg,
+                    fontSize: "clamp(12px, 1.4vw, 15px)",
+                    color: isFocused ? f.white(0.85) : f.white(0.55),
+                    lineHeight: 1.7,
+                    borderLeft: `2px solid ${isFocused ? f.redA(0.6) : f.redA(0.15)}`,
+                    transition: "all 0.5s ease",
+                  }}>
+                    {row.theirs}
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
+          {/* Post-confrontation insight */}
+          {confrontationStep >= CONFRONTATION_ROWS.length - 1 && (
+            <div
+              className="mt-10 max-w-[600px]"
+              style={{
+                opacity: 0,
+                animation: "deck-fade-up 0.8s ease 600ms forwards",
+              }}
+            >
+              <p style={{ ...body(0.5), borderLeft: `3px solid ${f.redA(0.4)}`, paddingLeft: "16px" }}>
+                You test messages in a petri dish and pay people to watch the winners.{" "}
+                <span style={{ color: f.white(0.8) }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
+              </p>
+            </div>
+          )}
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 4: What Effective Portfolios Have in Common ═══ */}
-      <DeckFrame ref={setRef(3)} label="Effective Portfolios">
-        <div ref={r4.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r4.stagger(0) }}>
-            Three hallmarks across portfolios that are actually producing results.
-          </p>
-          <div className="flex flex-col md:flex-row gap-4">
+      {/* ═══ FRAME 4: Hallmarks — One at a time ═══ */}
+      <DeckFrame ref={setRef(3)} label="Effective Portfolios" mode="wide">
+        <div ref={r4.ref} className="flex flex-col lg:flex-row gap-0 w-full">
+          {/* Left: Title */}
+          <div className="lg:w-[35%] lg:pr-12 mb-8 lg:mb-0 flex flex-col justify-center" style={r4.stagger(0)}>
+            <p style={heading("clamp(22px, 3.5vw, 38px)")}>
+              Three hallmarks of portfolios{" "}
+              <span style={{ color: f.redA(0.8) }}>actually producing results.</span>
+            </p>
+            {selectedPainData && (
+              <p
+                style={{
+                  marginTop: "20px",
+                  fontFamily: f.sg,
+                  fontSize: "clamp(12px, 1.3vw, 14px)",
+                  color: f.redA(0.6),
+                  lineHeight: 1.6,
+                  fontStyle: "italic",
+                  borderLeft: `2px solid ${f.redA(0.3)}`,
+                  paddingLeft: "12px",
+                }}
+              >
+                You said: "{selectedPainData.short}" — each of these addresses that directly.
+              </p>
+            )}
+          </div>
+
+          {/* Right: Hallmark cards — full height */}
+          <div className="lg:w-[65%] flex flex-col gap-0">
             {[
               {
                 title: "They're using the full culture stack.",
-                rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels. If a portfolio is only in news and documentary, the most powerful levers aren't being touched.",
-                help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need, and integrate them into your strategy from the start.",
+                rationale: "Music, faith communities, digital creators, campuses, veteran groups, local media — organizing infrastructure, not comms channels.",
+                help: "Connect you to every cultural sector you're missing, map which networks reach the audiences you need.",
               },
               {
                 title: "They're coordinating across sectors.",
-                rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live. Grantees in silos can't deliver durable outcomes alone.",
-                help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other. We get everyone to the table and make sure every partner knows their role.",
+                rationale: "Effective strategies have a policy pathway pre-engineered — industry, labor, grassroots, and culture lined up before any content goes live.",
+                help: "Design multi-sector strategies where comms, policy, industry, labor, grassroots, and culture reinforce each other.",
               },
               {
                 title: "They're organizing for growth.",
-                rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events. That growing base is the power everyone needs to win and protect the win.",
-                help: "Run live campaigns that engage new audiences. Identify emerging leaders. Audit grantees for real vs. performed organizing and restructure around what's producing power.",
+                rationale: "Sustained base-building with trusted local leaders — not cycling the same people through the same events.",
+                help: "Run live campaigns that engage new audiences. Audit grantees for real vs. performed organizing.",
               },
-            ].map((h, i) => (
-              <ExpandableHallmark
-                key={i}
-                index={i}
-                title={h.title}
-                rationale={h.rationale}
-                help={h.help}
-                isExpanded={expandedHallmark === i}
-                onToggle={() => setExpandedHallmark(expandedHallmark === i ? null : i)}
-                style={r4.stagger(i + 1, 100)}
-              />
-            ))}
+            ].map((h, i) => {
+              const isExpanded = expandedHallmark === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setExpandedHallmark(isExpanded ? null : i)}
+                  className="text-left w-full transition-all duration-300"
+                  style={{
+                    padding: "28px 24px",
+                    borderBottom: `1px solid ${f.white(0.06)}`,
+                    borderLeft: isExpanded ? `3px solid ${f.red}` : `3px solid transparent`,
+                    background: isExpanded ? f.white(0.02) : "transparent",
+                    cursor: "pointer",
+                    opacity: r4.isActive ? 1 : 0,
+                    transform: r4.isActive ? "translateY(0)" : "translateY(12px)",
+                    transition: `all 0.5s ease ${200 + i * 150}ms`,
+                  }}
+                >
+                  <div className="flex items-start gap-4">
+                    <span style={{ ...mono("clamp(18px, 2vw, 24px)"), color: isExpanded ? f.redA(0.8) : f.white(0.15), fontWeight: 600, minWidth: "32px" }}>
+                      {i + 1}
+                    </span>
+                    <div className="flex-1">
+                      <p style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 500, color: isExpanded ? f.white(1) : f.white(0.8) }}>
+                        {h.title}
+                      </p>
+                      <div
+                        style={{
+                          maxHeight: isExpanded ? "300px" : "0",
+                          overflow: "hidden",
+                          opacity: isExpanded ? 1 : 0,
+                          transition: "max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease",
+                        }}
+                      >
+                        <p style={{ ...body(0.45), marginTop: "12px" }}>{h.rationale}</p>
+                        <p style={{ ...body(0.55), marginTop: "8px", fontStyle: "italic" }}>
+                          <span style={{ color: f.redA(0.7), fontStyle: "normal", fontWeight: 500 }}>How we help: </span>
+                          {h.help}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 5: Core Capabilities ═══ */}
-      <DeckFrame ref={setRef(4)} label="Core Capabilities">
-        <div ref={r5.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r5.stagger(0) }}>
+      {/* ═══ FRAME 5: Three Service Domains — Interactive System ═══ */}
+      <DeckFrame ref={setRef(4)} label="What We Do" mode="full">
+        <div ref={r5.ref} className="flex flex-col gap-0 w-full">
+          <p style={{ ...heading("clamp(22px, 3.5vw, 38px)"), ...r5.stagger(0), marginBottom: "12px" }}>
+            Three domains. One integrated system.
+          </p>
+          <p style={{ ...body(0.35), ...r5.stagger(1), marginBottom: "32px", maxWidth: "500px" }}>
+            Click any domain to explore what it means for your portfolio.
+          </p>
+
+          {/* Domain selector — full width tabs */}
+          <div className="flex w-full border-b" style={{ borderColor: f.white(0.08) }}>
+            {DOMAINS.map((d, i) => {
+              const isActive = activeDomain === d.id;
+              return (
+                <button
+                  key={d.id}
+                  onClick={() => setActiveDomain(isActive ? null : d.id)}
+                  className="flex-1 text-left transition-all duration-300"
+                  style={{
+                    padding: "24px 20px",
+                    borderBottom: isActive ? `3px solid ${f.red}` : `3px solid transparent`,
+                    background: isActive ? f.white(0.02) : "transparent",
+                    cursor: "pointer",
+                    opacity: r5.isActive ? 1 : 0,
+                    transform: r5.isActive ? "translateY(0)" : "translateY(12px)",
+                    transition: `all 0.5s ease ${300 + i * 150}ms`,
+                  }}
+                >
+                  <span style={{ ...mono("9px"), color: isActive ? f.redA(0.8) : f.white(0.2), display: "block", marginBottom: "8px" }}>
+                    0{i + 1}
+                  </span>
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2.2vw, 24px)", fontWeight: 500, color: isActive ? f.white(1) : f.white(0.6) }}>
+                    {d.title}
+                  </p>
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(11px, 1.2vw, 14px)", color: f.white(0.3), marginTop: "4px", lineHeight: 1.5 }}>
+                    {d.tagline}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Domain detail panel */}
+          {activeDomainData && (
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full"
+              style={{
+                animation: "deck-fade-up 0.5s ease forwards",
+                borderBottom: `1px solid ${f.white(0.06)}`,
+              }}
+            >
+              <div style={{ padding: "32px 24px", borderRight: `1px solid ${f.white(0.04)}` }}>
+                <span style={{ ...mono("9px"), color: f.redA(0.6), display: "block", marginBottom: "12px" }}>
+                  What it is
+                </span>
+                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.what}</p>
+                <span style={{ ...mono("9px"), color: f.redA(0.6), display: "block", marginTop: "24px", marginBottom: "12px" }}>
+                  What it unlocks
+                </span>
+                <p style={{ ...body(0.6), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.unlocks}</p>
+              </div>
+              <div style={{ padding: "32px 24px" }}>
+                <span style={{ ...mono("9px"), color: f.white(0.25), display: "block", marginBottom: "12px" }}>
+                  What donor advisors usually miss
+                </span>
+                <p style={{ ...body(0.45), fontSize: "clamp(14px, 1.6vw, 17px)" }}>{activeDomainData.missed}</p>
+                <span style={{ ...mono("9px"), color: f.white(0.25), display: "block", marginTop: "24px", marginBottom: "12px" }}>
+                  In practice
+                </span>
+                <p style={{ ...body(0.55), fontSize: "clamp(14px, 1.6vw, 17px)", fontStyle: "italic", borderLeft: `2px solid ${f.redA(0.3)}`, paddingLeft: "12px" }}>
+                  {activeDomainData.example}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {!activeDomain && (
+            <div className="flex items-center justify-center py-16" style={{ borderBottom: `1px solid ${f.white(0.04)}` }}>
+              <p style={{ ...mono("10px"), color: f.white(0.15) }}>
+                ↑ Select a domain to explore
+              </p>
+            </div>
+          )}
+
+          {/* Connection to selected pain */}
+          {selectedPainData && activeDomainData && (
+            <div style={{ padding: "20px 24px", background: f.redA(0.03), borderBottom: `1px solid ${f.redA(0.1)}` }}>
+              <p style={{ fontFamily: f.sg, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.redA(0.7), lineHeight: 1.6 }}>
+                <span style={{ fontWeight: 600 }}>Re: "{selectedPainData.short}"</span> — {selectedPainData.capRelevance}
+              </p>
+            </div>
+          )}
+        </div>
+      </DeckFrame>
+
+      {/* ═══ FRAME 6: Capabilities — What You Get ═══ */}
+      <DeckFrame ref={setRef(5)} label="Capabilities" mode="wide">
+        <div ref={r6.ref} className="flex flex-col gap-8">
+          <p style={{ ...heading("clamp(20px, 3vw, 32px)"), ...r6.stagger(0) }}>
             How people typically engage with us.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
             {[
               { title: "Portfolio Audit", desc: "Deep dive into your grantees, past investments, and records. We interview grantees directly. You get the institutional record that's never existed." },
               { title: "Strategic Framework", desc: "Customized decision-making rubric for evaluating grants against strategy, not inertia. A tool your team owns and uses independently." },
-              { title: "Impact Measurement", desc: "Co-designed around your objectives. Real indicators of power — sectors convened, policy outcomes, capital unlocked — replacing vanity metrics." },
+              { title: "Impact Measurement", desc: "Co-designed around your objectives. Real indicators of power — sectors convened, policy outcomes, capital unlocked." },
               { title: "Access & Introductions", desc: "Cultural operatives across music, film/TV, digital, news. Co-funders, strategic partners. A 480-member network for confidential intel-sharing." },
-              { title: "Program Development", desc: "When the work surfaces a gap, we help build what doesn't exist — coalition, campaign, cultural activation, grant competition, or fund." },
-              { title: "Training", desc: "No dependency. You learn to evaluate cultural landscapes, run multi-sector campaigns, and tell real organizing from performed. If we do our jobs right, you won't need us forever." },
+              { title: "Program Development", desc: "When the work surfaces a gap, we help build what doesn't exist — coalition, campaign, cultural activation, or fund." },
+              { title: "Training", desc: "No dependency. You learn to evaluate cultural landscapes, run multi-sector campaigns, and tell real organizing from performed." },
             ].map((cap, i) => (
-              <CapabilityCard key={i} title={cap.title} desc={cap.desc} style={r5.stagger(i + 1, 50)} />
+              <div
+                key={i}
+                className="group transition-all duration-300"
+                style={{
+                  padding: "28px 24px",
+                  border: `1px solid ${f.white(0.04)}`,
+                  opacity: r6.isActive ? 1 : 0,
+                  transform: r6.isActive ? "translateY(0)" : "translateY(12px)",
+                  transition: `all 0.5s ease ${200 + i * 100}ms`,
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <span style={{ width: "20px", height: "2px", background: f.redA(0.4), marginTop: "10px", flexShrink: 0 }} />
+                  <div>
+                    <p style={{ fontFamily: f.sg, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 500, color: f.white(0.85), marginBottom: "8px" }}>
+                      {cap.title}
+                    </p>
+                    <p style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)" }}>{cap.desc}</p>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 6: How We Measure Impact ═══ */}
-      <DeckFrame ref={setRef(5)} label="Impact Measurement">
-        <div ref={r6.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r6.stagger(0) }}>
-            Most grantee reports measure activity. We measure power.
-          </p>
-          <AnimatedMetricsRows rows={METRICS_ROWS} isActive={r6.isActive} />
-          <p
-            style={{
-              ...r6.stagger(8, 900),
-              fontFamily: f.sg,
-              fontSize: "clamp(13px, 1.6vw, 17px)",
-              fontStyle: "italic",
-              color: f.redA(0.7),
-              lineHeight: 1.55,
-              borderLeft: `3px solid ${f.redA(0.4)}`,
-              paddingLeft: "16px",
-            }}
-          >
-            A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
-          </p>
-        </div>
-      </DeckFrame>
-
-      {/* ═══ FRAME 7: How Engagements Work ═══ */}
-      <DeckFrame ref={setRef(6)} label="How Engagements Work">
-        <div ref={r7.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading(), ...r7.stagger(0) }}>
-            Two types of clients come to us.
-          </p>
-          <div className="flex flex-col gap-4" style={r7.stagger(1)}>
-            <p style={body(0.6)}>
-              <strong style={{ color: f.white(0.9) }}>Already up to speed and need capacity?</strong> Let's scope it to your specific needs.
+      {/* ═══ FRAME 7: Impact Measurement — Progressive Reveal ═══ */}
+      <DeckFrame ref={setRef(6)} label="Impact Measurement" mode="wide">
+        <div ref={r7.ref} className="flex flex-col lg:flex-row gap-12 w-full">
+          <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0)}>
+            <p style={heading("clamp(22px, 3.5vw, 38px)")}>
+              Most grantee reports measure activity.{" "}
+              <span style={{ color: f.redA(0.8) }}>We measure power.</span>
             </p>
-            <p style={body(0.6)}>
-              <strong style={{ color: f.white(0.9) }}>Starting fresh?</strong> Two phases, roughly three months:
+            <p
+              style={{
+                ...r7.stagger(1, 600),
+                marginTop: "24px",
+                fontFamily: f.sg,
+                fontSize: "clamp(13px, 1.6vw, 17px)",
+                fontStyle: "italic",
+                color: f.redA(0.7),
+                lineHeight: 1.55,
+                borderLeft: `3px solid ${f.redA(0.4)}`,
+                paddingLeft: "16px",
+              }}
+            >
+              A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
 
-          {/* Timeline */}
-          <div className="flex flex-col gap-0" style={r7.stagger(2, 200)}>
-            <TimelineNode
-              label="Phase 1: Internal Review"
-              period="4–6 weeks"
-              bullets={[
-                "Go through everything — grantees, systems, assumptions, goals.",
-                "Voice-track what's been funded, what you're trying to accomplish, where things feel stuck.",
-                "Identify the gap between where you are and where you need to be.",
-              ]}
-              deliverable="Diagnostic — here's what we're hearing, here's the delta, here's the plan."
-              isActive={r7.isActive}
-              delay={400}
-            />
-            <TimelineNode
-              label="Phase 2: External Engagement"
-              period="6–8 weeks"
-              bullets={[
-                "Interview existing grantees. Flag what should concern you.",
-                "Map cultural infrastructure you're not using.",
-                "Introduce partners from sectors you haven't accessed.",
-              ]}
-              deliverable="Actionable roadmap — restructured strategy, evaluation rubric, introduction list. A system your team can run independently."
-              isActive={r7.isActive}
-              delay={600}
-            />
-          </div>
-
-          {/* The Fork */}
-          <div className="flex flex-col sm:flex-row gap-4" style={r7.stagger(3, 800)}>
-            <InteractiveForkCard
-              label="Option A"
-              title="Strategic Advisory Retainer"
-              desc="Ongoing partnership. We stay embedded as a sounding board, connector, and diagnostic resource. Monthly cadence, quarterly reviews, direct access."
-              side="a"
-              hoveredFork={hoveredFork}
-              onHover={setHoveredFork}
-            />
-            <InteractiveForkCard
-              label="Option B"
-              title="Transition to Independence"
-              desc="We hand over the playbook, train your team, and step back. You keep the frameworks, the network, and the knowledge. Check-in as needed."
-              side="b"
-              hoveredFork={hoveredFork}
-              onHover={setHoveredFork}
-            />
+          <div className="lg:w-[60%]">
+            <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.white(0.08)}` }}>
+              <div style={{ ...mono("9px"), padding: "12px 16px", color: f.white(0.3) }}>What most grantees report</div>
+              <div style={{ ...mono("9px"), padding: "12px 16px", color: f.redA(0.8), borderLeft: `2px solid ${f.redA(0.15)}` }}>What we track</div>
+            </div>
+            {METRICS_ROWS.map((row, i) => {
+              const delay = 300 + i * 200;
+              return (
+                <div
+                  key={i}
+                  className="grid grid-cols-2 gap-0"
+                  style={{
+                    borderBottom: `1px solid ${f.white(0.04)}`,
+                    opacity: r7.isActive ? 1 : 0,
+                    transform: r7.isActive ? "translateX(0)" : "translateX(12px)",
+                    transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
+                  }}
+                >
+                  <div style={{
+                    padding: "14px 16px",
+                    fontFamily: f.sg,
+                    fontSize: "clamp(12px, 1.4vw, 15px)",
+                    color: f.white(0.25),
+                    lineHeight: 1.6,
+                    textDecoration: r7.isActive ? "line-through" : "none",
+                    textDecorationColor: f.redA(0.3),
+                  }}>
+                    {row.left}
+                  </div>
+                  <div style={{
+                    padding: "14px 16px",
+                    fontFamily: f.sg,
+                    fontSize: "clamp(12px, 1.4vw, 15px)",
+                    color: f.white(0.7),
+                    lineHeight: 1.6,
+                    borderLeft: `2px solid ${f.redA(0.15)}`,
+                  }}>
+                    {row.right}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 8: Who We Are ═══ */}
-      <DeckFrame ref={setRef(7)} label="Who We Are">
-        <div ref={r8.ref} className="flex flex-col gap-8">
-          <p
-            style={{
-              ...r8.stagger(0),
-              fontFamily: f.sg,
-              fontSize: "clamp(22px, 3.2vw, 36px)",
-              fontWeight: 400,
-              color: f.white(0.9),
-              lineHeight: 1.35,
-            }}
-          >
-            We've been where you are.
+      {/* ═══ FRAME 8: Working Together — Adaptive Path ═══ */}
+      <DeckFrame ref={setRef(7)} label="Working Together" mode="wide">
+        <div ref={r8.ref} className="flex flex-col gap-8 w-full">
+          <p style={{ ...heading("clamp(22px, 3.5vw, 38px)"), ...r8.stagger(0) }}>
+            How do you want to start?
           </p>
-          <p style={{ ...body(0.55), ...r8.stagger(1) }}>
-            The difference is where we came from. Our team is built from careers in <strong style={{ color: f.white(0.85) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
-          </p>
-          {/* Sector pills */}
-          <div className="flex flex-wrap gap-3" style={r8.stagger(2, 200)}>
+
+          {/* Path selector */}
+          <div className="flex flex-col sm:flex-row gap-0 w-full" style={r8.stagger(1, 200)}>
+            {([
+              { id: "fresh" as const, title: "Starting fresh", desc: "You need to understand the landscape before you act." },
+              { id: "experienced" as const, title: "Already up to speed", desc: "You know the gaps. You need capacity and connections." },
+            ]).map((path) => {
+              const isSelected = engagementPath === path.id;
+              const isDimmed = engagementPath !== null && !isSelected;
+              return (
+                <button
+                  key={path.id}
+                  onClick={() => setEngagementPath(isSelected ? null : path.id)}
+                  className="flex-1 text-left transition-all duration-300"
+                  style={{
+                    padding: "32px 28px",
+                    border: `1px solid ${isSelected ? f.redA(0.5) : f.white(0.06)}`,
+                    borderLeft: isSelected ? `3px solid ${f.red}` : `1px solid ${f.white(0.06)}`,
+                    background: isSelected ? f.redA(0.06) : "transparent",
+                    opacity: isDimmed ? 0.4 : 1,
+                    transform: isSelected ? "scale(1)" : isDimmed ? "scale(0.98)" : "scale(1)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 500, color: isSelected ? f.white(1) : f.white(0.7), marginBottom: "8px" }}>
+                    {path.title}
+                  </p>
+                  <p style={body(0.4)}>{path.desc}</p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Conditional content */}
+          {engagementPath === "fresh" && (
+            <div
+              className="flex flex-col lg:flex-row gap-0 w-full"
+              style={{ animation: "deck-fade-up 0.6s ease forwards" }}
+            >
+              {/* Phase 1 */}
+              <div className="flex-1" style={{ padding: "28px 24px", borderRight: `1px solid ${f.white(0.04)}`, borderBottom: `1px solid ${f.white(0.04)}` }}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span style={{ ...mono("9px"), color: f.redA(0.7) }}>Phase 1</span>
+                  <span style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, color: f.white(0.9) }}>Internal Review</span>
+                  <span style={{ ...mono("9px"), color: f.white(0.25) }}>4–6 weeks</span>
+                </div>
+                {[
+                  "Go through everything — grantees, systems, assumptions, goals.",
+                  "Voice-track what's been funded and where things feel stuck.",
+                  "Identify the gap between where you are and where you need to be.",
+                ].map((b, i) => (
+                  <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.white(0.06)}` }}>
+                    {b}
+                  </p>
+                ))}
+                <p style={{ ...body(0.6), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
+                  <strong style={{ color: f.white(0.8) }}>Output:</strong> Diagnostic — here's what we're hearing, here's the delta, here's the plan.
+                </p>
+              </div>
+
+              {/* Phase 2 */}
+              <div className="flex-1" style={{ padding: "28px 24px", borderBottom: `1px solid ${f.white(0.04)}` }}>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span style={{ ...mono("9px"), color: f.redA(0.7) }}>Phase 2</span>
+                  <span style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, color: f.white(0.9) }}>External Engagement</span>
+                  <span style={{ ...mono("9px"), color: f.white(0.25) }}>6–8 weeks</span>
+                </div>
+                {[
+                  "Interview existing grantees. Flag what should concern you.",
+                  "Map cultural infrastructure you're not using.",
+                  "Introduce partners from sectors you haven't accessed.",
+                ].map((b, i) => (
+                  <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.3vw, 14px)", marginBottom: "6px", paddingLeft: "12px", borderLeft: `1px solid ${f.white(0.06)}` }}>
+                    {b}
+                  </p>
+                ))}
+                <p style={{ ...body(0.6), fontSize: "clamp(12px, 1.3vw, 14px)", marginTop: "12px" }}>
+                  <strong style={{ color: f.white(0.8) }}>Output:</strong> Actionable roadmap — restructured strategy, evaluation rubric, introduction list.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {engagementPath === "experienced" && (
+            <div
+              className="w-full"
+              style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", border: `1px solid ${f.white(0.06)}` }}
+            >
+              <p style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, color: f.white(0.9), marginBottom: "12px" }}>
+                Custom scope, fast start.
+              </p>
+              <p style={{ ...body(0.5), maxWidth: "600px" }}>
+                We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.
+              </p>
+            </div>
+          )}
+
+          {/* Fork: what happens after */}
+          {engagementPath && (
+            <div className="flex flex-col sm:flex-row gap-0 w-full" style={{ animation: "deck-fade-up 0.6s ease 300ms forwards", opacity: 0 }}>
+              {[
+                { label: "Option A", title: "Strategic Advisory Retainer", desc: "Ongoing partnership. We stay embedded as a sounding board, connector, and diagnostic resource. Monthly cadence, quarterly reviews, direct access." },
+                { label: "Option B", title: "Transition to Independence", desc: "We hand over the playbook, train your team, and step back. You keep the frameworks, the network, and the knowledge." },
+              ].map((opt, i) => (
+                <div
+                  key={i}
+                  className="flex-1 transition-all duration-300"
+                  style={{
+                    padding: "28px 24px",
+                    border: `1px solid ${f.white(0.06)}`,
+                    borderTop: `2px solid ${f.redA(0.3)}`,
+                  }}
+                >
+                  <span style={{ ...mono("9px"), color: f.redA(0.7) }}>{opt.label}</span>
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, color: f.white(0.9), marginTop: "8px", marginBottom: "8px" }}>
+                    {opt.title}
+                  </p>
+                  <p style={body(0.4)}>{opt.desc}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!engagementPath && (
+            <p style={{ ...mono("8px"), color: f.white(0.15), ...r8.stagger(2, 600) }}>
+              ↑ Choose a path to see the process
+            </p>
+          )}
+        </div>
+      </DeckFrame>
+
+      {/* ═══ FRAME 9: Who We Are ═══ */}
+      <DeckFrame ref={setRef(8)} label="Who We Are" mode="wide">
+        <div ref={r9.ref} className="flex flex-col lg:flex-row gap-12 w-full">
+          <div className="lg:w-[45%] flex flex-col justify-center">
+            <p
+              style={{
+                ...r9.stagger(0),
+                fontFamily: f.sg,
+                fontSize: "clamp(24px, 4vw, 44px)",
+                fontWeight: 400,
+                color: f.white(0.9),
+                lineHeight: 1.3,
+              }}
+            >
+              We've been where you are.
+            </p>
+            <p style={{ ...body(0.55), ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
+              Our team is built from careers in{" "}
+              <strong style={{ color: f.white(0.85) }}>commercial media and entertainment</strong>{" "}
+              — the industries your grantees are trying to reach.
+            </p>
+            <p style={{ ...body(0.45), ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
+              What's holding most donor advisors back isn't effort — it's{" "}
+              <strong style={{ color: f.white(0.85) }}>access and pattern recognition</strong>{" "}
+              across these industries. That's what we transfer.
+            </p>
+          </div>
+
+          <div className="lg:w-[55%] grid grid-cols-2 md:grid-cols-3 gap-0">
             {[
               { name: "News", desc: "Local and national — how stories get placed and why" },
               { name: "Music", desc: "Labels, touring, festivals, artist strategy" },
@@ -603,128 +1074,160 @@ const Deck = () => {
               { name: "PR", desc: "Corporate, entertainment, crisis communications" },
               { name: "Philanthropy", desc: "Running organizations, managing portfolios, advising donors" },
             ].map((s, i) => (
-              <SectorPill key={i} name={s.name} desc={s.desc} delay={i * 100} isActive={r8.isActive} />
+              <div
+                key={i}
+                className="transition-all duration-300"
+                style={{
+                  padding: "20px 16px",
+                  border: `1px solid ${f.white(0.04)}`,
+                  opacity: r9.isActive ? 1 : 0,
+                  transform: r9.isActive ? "translateY(0)" : "translateY(8px)",
+                  transition: `all 0.5s ease ${400 + i * 100}ms`,
+                }}
+              >
+                <p style={{ fontFamily: f.sg, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 500, color: f.white(0.8), marginBottom: "6px" }}>
+                  {s.name}
+                </p>
+                <p style={{ fontFamily: f.sg, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.white(0.3), lineHeight: 1.5 }}>
+                  {s.desc}
+                </p>
+              </div>
             ))}
           </div>
-          <p style={{ ...body(0.55), ...r8.stagger(3, 600) }}>
-            What's holding most donor advisors and program officers back isn't effort — it's <strong style={{ color: f.white(0.85) }}>access and pattern recognition</strong> across these industries. That's what we transfer.
-          </p>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 9: The Promise ═══ */}
-      <DeckFrame ref={setRef(8)} label="The Promise">
-        <div ref={r9.ref} className="flex flex-col gap-8 items-center text-center">
+      {/* ═══ FRAME 10: The Promise ═══ */}
+      <DeckFrame ref={setRef(9)} mode="narrow">
+        <div ref={r10.ref} className="flex flex-col gap-8 items-center text-center">
           <p
-            style={{
-              ...r9.stagger(0),
-              fontFamily: f.sg,
-              fontSize: "clamp(26px, 4vw, 48px)",
-              fontWeight: 400,
-              color: f.white(0.95),
-              lineHeight: 1.3,
-              maxWidth: "700px",
-            }}
-          >
-            Everything we know becomes everything you know.
-          </p>
-          <div style={{ ...r9.stagger(1, 400), width: "40px", height: "1px", background: f.redA(0.3) }} />
-          <p
-            style={{
-              ...r9.stagger(2, 600),
-              fontFamily: f.sg,
-              fontSize: "clamp(15px, 2vw, 21px)",
-              fontWeight: 400,
-              color: f.white(0.5),
-              lineHeight: 1.65,
-              maxWidth: "580px",
-            }}
-          >
-            We're not building a dependency. Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
-          </p>
-        </div>
-      </DeckFrame>
-
-      {/* ═══ FRAME 10: CTA ═══ */}
-      <DeckFrame ref={setRef(9)}>
-        <div ref={r10.ref} className="flex flex-col items-center text-center gap-8">
-          <h2
             style={{
               ...r10.stagger(0),
               fontFamily: f.sg,
               fontSize: "clamp(28px, 5vw, 56px)",
-              fontWeight: 500,
-              color: f.white(1),
+              fontWeight: 400,
+              color: f.white(0.95),
+              lineHeight: 1.2,
               letterSpacing: "-0.02em",
-              lineHeight: 1.1,
             }}
           >
-            VGC StratComm
-          </h2>
+            Everything we know becomes everything you know.
+          </p>
+          <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.redA(0.3) }} />
           <p
             style={{
-              ...r10.stagger(1, 300),
+              ...r10.stagger(2, 600),
               fontFamily: f.sg,
               fontSize: "clamp(15px, 2vw, 21px)",
               fontWeight: 400,
-              color: f.white(0.5),
-              lineHeight: 1.55,
-              maxWidth: "520px",
+              color: f.white(0.45),
+              lineHeight: 1.65,
+              maxWidth: "560px",
             }}
           >
-            Let's look at your portfolio together.
+            Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
-          <a
-            href="mailto:info@vgcstratcomm.com"
-            className="deck-glow-pulse"
-            style={{
-              ...r10.stagger(2, 600),
-              ...mono("12px"),
-              fontWeight: 500,
-              color: f.redA(0.9),
-              border: `1px solid ${f.redA(0.4)}`,
-              padding: "14px 36px",
-              textDecoration: "none",
-              transition: "border-color 300ms, color 300ms, box-shadow 300ms",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = f.redA(0.8);
-              e.currentTarget.style.color = f.redA(1);
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = f.redA(0.4);
-              e.currentTarget.style.color = f.redA(0.9);
-            }}
-          >
-            Get in touch
-          </a>
+          {selectedPainData && (
+            <p
+              style={{
+                ...r10.stagger(3, 900),
+                fontFamily: f.sg,
+                fontSize: "clamp(13px, 1.5vw, 16px)",
+                color: f.redA(0.6),
+                lineHeight: 1.6,
+                fontStyle: "italic",
+                maxWidth: "480px",
+              }}
+            >
+              "{selectedPainData.short}" — we've seen it before. We know how to fix it. And we'll show you how.
+            </p>
+          )}
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 11: Case Studies ═══ */}
-      <DeckFrame ref={setRef(10)} label="Case Studies">
-        <div ref={r11.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(22px, 3vw, 34px)"), fontWeight: 500, ...r11.stagger(0) }}>
-            Want to see it in action?
-          </p>
-          <p style={{ ...body(0.35), ...r11.stagger(1) }}>
-            Click any case study to read the full breakdown.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {CASE_STUDIES.map((cs, i) => (
-              <CaseStudyCard
-                key={i}
-                name={cs.name}
-                outcome={cs.outcome}
-                hasContent={cs.content !== null}
-                onClick={() => setSelectedCase(i)}
-                style={r11.stagger(i + 2, 50)}
-              />
-            ))}
+      {/* ═══ FRAME 11: CTA + Proof ═══ */}
+      <DeckFrame ref={setRef(10)} label="Let's Talk" mode="wide">
+        <div ref={r11.ref} className="flex flex-col lg:flex-row gap-12 w-full">
+          {/* Left: CTA */}
+          <div className="lg:w-[40%] flex flex-col justify-center" style={r11.stagger(0)}>
+            <h2
+              style={{
+                fontFamily: f.sg,
+                fontSize: "clamp(28px, 4.5vw, 52px)",
+                fontWeight: 500,
+                color: f.white(1),
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                marginBottom: "16px",
+              }}
+            >
+              VGC StratComm
+            </h2>
+            <p
+              style={{
+                fontFamily: f.sg,
+                fontSize: "clamp(15px, 2vw, 21px)",
+                color: f.white(0.5),
+                lineHeight: 1.55,
+                marginBottom: "24px",
+              }}
+            >
+              Let's look at your portfolio together.
+            </p>
+            <a
+              href="mailto:info@vgcstratcomm.com"
+              className="deck-glow-pulse inline-block"
+              style={{
+                ...mono("12px"),
+                fontWeight: 500,
+                color: f.redA(0.9),
+                border: `1px solid ${f.redA(0.4)}`,
+                padding: "14px 36px",
+                textDecoration: "none",
+                textAlign: "center",
+                transition: "border-color 300ms, color 300ms",
+                maxWidth: "200px",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.redA(0.8); e.currentTarget.style.color = f.redA(1); }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.redA(0.4); e.currentTarget.style.color = f.redA(0.9); }}
+            >
+              Get in touch
+            </a>
           </div>
-          <p style={{ ...mono("10px"), color: f.white(0.25), marginTop: "4px", ...r11.stagger(13, 500) }}>
-            Full case studies coming soon. Clean Energy Workforce available now.
-          </p>
+
+          {/* Right: Case studies as proof wall */}
+          <div className="lg:w-[60%]">
+            <p style={{ ...mono("9px"), color: f.white(0.25), marginBottom: "16px", ...r11.stagger(1, 200) }}>
+              Selected case work
+            </p>
+            <div className="grid grid-cols-2 gap-0">
+              {CASE_STUDIES.map((cs, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedCase(i)}
+                  className="text-left transition-all duration-300"
+                  style={{
+                    padding: "16px 14px",
+                    border: `1px solid ${f.white(0.04)}`,
+                    borderTop: cs.content ? `2px solid ${f.redA(0.4)}` : `1px solid ${f.white(0.04)}`,
+                    cursor: "pointer",
+                    opacity: r11.isActive ? 1 : 0,
+                    transform: r11.isActive ? "translateY(0)" : "translateY(8px)",
+                    transition: `all 0.4s ease ${300 + i * 60}ms`,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = f.white(0.02); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                >
+                  <p style={{ fontFamily: f.sg, fontSize: "clamp(12px, 1.3vw, 14px)", fontWeight: 500, color: cs.content ? f.white(0.8) : f.white(0.4), marginBottom: "4px" }}>
+                    {cs.name}
+                  </p>
+                  <p style={{ ...mono("9px"), color: cs.content ? f.redA(0.5) : f.white(0.2), lineHeight: "1.4" }}>
+                    {cs.outcome}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </DeckFrame>
 
@@ -732,7 +1235,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(11)}>
         <div className="flex flex-col items-center text-center gap-6">
           <p style={{ ...mono("10px"), color: f.white(0.15) }}>
-            ↑ Scroll up to explore case studies
+            ↑ Scroll up to explore
           </p>
           <h2
             style={{
@@ -748,7 +1251,7 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ Case Study Lightbox ═══ */}
+      {/* Case Study Lightbox */}
       <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
         <DialogContent
           className="max-w-2xl max-h-[85vh] overflow-y-auto"
@@ -785,470 +1288,6 @@ const Deck = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   INLINE COMPONENTS — v2 Interactive
-   ═══════════════════════════════════════════════════════════════ */
-
-
-/* ─── NumberedProblem — with stagger support ─── */
-const NumberedProblem = ({ n, title, desc, style }: { n: number; title: string; desc: string; style?: CSSProperties }) => (
-  <div
-    className="flex gap-4 py-3"
-    style={{
-      borderBottom: `1px solid ${f.white(0.04)}`,
-      ...style,
-    }}
-  >
-    <span
-      style={{
-        ...mono("clamp(16px, 2vw, 22px)"),
-        fontWeight: 600,
-        color: f.redA(0.7),
-        lineHeight: "1.4",
-        minWidth: "28px",
-      }}
-    >
-      {n}.
-    </span>
-    <p style={body()}>
-      <strong style={{ color: f.white(0.85) }}>{title}</strong>{" "}
-      {desc}
-    </p>
-  </div>
-);
-
-/* ─── Animated Comparison Rows (replaces table) ─── */
-const AnimatedComparisonRows = ({
-  rows,
-  isActive,
-}: {
-  rows: { step: string; left: string; right: string }[];
-  isActive: boolean;
-}) => (
-  <div className="flex flex-col gap-0">
-    {/* Header */}
-    <div className="grid grid-cols-[100px_1fr_1fr] gap-0" style={{ borderBottom: `1px solid ${f.white(0.08)}` }}>
-      <div style={{ padding: "8px 12px" }} />
-      <div style={{ ...mono("9px"), padding: "8px 12px", color: f.white(0.3) }}>Your side</div>
-      <div style={{ ...mono("9px"), padding: "8px 12px", color: f.redA(0.8), borderLeft: `2px solid ${f.redA(0.15)}` }}>Their side</div>
-    </div>
-    {/* Rows */}
-    {rows.map((row, i) => {
-      const delay = 200 + i * 150;
-      return (
-        <div
-          key={i}
-          className="grid grid-cols-[100px_1fr_1fr] gap-0"
-          style={{
-            borderBottom: `1px solid ${f.white(0.04)}`,
-            opacity: isActive ? 1 : 0,
-            transform: isActive ? "translateX(0)" : "translateX(12px)",
-            transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-          }}
-        >
-          <div style={{ padding: "10px 12px", fontFamily: f.sg, fontSize: "clamp(11px, 1.3vw, 14px)", fontWeight: 600, color: f.white(0.6) }}>
-            {row.step}
-          </div>
-          <div style={{ padding: "10px 12px", fontFamily: f.sg, fontSize: "clamp(11px, 1.3vw, 14px)", color: f.white(0.3), lineHeight: 1.6 }}>
-            {row.left}
-          </div>
-          <div style={{ padding: "10px 12px", fontFamily: f.sg, fontSize: "clamp(11px, 1.3vw, 14px)", color: f.white(0.6), lineHeight: 1.6, borderLeft: `2px solid ${f.redA(0.15)}` }}>
-            {row.right}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-);
-
-/* ─── Animated Metrics Rows ─── */
-const AnimatedMetricsRows = ({
-  rows,
-  isActive,
-}: {
-  rows: { left: string; right: string }[];
-  isActive: boolean;
-}) => (
-  <div className="flex flex-col gap-0">
-    <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.white(0.08)}` }}>
-      <div style={{ ...mono("9px"), padding: "8px 12px", color: f.white(0.3) }}>What most grantees report</div>
-      <div style={{ ...mono("9px"), padding: "8px 12px", color: f.redA(0.8), borderLeft: `2px solid ${f.redA(0.15)}` }}>What we track</div>
-    </div>
-    {rows.map((row, i) => {
-      const delay = 200 + i * 150;
-      return (
-        <div
-          key={i}
-          className="grid grid-cols-2 gap-0"
-          style={{
-            borderBottom: `1px solid ${f.white(0.04)}`,
-            opacity: isActive ? 1 : 0,
-            transform: isActive ? "translateX(0)" : "translateX(12px)",
-            transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-          }}
-        >
-          <div style={{
-            padding: "10px 12px",
-            fontFamily: f.sg,
-            fontSize: "clamp(11px, 1.3vw, 14px)",
-            color: f.white(0.25),
-            lineHeight: 1.6,
-            textDecoration: isActive ? "line-through" : "none",
-            textDecorationColor: f.redA(0.3),
-            transition: `text-decoration 0.4s ease ${delay + 400}ms`,
-          }}>
-            {row.left}
-          </div>
-          <div style={{
-            padding: "10px 12px",
-            fontFamily: f.sg,
-            fontSize: "clamp(11px, 1.3vw, 14px)",
-            color: f.white(0.7),
-            lineHeight: 1.6,
-            borderLeft: `2px solid ${f.redA(0.15)}`,
-          }}>
-            {row.right}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-);
-
-/* ─── Expandable Hallmark Card ─── */
-const ExpandableHallmark = ({
-  index: _,
-  title,
-  rationale,
-  help,
-  isExpanded,
-  onToggle,
-  style,
-}: {
-  index: number;
-  title: string;
-  rationale: string;
-  help: string;
-  isExpanded: boolean;
-  onToggle: () => void;
-  style?: CSSProperties;
-}) => (
-  <button
-    onClick={onToggle}
-    className="text-left flex-1 transition-all duration-300"
-    style={{
-      border: `1px solid ${isExpanded ? f.white(0.15) : f.white(0.08)}`,
-      borderTop: `2px solid ${isExpanded ? f.redA(0.8) : f.redA(0.3)}`,
-      padding: "24px",
-      background: isExpanded ? f.white(0.02) : "transparent",
-      cursor: "pointer",
-      ...style,
-    }}
-  >
-    <p
-      style={{
-        fontFamily: f.sg,
-        fontSize: "clamp(15px, 1.8vw, 19px)",
-        fontWeight: 500,
-        color: f.white(0.9),
-        marginBottom: isExpanded ? "16px" : "0",
-        transition: "margin 0.3s ease",
-      }}
-    >
-      {title}
-    </p>
-    <div
-      style={{
-        maxHeight: isExpanded ? "400px" : "0",
-        overflow: "hidden",
-        opacity: isExpanded ? 1 : 0,
-        transition: "max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease",
-      }}
-    >
-      <p style={{ ...body(), marginBottom: "12px" }}>{rationale}</p>
-      <p style={{ ...body(0.55), fontStyle: "italic" }}>
-        <span style={{ color: f.redA(0.7), fontStyle: "normal", fontWeight: 500 }}>How we help: </span>
-        {help}
-      </p>
-    </div>
-    <span
-      style={{
-        display: "block",
-        marginTop: isExpanded ? "0" : "8px",
-        ...mono("8px"),
-        color: f.redA(0.5),
-        transition: "opacity 0.3s",
-        opacity: isExpanded ? 0 : 1,
-        height: isExpanded ? 0 : "auto",
-        overflow: "hidden",
-      }}
-    >
-      ↓ click to expand
-    </span>
-  </button>
-);
-
-/* ─── Capability Card (2×3 grid) ─── */
-const CapabilityCard = ({
-  title,
-  desc,
-  style,
-}: {
-  title: string;
-  desc: string;
-  style?: CSSProperties;
-}) => {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      className="transition-all duration-300"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        border: `1px solid ${hovered ? f.white(0.15) : f.white(0.06)}`,
-        padding: "20px",
-        background: hovered ? f.white(0.02) : "transparent",
-        ...style,
-      }}
-    >
-      <p
-        style={{
-          fontFamily: f.sg,
-          fontSize: "clamp(15px, 1.8vw, 19px)",
-          fontWeight: 500,
-          color: f.white(0.85),
-          marginBottom: hovered ? "10px" : "4px",
-          transition: "margin 0.3s ease",
-        }}
-      >
-        {title}
-      </p>
-      <div
-        style={{
-          maxHeight: hovered ? "200px" : "0",
-          overflow: "hidden",
-          opacity: hovered ? 1 : 0,
-          transition: "max-height 0.4s ease, opacity 0.3s ease",
-        }}
-      >
-        <p style={body(0.4)}>{desc}</p>
-      </div>
-      {!hovered && (
-        <div
-          style={{
-            width: "20px",
-            height: "2px",
-            background: f.redA(0.3),
-            marginTop: "8px",
-            transition: "opacity 0.3s",
-          }}
-        />
-      )}
-    </div>
-  );
-};
-
-/* ─── Timeline Node ─── */
-const TimelineNode = ({
-  label,
-  period,
-  bullets,
-  deliverable,
-  isActive,
-  delay,
-}: {
-  label: string;
-  period: string;
-  bullets: string[];
-  deliverable: string;
-  isActive: boolean;
-  delay: number;
-}) => (
-  <div
-    style={{
-      borderLeft: `2px solid ${f.redA(0.3)}`,
-      paddingLeft: "20px",
-      paddingBottom: "24px",
-      position: "relative",
-      opacity: isActive ? 1 : 0,
-      transform: isActive ? "translateY(0)" : "translateY(12px)",
-      transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-    }}
-  >
-    {/* Node dot */}
-    <div
-      style={{
-        position: "absolute",
-        left: "-5px",
-        top: "6px",
-        width: "8px",
-        height: "8px",
-        borderRadius: "50%",
-        background: isActive ? f.red : f.redA(0.3),
-        boxShadow: isActive ? `0 0 12px ${f.redA(0.5)}` : "none",
-        transition: `background 0.4s ease ${delay}ms, box-shadow 0.6s ease ${delay + 200}ms`,
-      }}
-    />
-    <div className="flex items-baseline gap-3 mb-3">
-      <span style={{ fontFamily: f.sg, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 500, color: f.white(0.9) }}>
-        {label}
-      </span>
-      <span style={{ ...mono("9px"), color: f.redA(0.6) }}>{period}</span>
-    </div>
-    {bullets.map((b, i) => (
-      <p key={i} style={{ ...body(0.4), fontSize: "clamp(12px, 1.4vw, 14px)", marginBottom: "6px", paddingLeft: "12px" }}>
-        {b}
-      </p>
-    ))}
-    <p style={{ ...body(0.6), fontSize: "clamp(12px, 1.4vw, 14px)", marginTop: "8px" }}>
-      <strong style={{ color: f.white(0.8) }}>Deliverable:</strong> {deliverable}
-    </p>
-  </div>
-);
-
-/* ─── Interactive Fork Card ─── */
-const InteractiveForkCard = ({
-  label,
-  title,
-  desc,
-  side,
-  hoveredFork,
-  onHover,
-}: {
-  label: string;
-  title: string;
-  desc: string;
-  side: "a" | "b";
-  hoveredFork: "a" | "b" | null;
-  onHover: (v: "a" | "b" | null) => void;
-}) => {
-  const isHovered = hoveredFork === side;
-  const isDimmed = hoveredFork !== null && hoveredFork !== side;
-  return (
-    <div
-      className="flex-1 transition-all duration-300 cursor-pointer"
-      onMouseEnter={() => onHover(side)}
-      onMouseLeave={() => onHover(null)}
-      style={{
-        border: `1px solid ${isHovered ? f.white(0.2) : f.white(0.08)}`,
-        padding: "24px",
-        transform: isHovered ? "scale(1.02)" : isDimmed ? "scale(0.98)" : "scale(1)",
-        opacity: isDimmed ? 0.5 : 1,
-        background: isHovered ? f.white(0.03) : "transparent",
-      }}
-    >
-      <span style={{ ...mono("9px"), color: f.redA(0.7) }}>{label}</span>
-      <p style={{ fontFamily: f.sg, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, color: f.white(0.9), marginTop: "8px", marginBottom: "8px" }}>
-        {title}
-      </p>
-      <p style={body(0.4)}>{desc}</p>
-    </div>
-  );
-};
-
-/* ─── Sector Pill ─── */
-const SectorPill = ({
-  name,
-  desc,
-  delay,
-  isActive,
-}: {
-  name: string;
-  desc: string;
-  delay: number;
-  isActive: boolean;
-}) => {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        opacity: isActive ? 1 : 0,
-        transform: isActive ? "translateY(0)" : "translateY(8px)",
-        transition: `opacity 0.5s ease ${300 + delay}ms, transform 0.5s ease ${300 + delay}ms`,
-      }}
-    >
-      <span
-        className="inline-block transition-all duration-200"
-        style={{
-          fontFamily: f.sg,
-          fontSize: "clamp(12px, 1.4vw, 15px)",
-          fontWeight: 500,
-          color: hovered ? f.white(0.95) : f.white(0.7),
-          padding: "8px 16px",
-          border: `1px solid ${hovered ? f.redA(0.5) : f.white(0.1)}`,
-          background: hovered ? f.redA(0.08) : "transparent",
-          cursor: "default",
-        }}
-      >
-        {name}
-      </span>
-      {/* Tooltip */}
-      {hovered && (
-        <div
-          className="absolute left-0 top-full mt-2 z-50"
-          style={{
-            fontFamily: f.sg,
-            fontSize: "12px",
-            color: f.white(0.6),
-            background: "hsl(0 0% 6%)",
-            border: `1px solid ${f.white(0.1)}`,
-            padding: "8px 12px",
-            whiteSpace: "nowrap",
-            animation: "deck-fade-up 0.2s ease forwards",
-          }}
-        >
-          {desc}
-        </div>
-      )}
-    </div>
-  );
-};
-
-/* ─── Case Study Card ─── */
-const CaseStudyCard = ({
-  name,
-  outcome,
-  hasContent,
-  onClick,
-  style,
-}: {
-  name: string;
-  outcome: string;
-  hasContent: boolean;
-  onClick: () => void;
-  style?: CSSProperties;
-}) => {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="text-left transition-all duration-300"
-      style={{
-        border: `1px solid ${hovered ? f.white(0.15) : f.white(0.08)}`,
-        borderTop: hasContent ? `2px solid ${f.redA(0.5)}` : `2px solid ${f.white(0.08)}`,
-        padding: "20px",
-        background: hovered ? f.white(0.02) : "transparent",
-        cursor: "pointer",
-        transform: hovered ? "translateY(-2px)" : "translateY(0)",
-        boxShadow: hovered ? `0 8px 24px ${f.white(0.03)}` : "none",
-        ...style,
-      }}
-    >
-      <p style={{ fontFamily: f.sg, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 500, color: f.white(0.85), marginBottom: "6px" }}>
-        {name}
-      </p>
-      <p style={{ ...mono("10px"), color: hasContent ? f.redA(0.6) : f.white(0.25), lineHeight: "1.5" }}>
-        {outcome}
-      </p>
-    </button>
   );
 };
 
