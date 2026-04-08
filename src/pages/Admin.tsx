@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, MessageSquare, ChevronDown, ChevronUp, Link as LinkIcon, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
