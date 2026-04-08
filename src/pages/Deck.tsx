@@ -231,7 +231,7 @@ const Deck = () => {
     setCtaMode("thanks");
   };
   
-  const [activeDomain, setActiveDomain] = useState<string | null>(null);
+  const [activeDomain, setActiveDomain] = useState<string | null>("cultural");
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [expandedHallmark, setExpandedHallmark] = useState<number | null>(null);
