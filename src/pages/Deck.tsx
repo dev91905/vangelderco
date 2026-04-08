@@ -336,6 +336,64 @@ const Deck = () => {
       }}
     >
 
+      {/* ─── Fixed UI Chrome ─── */}
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
+        <div className="flex items-center justify-between pointer-events-auto">
+          {/* Frame counter */}
+          <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
+            {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
+          </span>
+          {/* ESC hint */}
+          <button
+            onClick={() => navigate("/")}
+            className="transition-colors duration-200"
+            style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.06em", color: f.ink(0.25), background: "none", border: "none", cursor: "pointer" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = f.ink(0.6))}
+            onMouseLeave={(e) => (e.currentTarget.style.color = f.ink(0.25))}
+          >
+            ESC to exit
+          </button>
+        </div>
+      </div>
+
+      {/* ─── Fixed progress bar ─── */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 0 16px 0" }}>
+        <div style={{ margin: "0 28px", height: "2px", borderRadius: "1px", background: f.ink(0.06), overflow: "hidden" }}>
+          <div
+            style={{
+              height: "100%",
+              width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
+              background: f.ink(0.25),
+              borderRadius: "1px",
+              transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            }}
+          />
+        </div>
+        {/* Nav arrows */}
+        <div className="flex items-center justify-center gap-4 mt-2 pointer-events-auto">
+          <button
+            onClick={() => scrollToFrame(currentFrame - 1)}
+            disabled={currentFrame === 0}
+            className="transition-colors duration-200"
+            style={{ fontFamily: f.sans, fontSize: "11px", color: currentFrame === 0 ? f.ink(0.1) : f.ink(0.3), background: "none", border: "none", cursor: currentFrame === 0 ? "default" : "pointer" }}
+            onMouseEnter={(e) => { if (currentFrame > 0) e.currentTarget.style.color = f.ink(0.6); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = currentFrame === 0 ? f.ink(0.1) : f.ink(0.3); }}
+          >
+            ← Prev
+          </button>
+          <button
+            onClick={() => scrollToFrame(currentFrame + 1)}
+            disabled={currentFrame === TOTAL_FRAMES - 1}
+            className="transition-colors duration-200"
+            style={{ fontFamily: f.sans, fontSize: "11px", color: currentFrame === TOTAL_FRAMES - 1 ? f.ink(0.1) : f.ink(0.3), background: "none", border: "none", cursor: currentFrame === TOTAL_FRAMES - 1 ? "default" : "pointer" }}
+            onMouseEnter={(e) => { if (currentFrame < TOTAL_FRAMES - 1) e.currentTarget.style.color = f.ink(0.6); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = currentFrame === TOTAL_FRAMES - 1 ? f.ink(0.1) : f.ink(0.3); }}
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-8 min-h-[60vh] justify-center">
