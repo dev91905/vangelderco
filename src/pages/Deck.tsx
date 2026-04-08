@@ -740,8 +740,6 @@ const Deck = () => {
                   );
                 })}
               </div>
-            </div>
-          </div>
         </div>
       </DeckFrame>
 
