@@ -337,7 +337,7 @@ const Deck = () => {
   return (
     <div
       ref={containerRef}
-      className="relative bg-background"
+      className="relative bg-background deck-scroll"
       style={{
         height: "100dvh",
         width: "100vw",
