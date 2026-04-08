@@ -421,8 +421,8 @@ const Deck = () => {
               maxWidth: "700px",
             }}
           >
-            Strategic communications advisory for donor advisors and program officers who know{" "}
-            <em style={{ fontStyle: "italic", color: f.white(0.9) }}>their portfolio should be hitting harder.</em>
+            StratComm support for donor advisors and program officers who want a portfolio that{" "}
+            <em style={{ fontStyle: "italic", color: f.white(0.9) }}>hits harder.</em>
           </p>
           <p
             style={{
