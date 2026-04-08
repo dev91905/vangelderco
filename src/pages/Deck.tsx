@@ -375,7 +375,7 @@ const Deck = () => {
               lineHeight: 1.45,
             }}
           >
-            Same goal. Completely different process.
+            Both sides of every issue have the same goal — shift public opinion and force policy outcomes. They're running completely different processes to get there.
           </p>
           <ComparisonTable
             leftTitle="Your Side"
