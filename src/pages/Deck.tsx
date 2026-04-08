@@ -201,6 +201,7 @@ const Deck = () => {
   const [customOpen, setCustomOpen] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
   const [openRows, setOpenRows] = useState<Set<number>>(new Set());
+  const [confrontationStep, setConfrontationStep] = useState(0);
   const [customSubmitted, setCustomSubmitted] = useState(false);
   const [customSubmitting, setCustomSubmitting] = useState(false);
 
