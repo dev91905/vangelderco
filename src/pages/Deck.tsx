@@ -398,8 +398,8 @@ const Deck = () => {
               lineHeight: 1.4,
             }}
           >
-            For donor advisors and program officers who want a portfolio that{" "}
-            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.65) }}>hits harder.</em>
+            For donor advisors and program officers who know{" "}
+            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
           </p>
           <div
             style={{
