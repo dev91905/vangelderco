@@ -900,8 +900,8 @@ const Deck = () => {
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0)}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              Three hallmarks of portfolios that{" "}
-              <span style={{ fontStyle: "italic" }}>produce results and build power.</span>
+              There are three things successful portfolios do to{" "}
+              <span style={{ fontStyle: "italic" }}>build power and produce results.</span>
             </p>
             {selectedPainDatas.length > 0 && (
               <p style={{ marginTop: "20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
