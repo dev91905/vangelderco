@@ -12,9 +12,9 @@ interface DeckFrameProps {
 }
 
 const modeStyles: Record<FrameMode, string> = {
-  narrow: "max-w-[680px] px-8 md:px-12",
-  wide: "max-w-[1400px] px-6 md:px-16 lg:px-24",
-  full: "w-full px-6 md:px-12 lg:px-16",
+  narrow: "max-w-[680px] px-10 md:px-16",
+  wide: "max-w-[1400px] px-8 md:px-20 lg:px-28",
+  full: "w-full px-8 md:px-16 lg:px-24",
 };
 
 const alignStyles: Record<FrameAlign, string> = {
@@ -66,11 +66,11 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
           <span
             className="absolute top-8 left-8 z-10"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: "9px",
-              letterSpacing: "0.2em",
+              letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "hsl(0 0% 100% / 0.2)",
+              color: "hsl(40 50% 57% / 0.3)",
               opacity: isActive ? 1 : 0,
               transform: isActive ? "translateX(0)" : "translateX(-8px)",
               transition: "opacity 0.5s ease 200ms, transform 0.5s ease 200ms",

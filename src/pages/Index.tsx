@@ -24,8 +24,8 @@ const Index = () => {
       <div className="flex items-center justify-center h-full w-full">
         {/* HUD: top-right */}
         <span
-          className="fixed top-6 right-6 z-30 font-mono text-[10px] tracking-[0.2em] uppercase"
-          style={{ color: "hsl(0 0% 100% / 0.18)", fontFamily: "'JetBrains Mono', monospace" }}
+          className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
+          style={{ color: "hsl(0 0% 100% / 0.15)", fontFamily: "'DM Sans', sans-serif" }}
         >
           Van Gelder Co.
         </span>
@@ -34,10 +34,10 @@ const Index = () => {
         <main className="relative z-20 flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14">
           {/* Classification label */}
           <span
-            className="text-[11px] tracking-[0.3em] uppercase"
+            className="text-[11px] tracking-[0.25em] uppercase"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 80% 48% / 0.9)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(40 50% 57% / 0.8)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -50,7 +50,7 @@ const Index = () => {
               <Link
                 key={i}
                 to={link.to}
-                className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6"
+                className="hero-nav-link group relative flex items-center justify-center py-1.5 md:py-2 px-4 md:px-6 rounded-lg"
                 onPointerEnter={() => playHoverGlitch()}
                 onFocus={() => playHoverGlitch()}
                 onClick={() => playClickGlitch()}
@@ -60,19 +60,19 @@ const Index = () => {
               >
                 {/* Background wash */}
                 <span
-                  className="hero-nav-wash absolute inset-0 pointer-events-none"
+                  className="hero-nav-wash absolute inset-0 pointer-events-none rounded-lg"
                   style={{
-                    background: "hsl(0 80% 48% / 0)",
+                    background: "hsl(40 50% 57% / 0)",
                     transition: "background 0.15s ease",
                   }}
                 />
 
                 {/* Left bar */}
                 <span
-                  className="hero-nav-bar absolute left-0 top-0 bottom-0 pointer-events-none"
+                  className="hero-nav-bar absolute left-0 top-2 bottom-2 pointer-events-none rounded-full"
                   style={{
                     width: "2px",
-                    background: "hsl(0 80% 48% / 0.8)",
+                    background: "hsl(40 50% 57% / 0.6)",
                     opacity: 0,
                     transition: "opacity 0.1s ease",
                   }}
@@ -80,10 +80,10 @@ const Index = () => {
 
                 {/* Text */}
                 <span
-                  className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-medium leading-[1.15] transition-colors duration-150"
+                  className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-normal leading-[1.15] transition-colors duration-150"
                   style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    color: "hsl(0 0% 100% / 0.9)",
+                    fontFamily: "'Instrument Serif', serif",
+                    color: "hsl(0 0% 100% / 0.88)",
                   }}
                 >
                   {link.label}
@@ -100,12 +100,12 @@ const Index = () => {
             {SECTORS.map((sector) => (
               <span
                 key={sector}
-                className="text-[10px] md:text-[11px] tracking-[0.15em] uppercase px-3 py-1.5"
+                className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: "hsl(0 0% 100% / 0.5)",
-                  border: "1px solid hsl(0 0% 100% / 0.08)",
-                  borderLeft: "2px solid hsl(0 80% 48% / 0.5)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: "hsl(0 0% 100% / 0.4)",
+                  background: "hsl(0 0% 100% / 0.03)",
+                  border: "1px solid hsl(0 0% 100% / 0.06)",
                 }}
               >
                 {sector}
@@ -115,10 +115,10 @@ const Index = () => {
 
           {/* Access gate */}
           <span
-            className="text-[10px] tracking-[0.35em] uppercase"
+            className="text-[10px] tracking-[0.3em] uppercase"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              color: "hsl(0 0% 100% / 0.25)",
+              fontFamily: "'DM Sans', sans-serif",
+              color: "hsl(0 0% 100% / 0.2)",
               animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
