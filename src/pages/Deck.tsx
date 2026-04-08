@@ -294,7 +294,7 @@ const Deck = () => {
     if (currentFrame !== 2) { setConfrontationStep(0); return; }
     const timer = setInterval(() => {
       setConfrontationStep((prev) => { if (prev >= CONFRONTATION_ROWS.length - 1) { clearInterval(timer); return prev; } return prev + 1; });
-    }, 1800);
+    }, 900);
     return () => clearInterval(timer);
   }, [currentFrame]);
 
@@ -505,18 +505,26 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
-      <DeckFrame ref={setRef(2)} mode="full">
-        <div ref={r3.ref}>
-          <p style={{ ...heading("clamp(24px, 3.5vw, 40px)"), fontWeight: 700, ...r3.stagger(0), marginBottom: "48px", maxWidth: "700px" }}>
-            Both sides have the same goal — shift opinion, force outcomes.{" "}
-            <span style={{ color: f.ink(0.5) }}>Completely different processes.</span>
-          </p>
+      <DeckFrame ref={setRef(2)} mode="wide">
+        <div ref={r3.ref} className="flex flex-col gap-8">
+          {/* ── Heading row: slide-2 pattern ── */}
+          <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-36">
+            <p style={{ ...heading("clamp(24px, 3.2vw, 42px)"), fontWeight: 700, ...r3.stagger(0), flex: "1 1 50%" }}>
+              Same goal. Completely different playbooks.
+            </p>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(16px, 1.6vw, 20px)", color: f.ink(0.75), lineHeight: 1.5, ...r3.stagger(1), flex: "1 1 50%" }}>
+              Both sides of an issue want the same thing — shift public opinion and force policy outcomes. But they run completely different processes to get there.
+            </p>
+          </div>
 
-          <div className="w-full">
-            <div className="grid gap-0" style={{ gridTemplateColumns: "140px 1fr 1fr", borderBottom: `1px solid ${f.ink(0.08)}` }}>
-              <div style={{ padding: "14px 20px" }} />
-              <div style={{ ...label("10px"), padding: "14px 20px" }}>Your current portfolio</div>
-              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6) }}>How the opposition operates</div>
+          {/* ── Comparison table ── */}
+          <div className="w-full" style={r3.stagger(2, 200)}>
+            {/* Column headers */}
+            <div className="grid" style={{ gridTemplateColumns: "120px 1fr 40px 1fr", borderBottom: `1px solid ${f.ink(0.1)}`, paddingBottom: "12px", marginBottom: "4px" }}>
+              <div />
+              <div style={{ ...label("10px") }}>Your current portfolio</div>
+              <div />
+              <div style={{ ...label("10px"), color: f.ink(0.6) }}>How the opposition operates</div>
             </div>
 
             {CONFRONTATION_ROWS.map((row, i) => {
@@ -525,27 +533,31 @@ const Deck = () => {
               return (
                 <div
                   key={i}
-                  className="grid gap-0 transition-all duration-700"
+                  className="grid transition-all duration-500"
                   style={{
-                    gridTemplateColumns: "140px 1fr 1fr",
+                    gridTemplateColumns: "120px 1fr 40px 1fr",
                     borderBottom: i < CONFRONTATION_ROWS.length - 1 ? `1px solid ${f.ink(0.04)}` : "none",
                     opacity: isRevealed ? 1 : 0,
-                    transform: isRevealed ? "translateX(0)" : "translateX(20px)",
+                    transform: isRevealed ? "translateX(0)" : "translateX(12px)",
                   }}
                 >
-                  <div style={{ padding: "18px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", fontWeight: 700, color: isFocused ? f.ink(0.8) : f.ink(0.35) }}>
+                  <div style={{ padding: "14px 0", fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 14px)", fontWeight: 700, color: isFocused ? f.ink(0.7) : f.ink(0.3) }}>
                     {row.dimension}
                   </div>
-                  <div style={{ padding: "18px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.7, textDecoration: "line-through", textDecorationColor: f.ink(0.12) }}>
+                  <div style={{ padding: "14px 0", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 15px)", color: f.ink(0.4), lineHeight: 1.65 }}>
                     {row.yours}
                   </div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: "1px", height: "60%", background: f.ink(0.06) }} />
+                  </div>
                   <div style={{
-                    padding: "18px 20px",
+                    padding: "14px 0",
                     fontFamily: f.serif,
-                    fontSize: "clamp(12px, 1.4vw, 15px)",
-                    color: isFocused ? f.ink(0.8) : f.ink(0.55),
-                    lineHeight: 1.7,
-                    transition: "all 0.5s ease",
+                    fontSize: "clamp(12px, 1.3vw, 15px)",
+                    color: isFocused ? f.ink(0.85) : f.ink(0.6),
+                    lineHeight: 1.65,
+                    fontWeight: isFocused ? 600 : 400,
+                    transition: "all 0.4s ease",
                   }}>
                     {row.theirs}
                   </div>
@@ -554,11 +566,12 @@ const Deck = () => {
             })}
           </div>
 
+          {/* ── Kicker ── */}
           {confrontationStep >= CONFRONTATION_ROWS.length - 1 && (
-            <div className="mt-10 max-w-[600px]" style={{ opacity: 0, animation: "deck-fade-up 0.8s ease 600ms forwards" }}>
-              <p style={{ ...body(0.5), paddingLeft: "16px" }}>
+            <div style={{ opacity: 0, animation: "deck-fade-up 0.6s ease 400ms forwards", maxWidth: "680px" }}>
+              <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.5), lineHeight: 1.7 }}>
                 You test messages in a petri dish and pay people to watch the winners.{" "}
-                <span style={{ color: f.ink(0.8) }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
+                <span style={{ color: f.ink(0.85), fontWeight: 600 }}>They skip the test tube — fund everything, watch what catches fire organically, and supercharge it.</span>
               </p>
             </div>
           )}
