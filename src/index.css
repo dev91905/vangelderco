@@ -112,6 +112,9 @@
 .hero-nav-link:hover .hero-nav-text {
   color: hsl(30 10% 12% / 1) !important;
   transform: translateX(6px);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
 }
 
 .hero-nav-text {
