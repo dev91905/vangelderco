@@ -383,7 +383,7 @@ const Deck = () => {
               color: f.ink(0.92),
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
-              maxWidth: "580px",
+              maxWidth: "720px",
               animation: r1.isActive ? "deck-clip-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards" : "none",
             }}
           >
