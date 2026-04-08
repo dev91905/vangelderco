@@ -1,122 +1,169 @@
 
+# Deck v3 — Rebuild the Experience, Not the Decorations
 
-# Deck v2 — Premium Interactive Overhaul
+## What failed in v2
+The current build is still a normal slide deck wearing animation. The core problems are structural:
 
-## The Problem With v1
+- **Everything is trapped in a 900px column** because `DeckFrame` hard-caps content at `max-w-[900px]`.
+- **Every frame still reveals a full information dump**. Stagger is cosmetic; the user still gets a dense block, just 300ms later.
+- **Interactions are local, not narrative.** Hover states and accordions do not change the journey.
+- **The most important moments are still tables and cards**, not experiences.
+- **The page does not use the screen.** It feels timid instead of premium.
 
-Every frame dumps its full content at once. No animation, no pacing, no interactivity. Components are bordered boxes with inline styles. The comparison "tables" look like spreadsheets. Dense frames (Hallmarks, Capabilities, Engagements) cram paragraphs into a single viewport. There's no sense of choreography — it reads like a document, not an experience.
+So v3 needs a **different information architecture**, not nicer transitions.
 
-## Design Philosophy for v2
+## New experience model
+I’ll redesign `/deck` as a **full-bleed guided narrative** with **stateful branching** and **screen-scale composition**.
 
-**Cinematic pacing.** Each frame reveals its content in a choreographed sequence — headline first, then supporting elements stagger in 150-200ms apart. The user watches the argument build.
+Instead of “12 stacked slides,” the user moves through **chapters**:
 
-**Progressive disclosure.** Dense content (Hallmarks, Capabilities) uses expandable cards. You see the headline grid; click to reveal depth. Skimmers get the argument from titles alone. Engaged readers go deeper without leaving the frame.
+1. **Orientation** — who this is for
+2. **Self-diagnosis** — pick the pain that feels most true
+3. **Reveal** — show how the opposition actually operates
+4. **Reframe** — define what effective stratcomm really is
+5. **Explore** — move through the three service areas as an interactive system
+6. **Engagement path** — choose how to work together
+7. **Credibility + proof** — who we are and selected case work
+8. **Close** — clear CTA
 
-**Interactive decision points.** The engagement fork (Option A/B) becomes a real interactive moment — hover/click one side and it expands while the other recedes. The comparison tables animate row-by-row on scroll entry.
+The deck still scrolls frame-by-frame and keeps arrow / ESC behavior, but the middle becomes a **guided app-like story**, not a stack of centered slides.
 
-**Breathing room.** Split the densest frames. Fewer words visible at any moment. Much larger type for hero statements.
+## Structural overhaul
 
-## Frame-by-Frame Redesign
+### 1) Full-screen frame system
+I will change the frame layout so each section can choose between:
+- **narrative width** for hero copy
+- **wide canvas** for comparisons / maps / branching layouts
+- **edge-to-edge mode** for immersive moments
 
-### Frame 1 — Title
-- Title types in with a clip-reveal animation
-- Subtitle and tagline stagger-fade 400ms apart
-- Subtle downward scroll indicator (animated chevron or "scroll" label)
+This means removing the fixed 900px choke point and replacing it with a frame API like:
+- `narrow`
+- `wide`
+- `full`
 
-### Frame 2 — The Problem
-- Headline fades in first
-- Each numbered problem staggers in one by one (200ms intervals)
-- Problems start collapsed (title only), auto-expand sequentially as user watches, or click to expand individually
+### 2) Branch logic that actually changes the journey
+Early in the deck, the user chooses the problem they most identify with, such as:
+- No institutional memory
+- No decision framework
+- No access beyond the usual channels
+- No real measurement
+- No media fluency in-house
 
-### Frame 3 — What You're Up Against
-- Headline animates in
-- **Replace the HTML table** with two side-by-side card columns that animate in row by row
-- Left column fades in dim (your side), right column slides in with red accent (their side) — staggered so the contrast hits viscerally
-- Closing paragraphs fade in last
+That selection becomes active state for the rest of the deck:
+- later copy highlights the relevant consequence
+- service capability cards reorder around that pain
+- engagement path copy adapts slightly
+- CTA echoes the selected problem
 
-### Frame 4 — What Effective Portfolios Have in Common
-- Three hallmark cards in a row (or stacked on mobile)
-- Each shows ONLY the title initially
-- Click a card → it expands smoothly to reveal the rationale + "How we help" section
-- Accordion behavior — opening one can optionally close others
-- Red accent line on the active/expanded card
+This creates a guided path without splitting into separate routes.
 
-### Frame 5 — Core Capabilities
-- Six capabilities as a 2×3 grid of cards (not a vertical list)
-- Each card shows bold title + first line
-- Hover reveals full description with a smooth height animation
-- Cards stagger-fade on frame entry
+### 3) Replace static “comparison tables” with a narrative confrontation
+The “what you’re up against” section becomes a **full-width confrontation screen**:
+- one side = your current portfolio behavior
+- the other = how the opposition actually operates
+- the user advances row-by-row through the contrast
+- each step locks focus on one dimension at a time
+- the final state shows the whole system at once
 
-### Frame 6 — How We Measure Impact
-- **Replace table** with two animated columns
-- Left column items fade in dim with strikethrough or reduced opacity (vanity metrics)
-- Right column items fade in bright with red accent (power indicators)
-- Row-by-row animation, ~300ms stagger
-- Closing quote animates in last with a red left-border accent
+This becomes the emotional pivot of the deck.
 
-### Frame 7 — How Engagements Work
-- Two client type cards at top (click to toggle between custom vs standard flow)
-- Standard flow: animated vertical timeline with Phase 1 → Phase 2 → Fork
-- Timeline nodes pulse/glow as they enter view
-- **The Fork** — two cards side by side. Hovering one scales it up slightly and dims the other. Click expands it with a subtle transition. This is the "choose your path" moment.
+### 4) Rebuild the three service areas as an interactive system
+Instead of six cramped cards, I’ll turn the core offering into a **three-domain interactive canvas**:
+- Cultural Strategy
+- Cross-Sector Intelligence
+- Deep Organizing
 
-### Frame 8 — Who We Are
-- Hero statement animates in large
-- Sector list staggers in as horizontal pills/tags (not a vertical list) — more modern, less document-like
-- Each pill has a subtle hover state revealing the description as a tooltip or expandable
+Each domain opens into:
+- what it is
+- what it unlocks
+- what donor advisors usually miss
+- a practical example
 
-### Frame 9 — The Promise
-- Single hero statement, very large type
-- Typewriter or clip-reveal animation
-- Supporting paragraph fades in after a beat
-- This frame should feel like a pause — lots of negative space
+The user can move between them horizontally within the frame. This is where the deck starts feeling like software, not slides.
 
-### Frame 10 — CTA
-- Minimal. Name, line, button.
-- Button has a glow/pulse animation on idle
+### 5) Make “How engagements work” feel like a real decision engine
+This section becomes a **choose-your-path sequence**:
+- First question: “Are you already up to speed, or starting fresh?”
+- If starting fresh: show the 2-phase journey
+- If already up to speed: show a compressed custom-scope path
+- End with a fork:
+  - you take it from here
+  - we build it with you
 
-### Frame 11 — Case Studies
-- Grid of cards with staggered entrance animation
-- Cards with content have a red top-border; others are dimmer
-- Hover lifts the card (translateY + shadow)
-- Lightbox opens with a scale-in animation from the card position
+The content shown changes based on the selected path, not just hover styling.
 
-### Frame 12 — Spacer (navigation padding)
-- Keep as-is
+### 6) Use the full screen for proof
+Case studies become a **trophy wall / evidence room**, not a closing grid dump:
+- one featured case gets immersive treatment
+- the rest live as a browsable field of proof cards
+- selecting one opens a more editorial side panel / lightbox
+- “coming soon” cards stay visible but clearly secondary
 
-## New Infrastructure
+## Revised frame sequence
+1. **Hero** — strong title, full-screen composition, immediate orientation  
+2. **Self-diagnosis** — interactive problem selector  
+3. **The real delta** — step-by-step confrontation of both sides’ processes  
+4. **What effective portfolios have in common** — three hallmarks, one at a time, not all at once  
+5. **Three service areas** — interactive system map  
+6. **Inside each capability** — guided deep dive driven by selected domain  
+7. **How we measure impact** — vanity vs power as a focused, progressive reveal  
+8. **Working together** — adaptive path based on client type  
+9. **Who we are** — credibility, sector access, pattern recognition  
+10. **Proof** — featured case study + expandable evidence field  
+11. **CTA** — tailored close that reflects selected pain / path  
+12. **Spacer / exit buffer** — keep navigation breathing room
 
-### `useFrameReveal` hook
-A custom hook that uses IntersectionObserver to track when a frame enters view and returns a `isActive` boolean + a `stagger(index)` helper that returns `{ opacity, transform, transition }` for sequenced reveals. Every frame wraps its children with this — zero per-frame animation boilerplate.
+## Interaction principles for v3
+- **One primary decision per frame**
+- **One red focal element at a time**
+- **No centered card pileups**
+- **Copy revealed in layers, not paragraphs**
+- **Every major interaction changes downstream context**
+- **Large compositions first, detail second**
 
-### `DeckFrame` upgrade
-Add an `onActive` callback and pass the reveal state down. The frame itself handles the stagger orchestration.
+## Files to change
 
-### Vertical progress nav
-Fixed right-side dots (below frame counter). Clickable. Active dot is red, others are dim white. Animates between states.
+### `src/components/deck/DeckFrame.tsx`
+- Remove the fixed `max-w-[900px]`
+- Add frame width modes (`narrow`, `wide`, `full`)
+- Add alignment options so content can anchor left / split / center depending on frame
+- Keep full-screen sticky/snap behavior
 
-### CSS additions to `index.css`
-- `@keyframes clip-reveal` (already exists)
-- `@keyframes counter-up` for number animations
-- Stagger utility classes
+### `src/pages/Deck.tsx`
+- Rewrite the deck around chapter/state logic
+- Add persistent state for:
+  - selected problem
+  - selected capability
+  - selected engagement path
+  - selected case study
+- Replace table/card-heavy sections with guided interactive sequences
+- Recompose frames to use wide/full layouts
 
-## What stays the same
-- All copy/content — identical words
-- DeckFrame scroll-snap architecture
-- HUD chrome (brackets, scan beam, frame counter, ESC hint)
-- useGlitchSFX on frame transitions
-- Arrow key + ESC navigation
-- Color system (red accent, near-black bg)
-- Font stack (Space Grotesk, JetBrains Mono)
-- Case study lightbox content
-- Dialog component for lightbox
+### `src/hooks/useFrameReveal.ts`
+- Keep the hook, but use it for **chapter staging**, not generic fade-on-everything
+- Add helpers for step-based reveal states where needed
 
-## Technical details
+### `src/index.css`
+- Add layout utilities for full-bleed deck canvases
+- Add transition primitives for chapter swapping, row stepping, panel slides, and state changes
+- Keep the existing visual identity, but support bigger compositions
 
-### Files modified
-- `src/pages/Deck.tsx` — full rewrite with animation system, interactive components, new layout patterns
-- `src/components/deck/DeckFrame.tsx` — add `onActive` prop and reveal state management
-- `src/index.css` — add stagger animation keyframes and utility classes
+## What stays
+- `/deck` route
+- full-screen scroll-snap structure
+- arrow key navigation
+- ESC to exit
+- existing overall visual language and typography direction
+- current content strategy / subject matter, but reorganized for absorption
 
-### No new dependencies. All animations are CSS transitions + IntersectionObserver.
+## What changes fundamentally
+- Not a “slide deck with nicer animation”
+- Not everything centered
+- Not every frame showing all its content at once
+- Not hover/accordion as the main idea
+- Yes to branching
+- Yes to full-width composition
+- Yes to app-like guided storytelling
 
+## Implementation outcome
+After this overhaul, the deck should feel like a **premium narrative product demo for an advisory firm**: the user makes a few smart choices, the system responds, the argument unfolds in controlled beats, and the screen finally feels used like a modern interactive medium instead of a presentation canvas.
