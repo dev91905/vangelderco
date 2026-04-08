@@ -612,85 +612,87 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Confrontation ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide">
-        <div ref={r3.ref} className="flex flex-col gap-4">
-          <div style={r3.stagger(0)}>
-            <p style={{ ...heading("clamp(18px, 2.2vw, 28px)"), fontWeight: 700, marginBottom: "4px" }}>
+        <div ref={r3.ref} className="flex flex-col" style={{ gap: "clamp(20px, 3vw, 36px)" }}>
+          {/* ── Editorial heading — split layout ── */}
+          <div className="flex flex-col lg:flex-row lg:items-end" style={{ gap: "clamp(12px, 2vw, 32px)", ...r3.stagger(0) }}>
+            <p style={{ ...heading("clamp(22px, 3vw, 38px)"), fontWeight: 700, flex: "1 1 45%", lineHeight: 1.15 }}>
               What you're up against.
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.45 }}>
+            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 17px)", color: f.ink(0.45), lineHeight: 1.55, flex: "1 1 55%" }}>
               Both sides of an issue try to do the same thing — shift public opinion, force policy outcomes. But they run completely different playbooks to get there.
             </p>
           </div>
 
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "80px 1fr 1fr",
-            borderRadius: "8px",
-            overflow: "hidden",
-            border: `1px solid ${f.ink(0.07)}`,
-            ...r3.stagger(1, 150),
-          }}>
-            {/* Header row */}
-            <div style={{ padding: "7px 12px", background: f.ink(0.04), borderBottom: `1px solid ${f.ink(0.07)}`, borderRight: `1px solid ${f.ink(0.05)}` }} />
-            <div style={{ padding: "7px 12px", background: f.ink(0.04), borderBottom: `1px solid ${f.ink(0.07)}`, borderRight: `1px solid ${f.ink(0.05)}` }}>
-              <p style={{ ...label("8px"), color: f.ink(0.4) }}>Your side</p>
-            </div>
-            <div style={{ padding: "7px 12px", background: f.ink(0.06), borderBottom: `1px solid ${f.ink(0.07)}` }}>
-              <p style={{ ...label("8px"), color: f.ink(0.5) }}>Their side</p>
+          {/* ── Premium comparison matrix ── */}
+          <div style={r3.stagger(1, 150)}>
+            {/* Column headers */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              paddingLeft: "clamp(90px, 9vw, 130px)",
+              borderBottom: `1.5px solid ${f.ink(0.12)}`,
+              paddingBottom: "8px",
+              marginBottom: "0",
+            }}>
+              <p style={{ ...label("9px"), color: f.ink(0.35) }}>Your side</p>
+              <p style={{ ...label("9px"), color: f.ink(0.55), fontWeight: 700 }}>Their side</p>
             </div>
 
+            {/* Rows */}
             {CONFRONTATION_ROWS.map((row, i) => {
               const isLast = i === CONFRONTATION_ROWS.length - 1;
               const anim = {
                 opacity: r3.isActive ? 1 : 0,
                 transform: r3.isActive ? "translateY(0)" : "translateY(4px)",
-                transition: `opacity 0.3s ease ${100 + i * 50}ms, transform 0.3s ease ${100 + i * 50}ms`,
+                transition: `opacity 0.35s ease ${120 + i * 55}ms, transform 0.35s ease ${120 + i * 55}ms`,
               };
               return (
-                <React.Fragment key={i}>
-                  <div style={{
-                    padding: "8px 12px",
-                    background: f.ink(0.02),
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.04)}` : "none",
-                    borderRight: `1px solid ${f.ink(0.05)}`,
-                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
-                    display: "flex", alignItems: "flex-start",
+                <div
+                  key={i}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "clamp(90px, 9vw, 130px) 1fr 1fr",
+                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
+                    borderTop: isLast ? `1.5px solid ${f.ink(0.12)}` : "none",
                     ...anim,
-                  }}>
+                  }}
+                >
+                  {/* Dimension label */}
+                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) 0", paddingRight: "16px" }}>
                     <p style={{
-                      fontFamily: f.sans, fontSize: "8px", fontWeight: 700,
-                      color: f.ink(0.4), textTransform: "uppercase" as const,
-                      letterSpacing: "0.06em", paddingTop: "1px",
+                      fontFamily: f.sans,
+                      fontSize: "9px",
+                      fontWeight: 600,
+                      color: f.ink(0.3),
+                      textTransform: "uppercase" as const,
+                      letterSpacing: "0.1em",
+                      lineHeight: 1.4,
                     }}>{row.dimension}</p>
                   </div>
-                  <div style={{
-                    padding: "8px 12px",
-                    background: f.ink(0.01),
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.04)}` : "none",
-                    borderRight: `1px solid ${f.ink(0.05)}`,
-                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
-                    ...anim,
-                  }}>
+                  {/* Your side */}
+                  <div style={{ padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)", borderLeft: `1px solid ${f.ink(0.06)}` }}>
                     <p style={{
-                      fontFamily: f.serif, fontSize: "clamp(11px, 1vw, 13px)",
-                      color: f.ink(0.55), lineHeight: 1.5,
-                      fontWeight: isLast ? 500 : 400,
+                      fontFamily: f.serif,
+                      fontSize: "clamp(12px, 1.1vw, 14px)",
+                      color: f.ink(0.45),
+                      lineHeight: 1.55,
                     }}>{row.yours}</p>
                   </div>
+                  {/* Their side */}
                   <div style={{
-                    padding: "8px 12px",
-                    background: f.ink(0.05),
-                    borderBottom: !isLast ? `1px solid ${f.ink(0.06)}` : "none",
-                    borderTop: isLast ? `1px solid ${f.ink(0.08)}` : "none",
-                    ...anim,
+                    padding: "clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px)",
+                    borderLeft: `1px solid ${f.ink(0.06)}`,
+                    background: isLast ? f.ink(0.03) : "transparent",
                   }}>
                     <p style={{
-                      fontFamily: f.serif, fontSize: "clamp(11px, 1vw, 13px)",
-                      color: f.ink(0.72), lineHeight: 1.5,
+                      fontFamily: f.serif,
+                      fontSize: "clamp(12px, 1.1vw, 14px)",
+                      color: f.ink(0.75),
+                      lineHeight: 1.55,
                       fontWeight: isLast ? 600 : 500,
                     }}>{row.theirs}</p>
                   </div>
-                </React.Fragment>
+                </div>
               );
             })}
           </div>
