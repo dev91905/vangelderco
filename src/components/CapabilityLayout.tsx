@@ -49,7 +49,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
             {title}
           </h1>
 
-          <p className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl" style={{ ...t.body(), fontSize: "clamp(17px, 1.9vw, 19px)", textAlign: "center", animation: "fade-up 0.6s ease-out 0.9s both" }}>
+          <p className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl" style={{ fontFamily: t.serif, fontSize: "clamp(17px, 1.9vw, 19px)", color: t.ink(0.55), lineHeight: 1.8, textAlign: "center", animation: "fade-up 0.6s ease-out 0.9s both" }}>
             {description}
           </p>
 
