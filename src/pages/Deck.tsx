@@ -541,22 +541,6 @@ const Deck = () => {
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
                     {pain.detail}
                   </p>
-                  {isSelected && (
-                    <p
-                      style={{
-                        marginTop: "16px",
-                        paddingTop: "12px",
-                        borderTop: `1px solid ${f.ink(0.1)}`,
-                        fontFamily: f.sans,
-                        fontSize: "clamp(12px, 1.3vw, 14px)",
-                        color: f.ink(0.5),
-                        lineHeight: 1.6,
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {pain.consequence}
-                    </p>
-                  )}
                 </button>
               );
             })}
