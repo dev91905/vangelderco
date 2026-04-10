@@ -461,7 +461,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <TypewriterHeading
-            text="Let's figure out if there's a fit."
+            text="Let's diagnose your communications."
             active={r1.isActive}
             style={{
               fontFamily: f.sans,
@@ -484,8 +484,8 @@ const Deck = () => {
               lineHeight: 1.4,
             }}
           >
-            This is a five-minute walkthrough that helps us understand your situation{" "}
-            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>— and shows you how we think about it.</em>
+            A five-minute diagnostic that benchmarks your strategic communications against the other side{" "}
+            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>— and shows you exactly where the gaps are.</em>
           </p>
           <div
             style={{
@@ -521,7 +521,7 @@ const Deck = () => {
               Get started →
             </button>
             <span style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em", color: f.ink(0.25) }}>
-              5 min · interactive diagnostic
+              5 min · communications diagnostic
             </span>
           </div>
         </div>
@@ -532,7 +532,7 @@ const Deck = () => {
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
-              Tell us where you are.
+              Where are your communications right now?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1, 200, "blur-up"), flex: "1 1 auto", paddingBottom: "clamp(6px, 0.8vw, 12px)" }}>
               This helps us understand your situation before we talk. Select everything that resonates.
@@ -631,7 +631,7 @@ const Deck = () => {
             </p>
             {!quizRevealed && (
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.5 }}>
-                Two approaches to {QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick whichever you think works better.
+                Two communications approaches to {QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.
               </p>
             )}
           </div>
@@ -824,7 +824,7 @@ const Deck = () => {
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              Here's what separates portfolios that move policy from ones that report on awareness.
+              Here's what separates communications that move policy from ones that report on awareness.
             </p>
             {selectedPainDatas.length > 0 && (
               <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
@@ -885,7 +885,7 @@ const Deck = () => {
         <div ref={r5.ref} className="flex flex-col w-full" style={{ justifyContent: "center" }}>
           <div style={{ transition: "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)", transform: activeDomain ? "translateY(-20px)" : "translateY(0)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up"), marginBottom: "12px" }}>
-              Where do you need the most help?
+              Where do your communications need the most help?
             </p>
             <p style={{ ...body(0.4), ...r5.stagger(1, 200, "blur-up"), marginBottom: activeDomain ? "24px" : "48px", maxWidth: "500px", transition: "margin 0.4s ease" }}>
               Select the domains most relevant to your situation.
@@ -1030,7 +1030,7 @@ const Deck = () => {
         <div ref={r7.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              Which of these do you currently track?
+              How do you measure your communications today?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
               Check everything your grantees report on today. Be honest — there are no wrong answers.
@@ -1091,7 +1091,7 @@ const Deck = () => {
       {/* ═══ FRAME 8: Working Together ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="flex flex-col gap-8 w-full">
-          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r8.stagger(0, 0, "blur-up") }}>How do you want to start?</p>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r8.stagger(0, 0, "blur-up") }}>How do you want to start working on your communications?</p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full" style={r8.stagger(1, 300, "blur-scale")}>
             {([
@@ -1166,7 +1166,7 @@ const Deck = () => {
         <div ref={r9.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[45%] flex flex-col justify-center">
             <p style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
-              We've been where you are.
+              We've built the communications you're trying to buy.
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300, "blur-up"), marginTop: "20px", maxWidth: "400px" }}>
               Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
@@ -1252,7 +1252,7 @@ const Deck = () => {
           ) : (
             <>
               <h2 style={{ ...r10.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-                We've got a picture. Let's talk.
+                We've got a picture of your communications. Let's talk.
               </h2>
               <p style={{ ...r10.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
                 Leave your details and we'll send your diagnostic. Or book a call and walk through it together.
@@ -1363,7 +1363,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(10)} mode="wide">
         <div ref={r11.ref} className="flex flex-col gap-8 w-full">
           <div style={r11.stagger(0, 0, "blur-up")}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>Selected case work.</p>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>Selected communications work.</p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>Click any case to read the full story.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" style={r11.stagger(1, 300, "blur-scale")}>
@@ -1413,7 +1413,7 @@ const Deck = () => {
                 onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))"; }}
               >
-                Send your intake →
+                Send your communications intake →
               </button>
             </>
           )}
