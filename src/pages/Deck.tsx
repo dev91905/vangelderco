@@ -435,7 +435,7 @@ const Deck = () => {
   const opponentPickCount = quizAnswers.filter(a => a?.picked === "theirs").length;
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Domains", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
 
   return (
     <div
