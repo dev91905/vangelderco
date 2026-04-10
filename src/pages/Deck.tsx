@@ -750,34 +750,34 @@ const Deck = () => {
                             <div style={{
                               padding: "clamp(12px, 1.5vw, 20px)",
                               borderRadius: "8px",
-                              background: "hsl(0 60% 50% / var(--a-bg))",
-                              border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
+                              background: f.ink(0.03),
+                              border: `1px solid ${f.ink(0.08)}`,
                             }}>
-                              <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-mid))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-mid))" }} />
+                              <p style={{ ...label("9px"), color: f.ink(0.35), fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: f.ink(0.25) }} />
                                 Your side
                               </p>
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(15px, 1.5vw, 20px)",
-                                color: "hsl(0 60% 50% / var(--a-high))",
+                                color: f.ink(0.6),
                                 lineHeight: 1.65,
                               }}>{row.yours}</p>
                             </div>
                             <div style={{
                               padding: "clamp(12px, 1.5vw, 20px)",
                               borderRadius: "8px",
-                              background: "hsl(145 50% 40% / var(--a-bg))",
-                              border: "1px solid hsl(145 50% 40% / var(--a-border-card))",
+                              background: "hsl(0 60% 50% / var(--a-bg))",
+                              border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
                             }}>
-                              <p style={{ ...label("9px"), color: "hsl(145 50% 40% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(145 50% 40% / var(--a-high))" }} />
+                              <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-high))" }} />
                                 Their side
                               </p>
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(15px, 1.5vw, 20px)",
-                                color: "hsl(145 50% 40% / var(--a-high))",
+                                color: "hsl(0 60% 50% / var(--a-high))",
                                 lineHeight: 1.65,
                                 fontWeight: 500,
                               }}>{row.theirs}</p>
@@ -835,34 +835,34 @@ const Deck = () => {
                           <div style={{
                             padding: "clamp(16px, 2vw, 24px)",
                             borderRadius: "8px",
-                            background: "hsl(0 60% 50% / var(--a-bg))",
-                            border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
+                            background: f.ink(0.03),
+                            border: `1px solid ${f.ink(0.08)}`,
                           }}>
-                            <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-mid))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-mid))" }} />
+                            <p style={{ ...label("9px"), color: f.ink(0.35), fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: f.ink(0.25) }} />
                               Your approach
                             </p>
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(13px, 1.4vw, 17px)",
-                              color: "hsl(0 60% 50% / var(--a-high))",
+                              color: f.ink(0.6),
                               lineHeight: 1.6,
                             }}>{overall.yours}</p>
                           </div>
                           <div style={{
                             padding: "clamp(16px, 2vw, 24px)",
                             borderRadius: "8px",
-                            background: "hsl(145 50% 40% / var(--a-bg))",
-                            border: "1px solid hsl(145 50% 40% / var(--a-border-card))",
+                            background: "hsl(0 60% 50% / var(--a-bg))",
+                            border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
                           }}>
-                            <p style={{ ...label("9px"), color: "hsl(145 50% 40% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(145 50% 40% / var(--a-high))" }} />
+                            <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-high))" }} />
                               Their approach
                             </p>
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(13px, 1.4vw, 17px)",
-                              color: "hsl(145 50% 40% / var(--a-high))",
+                              color: "hsl(0 60% 50% / var(--a-high))",
                               lineHeight: 1.6,
                               fontWeight: 500,
                             }}>{overall.theirs}</p>
