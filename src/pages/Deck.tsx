@@ -72,13 +72,13 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "01 Research", yours: "Test messages in a lab. Focus groups, message testing, pre-launch polling — all before a single dollar goes to market.", theirs: "Monitor what's already resonating organically across platforms and communities. Skip the lab — study the wild." },
-  { dimension: "02 Content", yours: "Produce polished ads, post explainers, place op-eds — and if there's budget, fund a documentary that nobody sees.", theirs: "Invest in digital creator economies and fund investigative journalism so political ideology and conspiracies form in real time. Round-the-clock content, constantly." },
-  { dimension: "03 Distribution", yours: "Buy placements on platforms where a 3-second scroll-by counts as a \"view.\" No one remembers it. They forget the moment they scroll past.", theirs: "Buy the platforms themselves. Change the algorithms, the programming, the editorial direction. Own the infrastructure attention flows through." },
-  { dimension: "04 Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree.", theirs: "Take the conversation offline. Organize and fund mega-structures — faith communities, campuses, business networks, legal networks, veterans groups. That's culture." },
-  { dimension: "05 Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics." },
-  { dimension: "06 Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization." },
-  { dimension: "Overall", yours: "Test messages in a controlled environment, then pay people to watch the winners.", theirs: "Fund everything, find what catches fire organically, and supercharge it with infrastructure and capital." },
+  { dimension: "01 Research", yours: "Test messages in a lab — focus groups, polls, pre-launch studies — before a single dollar goes to market.", theirs: "Skip the lab. Monitor what's already resonating organically across platforms and communities." },
+  { dimension: "02 Content", yours: "Produce polished ads, post explainers, place op-eds. If there's budget, fund a documentary nobody sees.", theirs: "Fund creator economies and investigative journalism. Ideology forms in real time. Content never stops." },
+  { dimension: "03 Distribution", yours: "Buy placements where a 3-second scroll-by counts as a \"view.\" Nobody remembers. Nobody comes back.", theirs: "Buy the platforms themselves. Rewrite the algorithms, the programming, the editorial direction." },
+  { dimension: "04 Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree with you.", theirs: "Take it offline. Fund faith communities, campuses, business networks, legal orgs. Build culture." },
+  { dimension: "05 Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Wonder why nothing sticks.", theirs: "Track who's new to the table. Measure what's shifting policy. Growth over time, not vanity metrics." },
+  { dimension: "06 Iteration", yours: "Declare success when the grant ends. Say you need more money. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour into what's working. Compound gains across years. No sentiment." },
+  { dimension: "Overall", yours: "Test messages in a controlled environment, then pay people to watch the winners.", theirs: "Fund everything, find what catches fire organically, and supercharge with infrastructure and capital." },
 ];
 
 /* ─── Three domains ─── */
