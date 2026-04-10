@@ -236,14 +236,11 @@
   background: hsl(var(--foreground) / 0.03) !important;
 }
 
-/* Snap scroll container — section-by-section */
+/* Smooth scroll container */
 .snap-scroll-container {
-  scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
 }
 .snap-section {
-  scroll-snap-align: start;
-  height: 100dvh;
   min-height: 100dvh;
 }
 
