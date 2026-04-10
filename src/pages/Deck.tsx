@@ -451,33 +451,26 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 28px 24px" }}>
+        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 32px 40px" }}>
+          {/* Progress bar */}
+          <div style={{ marginBottom: "20px", height: "2px", borderRadius: "1px", background: f.ink(0.06), overflow: "hidden" }}>
+            <div
+              style={{
+                height: "100%",
+                width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
+                background: "hsl(var(--foreground) / var(--a-mid))",
+                borderRadius: "1px",
+                transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+              }}
+            />
+          </div>
+          {/* Nav buttons */}
           <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1400px", margin: "0 auto" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
-            <div className="flex items-center gap-3">
-              <span style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.2), letterSpacing: "0.04em" }}>
-                Enter ↵ or ↓
-              </span>
-              <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
-            </div>
+            <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
           </div>
         </div>
       )}
-
-      {/* ─── Fixed progress bar ─── */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 0 16px 0" }}>
-        <div style={{ margin: "0 28px", height: "2px", borderRadius: "1px", background: f.ink(0.06), overflow: "hidden" }}>
-          <div
-            style={{
-              height: "100%",
-              width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
-              background: "hsl(var(--foreground) / var(--a-mid))",
-              borderRadius: "1px",
-              transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-            }}
-          />
-        </div>
-      </div>
 
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide">
