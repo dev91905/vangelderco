@@ -829,8 +829,11 @@ const Deck = () => {
                 </p>
               </div>
 
-              {/* Dimension-by-dimension breakdown */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+              {/* Dimension-by-dimension breakdown with explanations */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: f.ink(0.3), marginBottom: "16px" }}>
+                  Dimension by dimension
+                </p>
                 {QUIZ_ROWS.map((row, i) => {
                   const answer = quizAnswers[i];
                   const pickedNextGen = answer?.picked === "theirs";
@@ -838,52 +841,74 @@ const Deck = () => {
                     <div
                       key={i}
                       style={{
-                        display: "grid",
-                        gridTemplateColumns: "clamp(80px, 10vw, 120px) 1fr",
-                        gap: "0",
-                        padding: "clamp(14px, 1.5vw, 20px) 0",
-                        borderBottom: i < QUIZ_ROWS.length - 1 ? `1px solid ${f.ink(0.06)}` : "none",
+                        padding: "clamp(20px, 2vw, 28px)",
+                        marginBottom: "12px",
+                        borderRadius: "12px",
+                        background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg-subtle))" : f.ink(0.02),
+                        border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.06)}`,
                         animation: `fade-up 0.35s ease-out ${i * 80}ms both`,
                       }}
                     >
-                      {/* Dimension label */}
-                      <div style={{ display: "flex", alignItems: "flex-start", paddingTop: "2px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "10px", fontWeight: 600, color: f.ink(0.3), textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                      {/* Header row: dimension + badge */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>
                           {row.dimension}
+                        </p>
+                        <span style={{
+                          fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          padding: "3px 10px", borderRadius: "999px",
+                          color: pickedNextGen ? "hsl(150 50% 36%)" : "hsl(25 80% 50%)",
+                          background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : "hsl(25 80% 50% / 0.1)",
+                        }}>
+                          {pickedNextGen ? "Next-Gen ✓" : "Traditional"}
+                        </span>
+                      </div>
+
+                      {/* What they picked */}
+                      <p style={{
+                        fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)",
+                        color: f.ink(0.55), lineHeight: 1.65, marginBottom: "14px",
+                      }}>
+                        <span style={{ fontWeight: 600, color: f.ink(0.65) }}>You picked: </span>
+                        {pickedNextGen ? row.theirs : row.yours}
+                      </p>
+
+                      {/* Explanation — why this matters */}
+                      <div style={{
+                        borderTop: `1px solid ${f.ink(0.06)}`,
+                        paddingTop: "14px",
+                      }}>
+                        <p style={{
+                          fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)",
+                          color: f.ink(0.5), lineHeight: 1.7, fontStyle: "italic",
+                        }}>
+                          {row.explanation}
                         </p>
                       </div>
 
-                      {/* What they picked — single column, clear label */}
-                      <div style={{ paddingLeft: "clamp(12px, 1.5vw, 20px)" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                          <span style={{
-                            fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            padding: "3px 10px", borderRadius: "999px",
-                            color: pickedNextGen ? "hsl(150 50% 36%)" : f.ink(0.4),
-                            background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : f.ink(0.05),
-                          }}>
-                            {pickedNextGen ? "Next-Gen" : "Traditional"}
-                          </span>
-                          <span style={{ fontFamily: f.sans, fontSize: "9px", color: f.ink(0.2) }}>
-                            Your pick
-                          </span>
-                        </div>
-                        <p style={{
-                          fontFamily: f.sans,
-                          fontSize: "clamp(12px, 1.2vw, 14px)",
-                          color: pickedNextGen ? f.ink(0.65) : f.ink(0.4),
-                          lineHeight: 1.6,
+                      {/* If they picked traditional, show what the better approach looks like */}
+                      {!pickedNextGen && (
+                        <div style={{
+                          marginTop: "14px", padding: "14px 16px",
+                          borderRadius: "8px",
+                          background: "hsl(var(--foreground) / var(--a-bg))",
+                          border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                         }}>
-                          {pickedNextGen ? row.theirs : row.yours}
-                        </p>
-                      </div>
+                          <p style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: f.ink(0.3), marginBottom: "8px" }}>
+                            The next-gen approach
+                          </p>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.6), lineHeight: 1.65 }}>
+                            {row.theirs}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
 
-              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", display: "flex", justifyContent: "center" }}>
+              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", marginBottom: "40px", display: "flex", justifyContent: "center" }}>
                 <NavRow onBack={() => scrollToFrame(1)} onNext={() => scrollToFrame(3)} />
               </div>
             </div>
