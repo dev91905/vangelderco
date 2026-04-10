@@ -72,7 +72,7 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "01 Research", yours: "Test messages in a lab — focus groups, polls, pre-launch studies — before a single dollar goes to market.", theirs: "Skip the lab. Monitor what's already resonating organically across platforms and communities." },
+  { dimension: "01 Research", yours: "Test messages in a lab — focus groups, polls, pre-launch studies — before a single dollar goes to market.", theirs: "Skip the lab — study the wild. Monitor what's already resonating organically across platforms and communities." },
   { dimension: "02 Content", yours: "Produce polished ads, post explainers, place op-eds. If there's budget, fund a documentary nobody sees.", theirs: "Fund creator economies and investigative journalism. Ideology forms in real time. Content never stops." },
   { dimension: "03 Distribution", yours: "Buy placements where a 3-second scroll-by counts as a \"view.\" Nobody remembers. Nobody comes back.", theirs: "Buy the platforms themselves. Rewrite the algorithms, the programming, the editorial direction." },
   { dimension: "04 Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree with you.", theirs: "Take it offline. Fund faith communities, campuses, business networks, legal orgs. Build culture." },
