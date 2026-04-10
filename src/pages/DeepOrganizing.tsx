@@ -5,7 +5,7 @@ const DeepOrganizing = () => (
     capability="deep-organizing"
     label="VGC Domain // 003"
     title="Deep Organizing"
-    description="Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between communications that grow a movement and ones that stall."
+    description="Campaigns create momentum. We make sure it lasts. We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise."
   />
 );
 
