@@ -569,8 +569,9 @@ const Deck = () => {
                 background: customOpen || customSaved ? "hsl(var(--destructive) / var(--a-bg-subtle))" : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
-                transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
-                transition: "opacity 0.3s ease 400ms, transform 0.3s ease 400ms, background 0.15s ease",
+                transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
+                filter: r2.isActive ? "blur(0px)" : "blur(4px)",
+                transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.15s ease",
               }}
             >
               {customSaved && !customOpen ? (
@@ -679,7 +680,7 @@ const Deck = () => {
             </div>
           </div>
           {selectedPains.length === 0 && (
-            <p style={{ ...label("9px"), ...r2.stagger(3, 800) }}>
+            <p style={{ ...label("9px"), ...r2.stagger(3, 1000, "blur-up") }}>
               → or skip and keep scrolling
             </p>
           )}
@@ -912,7 +913,7 @@ const Deck = () => {
       {/* ═══ FRAME 4: Hallmarks ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0)}>
+          <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Stratcomm portfolios that get results do these three things.
             </p>
@@ -942,8 +943,9 @@ const Deck = () => {
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
-                    transform: r4.isActive ? "translateY(0)" : "translateY(12px)",
-                    transition: `all 0.5s ease ${200 + i * 150}ms`,
+                    transform: r4.isActive ? "translateX(0) scale(1)" : "translateX(30px) scale(0.97)",
+                    filter: r4.isActive ? "blur(0px)" : "blur(5px)",
+                    transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms`,
                   }}
                 >
                   <div className="flex items-center gap-4">
