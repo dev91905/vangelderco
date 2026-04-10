@@ -72,12 +72,12 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "Research", yours: "Commission focus groups and test messages before launching a campaign.", theirs: "Monitor what's already resonating organically across platforms and communities." },
-  { dimension: "Content", yours: "Produce polished ads, place op-eds, and fund a documentary on a campaign calendar.", theirs: "Invest in digital creator economies where ideology forms in real time — and fund investigative journalism to develop new media talent." },
-  { dimension: "Distribution", yours: "Buy placements on platforms and hope the right audiences see them.", theirs: "Acquire the platforms themselves and change the programming, algorithms, and editorial direction." },
-  { dimension: "Engagement", yours: "Hire influencers to post scripted content for a single grant cycle.", theirs: "Organize at scale through churches, veteran groups, campuses, and local business networks — building durable infrastructure." },
-  { dimension: "Measurement", yours: "Count impressions and media mentions when the grant closes.", theirs: "Run public polls designed to shift policy baselines and track what's actually moving legislation in real time." },
-  { dimension: "Iteration", yours: "Declare success when the grant period ends and move to the next proposal.", theirs: "Cut what's failing mid-cycle, pour resources into what's working, and compound gains across years." },
+  { dimension: "01 Research", yours: "Commission focus groups and test messages before launching a campaign.", theirs: "Monitor what's already resonating organically across platforms and communities." },
+  { dimension: "02 Content", yours: "Produce polished ads, place op-eds, and fund a documentary on a campaign calendar.", theirs: "Invest in digital creator economies where ideology forms in real time — and fund investigative journalism to develop new media talent." },
+  { dimension: "03 Distribution", yours: "Buy placements on platforms and hope the right audiences see them.", theirs: "Acquire the platforms themselves and change the programming, algorithms, and editorial direction." },
+  { dimension: "04 Engagement", yours: "Hire influencers to post scripted content for a single grant cycle.", theirs: "Organize at scale through churches, veteran groups, campuses, and local business networks — building durable infrastructure." },
+  { dimension: "05 Measurement", yours: "Count impressions and media mentions when the grant closes.", theirs: "Run public polls designed to shift policy baselines and track what's actually moving legislation in real time." },
+  { dimension: "06 Iteration", yours: "Declare success when the grant period ends and move to the next proposal.", theirs: "Cut what's failing mid-cycle, pour resources into what's working, and compound gains across years." },
   { dimension: "Overall", yours: "Test messages in a controlled environment, then pay people to watch the winners.", theirs: "Fund everything, find what catches fire organically, and supercharge it with infrastructure and capital." },
 ];
 
