@@ -211,26 +211,52 @@ const AdminEditor = () => {
         )}
 
         {type === "field-note" && (
-          <div className="px-4 md:px-8 py-6 max-w-2xl mx-auto space-y-6">
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Slug Line</label>
-              <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)} placeholder="e.g. INTELLIGENCE · CULTURE · ORGANIZING"
-                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
+          <div className="px-6 md:px-8 pt-10 pb-16 max-w-[560px] mx-auto">
+            {/* Elegant centered field note form */}
+            <div className="flex flex-col items-center mb-12">
+              <span className="text-[11px] uppercase tracking-[0.14em] mb-3" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>Field Note</span>
+              <div className="w-8" style={{ height: "1px", background: "hsl(30 10% 12% / 0.1)" }} />
             </div>
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Brief</label>
-              <textarea value={excerpt} onChange={(e) => markDirty(setExcerpt)(e.target.value)} placeholder="One to two sentences — what happened, what was accomplished"
-                rows={3} className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl resize-none" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)", lineHeight: "1.6" }} />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Impact Stat</label>
-              <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)} placeholder="e.g. $12M mobilized across 3 foundations"
-                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Link <span style={{ color: "hsl(30 10% 12% / 0.2)", textTransform: "none", letterSpacing: "0" }}>optional — internal slug or external URL</span></label>
-              <input value={linkUrl || ""} onChange={(e) => markDirty(setLinkUrl)(e.target.value || null)} placeholder="e.g. /post/clean-energy or https://nytimes.com/..."
-                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
+
+            <div className="space-y-10">
+              {/* Slug line — elegant inline */}
+              <div className="group">
+                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block transition-colors" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>Slug Line</label>
+                <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)}
+                  placeholder="INTELLIGENCE · CULTURE · ORGANIZING"
+                  className="w-full bg-transparent outline-none pb-3 transition-colors"
+                  style={{ ...label, color: "hsl(30 10% 12% / 0.75)", fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase", borderBottom: "1px solid hsl(30 10% 12% / 0.08)" }} />
+              </div>
+
+              {/* Brief */}
+              <div className="group">
+                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block transition-colors" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>Brief</label>
+                <textarea value={excerpt} onChange={(e) => markDirty(setExcerpt)(e.target.value)}
+                  placeholder="What happened. What was accomplished."
+                  rows={3}
+                  className="w-full bg-transparent outline-none resize-none pb-3 transition-colors"
+                  style={{ ...label, color: "hsl(30 10% 12% / 0.7)", fontSize: "15px", lineHeight: "1.75", borderBottom: "1px solid hsl(30 10% 12% / 0.08)" }} />
+              </div>
+
+              {/* Impact stat */}
+              <div className="group">
+                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block transition-colors" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>Impact Stat</label>
+                <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)}
+                  placeholder="$12M mobilized across 3 foundations"
+                  className="w-full bg-transparent outline-none pb-3 transition-colors"
+                  style={{ ...label, color: "hsl(30 10% 12% / 0.7)", fontSize: "15px", borderBottom: "1px solid hsl(30 10% 12% / 0.08)" }} />
+              </div>
+
+              {/* Link */}
+              <div className="group">
+                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block transition-colors" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>
+                  Link <span style={{ color: "hsl(30 10% 12% / 0.15)", textTransform: "none", letterSpacing: "0", fontSize: "10px" }}>optional</span>
+                </label>
+                <input value={linkUrl || ""} onChange={(e) => markDirty(setLinkUrl)(e.target.value || null)}
+                  placeholder="/post/clean-energy or https://nytimes.com/..."
+                  className="w-full bg-transparent outline-none pb-3 transition-colors"
+                  style={{ ...label, color: "hsl(30 10% 12% / 0.5)", fontSize: "14px", borderBottom: "1px solid hsl(30 10% 12% / 0.08)" }} />
+              </div>
             </div>
           </div>
         )}
