@@ -976,11 +976,12 @@ const Deck = () => {
                   className="lg:w-[62%] flex flex-col gap-4 results-scrollbar"
                   data-results-scroll="true"
                   style={{
-                    maxHeight: "calc(100dvh - 80px)",
+                    maxHeight: "100dvh",
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingRight: "8px",
-                    paddingBottom: "40px",
+                    paddingTop: "40px",
+                    paddingBottom: "60px",
                   }}
                 >
                   {QUIZ_ROWS.map((row, i) => {
