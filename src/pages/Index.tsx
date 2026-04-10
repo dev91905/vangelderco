@@ -192,6 +192,13 @@ const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
   const [scrollY, setScrollY] = useState(0);
+  const [glowIndex, setGlowIndex] = useState(0);
+
+  // Cycle glow through the 6 sector pills
+  useEffect(() => {
+    const id = setInterval(() => setGlowIndex((p) => (p + 1) % SECTORS.length), 2000);
+    return () => clearInterval(id);
+  }, []);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
 
@@ -293,21 +300,26 @@ const Index = () => {
             className="flex flex-wrap justify-center gap-2 md:gap-3"
             style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both` }}
           >
-            {SECTORS.map((sector, i) => (
-              <span
-                key={sector}
-                className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
-                style={{
-                  fontFamily: t.sans,
-                  color: "hsl(var(--destructive) / var(--a-mid))",
-                  background: "hsl(var(--destructive) / var(--a-bg))",
-                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
-                  animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
-                }}
-              >
-                {sector}
-              </span>
-            ))}
+            {SECTORS.map((sector, i) => {
+              const isGlowing = i === glowIndex;
+              return (
+                <span
+                  key={sector}
+                  className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
+                  style={{
+                    fontFamily: t.sans,
+                    color: isGlowing ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-mid))",
+                    background: isGlowing ? "hsl(var(--destructive) / 0.14)" : "hsl(var(--destructive) / var(--a-bg))",
+                    border: `1px solid ${isGlowing ? "hsl(var(--destructive) / 0.45)" : "hsl(var(--destructive) / var(--a-border))"}`,
+                    boxShadow: isGlowing ? "0 0 20px -4px hsl(var(--destructive) / 0.2)" : "none",
+                    transition: "all 0.6s ease",
+                    animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
+                  }}
+                >
+                  {sector}
+                </span>
+              );
+            })}
           </div>
 
           <span
@@ -519,26 +531,23 @@ const Index = () => {
             {NETWORK_SECTORS.map((sector, i) => (
               <RevealBlock key={sector} delay={0.25 + i * 0.04}>
                 <span
-                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default dark:animate-[pill-glow_4s_ease-in-out_infinite]"
+                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
                   style={{
                     fontFamily: t.sans,
                     color: "hsl(var(--destructive) / var(--a-high))",
                     background: "hsl(var(--destructive) / var(--a-bg))",
                     border: "1px solid hsl(var(--destructive) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
-                    animationDelay: `${i * 0.35}s`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
                     e.currentTarget.style.color = "hsl(var(--destructive))";
-                    e.currentTarget.style.animationPlayState = "paused";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
                     e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
-                    e.currentTarget.style.animationPlayState = "running";
                   }}
                 >
                   {sector}

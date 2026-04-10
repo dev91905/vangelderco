@@ -230,16 +230,18 @@
   50% { opacity: 0; }
 }
 
-/* Network pill cycling glow — dark mode only */
+/* Sector pill sequential glow — dark mode only */
 @keyframes pill-glow {
-  0%, 100% {
+  0%, 10% {
+    background: hsl(var(--destructive) / 0.14);
+    border-color: hsl(var(--destructive) / 0.45);
+    color: hsl(var(--destructive));
+    box-shadow: 0 0 20px -4px hsl(var(--destructive) / 0.2);
+  }
+  20%, 100% {
     background: hsl(var(--destructive) / var(--a-bg));
     border-color: hsl(var(--destructive) / var(--a-border));
+    color: hsl(var(--destructive) / var(--a-mid));
     box-shadow: 0 0 0 0 hsl(var(--destructive) / 0);
-  }
-  50% {
-    background: hsl(var(--destructive) / 0.14);
-    border-color: hsl(var(--destructive) / 0.5);
-    box-shadow: 0 0 20px -4px hsl(var(--destructive) / 0.25);
   }
 }
