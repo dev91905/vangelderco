@@ -376,7 +376,7 @@ const Index = () => {
                 letterSpacing: "0.25em",
               }}
             >
-              Our Approach to Communications
+              The Altitude
             </p>
           </RevealBlock>
           <RevealBlock delay={0.15}>
@@ -389,7 +389,7 @@ const Index = () => {
                 color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
-              Your communications are on the ground. We see them from orbit.
+              You're in the spy plane. We're in the satellite.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.3}>
@@ -402,7 +402,7 @@ const Index = () => {
                 color: t.ink(0.85),
               }}
             >
-              One picture. Every sector. Every gap.
+              Most firms see one sector. We see all of them at once.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.5}>
@@ -411,13 +411,7 @@ const Index = () => {
               className="text-xs leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
             >
-              We identify the communications alignment that nobody in any single sector can see from where they sit.
-            </p>
-            <p
-              className="mt-4 max-w-2xl"
-              style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.45), lineHeight: 1.8 }}
-            >
-              We're strategic communications specialists — cultural strategy, media-based organizing, and cross-sector coordination — helping donors and their grantees close the gap between spend and impact.
+              At 30,000 feet you see your sector clearly. At 80,000 feet you see where energy, labor, culture, faith, policy, and philanthropy are already aligned on things they don't know they're aligned on. That's where the leverage is — and that's where we operate.
             </p>
           </RevealBlock>
         </div>
