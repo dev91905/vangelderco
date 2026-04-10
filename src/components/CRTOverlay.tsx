@@ -5,37 +5,49 @@ const CRTOverlay = () => {
   if (!isDark) return null;
 
   return (
-    <div className="fixed inset-0 z-10 pointer-events-none" aria-hidden="true">
-      {/* Scan lines */}
+    <>
+      {/* Scan lines — white lines, 3px pitch, covers full viewport with bleed */}
       <div
-        className="absolute inset-0"
+        className="pointer-events-none fixed z-[1]"
         style={{
+          top: "-50%",
+          left: "-50%",
+          width: "200%",
+          height: "200%",
           background:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px)",
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(0 0% 100%) 2px, hsl(0 0% 100%) 3px)",
+          opacity: 0.03,
         }}
+        aria-hidden="true"
       />
 
-      {/* Scan beam */}
+      {/* Scan beam — 1px white line sweeping vertically */}
       <div
-        className="absolute left-0 right-0 crt-scan-beam"
+        className="pointer-events-none fixed left-0 z-20 w-full"
         style={{
-          height: "120px",
+          height: "1px",
           background:
-            "linear-gradient(180deg, transparent 0%, hsla(0,80%,48%,0.04) 40%, hsla(0,80%,48%,0.07) 50%, hsla(0,80%,48%,0.04) 60%, transparent 100%)",
-          animation: "crt-scan-beam 8s linear infinite",
+            "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)",
+          animation: "scan-beam 7s linear infinite",
         }}
+        aria-hidden="true"
       />
 
-      {/* Breathing red glow */}
+      {/* Breathing red glow — centered, subtle */}
       <div
-        className="absolute inset-0"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0"
         style={{
+          width: "min(80vw, 700px)",
+          height: "min(80vh, 600px)",
+          borderRadius: "50%",
           background:
-            "radial-gradient(ellipse at 50% 50%, hsla(0,80%,48%,0.06) 0%, transparent 70%)",
-          animation: "crt-breathe 8s ease-in-out infinite",
+            "radial-gradient(ellipse at center, hsl(0 80% 48% / 0.18) 0%, hsl(0 80% 48% / 0.10) 30%, hsl(0 80% 48% / 0.03) 55%, transparent 80%)",
+          animation: "breathe 8s ease-in-out infinite",
+          transform: "translate(-50%, -50%)",
         }}
+        aria-hidden="true"
       />
-    </div>
+    </>
   );
 };
 
