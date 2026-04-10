@@ -91,14 +91,16 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
             <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
           </button>
         </div>
-        <div className="mt-3">
-          <label className="text-[11px] uppercase tracking-[0.06em] mb-1 flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
-            {props.type === "field-note" ? "ALERT / BRIEF" : "DEK"}
-            {!props.excerpt?.trim() && props.isPublished && <span style={{ color: t.error(0.6), fontSize: "10px" }}>MISSING</span>}
-          </label>
-          <textarea value={props.excerpt} onChange={(e) => props.onExcerptChange(e.target.value)} placeholder={props.type === "field-note" ? "One to two sentences — what happened, what was accomplished" : "Short description shown on listing cards and below the title"}
-            rows={2} className="w-full bg-transparent outline-none text-sm resize-none" style={{ fontFamily: t.sans, color: t.ink(0.55), lineHeight: "1.6" }} />
-        </div>
+        {props.type !== "field-note" && (
+          <div className="mt-3">
+            <label className="text-[11px] uppercase tracking-[0.06em] mb-1 flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
+              DEK
+              {!props.excerpt?.trim() && props.isPublished && <span style={{ color: t.error(0.6), fontSize: "10px" }}>MISSING</span>}
+            </label>
+            <textarea value={props.excerpt} onChange={(e) => props.onExcerptChange(e.target.value)} placeholder="Short description shown on listing cards and below the title"
+              rows={2} className="w-full bg-transparent outline-none text-sm resize-none" style={{ fontFamily: t.sans, color: t.ink(0.55), lineHeight: "1.6" }} />
+          </div>
+        )}
       </div>
 
       {drawerOpen && (
