@@ -977,10 +977,14 @@ const Deck = () => {
                           return (
                             <button
                               key={opt.value}
-                              onClick={() => setHallmarkSelections(prev => ({
-                                ...prev,
-                                [i]: prev[i] === opt.value ? undefined as any : opt.value,
-                              }))}
+                              onClick={() => setHallmarkSelections(prev => {
+                                if (prev[i] === opt.value) {
+                                  const next = { ...prev };
+                                  delete next[i];
+                                  return next;
+                                }
+                                return { ...prev, [i]: opt.value };
+                              })}
                               style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(11px, 1.1vw, 13px)",
