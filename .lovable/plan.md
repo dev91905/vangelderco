@@ -1,28 +1,67 @@
 
 
-## Sharpening the Card Body Copy
+# Reframe the Deck as a Client Intake Tool
 
-Updating only the `detail` field for each of the five pain-point cards. Headlines (`short`) stay the same. Character counts stay within ±15 of originals so card heights don't shift.
+## The Shift
 
-### Current → New
+Right now the deck reads as an educational walkthrough — "here's what's broken, here's how we work." The reframe: it's a **guided intake experience** where the prospect self-diagnoses, learns just enough to be dangerous, and exits with a clear next step (book a call or submit for review). Their selections and responses become an intake log you review on the backend.
 
-| # | Headline | Current `detail` | New `detail` |
-|---|----------|-------------------|--------------|
-| 1 | I'm just getting started | "You're building a strategic communications portfolio from scratch — no track record of what's been funded or what's working." (122 chars) | "You're new to this role or building from scratch. There's no system, no process — just a mandate and a blank slate." (115 chars) |
-| 2 | We don't have a strategy | "You've got a landscape but no framework. When a proposal lands, you can't tell if it fits a strategy or just sounds good." (121 chars) | "You have a portfolio but no decision-making framework. When a proposal lands, you can't tell if it's genuinely strategic or just sounds good." (141 chars) |
-| 3 | Limited access to pop culture | "Your grantees recycle the same playbook — op-eds, paid media, social. The most powerful cultural channels stay untapped." (120 chars) | "Your grantees keep running the same plays — op-eds, paid media, social. The deeper cultural channels that actually move people stay untapped." (141 chars) |
-| 4 | Not sure how to measure | "Grantees send views and impressions. Other donors tie funding to impossible benchmarks. You need to tell the real impact story." (125 chars) | "Grantees report views and impressions. The numbers look fine — but you don't feel real impact, and you're not sure what better looks like." (137 chars) |
-| 5 | No media expertise in-house | "You're not a media expert. When something isn't working, you can't diagnose why — you've never operated in these sectors." (120 chars) | "When leadership asks what's broken or whether a pitch is worth it, you lack the operational media experience to give a real answer." (130 chars) |
+## What Changes
 
-### What changes and why
+### 1. Rewrite the Framing Copy (Frames 1, 2, 10, 11)
 
-1. **Just getting started** — Captures "new to role OR tasked with building something new" and the feeling of no system/process/ethos. Blank slate, not just "no track record."
-2. **No strategy** — Shifts from "landscape" to "portfolio" (more accurate for donors who already have one) and zeroes in on the real pain: you can't tell if something is *genuinely* strategic or just sounds good.
-3. **Limited access** — Swaps "most powerful cultural channels" for "deeper cultural channels that actually move people" — gets at the user's point that nothing the grantees do is resonating.
-4. **Not sure how to measure** — Removes the "other donors / impossible benchmarks" framing (too specific). Focuses on the core feeling: numbers look fine on paper but you don't feel impact and don't know what to ask for instead.
-5. **No media expertise** — Reframes from "you're not an expert" (slightly condescending) to "leadership is asking you questions you can't answer" — the actual lived pain.
+**Frame 1 (Hero):** Shift from "learning module" to invitation. Something like:
+- Headline: "Let's figure out if there's a fit."
+- Subhead: "This is a five-minute walkthrough that helps us understand your situation — and shows you how we think about it."
+- CTA: "Get started" (not "Start the walkthrough")
 
-### Implementation
+**Frame 2 (Self-Diagnosis):** Rewrite header from "What are your biggest challenges?" to something warmer and intake-oriented — "Tell us where you are." The subtext should frame this as useful for both parties: "This helps us understand your situation before we talk."
 
-Single file edit: `src/pages/Deck.tsx`, lines 36–70, replacing the five `detail` strings.
+**Frame 10 (The Promise):** Tighten as a transition to the close — less aspirational, more "here's what happens next with what you've told us."
+
+**Frame 11 (CTA):** This is the money slide. Rewrite entirely:
+- Headline: "We've got a picture. Let's talk."
+- Show a summary of what they selected (pain points, custom challenge, engagement path) as a compact "intake summary" card
+- Two clear CTAs: **Book a Call** (primary, if booking link exists) and **Send This to Our Team** (secondary, submits their info + selections via email)
+- The form stays but the framing changes — it's not "email us," it's "send your intake for review"
+
+### 2. Surface Intake Summary on the CTA Slide
+
+On Frame 11, dynamically render a small summary block showing:
+- Selected pain points (from Frame 2)
+- Custom challenge text (if entered)
+- Engagement path chosen (fresh vs. experienced, from Frame 8)
+- Domains of interest (from Frame 5)
+
+This gives the prospect a sense of "my data is being captured" and gives you a complete picture when the submission hits the backend.
+
+### 3. Persist All Selections to `deck_contacts`
+
+The current `handleCtaSubmit` already saves `selected_pains` and `custom_challenge`. Extend it to also save:
+- `engagement_path` (fresh/experienced)
+- `selected_domains` (cultural/cross-sector/organizing)
+
+This requires adding two columns to `deck_contacts`:
+- `engagement_path TEXT` (nullable)
+- `selected_domains TEXT[]` (nullable)
+
+### 4. Rewrite Transitional Copy Throughout
+
+Audit every frame's header/subhead copy to shift tone from "here's a presentation" to "here's a conversation." Key rewrites:
+- Frame 3 (Confrontation): Keep as-is — it's the strongest content
+- Frame 4 (Hallmarks): "Stratcomm portfolios that get results..." → "Here's what separates portfolios that move policy from ones that report on awareness."
+- Frame 5 (Domains): "You're ready to level up" → "Where do you need the most help?" — make it interactive/intake-oriented
+- Frame 8 (Working Together): "How do you want to start?" is already good — keep it
+- Frame 13 (Spacer): Replace dead-end spacer with a redirect back to the CTA or a "thank you" if they already submitted
+
+### 5. Rewrite the Homepage CTA Section
+
+Update the bottom of Index.tsx to match the new framing. Instead of "You already know something isn't working" → something like "Five minutes. One walkthrough. See if there's a fit." The button copy "Show me" becomes "Start the intake" or "Let's see."
+
+## Technical Summary
+
+- **Migration:** Add `engagement_path` and `selected_domains` columns to `deck_contacts`
+- **Deck.tsx:** Rewrite copy across ~8 frames, add intake summary to Frame 11, persist new fields on submit
+- **Index.tsx:** Update CTA section copy and button label
+- No new tables, no new pages, no auth changes
 
