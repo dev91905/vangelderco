@@ -77,7 +77,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
           ) : posts && posts.length > 0 ? (
             <div className="w-full flex flex-col gap-3">
               <span className="text-[10px] tracking-[0.15em] uppercase mb-2" style={{ fontFamily: t.sans, color: t.ink(0.25), animation: "fade-up 0.5s ease-out 1.3s both" }}>
-                Field Notes
+                Related Articles
               </span>
               {posts.map((post, i) => (
                 <PostCard key={post.id} post={post} index={i} />
