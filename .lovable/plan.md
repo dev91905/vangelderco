@@ -1,67 +1,57 @@
 
 
-# Reframe the Deck as a Client Intake Tool
+# Add "Field Note" as a Third Post Type
 
-## The Shift
+## What It Is
 
-Right now the deck reads as an educational walkthrough — "here's what's broken, here's how we work." The reframe: it's a **guided intake experience** where the prospect self-diagnoses, learns just enough to be dangerous, and exits with a clear next step (book a call or submit for review). Their selections and responses become an intake log you review on the backend.
+Field Notes are short, structured dispatches — more like alerts than articles. Three fixed fields:
+
+1. **Domain** — one of the three capabilities (Cultural Strategy, Cross-Sector Intelligence, Deep Organizing)
+2. **Brief** — one to two sentences: what happened, what was accomplished
+3. **Impact** — a standardized metrics line (e.g. "$12M mobilized across 3 foundations")
+
+No free-form content blocks. No hero images. Just the structured data.
 
 ## What Changes
 
-### 1. Rewrite the Framing Copy (Frames 1, 2, 10, 11)
+### 1. Add "field-note" as a Post Type in the Editor
 
-**Frame 1 (Hero):** Shift from "learning module" to invitation. Something like:
-- Headline: "Let's figure out if there's a fit."
-- Subhead: "This is a five-minute walkthrough that helps us understand your situation — and shows you how we think about it."
-- CTA: "Get started" (not "Start the walkthrough")
+**EditorMetaBar.tsx**: Add `"field-note"` to the type toggle (currently `["blog-post", "case-study"]` → `["blog-post", "case-study", "field-note"]`).
 
-**Frame 2 (Self-Diagnosis):** Rewrite header from "What are your biggest challenges?" to something warmer and intake-oriented — "Tell us where you are." The subtext should frame this as useful for both parties: "This helps us understand your situation before we talk."
+### 2. Adapt the Editor for Field Notes
 
-**Frame 10 (The Promise):** Tighten as a transition to the close — less aspirational, more "here's what happens next with what you've told us."
+**AdminEditor.tsx**: When `type === "field-note"`, hide the BlockCanvas (no free-form content blocks needed) and hide the StatChipsEditor. Instead, show a compact structured form with:
+- **Domain**: Already handled by the `capability` selector in the settings drawer
+- **Brief**: Already the `excerpt` field — just relabel it as "Alert / Brief" when type is field-note
+- **Impact**: Use the existing `featured_stat` field — relabel it as "Impact Metric" and surface it directly in the editor (not buried in the settings drawer)
 
-**Frame 11 (CTA):** This is the money slide. Rewrite entirely:
-- Headline: "We've got a picture. Let's talk."
-- Show a summary of what they selected (pain points, custom challenge, engagement path) as a compact "intake summary" card
-- Two clear CTAs: **Book a Call** (primary, if booking link exists) and **Send This to Our Team** (secondary, submits their info + selections via email)
-- The form stays but the framing changes — it's not "email us," it's "send your intake for review"
+This means no new database columns are needed. The existing fields map cleanly:
+- `capability` → domain
+- `excerpt` → brief
+- `featured_stat` → impact metric
+- `type` = `"field-note"`
 
-### 2. Surface Intake Summary on the CTA Slide
+### 3. Update the Homepage Field Notes Section
 
-On Frame 11, dynamically render a small summary block showing:
-- Selected pain points (from Frame 2)
-- Custom challenge text (if entered)
-- Engagement path chosen (fresh vs. experienced, from Frame 8)
-- Domains of interest (from Frame 5)
+**Index.tsx**: The `CaseFragment` component and the Field Notes query already render `sector_label`, `excerpt` (brief), and `featured_stat` (result). The `useFeaturedPosts` hook already fetches featured published posts. Field Notes will appear here automatically if marked as featured.
 
-This gives the prospect a sense of "my data is being captured" and gives you a complete picture when the submission hits the backend.
+Optionally, create a dedicated `useFieldNotes` hook that queries `type = "field-note"` posts instead of relying on the `is_featured` flag — so Field Notes always appear in this section regardless of the featured toggle.
 
-### 3. Persist All Selections to `deck_contacts`
+### 4. Update PostCard and Listing Pages
 
-The current `handleCtaSubmit` already saves `selected_pains` and `custom_challenge`. Extend it to also save:
-- `engagement_path` (fresh/experienced)
-- `selected_domains` (cultural/cross-sector/organizing)
+**PostCard.tsx**: Add `"field-note"` label rendering (currently shows "Case Study" or "Blog Post").
 
-This requires adding two columns to `deck_contacts`:
-- `engagement_path TEXT` (nullable)
-- `selected_domains TEXT[]` (nullable)
+### 5. Field Note Detail View
 
-### 4. Rewrite Transitional Copy Throughout
-
-Audit every frame's header/subhead copy to shift tone from "here's a presentation" to "here's a conversation." Key rewrites:
-- Frame 3 (Confrontation): Keep as-is — it's the strongest content
-- Frame 4 (Hallmarks): "Stratcomm portfolios that get results..." → "Here's what separates portfolios that move policy from ones that report on awareness."
-- Frame 5 (Domains): "You're ready to level up" → "Where do you need the most help?" — make it interactive/intake-oriented
-- Frame 8 (Working Together): "How do you want to start?" is already good — keep it
-- Frame 13 (Spacer): Replace dead-end spacer with a redirect back to the CTA or a "thank you" if they already submitted
-
-### 5. Rewrite the Homepage CTA Section
-
-Update the bottom of Index.tsx to match the new framing. Instead of "You already know something isn't working" → something like "Five minutes. One walkthrough. See if there's a fit." The button copy "Show me" becomes "Start the intake" or "Let's see."
+Since field notes are short alerts with no content blocks, the detail page (`PostDetail.tsx`) should render a minimal view — just the brief and impact metric, no block canvas. Check and handle the `type === "field-note"` case.
 
 ## Technical Summary
 
-- **Migration:** Add `engagement_path` and `selected_domains` columns to `deck_contacts`
-- **Deck.tsx:** Rewrite copy across ~8 frames, add intake summary to Frame 11, persist new fields on submit
-- **Index.tsx:** Update CTA section copy and button label
-- No new tables, no new pages, no auth changes
+- **No migration needed** — reuses existing columns (`type`, `capability`, `excerpt`, `featured_stat`)
+- **EditorMetaBar.tsx** — add "Field Note" to type picker
+- **AdminEditor.tsx** — conditional UI: hide BlockCanvas for field-notes, surface impact field inline
+- **Index.tsx** — optionally switch Field Notes section to query by type instead of `is_featured`
+- **PostCard.tsx** — add "Field Note" label
+- **PostDetail.tsx** — minimal render for field-note type
+- **useFeaturedPosts.ts** — potentially rename/refactor to `useFieldNotes` querying `type = "field-note"`
 
