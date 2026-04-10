@@ -2,6 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+function friendlyError(msg: string): string {
+  if (msg.includes("check constraint")) return "Save failed — post type not allowed by database.";
+  return msg;
+}
+
 export type PostFormData = {
   title: string;
   slug: string;
@@ -40,7 +45,7 @@ export function useCreatePost() {
       qc.invalidateQueries({ queryKey: ["admin-posts"] });
       toast.success("Post created");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(friendlyError(e.message), { id: "post-save-error" }),
   });
 }
 
@@ -63,7 +68,7 @@ export function useUpdatePost() {
       qc.invalidateQueries({ queryKey: ["post"] });
       toast.success("Post saved");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(friendlyError(e.message), { id: "post-save-error" }),
   });
 }
 
