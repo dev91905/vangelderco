@@ -243,8 +243,7 @@ const Index = () => {
 
       <div
         ref={scrollRef}
-        className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden"
-        style={{ scrollBehavior: "smooth" }}
+        className="snap-scroll-container"
       >
 
       {/* ═══ HERO ═══ */}
