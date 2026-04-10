@@ -8,23 +8,20 @@
  *   <div style={{ color: t.ink(0.5), fontFamily: t.serif }}>
  *
  * To change the entire site's look, edit ONLY this file + index.css variables.
+ *
+ * Colors now read from CSS custom properties so they automatically
+ * adapt when the `.dark` class is present on <html>.
  */
 
-/* ── Raw HSL base values (match :root in index.css) ── */
-const BASE = {
-  bg: "40 30% 96%",
-  fg: "30 10% 12%",
-  card: "40 25% 98%",       // subtle warm tint, NOT pure white
-  destructive: "0 60% 45%",
-  success: "150 40% 40%",
-} as const;
+/* ── Color helpers (CSS-variable-aware) ── */
+const ink = (alpha: number) =>
+  `hsl(var(--ink-h) var(--ink-s) var(--ink-l) / ${alpha})`;
 
-/* ── Color helpers ── */
-const ink = (alpha: number) => `hsl(${BASE.fg} / ${alpha})`;
-const cream = `hsl(${BASE.bg})`;
-const white = `hsl(${BASE.card})`;
-const error = (alpha = 1) => `hsl(${BASE.destructive} / ${alpha})`;
-const success = (alpha = 1) => `hsl(${BASE.success} / ${alpha})`;
+const cream = "hsl(var(--cream-h) var(--cream-s) var(--cream-l))";
+const white = "hsl(var(--card-h) var(--card-s) var(--card-l))";
+
+const error = (alpha = 1) => `hsl(var(--destructive) / ${alpha})`;
+const success = (alpha = 1) => `hsl(150 40% 40% / ${alpha})`;
 
 /* ── Typography ── */
 const serif = "'Source Serif 4', Georgia, serif";
