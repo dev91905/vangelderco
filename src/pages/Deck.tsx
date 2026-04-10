@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TOTAL_FRAMES = 11; // consolidated domains into Frame 2
+const TOTAL_FRAMES = 12; // removed Frame 10 (The Promise)
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -264,18 +264,19 @@ const Deck = () => {
   const frameInteracted = useMemo(() => {
     const gates: Record<number, boolean> = {};
     gates[0] = true; // hero — always ok
-    gates[1] = selectedPains.length > 0 || customSaved; // pain points + domains
+    gates[1] = selectedPains.length > 0 || customSaved; // pain points
     gates[2] = quizAnswers.every(a => a !== null); // quiz complete
     gates[3] = expandedHallmark !== null; // hallmarks — expanded at least one
-    gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
-    gates[5] = metricsChecked.length > 0; // metrics
-    gates[6] = engagementPath !== null; // working together
-    gates[7] = hasMediaExperience !== null; // media experience
-    gates[8] = true; // CTA — always accessible
-    gates[9] = true; // case studies
-    gates[10] = true; // close
+    gates[4] = selectedDomains.length > 0; // domains
+    gates[5] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
+    gates[6] = metricsChecked.length > 0; // metrics
+    gates[7] = engagementPath !== null; // working together
+    gates[8] = hasMediaExperience !== null; // media experience
+    gates[9] = true; // CTA — always accessible
+    gates[10] = true; // case studies
+    gates[11] = true; // close
     return gates;
-  }, [selectedPains, customSaved, quizAnswers, expandedHallmark, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
+  }, [selectedPains, customSaved, quizAnswers, expandedHallmark, selectedDomains, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
   /* ─── Scoring ─── */
   const diagnosticScore = useMemo(() => calculateReadinessScore({
@@ -435,7 +436,7 @@ const Deck = () => {
   const opponentPickCount = quizAnswers.filter(a => a?.picked === "theirs").length;
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Domains", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
 
   return (
     <div
@@ -642,54 +643,6 @@ const Deck = () => {
               </form>
             </div>
           </div>
-
-          {/* Domain selection */}
-          <div style={{ marginTop: "8px" }}>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 600, color: f.ink(0.6), marginBottom: "4px" }}>
-              Which areas are most relevant?
-            </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.35), marginBottom: "12px" }}>
-              Optional — select one or more.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {DOMAINS.map((d) => {
-                const isDomainSelected = selectedDomains.includes(d.id);
-                return (
-                  <button
-                    key={d.id}
-                    onClick={() => setSelectedDomains(prev => prev.includes(d.id) ? prev.filter(x => x !== d.id) : [...prev, d.id])}
-                    className="text-left"
-                    style={{
-                      display: "flex", alignItems: "flex-start", gap: "12px",
-                      padding: "18px 16px", borderRadius: "10px",
-                      border: isDomainSelected ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.08)}`,
-                      background: isDomainSelected ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
-                      cursor: "pointer", transition: "all 0.2s ease",
-                    }}
-                  >
-                    <div style={{
-                      width: "18px", height: "18px", borderRadius: "4px", flexShrink: 0, marginTop: "1px",
-                      border: isDomainSelected ? "none" : `1.5px solid ${f.ink(0.15)}`,
-                      background: isDomainSelected ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.15s ease",
-                    }}>
-                      {isDomainSelected && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      )}
-                    </div>
-                    <div>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "4px" }}>{d.title}</p>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.42), lineHeight: 1.5 }}>{d.tagline}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           <div style={{ display: "flex", alignItems: "center", gap: "16px", minHeight: "48px" }}>
             {(selectedPains.length > 0 || customSaved) ? (
               <NavRow onBack={() => scrollToFrame(0)} onNext={() => scrollToFrame(2)} />
@@ -972,10 +925,99 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
+      {/* ═══ FRAME 5: Three Service Domains ═══ */}
+      <DeckFrame ref={setRef(4)} mode="wide">
+        <div ref={r5.ref} className="flex flex-col w-full" style={{ justifyContent: "center" }}>
+          <div style={{ transition: "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)", transform: activeDomain ? "translateY(-20px)" : "translateY(0)" }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up"), marginBottom: "12px" }}>
+              Where do your communications need the most help?
+            </p>
+            <p style={{ ...body(0.4), ...r5.stagger(1, 200, "blur-up"), marginBottom: activeDomain ? "24px" : "48px", maxWidth: "500px", transition: "margin 0.4s ease" }}>
+              Select the domains most relevant to your situation.
+            </p>
 
+            <div
+              className="overflow-hidden rounded-[28px] border"
+              style={{ ...r5.stagger(2, 400, "blur-scale"), background: "hsl(var(--foreground) / var(--a-bg-subtle))", borderColor: "hsl(var(--foreground) / var(--a-border-card))" }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                {DOMAINS.map((d, i) => {
+                  const isActive = activeDomain === d.id;
+                  return (
+                    <button
+                      key={d.id}
+                      onClick={() => {
+                        setActiveDomain(isActive ? null : d.id);
+                        setSelectedDomains(prev => prev.includes(d.id) ? prev.filter(x => x !== d.id) : [...prev, d.id]);
+                      }}
+                      className={`text-left w-full hover:bg-background/20 transition-colors ${i < DOMAINS.length - 1 ? "border-b lg:border-b-0 lg:border-r" : ""}`}
+                      style={{
+                        padding: "26px 26px 24px",
+                        background: isActive ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                        borderColor: isActive ? "hsl(var(--foreground) / var(--a-border))" : "hsl(var(--border))",
+                        boxShadow: isActive ? "inset 0 0 0 1px hsl(var(--foreground) / var(--a-border))" : "none",
+                        transition: "background 0.2s ease, box-shadow 0.2s ease", cursor: "pointer",
+                      }}
+                    >
+                      <div className="flex h-full flex-col gap-5">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0">
+                            <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: isActive ? "hsl(var(--foreground))" : f.ink(0.82), lineHeight: 1.2, marginBottom: "8px" }}>{d.title}</p>
+                            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.42), lineHeight: 1.55, maxWidth: "30ch" }}>{d.tagline}</p>
+                          </div>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isActive ? "hsl(var(--foreground))" : f.ink(0.28)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: isActive ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease", flexShrink: 0, marginTop: "2px" }}>
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                        <div style={{ paddingTop: "18px", borderTop: `1px solid ${isActive ? "hsl(var(--foreground) / var(--a-border))" : f.ink(0.08)}` }}>
+                          <span style={{ ...label("9px"), color: isActive ? "hsl(var(--foreground) / var(--a-mid))" : f.ink(0.28), display: "block", marginBottom: "8px" }}>What it is</span>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>{d.what}</p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div style={{
+                maxHeight: activeDomainData ? "520px" : "0px", opacity: activeDomainData ? 1 : 0, overflow: "hidden",
+                borderTop: activeDomainData ? "1px solid hsl(var(--foreground) / var(--a-border-card))" : "1px solid transparent",
+                background: activeDomainData ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                transition: "max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease, border-color 0.2s ease",
+              }}>
+                {activeDomainData && (
+                  <div key={activeDomain} className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr_1fr] gap-8" style={{ padding: "28px 30px 32px" }}>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>Selected focus</span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, marginBottom: "10px" }}>{activeDomainData.title}</p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.48), lineHeight: 1.65 }}>{activeDomainData.tagline}</p>
+                    </div>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>What it unlocks</span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>{activeDomainData.unlocks}</p>
+                    </div>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>What most advisors miss</span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65, marginBottom: "18px" }}>{activeDomainData.missed}</p>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>Example</span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.46), lineHeight: 1.65, fontStyle: "italic" }}>{activeDomainData.example}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {selectedDomains.length > 0 && (
+              <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
+                <NavRow onBack={() => scrollToFrame(3)} onNext={() => scrollToFrame(5)} justifyEnd />
+              </div>
+            )}
+          </div>
+        </div>
+      </DeckFrame>
 
       {/* ═══ FRAME 6: Capabilities — "Which 2 matter most?" ═══ */}
-      <DeckFrame ref={setRef(4)} mode="wide">
+      <DeckFrame ref={setRef(5)} mode="wide">
         <div ref={r6.ref} className="flex flex-col gap-8">
           <div>
             <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r6.stagger(0, 0, "blur-up") }}>
