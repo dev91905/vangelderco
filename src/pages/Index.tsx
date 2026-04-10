@@ -301,21 +301,19 @@ const Index = () => {
             style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both` }}
           >
             {SECTORS.map((sector, i) => {
-              /* Each pill glows for ~2s then fades. Total cycle = 6 pills × 2s = 12s.
-                 pill-glow keyframe handles the bright flash; delay offsets stagger them. */
-              const cycleDuration = SECTORS.length * 2; // 12s full cycle
-              const delay = 1.5 + i * 0.08; // entrance delay
+              const isGlowing = i === glowIndex;
               return (
                 <span
                   key={sector}
-                  className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full dark:animate-[pill-glow_12s_ease-in-out_infinite]"
+                  className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                   style={{
                     fontFamily: t.sans,
-                    color: "hsl(var(--destructive) / var(--a-mid))",
-                    background: "hsl(var(--destructive) / var(--a-bg))",
-                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
-                    animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s both`,
-                    // After entrance, the pill-glow animation kicks in via the class
+                    color: isGlowing ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-mid))",
+                    background: isGlowing ? "hsl(var(--destructive) / 0.14)" : "hsl(var(--destructive) / var(--a-bg))",
+                    border: `1px solid ${isGlowing ? "hsl(var(--destructive) / 0.45)" : "hsl(var(--destructive) / var(--a-border))"}`,
+                    boxShadow: isGlowing ? "0 0 20px -4px hsl(var(--destructive) / 0.2)" : "none",
+                    transition: "all 0.6s ease",
+                    animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                   }}
                 >
                   {sector}
