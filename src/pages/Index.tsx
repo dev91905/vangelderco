@@ -716,7 +716,33 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.2}>
+        <RevealBlock delay={0.15}>
+          <Link
+            to="/deck"
+            className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full no-underline text-[12px] tracking-[0.15em] uppercase"
+            style={{
+              fontFamily: t.sans,
+              color: "hsl(var(--foreground))",
+              background: ox(0.1),
+              border: `1px solid ${ox(0.3)}`,
+              transition: `all 0.4s ${EASE_OUT_QUART}`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = ox(0.2);
+              e.currentTarget.style.borderColor = ox(0.6);
+              e.currentTarget.style.transform = "translateY(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = ox(0.1);
+              e.currentTarget.style.borderColor = ox(0.3);
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
+          >
+            Let's Chat
+            <span style={{ fontSize: "16px", lineHeight: 1 }}>→</span>
+          </Link>
+        </RevealBlock>
+        <RevealBlock delay={0.25}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
