@@ -457,16 +457,31 @@ const Deck = () => {
     if (!el) return;
 
     const handler = (e: WheelEvent) => {
+      // Check if wheel is inside the results scroll panel
       const target = e.target as HTMLElement | null;
-      if (target?.closest("[data-results-scroll='true']")) {
+      const resultsPanel = target?.closest("[data-results-scroll='true']") as HTMLElement | null;
+
+      if (resultsPanel) {
+        // Allow scrolling inside the panel only if it can still scroll in that direction
+        const atTop = resultsPanel.scrollTop <= 0;
+        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
+        const scrollingDown = e.deltaY > 0;
+        const scrollingUp = e.deltaY < 0;
+
+        if ((scrollingDown && atBottom) || (scrollingUp && atTop)) {
+          // Panel hit its limit — kill the event so it doesn't chain to the deck
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        // Otherwise let the panel scroll normally
         return;
       }
 
-      const frameEl = frameRefs.current[currentFrame];
-      if (!frameEl) return;
-
+      // Everything else: hard-lock the deck to the current frame
       e.preventDefault();
 
+      const frameEl = frameRefs.current[currentFrame];
+      if (!frameEl) return;
       const frameTop = frameEl.offsetTop;
       const frameBottom = frameTop + frameEl.scrollHeight;
       const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
@@ -528,6 +543,7 @@ const Deck = () => {
         width: "100vw",
         overflowX: "hidden",
         overflowY: "auto",
+        overscrollBehaviorY: "none",
         scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
@@ -959,6 +975,7 @@ const Deck = () => {
                   style={{
                     maxHeight: "calc(100dvh - 160px)",
                     overflowY: "auto",
+                    overscrollBehavior: "contain",
                     paddingRight: "8px",
                   }}
                 >
