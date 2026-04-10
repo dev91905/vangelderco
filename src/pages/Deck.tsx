@@ -760,7 +760,7 @@ const Deck = () => {
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(15px, 1.5vw, 20px)",
-                                color: f.ink(0.55),
+                                color: "hsl(0 60% 50% / var(--a-high))",
                                 lineHeight: 1.65,
                               }}>{row.yours}</p>
                             </div>
@@ -777,7 +777,7 @@ const Deck = () => {
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(15px, 1.5vw, 20px)",
-                                color: f.ink(0.88),
+                                color: "hsl(145 50% 40% / var(--a-high))",
                                 lineHeight: 1.65,
                                 fontWeight: 500,
                               }}>{row.theirs}</p>
@@ -863,7 +863,7 @@ const Deck = () => {
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
-                              color: f.ink(0.5),
+                              color: "hsl(0 60% 50% / var(--a-mid))",
                               lineHeight: 1.55,
                             }}>{row.yours}</p>
                           </div>
@@ -875,7 +875,7 @@ const Deck = () => {
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
-                              color: f.ink(0.75),
+                              color: "hsl(145 50% 40% / var(--a-high))",
                               lineHeight: 1.55,
                               fontWeight: isLast ? 600 : 500,
                             }}>{row.theirs}</p>
