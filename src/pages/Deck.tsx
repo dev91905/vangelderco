@@ -821,21 +821,71 @@ const Deck = () => {
                 {/* ── Final: full table view ── */}
                 {isFinal && (
                   <div style={{ opacity: 1, animation: "fade-in 0.5s ease-out" }}>
+                    {/* Overall summary hero */}
+                    {(() => {
+                      const overall = CONFRONTATION_ROWS[CONFRONTATION_ROWS.length - 1];
+                      return (
+                        <div style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gap: "clamp(16px, 2vw, 32px)",
+                          marginBottom: "clamp(24px, 3vw, 40px)",
+                          animation: "fade-in 0.4s ease-out",
+                        }}>
+                          <div style={{
+                            padding: "clamp(16px, 2vw, 24px)",
+                            borderRadius: "8px",
+                            background: "hsl(0 60% 50% / var(--a-bg))",
+                            border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
+                          }}>
+                            <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-mid))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-mid))" }} />
+                              Your approach
+                            </p>
+                            <p style={{
+                              fontFamily: f.sans,
+                              fontSize: "clamp(13px, 1.4vw, 17px)",
+                              color: "hsl(0 60% 50% / var(--a-high))",
+                              lineHeight: 1.6,
+                            }}>{overall.yours}</p>
+                          </div>
+                          <div style={{
+                            padding: "clamp(16px, 2vw, 24px)",
+                            borderRadius: "8px",
+                            background: "hsl(145 50% 40% / var(--a-bg))",
+                            border: "1px solid hsl(145 50% 40% / var(--a-border-card))",
+                          }}>
+                            <p style={{ ...label("9px"), color: "hsl(145 50% 40% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                              <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(145 50% 40% / var(--a-high))" }} />
+                              Their approach
+                            </p>
+                            <p style={{
+                              fontFamily: f.sans,
+                              fontSize: "clamp(13px, 1.4vw, 17px)",
+                              color: "hsl(145 50% 40% / var(--a-high))",
+                              lineHeight: 1.6,
+                              fontWeight: 500,
+                            }}>{overall.theirs}</p>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
                     {/* Column headers */}
                     <div style={{
                       display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      paddingLeft: "clamp(80px, 8vw, 120px)",
+                      gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr",
                       borderBottom: `1.5px solid ${f.ink(0.1)}`,
                       paddingBottom: "6px",
                     }}>
-                      <p style={{ ...label("9px"), color: f.ink(0.3) }}>Your side</p>
-                      <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700 }}>Their side</p>
+                      <div />
+                      <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Your side</p>
+                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Their side</p>
                     </div>
 
-                    {/* Rows */}
-                    {CONFRONTATION_ROWS.map((row, i) => {
-                      const isLast = i === CONFRONTATION_ROWS.length - 1;
+                    {/* Detail rows (exclude Overall) */}
+                    {CONFRONTATION_ROWS.slice(0, -1).map((row, i) => {
+                      const isLast = i === CONFRONTATION_ROWS.length - 2;
                       return (
                         <div
                           key={i}
@@ -843,7 +893,6 @@ const Deck = () => {
                             display: "grid",
                             gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr",
                             borderBottom: !isLast ? `1px solid ${f.ink(0.05)}` : "none",
-                            borderTop: isLast ? `1.5px solid ${f.ink(0.1)}` : "none",
                             opacity: 1,
                             animation: `fade-in 0.3s ease-out ${i * 40}ms both`,
                           }}
@@ -863,21 +912,20 @@ const Deck = () => {
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
-                              color: "hsl(0 60% 50% / var(--a-mid))",
+                              color: f.ink(0.45),
                               lineHeight: 1.55,
                             }}>{row.yours}</p>
                           </div>
                           <div style={{
                             padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)",
                             borderLeft: `1px solid ${f.ink(0.05)}`,
-                            background: isLast ? f.ink(0.02) : "transparent",
                           }}>
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
-                              color: "hsl(145 50% 40% / var(--a-high))",
+                              color: f.ink(0.75),
                               lineHeight: 1.55,
-                              fontWeight: isLast ? 600 : 500,
+                              fontWeight: 500,
                             }}>{row.theirs}</p>
                           </div>
                         </div>
