@@ -206,15 +206,13 @@ const Index = () => {
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => setScrollY(el.scrollTop));
+      rafRef.current = requestAnimationFrame(() => setScrollY(window.scrollY));
     };
-    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -243,8 +241,7 @@ const Index = () => {
 
       <div
         ref={scrollRef}
-        className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden"
-        style={{ scrollBehavior: "smooth" }}
+        className="snap-scroll-container"
       >
 
       {/* ═══ HERO ═══ */}
