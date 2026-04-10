@@ -346,7 +346,7 @@ const Index = () => {
               style={{
                 fontFamily: t.sans,
                 fontSize: "10px",
-                color: t.ink(0.4),
+                color: "hsl(var(--foreground))",
                 letterSpacing: "0.25em",
               }}
             >
