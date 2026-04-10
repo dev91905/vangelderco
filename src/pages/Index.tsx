@@ -189,6 +189,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
 /* ── Index page ── */
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
+  const { data: featuredPosts } = useFeaturedPosts();
   const [scrollY, setScrollY] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -480,8 +481,15 @@ const Index = () => {
         </div>
 
         <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {FIELD_NOTES.map((note, i) => (
-            <CaseFragment key={note.sector} {...note} index={i} />
+          {(featuredPosts || []).map((note, i) => (
+            <CaseFragment
+              key={note.id}
+              sector={note.sector_label || note.title}
+              brief={note.excerpt || ""}
+              result={note.featured_stat || ""}
+              slug={note.slug}
+              index={i}
+            />
           ))}
         </div>
       </section>

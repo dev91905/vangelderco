@@ -30,6 +30,9 @@ const AdminEditor = () => {
   const [contentBlocks, setContentBlocks] = useState<any[]>([]);
   const [stats, setStats] = useState<any[]>([]);
   const [password, setPassword] = useState<string | null>(null);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [sectorLabel, setSectorLabel] = useState<string | null>(null);
+  const [featuredStat, setFeaturedStat] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,6 +63,9 @@ const AdminEditor = () => {
       setContentBlocks(Array.isArray(post.content_blocks) ? post.content_blocks as any[] : []);
       setStats(Array.isArray(post.stats) ? post.stats as any[] : []);
       setPassword((post as any).password || null);
+      setIsFeatured((post as any).is_featured || false);
+      setSectorLabel((post as any).sector_label || null);
+      setFeaturedStat((post as any).featured_stat || null);
       setDirty(false);
     }
   }, [post]);
@@ -73,7 +79,10 @@ const AdminEditor = () => {
     password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
-  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt]);
+    is_featured: isFeatured,
+    sector_label: sectorLabel || null,
+    featured_stat: featuredStat || null,
+  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt, isFeatured, sectorLabel, featuredStat]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
