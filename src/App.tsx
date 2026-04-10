@@ -3,8 +3,11 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 import ConstellationField from "./components/ConstellationField";
 import type { ConstellationMode } from "./components/ConstellationField";
+import DarkModeToggle from "./components/DarkModeToggle";
+import CRTOverlay from "./components/CRTOverlay";
 import Index from "./pages/Index.tsx";
 import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
@@ -33,6 +36,8 @@ function AppRoutes() {
   return (
     <>
       <ConstellationField mode={mode} />
+      <CRTOverlay />
+      <DarkModeToggle />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/cultural-strategy" element={<CulturalStrategy />} />
@@ -55,9 +60,11 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <DarkModeProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </DarkModeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

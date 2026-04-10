@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { t } from "@/lib/theme";
 
 interface AtmosphericLayoutProps {
   children: ReactNode;
@@ -12,16 +13,16 @@ const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
         to="/admin"
         className="fixed bottom-6 right-6 z-30"
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: t.sans,
           fontSize: "10px",
           letterSpacing: "0.15em",
           textTransform: "uppercase",
-          color: "hsl(30 10% 12% / 0.12)",
+          color: t.ink(0.12),
           transition: "color 300ms",
           textDecoration: "none",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.5)")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "hsl(30 10% 12% / 0.12)")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.5))}
+        onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.12))}
       >
         Admin
       </Link>
