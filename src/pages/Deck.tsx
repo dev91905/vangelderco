@@ -50,6 +50,8 @@ const QUIZ_ROWS = [
   { dimension: "Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics." },
   { dimension: "Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization." },
 ];
+const COL_TRADITIONAL = "Traditional Approach";
+const COL_NEXTGEN = "Next-Gen Approach";
 
 /* ─── Three domains ─── */
 const DOMAINS = [
@@ -749,69 +751,86 @@ const Deck = () => {
 
           {/* REVEAL */}
           {quizRevealed && (
-            <div style={{ animation: "fade-in 0.6s ease-out" }}>
-              {/* Punch line */}
+            <div style={{ animation: "fade-up 0.5s ease-out" }}>
+              {/* Score + encouragement */}
               <div style={{
-                padding: "clamp(20px, 3vw, 32px)",
+                padding: "clamp(24px, 4vw, 40px)",
                 borderRadius: "16px",
                 background: "hsl(var(--foreground) / var(--a-bg))",
                 border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                marginBottom: "clamp(24px, 3vw, 40px)",
-                textAlign: "center",
+                marginBottom: "clamp(32px, 4vw, 48px)",
               }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, marginBottom: "12px" }}>
-                  {opponentPickCount} out of {QUIZ_ROWS.length}
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: f.ink(0.3), marginBottom: "12px" }}>
+                  Your read
                 </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, maxWidth: "540px", margin: "0 auto" }}>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.1, marginBottom: "16px" }}>
+                  {opponentPickCount} of {QUIZ_ROWS.length} next-gen
+                </p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 19px)", color: f.ink(0.55), lineHeight: 1.6, maxWidth: "560px" }}>
                   {opponentPickCount >= 4
-                    ? "You picked the opposition's approach almost every time. The approaches that sounded more effective? That's what the other side is doing. Your grantees are running the plays in the other column."
+                    ? "You already think the way the strongest portfolios operate. Most people in your position don't — which means you're ahead of your peers and ready to move."
                     : opponentPickCount >= 2
-                      ? "You spotted some of the stronger approaches — but many of the ones you picked are what the opposition is already doing at scale."
-                      : "You have strong instincts. You identified what works — now let's talk about how to execute it."
+                      ? "You're seeing what most of your peers miss. The instincts are right — the next step is building a portfolio that actually executes on them."
+                      : "You've got good instincts — and the fact that you're here means you're already thinking differently. Let's sharpen that into a real advantage."
                   }
                 </p>
               </div>
 
-              {/* Summary table */}
-              <div style={{ display: "grid", gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr 80px", borderBottom: `1.5px solid ${f.ink(0.1)}`, paddingBottom: "6px" }}>
-                <div />
-                <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "12px" }}>Your grantees</p>
-                <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, paddingLeft: "12px" }}>Their opponents</p>
-                <p style={{ ...label("9px"), color: f.ink(0.3), textAlign: "center" }}>You picked</p>
-              </div>
-              {QUIZ_ROWS.map((row, i) => {
-                const answer = quizAnswers[i];
-                const pickedOpponent = answer?.picked === "theirs";
-                return (
-                  <div key={i} style={{
-                    display: "grid", gridTemplateColumns: "clamp(80px, 8vw, 120px) 1fr 1fr 80px",
-                    borderBottom: i < QUIZ_ROWS.length - 1 ? `1px solid ${f.ink(0.05)}` : "none",
-                    animation: `fade-in 0.3s ease-out ${i * 60}ms both`,
-                  }}>
-                    <div style={{ padding: "clamp(8px, 1vw, 12px) 0" }}>
-                      <p style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 600, color: f.ink(0.3), textTransform: "uppercase", letterSpacing: "0.1em" }}>{row.dimension}</p>
-                    </div>
-                    <div style={{ padding: "clamp(8px, 1vw, 12px)", borderLeft: `1px solid ${f.ink(0.05)}` }}>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", color: f.ink(0.45), lineHeight: 1.55 }}>{row.yours}</p>
-                    </div>
-                    <div style={{ padding: "clamp(8px, 1vw, 12px)", borderLeft: `1px solid ${f.ink(0.05)}` }}>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", color: f.ink(0.75), lineHeight: 1.55, fontWeight: 500 }}>{row.theirs}</p>
-                    </div>
-                    <div style={{ padding: "clamp(8px, 1vw, 12px)", display: "flex", alignItems: "center", justifyContent: "center", borderLeft: `1px solid ${f.ink(0.05)}` }}>
-                      <span style={{
-                        fontFamily: f.sans, fontSize: "9px", fontWeight: 600, letterSpacing: "0.08em",
-                        padding: "3px 8px", borderRadius: "999px",
-                        color: pickedOpponent ? "hsl(0 72% 51%)" : f.ink(0.5),
-                        background: pickedOpponent ? "hsl(0 72% 51% / 0.1)" : f.ink(0.04),
-                      }}>
-                        {pickedOpponent ? "THEIRS" : "YOURS"}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+              {/* Dimension-by-dimension breakdown */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                {QUIZ_ROWS.map((row, i) => {
+                  const answer = quizAnswers[i];
+                  const pickedNextGen = answer?.picked === "theirs";
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "clamp(80px, 10vw, 120px) 1fr",
+                        gap: "0",
+                        padding: "clamp(14px, 1.5vw, 20px) 0",
+                        borderBottom: i < QUIZ_ROWS.length - 1 ? `1px solid ${f.ink(0.06)}` : "none",
+                        animation: `fade-up 0.35s ease-out ${i * 80}ms both`,
+                      }}
+                    >
+                      {/* Dimension label */}
+                      <div style={{ display: "flex", alignItems: "flex-start", paddingTop: "2px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "10px", fontWeight: 600, color: f.ink(0.3), textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                          {row.dimension}
+                        </p>
+                      </div>
 
-              <div style={{ marginTop: "clamp(24px, 3vw, 32px)", display: "flex", justifyContent: "center" }}>
+                      {/* What they picked — single column, clear label */}
+                      <div style={{ paddingLeft: "clamp(12px, 1.5vw, 20px)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                          <span style={{
+                            fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            padding: "3px 10px", borderRadius: "999px",
+                            color: pickedNextGen ? "hsl(150 50% 36%)" : f.ink(0.4),
+                            background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : f.ink(0.05),
+                          }}>
+                            {pickedNextGen ? "Next-Gen" : "Traditional"}
+                          </span>
+                          <span style={{ fontFamily: f.sans, fontSize: "9px", color: f.ink(0.2) }}>
+                            Your pick
+                          </span>
+                        </div>
+                        <p style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(12px, 1.2vw, 14px)",
+                          color: pickedNextGen ? f.ink(0.65) : f.ink(0.4),
+                          lineHeight: 1.6,
+                        }}>
+                          {pickedNextGen ? row.theirs : row.yours}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", display: "flex", justifyContent: "center" }}>
                 <ContinueButton onClick={() => scrollToFrame(3)} />
               </div>
             </div>
