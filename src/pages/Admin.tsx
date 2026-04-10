@@ -102,7 +102,7 @@ const Admin = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
             style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.white; }}
+            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
             onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
             <ArrowLeft className="w-3 h-3" /> Back to Site
           </Link>
@@ -111,11 +111,11 @@ const Admin = () => {
         <div className="flex items-center gap-2">
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.white)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <LogOut className="w-4 h-4" style={{ color: t.ink(0.3) }} />
           </button>
           <button onClick={() => setSettingsOpen(true)} className="p-2 rounded-xl relative transition-colors" style={{ border: t.border(0.06) }} title="Site settings"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.white)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
             {settings?.global_article_password && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: t.ink(1) }} />}
           </button>
@@ -260,7 +260,7 @@ const ContactsFeed = () => {
             const info = score != null ? getScoreLabel(score) : null;
             const isExpanded = expandedId === c.id;
             return (
-              <div key={c.id} style={{ padding: "16px 18px", borderRadius: "10px", border: t.border(0.06), background: t.white }}>
+              <div key={c.id} style={{ padding: "16px 18px", borderRadius: "10px", border: t.border(0.06), background: t.ink(0.02) }}>
                 <div className="flex items-center gap-2 mb-1">
                   <p style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>{c.first_name} {c.last_name}</p>
                   {c.organization && <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35) }}>· {c.organization}</span>}

@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import BlockEditor from "./BlockEditor";
 import BlockTypePicker, { BlockType } from "./BlockTypePicker";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { t } from "@/lib/theme";
 
 interface BlockCanvasProps {
   blocks: any[];
@@ -40,8 +41,6 @@ function SortableBlock({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty
     </div>
   );
 }
-
-const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
 
 const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
   const [pickerIndex, setPickerIndex] = useState<number | null>(null);
@@ -134,13 +133,13 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
 
       {safeBlocks.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <p className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.25)" }}>Start writing</p>
+          <p className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Start writing</p>
           <button
             onClick={() => setPickerIndex(0)}
             className="p-3 rounded-full transition-all hover:scale-105"
-            style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(30 10% 12% / 0.1)" }}
+            style={{ background: t.ink(0.04), border: t.border(0.1) }}
           >
-            <Plus className="w-5 h-5" style={{ color: "hsl(30 10% 12% / 0.4)" }} />
+            <Plus className="w-5 h-5" style={{ color: t.ink(0.4) }} />
           </button>
         </div>
       )}
@@ -149,10 +148,10 @@ const BlockCanvas = ({ blocks, onChange, isCaseStudy }: BlockCanvasProps) => {
         <button
           onClick={() => setPickerIndex(safeBlocks.length)}
           className="w-full py-3 flex items-center justify-center gap-2 mt-2 rounded-xl transition-colors"
-          style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(30 10% 12% / 0.06)" }}
+          style={{ background: t.ink(0.03), border: t.border(0.06) }}
         >
-          <Plus className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.3)" }} />
-          <span className="text-[11px]" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>Add block</span>
+          <Plus className="w-4 h-4" style={{ color: t.ink(0.3) }} />
+          <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Add block</span>
         </button>
       )}
     </div>
@@ -176,13 +175,13 @@ function InsertPoint({ index, pickerIndex, setPickerIndex, onInsert, isCaseStudy
 
   return (
     <div ref={ref} className="relative group flex items-center justify-center" style={{ height: "12px" }}>
-      <div className="absolute inset-x-6 top-1/2 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "hsl(30 10% 12% / 0.06)" }} />
+      <div className="absolute inset-x-6 top-1/2 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: t.ink(0.06) }} />
       <button
         onClick={() => setPickerIndex(isOpen ? null : index)}
         className="relative z-10 p-0.5 rounded-full opacity-0 group-hover:opacity-30 transition-all duration-200"
-        style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(30 10% 12% / 0.1)" }}
+        style={{ background: t.ink(0.05), border: t.border(0.1) }}
       >
-        <Plus className="w-3 h-3" style={{ color: "hsl(30 10% 12% / 0.5)" }} />
+        <Plus className="w-3 h-3" style={{ color: t.ink(0.5) }} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-50">
