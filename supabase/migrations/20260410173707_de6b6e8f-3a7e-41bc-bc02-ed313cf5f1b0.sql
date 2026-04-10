@@ -1,0 +1,2 @@
+ALTER TABLE public.capability_posts DROP CONSTRAINT IF EXISTS capability_posts_type_check;
+ALTER TABLE public.capability_posts ADD CONSTRAINT capability_posts_type_check CHECK (type IN ('case-study', 'blog-post', 'field-note'));

@@ -96,12 +96,12 @@ const AdminEditor = () => {
     if (isNew) {
       createPost.mutate(formData(), {
         onSuccess: (data) => { setDirty(false); setSaveStatus("saved"); navigate(`/admin/edit/${data.id}`, { replace: true }); },
-        onError: () => setSaveStatus("idle"),
+        onError: () => { setDirty(false); setSaveStatus("idle"); },
       });
     } else {
       updatePost.mutate({ id: id!, data: formData() }, {
         onSuccess: () => { setDirty(false); setSaveStatus("saved"); },
-        onError: () => setSaveStatus("idle"),
+        onError: () => { setDirty(false); setSaveStatus("idle"); },
       });
     }
   }, [isNew, id, formData, createPost, updatePost, navigate, title, slug]);
@@ -109,10 +109,11 @@ const AdminEditor = () => {
   useEffect(() => {
     if (!dirty || isNew) return;
     if (!hasLoadedRef.current) return;
+    if (saveStatus === "saving") return;
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
     autoSaveTimer.current = setTimeout(() => { handleSave(); }, 3000);
     return () => { if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current); };
-  }, [dirty, isNew, handleSave]);
+  }, [dirty, isNew, handleSave, saveStatus]);
 
   useEffect(() => {
     if (saveStatus === "saved") { const t = setTimeout(() => setSaveStatus("idle"), 2000); return () => clearTimeout(t); }
