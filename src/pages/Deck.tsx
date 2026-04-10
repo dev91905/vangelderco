@@ -264,19 +264,18 @@ const Deck = () => {
   const frameInteracted = useMemo(() => {
     const gates: Record<number, boolean> = {};
     gates[0] = true; // hero — always ok
-    gates[1] = selectedPains.length > 0 || customSaved; // pain points
+    gates[1] = selectedPains.length > 0 || customSaved; // pain points + domains
     gates[2] = quizAnswers.every(a => a !== null); // quiz complete
     gates[3] = expandedHallmark !== null; // hallmarks — expanded at least one
-    gates[4] = selectedDomains.length > 0; // domains
-    gates[5] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
-    gates[6] = metricsChecked.length > 0; // metrics
-    gates[7] = engagementPath !== null; // working together
-    gates[8] = hasMediaExperience !== null; // media experience
-    gates[9] = true; // CTA — always accessible
-    gates[10] = true; // case studies
-    gates[11] = true; // close
+    gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
+    gates[5] = metricsChecked.length > 0; // metrics
+    gates[6] = engagementPath !== null; // working together
+    gates[7] = hasMediaExperience !== null; // media experience
+    gates[8] = true; // CTA — always accessible
+    gates[9] = true; // case studies
+    gates[10] = true; // close
     return gates;
-  }, [selectedPains, customSaved, quizAnswers, expandedHallmark, selectedDomains, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
+  }, [selectedPains, customSaved, quizAnswers, expandedHallmark, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
   /* ─── Scoring ─── */
   const diagnosticScore = useMemo(() => calculateReadinessScore({
