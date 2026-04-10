@@ -146,11 +146,15 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   </div>
                 </button>
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Hero Image</label>
-                <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
-              </div>
-              <PasswordField value={props.password} onChange={props.onPasswordChange} />
+              {props.type !== "field-note" && (
+                <div className="space-y-2">
+                  <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Hero Image</label>
+                  <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
+                </div>
+              )}
+              {props.type !== "field-note" && (
+                <PasswordField value={props.password} onChange={props.onPasswordChange} />
+              )}
 
               {/* Featured on Homepage */}
               <div className="space-y-2">
@@ -163,7 +167,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   </div>
                 </button>
               </div>
-              {props.isFeatured && (
+              {props.isFeatured && props.type !== "field-note" && (
                 <>
                   <div className="space-y-2">
                     <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Sector Label</label>
