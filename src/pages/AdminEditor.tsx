@@ -154,9 +154,16 @@ const AdminEditor = () => {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(40 30% 96% / 0.9)", borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
         <div className="flex items-center gap-3">
-          <Link to="/admin" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
+          <button
+            onClick={() => {
+              if (isNew && dirty) { setShowLeaveDialog(true); return; }
+              if (!isNew && dirty) { setShowLeaveDialog(true); return; }
+              navigate("/admin");
+            }}
+            className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl"
+          >
             <ArrowLeft className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.4)" }} />
-          </Link>
+          </button>
           <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
             {title || "Untitled"}
           </span>
