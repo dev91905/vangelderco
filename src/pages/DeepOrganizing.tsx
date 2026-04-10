@@ -5,7 +5,7 @@ const DeepOrganizing = () => (
     capability="deep-organizing"
     label="VGC Domain // 003"
     title="Deep Organizing"
-    description="We identify community leaders already earning trust and building followings, and connect them with the resources to go further — the talent that traditional funding pipelines miss."
+    description="Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between a movement that grows and one that stalls."
   />
 );
 
