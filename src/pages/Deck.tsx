@@ -64,7 +64,7 @@ const PAIN_POINTS = [
   {
     id: "expertise",
     short: "No media expertise in-house",
-    detail: "When leadership asks what's broken or whether a pitch is worth it, you lack the operational media experience to give a real answer.",
+    detail: "When leadership asks what's broken or whether a pitch is worth it, you lack the operational media experience to answer with confidence.",
     consequence: "When stakeholders ask what's broken, it takes operational experience most teams lack.",
     capRelevance: "Our team comes from commercial media — we bring pattern recognition, not just advice.",
   },
