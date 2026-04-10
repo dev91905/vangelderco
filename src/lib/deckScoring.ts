@@ -75,3 +75,20 @@ export function getScoreLabel(score: number): { label: string; color: string; se
   if (score <= 75) return { label: "Moderate", color: "hsl(45 93% 47%)", severity: "moderate" };
   return { label: "Advanced", color: "hsl(142 71% 45%)", severity: "advanced" };
 }
+
+/** Client-facing grade based on how many next-gen approaches were picked (0–5) */
+export function getQuizGrade(nextgenCount: number, total: number): { grade: string; summary: string } {
+  const ratio = nextgenCount / total;
+  if (ratio >= 0.8) return {
+    grade: "Ahead of the field",
+    summary: "You're already thinking the way the most effective operators think. The question is whether your portfolio is executing at this level — or if there's a gap between instinct and implementation.",
+  };
+  if (ratio >= 0.4) return {
+    grade: "Strong foundation, clear gaps",
+    summary: "You've identified some of the shifts that separate effective programs from the rest. The dimensions below show exactly where conventional thinking may be leaving you exposed.",
+  };
+  return {
+    grade: "Room to move",
+    summary: "The approaches you chose are industry standard — necessary, but no longer sufficient. The operators who are winning do everything you're doing and more. The breakdown shows where.",
+  };
+}

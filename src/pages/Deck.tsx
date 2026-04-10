@@ -228,6 +228,7 @@ const Deck = () => {
   const [quizAnswers, setQuizAnswers] = useState<(QuizAnswer | null)[]>(Array(QUIZ_ROWS.length).fill(null));
   const [quizStep, setQuizStep] = useState(0); // 0..5 = questions, 6 = reveal
   const [quizRevealed, setQuizRevealed] = useState(false);
+  const [expandedDimension, setExpandedDimension] = useState<number | null>(null);
 
   // Randomize left/right placement per row (stable across re-renders)
   const quizOrderRef = useRef(QUIZ_ROWS.map(() => Math.random() > 0.5));
