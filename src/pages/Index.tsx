@@ -519,35 +519,6 @@ const Index = () => {
                 minHeight: "420px",
               }}
             >
-              {/* Visual texture layer — grid + noise */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, hsl(var(--foreground) / 0.015) 0%, hsl(var(--foreground) / 0.04) 50%, hsl(var(--foreground) / 0.01) 100%)`,
-                }}
-              />
-              {/* Subtle grid overlay */}
-              <div
-                className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                style={{
-                  backgroundImage: `
-                    linear-gradient(hsl(var(--background)) 1px, transparent 1px),
-                    linear-gradient(90deg, hsl(var(--background)) 1px, transparent 1px)
-                  `,
-                  backgroundSize: "40px 40px",
-                }}
-              />
-              {/* Diagonal accent line */}
-              <div
-                className="absolute pointer-events-none"
-                style={{
-                  top: 0,
-                  right: 0,
-                  width: "60%",
-                  height: "100%",
-                  background: `linear-gradient(135deg, transparent 0%, hsl(var(--background) / 0.03) 40%, transparent 70%)`,
-                }}
-              />
 
               {/* Content */}
               <div className="relative z-10 p-10 md:p-14 lg:p-16 flex flex-col justify-center min-h-[420px]">
