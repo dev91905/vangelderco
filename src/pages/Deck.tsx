@@ -23,6 +23,7 @@ const f = {
   ink: t.ink,
   cream: t.cream,
   rule: t.rule,
+  accent: t.accent,
 };
 
 const heading = t.heading;
