@@ -577,7 +577,7 @@ const Index = () => {
             className="text-[26px] md:text-[36px] lg:text-[42px] leading-[1.15] text-center mb-5 max-w-xl"
             style={{ fontFamily: t.serif, color: t.ink(0.85), fontWeight: 400 }}
           >
-            You already know something isn't working.
+            Five minutes. One walkthrough. See if there's a fit.
           </h2>
         </RevealBlock>
 
@@ -586,7 +586,7 @@ const Index = () => {
             className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-sm mb-12"
             style={{ fontFamily: t.sans, color: t.ink(0.4) }}
           >
-            This will show you exactly what — and what to do about it.
+            A guided intake that helps us understand your situation — and shows you how we think about it.
           </p>
         </RevealBlock>
 
@@ -622,7 +622,7 @@ const Index = () => {
               e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--destructive) / 0)";
             }}
           >
-            Show me
+            Let's see
             <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
           </Link>
         </RevealBlock>

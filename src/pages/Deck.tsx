@@ -1029,7 +1029,10 @@ const Deck = () => {
                   return (
                     <button
                       key={d.id}
-                      onClick={() => setActiveDomain(isActive ? null : d.id)}
+                      onClick={() => {
+                        setActiveDomain(isActive ? null : d.id);
+                        setSelectedDomains(prev => prev.includes(d.id) ? prev.filter(x => x !== d.id) : [...prev, d.id]);
+                      }}
                       className={`text-left w-full hover:bg-background/20 transition-colors ${i < DOMAINS.length - 1 ? "border-b lg:border-b-0 lg:border-r" : ""}`}
                       style={{
                         padding: "26px 26px 24px",
@@ -1340,15 +1343,15 @@ const Deck = () => {
       <DeckFrame ref={setRef(9)} mode="narrow">
         <div ref={r10.ref} className="flex flex-col gap-8 items-center text-center">
           <p style={{ ...r10.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-            Everything we know becomes everything you know.
+            Here's what happens next.
           </p>
           <div style={{ ...r10.lineDraw(500, "60px") }} />
           <p style={{ ...r10.stagger(2, 700, "blur-up"), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
-            Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
+            Based on what you've told us, we have a picture of where you are. The next step is a conversation — no pitch, no pressure. Just a clear-eyed look at whether there's a fit.
           </p>
           {selectedPainDatas.length > 0 && (
             <p style={{ ...r10.stagger(3, 1000, "blur-up"), fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
-              {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
+              You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")}. We've seen each of these before and know exactly how to address them.
             </p>
           )}
         </div>
@@ -1358,11 +1361,63 @@ const Deck = () => {
       <DeckFrame ref={setRef(10)} mode="narrow">
         <div ref={r11.ref} className="flex flex-col gap-8 items-center text-center">
           <h2 style={{ ...r11.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-            What's next?
+            We've got a picture. Let's talk.
           </h2>
           <p style={{ ...r11.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
-            Let's look at your portfolio together.
+            Send your intake for review, or book a call directly. Either way, a team member will follow up personally.
           </p>
+
+          {/* ─── Intake Summary Card ─── */}
+          {(selectedPains.length > 0 || customSaved || engagementPath || selectedDomains.length > 0) && ctaMode !== "thanks" && (
+            <div
+              style={{
+                ...r11.stagger(1, 400, "blur-up"),
+                width: "100%",
+                maxWidth: "480px",
+                padding: "20px 24px",
+                borderRadius: "12px",
+                background: "hsl(var(--destructive) / var(--a-bg))",
+                border: "1px solid hsl(var(--destructive) / var(--a-border-card))",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", marginBottom: "12px" }}>
+                Your intake summary
+              </p>
+              {selectedPains.length > 0 && (
+                <div style={{ marginBottom: "10px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Challenges</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>
+                    {selectedPainDatas.map(p => p.short).join(" · ")}
+                  </p>
+                </div>
+              )}
+              {customSaved && customMessage.trim() && (
+                <div style={{ marginBottom: "10px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Custom note</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5, fontStyle: "italic" }}>
+                    "{customMessage.trim()}"
+                  </p>
+                </div>
+              )}
+              {selectedDomains.length > 0 && (
+                <div style={{ marginBottom: "10px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Domains of interest</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>
+                    {DOMAINS.filter(d => selectedDomains.includes(d.id)).map(d => d.title).join(" · ")}
+                  </p>
+                </div>
+              )}
+              {engagementPath && (
+                <div>
+                  <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Engagement path</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>
+                    {engagementPath === "fresh" ? "Starting fresh — needs landscape review" : "Already up to speed — needs capacity & connections"}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Two CTA options */}
           {ctaMode !== "email" && ctaMode !== "thanks" && (
@@ -1387,7 +1442,7 @@ const Deck = () => {
                 onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive))"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; e.currentTarget.style.transform = "translateY(0)"; }}
               >
-                Email Us
+                Send Intake for Review
               </button>
               {bookingLink && (
                 <a
@@ -1414,7 +1469,7 @@ const Deck = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-mid))"; e.currentTarget.style.color = f.ink(0.9); }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; e.currentTarget.style.color = f.ink(0.7); }}
                 >
-                  Schedule a Meeting
+                  Book a Call
                 </a>
               )}
             </div>
@@ -1440,7 +1495,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                    background: "hsl(var(--card))",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1462,7 +1517,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                    background: "hsl(var(--card))",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1534,7 +1589,7 @@ const Deck = () => {
                     transition: "background 0.15s ease",
                   }}
                 >
-                  {ctaSubmitting ? "Sending…" : "Send"}
+                  {ctaSubmitting ? "Sending…" : "Submit Intake"}
                 </button>
                 <button
                   type="button"
@@ -1562,8 +1617,34 @@ const Deck = () => {
                 Received ✓
               </p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "400px", margin: "0 auto" }}>
-                A team member is reviewing and will reach out shortly.
+                We're reviewing your intake now. A team member will follow up within two business days.
               </p>
+              {bookingLink && (
+                <a
+                  href={bookingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-block",
+                    marginTop: "24px",
+                    fontFamily: f.sans,
+                    fontSize: "12px",
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase" as const,
+                    fontWeight: 600,
+                    color: f.ink(0.6),
+                    border: `1px solid ${f.ink(0.15)}`,
+                    padding: "12px 28px",
+                    borderRadius: "999px",
+                    textDecoration: "none",
+                    transition: "all 200ms",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.color = f.ink(0.6); }}
+                >
+                  Or book a call now →
+                </a>
+              )}
             </div>
           )}
         </div>
@@ -1608,11 +1689,42 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 13: Spacer ═══ */}
+      {/* ═══ FRAME 13: Close ═══ */}
       <DeckFrame ref={setRef(12)}>
         <div className="flex flex-col items-center text-center gap-6">
-          <p style={{ ...label("10px") }}>← Scroll back to explore</p>
-          <h2 style={{ fontFamily: f.sans, fontSize: "clamp(24px, 4vw, 44px)", fontWeight: 700, color: f.ink(0.06), letterSpacing: "-0.02em" }}>VGC StratComm</h2>
+          {ctaMode === "thanks" ? (
+            <>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 700, color: f.ink(0.85) }}>Thank you.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "400px" }}>
+                We're reviewing your intake and will be in touch shortly.
+              </p>
+            </>
+          ) : (
+            <>
+              <p style={{ ...label("10px") }}>← Ready to connect?</p>
+              <button
+                onClick={() => scrollToFrame(10)}
+                style={{
+                  fontFamily: f.sans,
+                  fontSize: "13px",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase" as const,
+                  fontWeight: 500,
+                  color: "hsl(var(--destructive))",
+                  background: "hsl(var(--destructive) / var(--a-bg))",
+                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                  padding: "14px 28px",
+                  borderRadius: "999px",
+                  cursor: "pointer",
+                  transition: "all 200ms ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-low))"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))"; }}
+              >
+                Send your intake →
+              </button>
+            </>
+          )}
         </div>
       </DeckFrame>
 
