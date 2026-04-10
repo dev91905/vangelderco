@@ -127,7 +127,7 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
       className="my-8"
       style={{
         height: 1,
-        background: "hsl(var(--destructive) / var(--a-low))",
+        background: "hsl(var(--foreground) / var(--a-low))",
         width: hasRevealed ? width : 0,
         transition: `width 1.2s ${EASE_OUT_EXPO} 0.3s`,
       }}
@@ -153,14 +153,14 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
           ? hovered ? "translateX(8px)" : "translateX(0)"
           : "translateX(-30px)",
         transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-dim))"}`,
+        borderLeft: `2px solid ${hovered ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-dim))"}`,
         paddingLeft: "24px",
         willChange: "opacity, transform",
       }}
     >
       <div
         className="text-[10px] tracking-[0.2em] uppercase mb-2"
-        style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+        style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
       >
         {sector}
       </div>
@@ -174,7 +174,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
         className="text-[11px]"
         style={{
           fontFamily: t.sans,
-          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / var(--a-mid))",
+          color: hovered ? "hsl(var(--foreground) / 0.9)" : "hsl(var(--foreground) / var(--a-mid))",
           transition: `color 0.4s ${EASE_OUT_QUART}`,
         }}
       >
@@ -261,7 +261,7 @@ const Index = () => {
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / var(--a-high))",
+              color: "hsl(var(--foreground) / var(--a-high))",
               animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
             }}
           >
@@ -307,10 +307,10 @@ const Index = () => {
                   className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                   style={{
                     fontFamily: t.sans,
-                    color: isGlowing ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-mid))",
-                    background: isGlowing ? "hsl(var(--destructive) / 0.14)" : "hsl(var(--destructive) / var(--a-bg))",
-                    border: `1px solid ${isGlowing ? "hsl(var(--destructive) / 0.45)" : "hsl(var(--destructive) / var(--a-border))"}`,
-                    boxShadow: isGlowing ? "0 0 20px -4px hsl(var(--destructive) / 0.2)" : "none",
+                    color: isGlowing ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-mid))",
+                    background: isGlowing ? "hsl(var(--foreground) / 0.14)" : "hsl(var(--foreground) / var(--a-bg))",
+                    border: `1px solid ${isGlowing ? "hsl(var(--foreground) / 0.45)" : "hsl(var(--foreground) / var(--a-border))"}`,
+                    boxShadow: isGlowing ? "0 0 20px -4px hsl(var(--foreground) / 0.2)" : "none",
                     transition: "all 0.6s ease",
                     animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                   }}
@@ -325,7 +325,7 @@ const Index = () => {
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / var(--a-dim))",
+              color: "hsl(var(--foreground) / var(--a-dim))",
               animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.0s both`,
             }}
           >
@@ -344,7 +344,7 @@ const Index = () => {
                 fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
-                color: "hsl(var(--destructive) / var(--a-high))",
+                color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
               You're on the ground doing the work.
@@ -382,7 +382,7 @@ const Index = () => {
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
               Capabilities
             </div>
@@ -395,19 +395,19 @@ const Index = () => {
                   to={cap.to}
                   className="group block relative overflow-hidden rounded-2xl no-underline"
                    style={{
-                    background: "hsl(var(--destructive) / var(--a-bg-subtle))",
-                    border: `1px solid hsl(var(--destructive) / var(--a-border-card))`,
+                    background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                    border: `1px solid hsl(var(--foreground) / var(--a-border-card))`,
                     transition: `border-color 0.5s ${EASE_OUT_QUART}, transform 0.6s ${EASE_OUT_EXPO}, box-shadow 0.5s ${EASE_OUT_QUART}`,
                   }}
                    onMouseEnter={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / 0.45)";
+                    el.style.borderColor = "hsl(var(--foreground) / 0.45)";
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--destructive) / 0.25)`;
+                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--foreground) / 0.25)`;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / var(--a-border-card))";
+                    el.style.borderColor = "hsl(var(--foreground) / var(--a-border-card))";
                     el.style.transform = "translateY(0)";
                     el.style.boxShadow = "none";
                   }}
@@ -416,7 +416,7 @@ const Index = () => {
                   <div
                     className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{
-                      background: "linear-gradient(180deg, hsl(var(--destructive) / var(--a-high)) 0%, hsl(var(--destructive) / var(--a-border)) 100%)",
+                      background: "linear-gradient(180deg, hsl(var(--foreground) / var(--a-high)) 0%, hsl(var(--foreground) / var(--a-border)) 100%)",
                       transition: `opacity 0.4s ${EASE_OUT_QUART}`,
                     }}
                   />
@@ -426,7 +426,7 @@ const Index = () => {
                     <div className="flex items-baseline gap-4 mb-4">
                       <span
                         className="text-[11px] tracking-[0.2em] uppercase"
-                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-low))" }}
+                        style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-low))" }}
                       >
                         0{i + 1}
                       </span>
@@ -443,7 +443,7 @@ const Index = () => {
                       className="text-[16px] md:text-[18px] mb-5"
                       style={{
                         fontFamily: t.serif,
-                        color: "hsl(var(--destructive))",
+                        color: "hsl(var(--foreground))",
                         fontStyle: "italic",
                         lineHeight: 1.5,
                       }}
@@ -464,11 +464,11 @@ const Index = () => {
                       className="mt-6 text-[11px] tracking-[0.15em] uppercase flex items-center gap-2"
                       style={{
                         fontFamily: t.sans,
-                        color: "hsl(var(--destructive) / var(--a-low))",
+                        color: "hsl(var(--foreground) / var(--a-low))",
                         transition: `color 0.3s ${EASE_OUT_QUART}, gap 0.4s ${EASE_OUT_EXPO}`,
                       }}
                     >
-                      <span className="group-hover:text-[hsl(var(--destructive))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>Explore</span>
+                      <span className="group-hover:text-[hsl(var(--foreground))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>Explore</span>
                       <span className="inline-block transition-transform duration-500 group-hover:translate-x-1.5" style={{ transitionTimingFunction: EASE_OUT_EXPO }}>→</span>
                     </div>
                   </div>
@@ -486,7 +486,7 @@ const Index = () => {
         <RevealBlock>
           <span
             className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
-            style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-mid))" }}
+            style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-mid))" }}
           >
             <Timer size={13} strokeWidth={1.5} />
             Five minutes
@@ -521,26 +521,26 @@ const Index = () => {
               fontWeight: 500,
               letterSpacing: "0.15em",
               textTransform: "uppercase" as const,
-              color: "hsl(var(--destructive))",
-              border: "1px solid hsl(var(--destructive) / var(--a-dim))",
-              background: "hsl(var(--destructive) / var(--a-bg))",
+              color: "hsl(var(--foreground))",
+              border: "1px solid hsl(var(--foreground) / var(--a-dim))",
+              background: "hsl(var(--foreground) / var(--a-bg))",
               padding: "14px 36px",
               transition: `all 0.5s ${EASE_OUT_EXPO}`,
-              boxShadow: "0 0 0 0 hsl(var(--destructive) / 0)",
+              boxShadow: "0 0 0 0 hsl(var(--foreground) / 0)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.background = "hsl(var(--destructive))";
-              e.currentTarget.style.color = "hsl(var(--destructive-foreground))";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive))";
-              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--destructive) / 0.35)";
+              e.currentTarget.style.background = "hsl(var(--foreground))";
+              e.currentTarget.style.color = "hsl(var(--background))";
+              e.currentTarget.style.borderColor = "hsl(var(--foreground))";
+              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--foreground) / 0.35)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
-              e.currentTarget.style.color = "hsl(var(--destructive))";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-dim))";
-              e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--destructive) / 0)";
+              e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))";
+              e.currentTarget.style.color = "hsl(var(--foreground))";
+              e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-dim))";
+              e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--foreground) / 0)";
             }}
           >
             Let's see
@@ -555,7 +555,7 @@ const Index = () => {
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-4"
-              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
               Our Network
             </div>
@@ -576,20 +576,20 @@ const Index = () => {
                   className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
                   style={{
                     fontFamily: t.sans,
-                    color: "hsl(var(--destructive) / var(--a-high))",
-                    background: "hsl(var(--destructive) / var(--a-bg))",
-                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                    color: "hsl(var(--foreground) / var(--a-high))",
+                    background: "hsl(var(--foreground) / var(--a-bg))",
+                    border: "1px solid hsl(var(--foreground) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
-                    e.currentTarget.style.color = "hsl(var(--destructive))";
+                    e.currentTarget.style.background = "hsl(var(--foreground) / 0.12)";
+                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.4)";
+                    e.currentTarget.style.color = "hsl(var(--foreground))";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
+                    e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))";
+                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border))";
+                    e.currentTarget.style.color = "hsl(var(--foreground) / var(--a-high))";
                   }}
                 >
                   {sector}
@@ -606,7 +606,7 @@ const Index = () => {
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
               Field Notes
             </div>
@@ -638,7 +638,7 @@ const Index = () => {
               color: t.ink(0.45),
               transition: `color 0.4s ${EASE_OUT_QUART}`,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(var(--destructive))")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(var(--foreground))")}
             onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.45))}
           >
             hello@vangelder.co

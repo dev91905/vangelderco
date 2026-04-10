@@ -81,7 +81,7 @@ const PostDetail = () => {
             {(post as any).featured_stat && (
               <div className="pt-4" style={{ borderTop: `1px solid ${t.ink(0.06)}` }}>
                 <span className="text-[10px] tracking-[0.15em] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif", color: t.ink(0.25) }}>Impact</span>
-                <span className="text-[15px]" style={{ fontFamily: "'DM Sans', sans-serif", color: "hsl(var(--destructive))" }}>
+                <span className="text-[15px]" style={{ fontFamily: "'DM Sans', sans-serif", color: "hsl(var(--foreground))" }}>
                   {(post as any).featured_stat}
                 </span>
               </div>
