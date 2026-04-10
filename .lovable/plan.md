@@ -1,44 +1,62 @@
 
 
-# Slide 3: Enrich Copy + Design Polish
+# Dark Mode with Black & Red CRT Aesthetic
 
-## The problem
+## Overview
+Add a toggle in the bottom-left corner that switches between the current warm cream light mode and a dark mode using the original black background + red accent color scheme, with CRT scan lines, a sweeping scan beam animation, and a breathing red glow.
 
-The current `CONFRONTATION_ROWS` copy was over-compressed. Critical insights from the original source material were stripped out:
+## What Changes
 
-- **Content**: Lost "investing in digital creator economies where ideology forms in real time" and "funding investigative journalism and developing new media talent" — replaced with a generic "fund creator ecosystems"
-- **Distribution**: Lost "acquiring legacy media platforms and changing the programming" — replaced with vague "acquire platforms and change the algorithms"
-- **Engagement**: Lost "organizing in churches, veteran groups, and local business networks" specificity
-- **Measurement**: Lost "running public polls designed to shift policy baselines"
+### 1. Dark Mode Context + Toggle
+- Create `src/contexts/DarkModeContext.tsx` — a React context with `isDark` state, persisted to `localStorage`.
+- Create `src/components/DarkModeToggle.tsx` — a small icon button (sun/moon) fixed to bottom-left corner, z-30.
+- When toggled, add/remove class `dark` on `<html>`.
 
-The "your side" column also lost specificity — the original had concrete items like "fund a documentary," "place op-eds and earned media," "hire influencers," "report impressions as impact."
+### 2. CSS Dark Mode Variables
+In `src/index.css`, add a `.dark` block with the original palette:
+- Background: `hsl(0 0% 2.5%)` (near-black)
+- Foreground/text: white at varying opacities
+- Accent: `hsl(0 80% 48%)` (red) for highlights, active states
+- Card/surface: `hsl(0 0% 5%)`
+- Border: white at ~8% opacity
 
-This slide is supposed to be the "oh shit" moment. Right now it reads like a generic comparison chart.
+### 3. Theme Token Awareness
+Update `src/lib/theme.ts` so `ink()`, `cream`, `white`, `border()`, and `surface` read from CSS custom properties rather than hardcoded HSL values. This way the same `t.ink(0.5)` call resolves to dark ink on light backgrounds or light ink on dark backgrounds automatically — **no component changes needed**.
 
-## What changes
+### 4. CRT Overlay (Dark Mode Only)
+Create `src/components/CRTOverlay.tsx` — rendered only when `isDark` is true. Contains:
+- **Scan lines**: repeating horizontal lines via CSS `repeating-linear-gradient` (2px pitch, ~4% opacity)
+- **Scan beam**: a horizontal bar that sweeps vertically on an 8s loop (`@keyframes scan-beam`)
+- **Breathing red glow**: a radial gradient centered on screen that pulses opacity on an 8s cycle
 
-### 1. Rewrite `CONFRONTATION_ROWS` copy (lines 71-79)
+All purely CSS, `pointer-events: none`, layered at z-10.
 
-Beef up both columns with the insights from the original source material. Each cell gets a full, educational sentence that teaches something specific. The opposition side should feel overwhelming — they're doing things the reader hasn't even considered.
+### 5. ConstellationField Dark Adaptation
+The constellation field already uses hardcoded `hsla(0, 0%, 100%, ...)` for edges/nodes and red for the northstar. In dark mode it will naturally look correct on the black background. It's currently rendered in `App.tsx` on all routes — no changes needed.
 
-**New rows:**
+### 6. Integration
+- Wrap `<App>` in `DarkModeProvider`.
+- Add `<DarkModeToggle />` and `<CRTOverlay />` inside `AppRoutes`.
+- The Deck page, blog pages, capability pages, and post cards all use `t.ink()` / `t.cream` — they'll automatically adapt.
 
-| Dimension | Your side | Their side |
-|-----------|-----------|------------|
-| Research | Commission focus groups and test messages before launching a campaign. | Monitor what's already resonating organically across platforms and communities. |
-| Content | Produce polished ads, place op-eds, and fund a documentary on a campaign calendar. | Invest in digital creator economies where ideology forms in real time — and fund investigative journalism to develop new media talent. |
-| Distribution | Buy placements on platforms and hope the right audiences see them. | Acquire the platforms themselves and change the programming, algorithms, and editorial direction. |
-| Engagement | Hire influencers to post scripted content for a single grant cycle. | Organize at scale through churches, veteran groups, campuses, and local business networks — building durable infrastructure. |
-| Measurement | Count impressions and media mentions when the grant closes. | Run public polls designed to shift policy baselines and track what's actually moving legislation in real time. |
-| Iteration | Declare success when the grant period ends and move to the next proposal. | Cut what's failing mid-cycle, pour resources into what's working, and compound gains across years. |
-| Overall | Test messages in a controlled environment, then pay people to watch the winners. | Fund everything, find what catches fire organically, and supercharge it with infrastructure and capital. |
+### 7. Component-Specific Tweaks
+Some components use hardcoded colors (e.g., `AtmosphericLayout`'s admin link, `PostCard` hover handlers). These will be updated to use theme tokens so they respond to the mode switch.
 
-### 2. Design improvements
+## Files Created
+- `src/contexts/DarkModeContext.tsx`
+- `src/components/DarkModeToggle.tsx`
+- `src/components/CRTOverlay.tsx`
 
-- **Increase font size** slightly — from `clamp(12px, 1.2vw, 14px)` to `clamp(13px, 1.3vw, 15px)` so the richer copy is readable
-- **"Their side" column gets slightly bolder weight** (500 vs 400) to make the opposition feel heavier — reinforcing the asymmetry without color tricks
-- **Row padding** bumped slightly to give the longer copy breathing room
+## Files Modified
+- `src/index.css` — add `.dark` CSS variables + CRT keyframes
+- `src/lib/theme.ts` — make tokens CSS-variable-aware
+- `src/App.tsx` — add provider, toggle, overlay
+- `src/components/AtmosphericLayout.tsx` — use theme tokens for admin link
+- `src/components/PostCard.tsx` — use CSS variables for hover colors
 
-## Files modified
-- `src/pages/Deck.tsx` — rewrite `CONFRONTATION_ROWS` constant (lines 71-79) and minor style tweaks in the table renderer
+## What Does NOT Change
+- Fonts stay the same (Source Serif 4 + Inter)
+- Component shapes, border-radius, spacing — untouched
+- Deck horizontal frame layout — untouched
+- No constellation field changes needed
 
