@@ -465,7 +465,7 @@ const Deck = () => {
       }}
     >
 
-      {/* ─── Fixed UI Chrome ─── */}
+      {/* ─── Fixed UI Chrome — Top ─── */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
         <div className="flex items-center justify-between pointer-events-auto">
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
@@ -482,6 +482,21 @@ const Deck = () => {
           </button>
         </div>
       </div>
+
+      {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
+      {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 28px 24px" }}>
+          <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1400px", margin: "0 auto" }}>
+            <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.2), letterSpacing: "0.04em" }}>
+                Enter ↵ or →
+              </span>
+              <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Fixed progress bar ─── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 0 16px 0" }}>
@@ -652,13 +667,7 @@ const Deck = () => {
               </form>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", minHeight: "48px" }}>
-            {(selectedPains.length > 0 || customSaved) ? (
-              <NavRow onBack={() => scrollToFrame(0)} onNext={() => scrollToFrame(2)} />
-            ) : (
-              <p style={{ ...label("9px"), ...r2.stagger(3, 1000, "blur-up") }}>→ Select at least one to continue, or skip and keep scrolling</p>
-            )}
-          </div>
+          <div style={{ minHeight: "48px" }} />
         </div>
       </DeckFrame>
 
@@ -908,9 +917,7 @@ const Deck = () => {
                 })}
               </div>
 
-              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", marginBottom: "40px", display: "flex", justifyContent: "center" }}>
-                <NavRow onBack={() => scrollToFrame(1)} onNext={() => scrollToFrame(3)} />
-              </div>
+              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", marginBottom: "40px" }} />
             </div>
           )}
         </div>
@@ -966,9 +973,6 @@ const Deck = () => {
                 </button>
               );
             })}
-            <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
-              <NavRow onBack={() => scrollToFrame(2)} onNext={() => scrollToFrame(4)} nextLabel="Continue →" justifyEnd />
-            </div>
           </div>
         </div>
       </DeckFrame>
@@ -1055,11 +1059,6 @@ const Deck = () => {
               </div>
             </div>
 
-            {selectedDomains.length > 0 && (
-              <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
-                <NavRow onBack={() => scrollToFrame(3)} onNext={() => scrollToFrame(5)} justifyEnd />
-              </div>
-            )}
           </div>
         </div>
       </DeckFrame>
@@ -1110,11 +1109,6 @@ const Deck = () => {
               );
             })}
           </div>
-          {capabilitiesRanked.length >= 2 && (
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <NavRow onBack={() => scrollToFrame(4)} onNext={() => scrollToFrame(6)} justifyEnd />
-            </div>
-          )}
         </div>
       </DeckFrame>
 
@@ -1128,11 +1122,6 @@ const Deck = () => {
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
               Check everything your grantees report on today. Be honest — there are no wrong answers.
             </p>
-            {metricsChecked.length > 0 && (
-              <div style={{ marginTop: "20px" }}>
-                <NavRow onBack={() => scrollToFrame(5)} onNext={() => scrollToFrame(7)} />
-              </div>
-            )}
           </div>
 
           <div className="lg:w-[60%] grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1242,11 +1231,6 @@ const Deck = () => {
             </div>
           )}
 
-          {engagementPath && (
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <NavRow onBack={() => scrollToFrame(6)} onNext={() => scrollToFrame(8)} justifyEnd />
-            </div>
-          )}
 
           {!engagementPath && (
             <p style={{ ...label("9px"), ...r8.stagger(2, 600, "blur-up") }}>↑ Choose a path to continue</p>
@@ -1291,11 +1275,6 @@ const Deck = () => {
                   </button>
                 ))}
               </div>
-              {hasMediaExperience !== null && (
-                <div style={{ marginTop: "16px" }}>
-                  <NavRow onBack={() => scrollToFrame(7)} onNext={() => scrollToFrame(9)} />
-                </div>
-              )}
             </div>
           </div>
 
