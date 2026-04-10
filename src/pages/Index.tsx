@@ -252,9 +252,6 @@ const Index = () => {
         <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: t.ink(0.3) }}>
           Van Gelder Co.
         </span>
-        <span className="text-[8px] tracking-[0.12em] uppercase mt-0.5" style={{ color: t.ink(0.2) }}>
-          Strategic Communications
-        </span>
       </div>
 
       <div
