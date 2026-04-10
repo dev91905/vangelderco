@@ -59,46 +59,46 @@
   }
 
   .dark {
-    --background: 0 0% 2.5%;
-    --foreground: 0 0% 93%;
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 93%;
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 93%;
-    --primary: 0 0% 90%;
-    --primary-foreground: 0 0% 5%;
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 70%;
-    --muted: 0 0% 8%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 0 0% 10%;
-    --accent-foreground: 0 0% 93%;
+    --background: 30 6% 3%;
+    --foreground: 35 5% 93%;
+    --card: 30 5% 5.5%;
+    --card-foreground: 35 5% 93%;
+    --popover: 30 5% 5.5%;
+    --popover-foreground: 35 5% 93%;
+    --primary: 35 5% 90%;
+    --primary-foreground: 30 5% 5%;
+    --secondary: 30 4% 10%;
+    --secondary-foreground: 30 4% 70%;
+    --muted: 30 4% 8%;
+    --muted-foreground: 30 4% 50%;
+    --accent: 30 4% 10%;
+    --accent-foreground: 35 5% 93%;
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 12%;
-    --input: 0 0% 12%;
-    --ring: 0 0% 40%;
-    --sidebar-background: 0 0% 4%;
-    --sidebar-foreground: 0 0% 50%;
-    --sidebar-primary: 0 0% 90%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 8%;
-    --sidebar-accent-foreground: 0 0% 70%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 0% 40%;
+    --border: 30 4% 12%;
+    --input: 30 4% 12%;
+    --ring: 30 4% 40%;
+    --sidebar-background: 30 5% 4%;
+    --sidebar-foreground: 30 4% 50%;
+    --sidebar-primary: 35 5% 90%;
+    --sidebar-primary-foreground: 30 5% 5%;
+    --sidebar-accent: 30 4% 8%;
+    --sidebar-accent-foreground: 30 4% 70%;
+    --sidebar-border: 30 4% 12%;
+    --sidebar-ring: 30 4% 40%;
 
-    /* Theme bridge tokens — dark */
-    --ink-h: 0;
-    --ink-s: 0%;
+    /* Theme bridge tokens — dark (warm neutrals) */
+    --ink-h: 35;
+    --ink-s: 5%;
     --ink-l: 93%;
-    --cream-h: 0;
-    --cream-s: 0%;
-    --cream-l: 2.5%;
-    --card-h: 0;
-    --card-s: 0%;
-    --card-l: 5%;
-    --accent-h: 0;
-    --accent-s: 0%;
+    --cream-h: 30;
+    --cream-s: 6%;
+    --cream-l: 3%;
+    --card-h: 30;
+    --card-s: 5%;
+    --card-l: 5.5%;
+    --accent-h: 35;
+    --accent-s: 5%;
     --accent-l: 60%;
 
     /* Accent opacity tiers — pop in dark mode */
