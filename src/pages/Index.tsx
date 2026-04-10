@@ -509,7 +509,7 @@ const Index = () => {
                         transition: `color 0.3s ${EASE_OUT_QUART}, gap 0.4s ${EASE_OUT_EXPO}`,
                       }}
                     >
-                      <span className="group-hover:text-[hsl(var(--foreground))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>See how we do it</span>
+                      <span className="group-hover:text-[hsl(var(--foreground))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>Explore</span>
                       <span className="inline-block transition-transform duration-500 group-hover:translate-x-1.5" style={{ transitionTimingFunction: EASE_OUT_EXPO }}>→</span>
                     </div>
                   </div>
