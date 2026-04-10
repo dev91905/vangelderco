@@ -8,6 +8,10 @@ import BlockCanvas from "@/components/admin/BlockCanvas";
 import StatChipsEditor from "@/components/admin/StatChipsEditor";
 import { ArrowLeft, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
 
