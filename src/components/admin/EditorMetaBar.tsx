@@ -244,8 +244,8 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
               {props.isFeatured && props.type !== "field-note" && (
                 <>
                   <div className="space-y-2">
-                    <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Sector Label</label>
-                    <input value={props.sectorLabel || ""} onChange={(e) => props.onSectorLabelChange(e.target.value || null)} placeholder="e.g. ENERGY × LABOR"
+                    <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Slug Line</label>
+                    <input value={props.sectorLabel || ""} onChange={(e) => props.onSectorLabelChange(e.target.value || null)} placeholder="e.g. INTELLIGENCE · CULTURE · ORGANIZING"
                       className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.7), border: t.border(0.08) }} />
                   </div>
                   <div className="space-y-2">

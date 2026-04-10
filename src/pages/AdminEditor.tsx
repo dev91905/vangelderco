@@ -213,8 +213,8 @@ const AdminEditor = () => {
         {type === "field-note" && (
           <div className="px-4 md:px-8 py-6 max-w-2xl mx-auto space-y-6">
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Sector Label</label>
-              <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)} placeholder="e.g. ENERGY × LABOR"
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Slug Line</label>
+              <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)} placeholder="e.g. INTELLIGENCE · CULTURE · ORGANIZING"
                 className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
             </div>
             <div className="space-y-2">
