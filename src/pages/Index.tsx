@@ -125,7 +125,7 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
       className="my-8"
       style={{
         height: 1,
-        background: "hsl(var(--destructive) / 0.4)",
+        background: "hsl(var(--destructive) / var(--a-low))",
         width: hasRevealed ? width : 0,
         transition: `width 1.2s ${EASE_OUT_EXPO} 0.3s`,
       }}
@@ -150,7 +150,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
           ? hovered ? "translateX(8px)" : "translateX(0)"
           : "translateX(-30px)",
         transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / 0.3)"}`,
+        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-dim))"}`,
         paddingLeft: "24px",
         willChange: "opacity, transform",
       }}
@@ -171,7 +171,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
         className="text-[11px]"
         style={{
           fontFamily: t.sans,
-          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / 0.5)",
+          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / var(--a-mid))",
           transition: `color 0.4s ${EASE_OUT_QUART}`,
         }}
       >
@@ -254,7 +254,7 @@ const Index = () => {
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / 0.6)",
+              color: "hsl(var(--destructive) / var(--a-high))",
               animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
             }}
           >
@@ -298,9 +298,9 @@ const Index = () => {
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
                   fontFamily: t.sans,
-                  color: "hsl(var(--destructive) / 0.5)",
-                  background: "hsl(var(--destructive) / 0.04)",
-                  border: "1px solid hsl(var(--destructive) / 0.12)",
+                  color: "hsl(var(--destructive) / var(--a-mid))",
+                  background: "hsl(var(--destructive) / var(--a-bg))",
+                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
                   animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                 }}
               >
@@ -313,7 +313,7 @@ const Index = () => {
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / 0.3)",
+              color: "hsl(var(--destructive) / var(--a-dim))",
               animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.0s both`,
             }}
           >
@@ -332,7 +332,7 @@ const Index = () => {
                 fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
-                color: "hsl(var(--destructive) / 0.6)",
+                color: "hsl(var(--destructive) / var(--a-high))",
               }}
             >
               You're on the ground doing the work.
@@ -382,20 +382,20 @@ const Index = () => {
                 <Link
                   to={cap.to}
                   className="group block relative overflow-hidden rounded-2xl no-underline"
-                  style={{
-                    background: "hsl(var(--destructive) / 0.03)",
-                    border: `1px solid hsl(var(--destructive) / 0.1)`,
+                   style={{
+                    background: "hsl(var(--destructive) / var(--a-bg-subtle))",
+                    border: `1px solid hsl(var(--destructive) / var(--a-border-card))`,
                     transition: `border-color 0.5s ${EASE_OUT_QUART}, transform 0.6s ${EASE_OUT_EXPO}, box-shadow 0.5s ${EASE_OUT_QUART}`,
                   }}
-                  onMouseEnter={(e) => {
+                   onMouseEnter={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / 0.35)";
+                    el.style.borderColor = "hsl(var(--destructive) / 0.45)";
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--destructive) / 0.2)`;
+                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--destructive) / 0.25)`;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / 0.1)";
+                    el.style.borderColor = "hsl(var(--destructive) / var(--a-border-card))";
                     el.style.transform = "translateY(0)";
                     el.style.boxShadow = "none";
                   }}
@@ -404,7 +404,7 @@ const Index = () => {
                   <div
                     className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{
-                      background: "linear-gradient(180deg, hsl(var(--destructive) / 0.6) 0%, hsl(var(--destructive) / 0.15) 100%)",
+                      background: "linear-gradient(180deg, hsl(var(--destructive) / var(--a-high)) 0%, hsl(var(--destructive) / var(--a-border)) 100%)",
                       transition: `opacity 0.4s ${EASE_OUT_QUART}`,
                     }}
                   />
@@ -414,7 +414,7 @@ const Index = () => {
                     <div className="flex items-baseline gap-4 mb-4">
                       <span
                         className="text-[11px] tracking-[0.2em] uppercase"
-                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / 0.4)" }}
+                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-low))" }}
                       >
                         0{i + 1}
                       </span>
@@ -452,7 +452,7 @@ const Index = () => {
                       className="mt-6 text-[11px] tracking-[0.15em] uppercase flex items-center gap-2"
                       style={{
                         fontFamily: t.sans,
-                        color: "hsl(var(--destructive) / 0.4)",
+                        color: "hsl(var(--destructive) / var(--a-low))",
                         transition: `color 0.3s ${EASE_OUT_QUART}, gap 0.4s ${EASE_OUT_EXPO}`,
                       }}
                     >
@@ -521,20 +521,20 @@ const Index = () => {
                   className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
                   style={{
                     fontFamily: t.sans,
-                    color: "hsl(var(--destructive) / 0.6)",
-                    background: "hsl(var(--destructive) / 0.04)",
-                    border: "1px solid hsl(var(--destructive) / 0.12)",
+                     color: "hsl(var(--destructive) / var(--a-high))",
+                    background: "hsl(var(--destructive) / var(--a-bg))",
+                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.35)";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.9)";
+                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
+                    e.currentTarget.style.color = "hsl(var(--destructive))";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.12)";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.6)";
+                    e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
+                    e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
                   }}
                 >
                   {sector}
@@ -556,18 +556,18 @@ const Index = () => {
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--destructive))",
-              border: "1px solid hsl(var(--destructive) / 0.3)",
-              background: "hsl(var(--destructive) / 0.04)",
+              border: "1px solid hsl(var(--destructive) / var(--a-dim))",
+              background: "hsl(var(--destructive) / var(--a-bg))",
               transition: `all 0.4s ${EASE_OUT_EXPO}`,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
+              e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
               e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.5)";
               e.currentTarget.style.transform = "scale(1.04)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.3)";
+              e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-dim))";
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
@@ -587,7 +587,7 @@ const Index = () => {
             style={{
               width: 0,
               height: 1,
-              background: "hsl(var(--destructive) / 0.4)",
+              background: "hsl(var(--destructive) / var(--a-low))",
               transition: `width 1s ${EASE_OUT_EXPO} 0.2s`,
             }}
           />

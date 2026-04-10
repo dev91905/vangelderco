@@ -46,6 +46,16 @@
     --accent-h: 0;
     --accent-s: 40%;
     --accent-l: 35%;
+
+    /* Accent opacity tiers — muted in light mode */
+    --a-high: 0.6;
+    --a-mid: 0.5;
+    --a-low: 0.4;
+    --a-dim: 0.3;
+    --a-bg: 0.04;
+    --a-bg-subtle: 0.03;
+    --a-border: 0.12;
+    --a-border-card: 0.1;
   }
 
   .dark {
@@ -90,6 +100,16 @@
     --accent-h: 355;
     --accent-s: 45%;
     --accent-l: 38%;
+
+    /* Accent opacity tiers — pop in dark mode */
+    --a-high: 0.9;
+    --a-mid: 0.8;
+    --a-low: 0.65;
+    --a-dim: 0.55;
+    --a-bg: 0.08;
+    --a-bg-subtle: 0.06;
+    --a-border: 0.22;
+    --a-border-card: 0.2;
   }
 }
 
