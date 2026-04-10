@@ -789,148 +789,97 @@ const Deck = () => {
 
           {quizRevealed && (
             <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
-              <div className="flex flex-col gap-6">
-                <div
-                  style={{
-                    padding: "clamp(22px, 3vw, 30px)",
-                    borderRadius: "20px",
-                    background: "hsl(var(--foreground) / var(--a-bg))",
-                    border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                  }}
-                >
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                    <div className="max-w-[720px]">
-                      <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                        {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
-                      </p>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                        {nextgenPickCount >= 5
-                          ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
-                          : nextgenPickCount >= 3
-                            ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
-                            : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
-                        }
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
-                        setTimeout(() => {
-                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                          setQuizStep(0);
-                          setQuizRevealed(false);
-                        }, 400);
-                      }}
-                      style={{
-                        fontFamily: f.sans,
-                        fontSize: "12px",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                        color: f.ink(0.72),
-                        background: "hsl(var(--background))",
-                        border: `1px solid ${f.ink(0.1)}`,
-                        padding: "12px 18px",
-                        borderRadius: "999px",
-                        cursor: "pointer",
-                        whiteSpace: "nowrap",
-                        alignSelf: "flex-start",
-                        transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = f.ink(0.24);
-                        e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = f.ink(0.1);
-                        e.currentTarget.style.background = "hsl(var(--background))";
-                      }}
-                    >
-                      Retake quiz
-                    </button>
+              <div className="flex flex-col lg:flex-row gap-8">
+                {/* ── Sticky left: summary ── */}
+                <div className="lg:w-[38%] lg:sticky lg:top-8 lg:self-start flex flex-col gap-6">
+                  <div
+                    style={{
+                      padding: "clamp(22px, 3vw, 30px)",
+                      borderRadius: "20px",
+                      background: "hsl(var(--foreground) / var(--a-bg))",
+                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                    }}
+                  >
+                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
+                      {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
+                    </p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
+                      {nextgenPickCount >= 5
+                        ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
+                        : nextgenPickCount >= 3
+                          ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
+                          : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
+                      }
+                    </p>
                   </div>
+
+                  <button
+                    onClick={() => {
+                      containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                      setTimeout(() => {
+                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                        setQuizStep(0);
+                        setQuizRevealed(false);
+                      }, 400);
+                    }}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "12px",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      color: f.ink(0.72),
+                      background: "hsl(var(--background))",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      padding: "12px 18px",
+                      borderRadius: "999px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      alignSelf: "flex-start",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.24);
+                      e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.1);
+                      e.currentTarget.style.background = "hsl(var(--background))";
+                    }}
+                  >
+                    Retake quiz
+                  </button>
                 </div>
 
-                <div>
-                  <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "14px" }}>Detailed breakdown</p>
-                  <div className="flex flex-col gap-4">
-                    {QUIZ_ROWS.map((row, i) => {
-                      const answer = quizAnswers[i];
-                      const pickedNextGen = answer?.picked === "nextgen";
-                      const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                {/* ── Scrollable right: breakdown cards ── */}
+                <div className="lg:w-[62%] flex flex-col gap-4">
+                  {QUIZ_ROWS.map((row, i) => {
+                    const answer = quizAnswers[i];
+                    const pickedNextGen = answer?.picked === "nextgen";
+                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                    const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
+                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
 
-                      return (
-                        <div
-                          key={i}
-                          style={{
-                            padding: "clamp(18px, 2vw, 24px)",
-                            borderRadius: "18px",
-                            background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                            border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
-                          }}
-                        >
-                          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ marginBottom: "16px" }}>
-                            <div>
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "6px" }}>Question {i + 1}</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.45vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
-                            </div>
-                            <span
-                              style={{
-                                fontFamily: f.sans,
-                                fontSize: "10px",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                padding: "6px 10px",
-                                borderRadius: "999px",
-                                color: f.ink(0.5),
-                                background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                                border: `1px solid ${f.ink(0.08)}`,
-                                alignSelf: "flex-start",
-                              }}
-                            >
-                              Your selection
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-4 lg:gap-6">
-                            <div
-                              style={{
-                                padding: "16px 18px",
-                                borderRadius: "14px",
-                                background: "hsl(var(--background))",
-                                border: `1px solid ${f.ink(0.08)}`,
-                              }}
-                            >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>What you selected</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{selectedCopy}</p>
-
-                              {!pickedNextGen && (
-                                <>
-                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Emerging approach</p>
-                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.nextgen}</p>
-                                </>
-                              )}
-                            </div>
-
-                            <div
-                              style={{
-                                padding: "16px 18px",
-                                borderRadius: "14px",
-                                background: "transparent",
-                                border: `1px solid ${f.ink(0.08)}`,
-                              }}
-                            >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>Why this matters</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.75 }}>{row.explanation}</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          padding: "clamp(18px, 2vw, 24px)",
+                          borderRadius: "16px",
+                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                          border: `1px solid ${f.ink(0.06)}`,
+                        }}
+                      >
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82), marginBottom: "10px" }}>{row.dimension}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.4), lineHeight: 1.65, fontStyle: "italic", marginBottom: "14px", paddingLeft: "12px", borderLeft: `2px solid ${f.ink(0.08)}` }}>
+                          {selectedCopy}
+                        </p>
+                        <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "6px" }}>{explanationLabel}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.7 }}>{explanationCopy}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
