@@ -8,7 +8,7 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown } from "lucide-react";
-import { calculateReadinessScore, getScoreLabel, type QuizAnswer } from "@/lib/deckScoring";
+import { calculateReadinessScore, type QuizAnswer } from "@/lib/deckScoring";
 import {
   Dialog,
   DialogContent,
@@ -290,7 +290,7 @@ const Deck = () => {
     hasMediaExperience,
   }), [selectedPains, customSaved, customMessage, quizAnswers, selectedDomains, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
-  const scoreInfo = useMemo(() => getScoreLabel(diagnosticScore), [diagnosticScore]);
+  
 
   const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
@@ -673,25 +673,42 @@ const Deck = () => {
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
       <DeckFrame ref={setRef(2)} mode="wide" scrollable={quizRevealed}>
-        <div ref={r3.ref} className="flex flex-col justify-center" style={{ height: "100%", width: "100%" }}>
+        <div
+          ref={r3.ref}
+          className="flex flex-col"
+          style={{
+            width: "100%",
+            minHeight: quizRevealed ? "auto" : "100%",
+            justifyContent: quizRevealed ? "flex-start" : "center",
+            paddingBottom: quizRevealed ? "clamp(128px, 18vh, 180px)" : "0",
+          }}
+        >
           {/* Header */}
-          <div style={{ marginBottom: "clamp(24px, 4vw, 48px)" }}>
-            <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.5vw, 32px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
+          <div
+            style={{
+              marginBottom: quizRevealed ? "clamp(24px, 3vw, 32px)" : "clamp(24px, 4vw, 48px)",
+              maxWidth: quizRevealed ? "960px" : "none",
+            }}
+          >
+            {quizRevealed && (
+              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Quiz results</p>
+            )}
+            <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
-                ? "Here's what happened."
+                ? "Here’s what your answers say."
                 : isFreshStart
                   ? "Which approach sounds more effective?"
                   : "How does your current portfolio work?"
               }
             </p>
-            {!quizRevealed && (
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.5 }}>
-                {isFreshStart
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
+              {quizRevealed
+                ? "The summary is at the top. Scroll for the breakdown and why each answer was right or wrong."
+                : isFreshStart
                   ? `Two communications approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.`
                   : `For ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"} — which of these is closer to how your portfolio operates today?`
-                }
-              </p>
-            )}
+              }
+            </p>
           </div>
 
           {/* Quiz questions — one at a time */}
@@ -700,7 +717,6 @@ const Deck = () => {
               {QUIZ_ROWS.map((row, i) => {
                 const isCurrent = i === quizStep;
                 const answered = quizAnswers[i] !== null;
-                // Determine order: if quizOrder[i] is true, show "theirs" on left
                 const leftIsTheirs = quizOrder[i];
                 const leftText = leftIsTheirs ? row.theirs : row.yours;
                 const rightText = leftIsTheirs ? row.yours : row.theirs;
@@ -712,7 +728,9 @@ const Deck = () => {
                     key={i}
                     style={{
                       position: i === quizStep ? "relative" : "absolute",
-                      top: 0, left: 0, width: "100%",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
                       opacity: isCurrent ? 1 : 0,
                       transform: isCurrent ? "translateY(0)" : i > quizStep ? "translateY(24px)" : "translateY(-24px)",
                       filter: isCurrent ? "blur(0px)" : "blur(6px)",
@@ -720,16 +738,21 @@ const Deck = () => {
                       pointerEvents: isCurrent ? "auto" : "none",
                     }}
                   >
-                    <p style={{
-                      fontFamily: f.sans, fontSize: "10px", fontWeight: 600,
-                      textTransform: "uppercase", letterSpacing: "0.15em",
-                      color: f.ink(0.25), marginBottom: "clamp(16px, 2vw, 28px)",
-                    }}>
+                    <p
+                      style={{
+                        fontFamily: f.sans,
+                        fontSize: "10px",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.15em",
+                        color: f.ink(0.25),
+                        marginBottom: "clamp(16px, 2vw, 28px)",
+                      }}
+                    >
                       {row.dimension} · Question {i + 1} of {QUIZ_ROWS.length}
                     </p>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(16px, 3vw, 32px)" }}>
-                      {/* Option A */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: "clamp(16px, 3vw, 32px)" }}>
                       <button
                         onClick={() => handleQuizPick(i, leftValue)}
                         disabled={answered}
@@ -737,23 +760,28 @@ const Deck = () => {
                           textAlign: "left",
                           padding: "clamp(16px, 2vw, 28px)",
                           borderRadius: "12px",
-                          background: answered && quizAnswers[i]?.picked === leftValue
-                            ? "hsl(var(--foreground) / var(--a-bg))"
-                            : "transparent",
-                          border: answered && quizAnswers[i]?.picked === leftValue
-                            ? "1px solid hsl(var(--foreground) / var(--a-high))"
-                            : `1px solid ${f.ink(0.1)}`,
+                          background: answered && quizAnswers[i]?.picked === leftValue ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                          border: answered && quizAnswers[i]?.picked === leftValue ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.1)}`,
                           cursor: answered ? "default" : "pointer",
                           transition: "all 0.2s ease",
                         }}
-                        onMouseEnter={(e) => { if (!answered) { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.background = f.ink(0.03); } }}
-                        onMouseLeave={(e) => { if (!answered) { e.currentTarget.style.borderColor = f.ink(0.1); e.currentTarget.style.background = "transparent"; } }}
+                        onMouseEnter={(e) => {
+                          if (!answered) {
+                            e.currentTarget.style.borderColor = f.ink(0.3);
+                            e.currentTarget.style.background = f.ink(0.03);
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!answered) {
+                            e.currentTarget.style.borderColor = f.ink(0.1);
+                            e.currentTarget.style.background = "transparent";
+                          }
+                        }}
                       >
                         <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "10px" }}>Option A</p>
                         <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 18px)", color: f.ink(0.7), lineHeight: 1.65 }}>{leftText}</p>
                       </button>
 
-                      {/* Option B */}
                       <button
                         onClick={() => handleQuizPick(i, rightValue)}
                         disabled={answered}
@@ -761,17 +789,23 @@ const Deck = () => {
                           textAlign: "left",
                           padding: "clamp(16px, 2vw, 28px)",
                           borderRadius: "12px",
-                          background: answered && quizAnswers[i]?.picked === rightValue
-                            ? "hsl(var(--foreground) / var(--a-bg))"
-                            : "transparent",
-                          border: answered && quizAnswers[i]?.picked === rightValue
-                            ? "1px solid hsl(var(--foreground) / var(--a-high))"
-                            : `1px solid ${f.ink(0.1)}`,
+                          background: answered && quizAnswers[i]?.picked === rightValue ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                          border: answered && quizAnswers[i]?.picked === rightValue ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.1)}`,
                           cursor: answered ? "default" : "pointer",
                           transition: "all 0.2s ease",
                         }}
-                        onMouseEnter={(e) => { if (!answered) { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.background = f.ink(0.03); } }}
-                        onMouseLeave={(e) => { if (!answered) { e.currentTarget.style.borderColor = f.ink(0.1); e.currentTarget.style.background = "transparent"; } }}
+                        onMouseEnter={(e) => {
+                          if (!answered) {
+                            e.currentTarget.style.borderColor = f.ink(0.3);
+                            e.currentTarget.style.background = f.ink(0.03);
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!answered) {
+                            e.currentTarget.style.borderColor = f.ink(0.1);
+                            e.currentTarget.style.background = "transparent";
+                          }
+                        }}
                       >
                         <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "10px" }}>Option B</p>
                         <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 18px)", color: f.ink(0.7), lineHeight: 1.65 }}>{rightText}</p>
@@ -783,7 +817,6 @@ const Deck = () => {
             </div>
           )}
 
-          {/* Progress dots */}
           {!quizRevealed && (
             <div style={{ marginTop: "clamp(24px, 4vw, 40px)", display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
               {QUIZ_ROWS.map((_, i) => (
@@ -793,11 +826,7 @@ const Deck = () => {
                     width: i === quizStep ? "24px" : "8px",
                     height: "8px",
                     borderRadius: "4px",
-                    background: quizAnswers[i] !== null
-                      ? "hsl(var(--foreground) / var(--a-high))"
-                      : i === quizStep
-                        ? "hsl(var(--foreground) / var(--a-mid))"
-                        : f.ink(0.1),
+                    background: quizAnswers[i] !== null ? "hsl(var(--foreground) / var(--a-high))" : i === quizStep ? "hsl(var(--foreground) / var(--a-mid))" : f.ink(0.1),
                     transition: "all 0.3s ease",
                   }}
                 />
@@ -805,119 +834,157 @@ const Deck = () => {
             </div>
           )}
 
-          {/* REVEAL */}
           {quizRevealed && (
-            <div style={{ animation: "fade-up 0.5s ease-out" }}>
-              {/* Score + encouragement */}
-              <div style={{
-                padding: "clamp(24px, 4vw, 40px)",
-                borderRadius: "16px",
-                background: "hsl(var(--foreground) / var(--a-bg))",
-                border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                marginBottom: "clamp(32px, 4vw, 48px)",
-              }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: f.ink(0.3), marginBottom: "12px" }}>
-                  Your read
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.1, marginBottom: "16px" }}>
-                  {opponentPickCount} of {QUIZ_ROWS.length} next-gen
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 19px)", color: f.ink(0.55), lineHeight: 1.6, maxWidth: "560px" }}>
-                  {isFreshStart
-                    ? opponentPickCount >= 5
-                      ? "Your instincts are really sharp. Most people aren't doing what you identified here — but your opponents are, and that's exactly what's going to make the difference."
-                      : opponentPickCount >= 3
-                        ? "You've got some work to do — but the fact that you spotted some of these tells us you're thinking in the right direction. We can close the rest of these gaps."
-                        : "You've got some work to do, but we can help. Most people pick the same way you did. The problem is, your opponents are running the other playbook — and it's working."
-                    : opponentPickCount >= 5
-                      ? "You're thinking ahead of the curve. Your portfolio is already oriented toward what works — we can help you execute at scale and stay ahead."
-                      : opponentPickCount >= 3
-                        ? "Your portfolio has some of the right instincts built in, but there are real gaps. Your opponents are already operating the way you're not — and that's what makes the difference."
-                        : "Your portfolio needs work. The approaches you're running are what most organizations default to — but they're not what moves power. Your opponents are already doing it differently."
-                  }
-                </p>
-              </div>
+            <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
+              <div className="flex flex-col gap-6">
+                <div
+                  style={{
+                    padding: "clamp(22px, 3vw, 30px)",
+                    borderRadius: "20px",
+                    background: "hsl(var(--foreground) / var(--a-bg))",
+                    border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                  }}
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                    <div className="max-w-[720px]">
+                      <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
+                        {opponentPickCount} of {QUIZ_ROWS.length} next-gen instincts
+                      </p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
+                        {isFreshStart
+                          ? opponentPickCount >= 5
+                            ? "Your instincts are really sharp. Most people aren't doing what you identified here — but your opponents are, and that's exactly what's going to make the difference."
+                            : opponentPickCount >= 3
+                              ? "You've got some work to do — but the fact that you spotted some of these tells us you're thinking in the right direction. We can close the rest of these gaps."
+                              : "You've got some work to do, but we can help. Most people pick the same way you did. The problem is, your opponents are running the other playbook — and it's working."
+                          : opponentPickCount >= 5
+                            ? "You're thinking ahead of the curve. Your portfolio is already oriented toward what works — we can help you execute at scale and stay ahead."
+                            : opponentPickCount >= 3
+                              ? "Your portfolio has some of the right instincts built in, but there are real gaps. Your opponents are already operating the way you're not — and that's what makes the difference."
+                              : "Your portfolio needs work. The approaches you're running are what most organizations default to — but they're not what moves power. Your opponents are already doing it differently."
+                        }
+                      </p>
+                    </div>
 
-              {/* Dimension-by-dimension breakdown with explanations */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: f.ink(0.3), marginBottom: "16px" }}>
-                  Dimension by dimension
-                </p>
-                {QUIZ_ROWS.map((row, i) => {
-                  const answer = quizAnswers[i];
-                  const pickedNextGen = answer?.picked === "theirs";
-                  return (
-                    <div
-                      key={i}
+                    <button
+                      onClick={() => {
+                        const frame = frameRefs.current[2];
+                        if (frame) frame.scrollTop = 0;
+                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                        setQuizStep(0);
+                        setQuizRevealed(false);
+                      }}
                       style={{
-                        padding: "clamp(20px, 2vw, 28px)",
-                        marginBottom: "12px",
-                        borderRadius: "12px",
-                        background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg-subtle))" : f.ink(0.02),
-                        border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.06)}`,
-                        animation: `fade-up 0.35s ease-out ${i * 80}ms both`,
+                        fontFamily: f.sans,
+                        fontSize: "12px",
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        fontWeight: 600,
+                        color: f.ink(0.72),
+                        background: "hsl(var(--background))",
+                        border: `1px solid ${f.ink(0.1)}`,
+                        padding: "12px 18px",
+                        borderRadius: "999px",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                        alignSelf: "flex-start",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = f.ink(0.24);
+                        e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = f.ink(0.1);
+                        e.currentTarget.style.background = "hsl(var(--background))";
                       }}
                     >
-                      {/* Header row: dimension + badge */}
-                      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>
-                          {row.dimension}
-                        </p>
-                        <span style={{
-                          fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          padding: "3px 10px", borderRadius: "999px",
-                          color: pickedNextGen ? "hsl(150 50% 36%)" : "hsl(25 80% 50%)",
-                          background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : "hsl(25 80% 50% / 0.1)",
-                        }}>
-                          {pickedNextGen ? "Next-Gen ✓" : "Traditional"}
-                        </span>
-                      </div>
+                      Retake quiz
+                    </button>
+                  </div>
+                </div>
 
-                      {/* What they picked */}
-                      <p style={{
-                        fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)",
-                        color: f.ink(0.55), lineHeight: 1.65, marginBottom: "14px",
-                      }}>
-                        <span style={{ fontWeight: 600, color: f.ink(0.65) }}>You picked: </span>
-                        {pickedNextGen ? row.theirs : row.yours}
-                      </p>
+                <div>
+                  <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "14px" }}>Detailed breakdown</p>
+                  <div className="flex flex-col gap-4">
+                    {QUIZ_ROWS.map((row, i) => {
+                      const answer = quizAnswers[i];
+                      const pickedNextGen = answer?.picked === "theirs";
+                      const selectedCopy = pickedNextGen ? row.theirs : row.yours;
 
-                      {/* Explanation — why this matters */}
-                      <div style={{
-                        borderTop: `1px solid ${f.ink(0.06)}`,
-                        paddingTop: "14px",
-                      }}>
-                        <p style={{
-                          fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)",
-                          color: f.ink(0.5), lineHeight: 1.7, fontStyle: "italic",
-                        }}>
-                          {row.explanation}
-                        </p>
-                      </div>
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            padding: "clamp(18px, 2vw, 24px)",
+                            borderRadius: "18px",
+                            background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                            border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
+                          }}
+                        >
+                          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ marginBottom: "16px" }}>
+                            <div>
+                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "6px" }}>Question {i + 1}</p>
+                              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.45vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
+                            </div>
+                            <span
+                              style={{
+                                fontFamily: f.sans,
+                                fontSize: "10px",
+                                fontWeight: 700,
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                padding: "6px 10px",
+                                borderRadius: "999px",
+                                color: f.ink(0.65),
+                                background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg))" : "hsl(var(--background))",
+                                border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
+                                alignSelf: "flex-start",
+                              }}
+                            >
+                              {pickedNextGen ? "You picked the next-gen answer" : "You picked the traditional answer"}
+                            </span>
+                          </div>
 
-                      {/* If they picked traditional, show what the better approach looks like */}
-                      {!pickedNextGen && (
-                        <div style={{
-                          marginTop: "14px", padding: "14px 16px",
-                          borderRadius: "8px",
-                          background: "hsl(var(--foreground) / var(--a-bg))",
-                          border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                        }}>
-                          <p style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: f.ink(0.3), marginBottom: "8px" }}>
-                            The next-gen approach
-                          </p>
-                          <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.6), lineHeight: 1.65 }}>
-                            {row.theirs}
-                          </p>
+                          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-4 lg:gap-6">
+                            <div
+                              style={{
+                                padding: "16px 18px",
+                                borderRadius: "14px",
+                                background: "hsl(var(--background))",
+                                border: `1px solid ${f.ink(0.08)}`,
+                              }}
+                            >
+                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>What you selected</p>
+                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{selectedCopy}</p>
+
+                              {!pickedNextGen && (
+                                <>
+                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Stronger approach</p>
+                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.theirs}</p>
+                                </>
+                              )}
+                            </div>
+
+                            <div
+                              style={{
+                                padding: "16px 18px",
+                                borderRadius: "14px",
+                                background: "transparent",
+                                border: `1px solid ${f.ink(0.08)}`,
+                              }}
+                            >
+                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>{pickedNextGen ? "Why this was right" : "Why this was wrong"}</p>
+                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.75 }}>{row.explanation}</p>
+                            </div>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-
-              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", marginBottom: "40px" }} />
             </div>
           )}
         </div>
