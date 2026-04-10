@@ -1079,9 +1079,6 @@ const Deck = () => {
             <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
               A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
             </p>
-            <p style={{ marginTop: "16px", fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.3), lineHeight: 1.6 }}>
-              Open each one and tell us where you stand.
-            </p>
           </div>
           <div className="lg:w-[65%] flex flex-col gap-4">
             {[
