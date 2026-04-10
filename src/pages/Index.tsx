@@ -26,23 +26,23 @@ const HERO_LINKS = [
 const CAPABILITIES = [
   {
     title: "Cultural Strategy",
-    sub: "Communications is the floor. Uptake is the ceiling.",
+    sub: "Strategic communications that become cultural moments.",
     detail:
-      "We operate across music, entertainment, news media, film, digital creators, brands, athletes, labor, faith, campuses, and veterans — turning communications into cultural moments.",
+      "We operate across music, entertainment, news media, film, digital creators, brands, athletes, labor, faith, campuses, and veterans — turning strategic communications into cultural moments.",
     to: "/cultural-strategy",
   },
   {
     title: "Cross-Sector Intelligence",
-    sub: "Nothing moves unless multiple sectors push together.",
+    sub: "Communications coordinated across every sector that matters.",
     detail:
-      "We map the alignments that nobody in any single sector can see. Industry, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target.",
+      "We map the communications alignments that nobody in any single sector can see. Industry, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target.",
     to: "/cross-sector",
   },
   {
     title: "Deep Organizing",
-    sub: "Not mobilization. Recruitment and retention.",
+    sub: "Communications infrastructure that grows your base.",
     detail:
-      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between a movement that grows and one that stalls.",
+      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between communications that grow a movement and ones that stall.",
     to: "/deep-organizing",
   },
 ];
@@ -309,9 +309,20 @@ const Index = () => {
             ))}
           </h1>
 
+          <span
+            className="text-[12px] md:text-[13px] tracking-[0.2em] uppercase"
+            style={{
+              fontFamily: t.sans,
+              color: t.ink(0.35),
+              animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.3s both",
+            }}
+          >
+            Strategic Communications Advisory
+          </span>
+
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
-            style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both` }}
+            style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both` }}
           >
             {SECTORS.map((sector, i) => {
               const isGlowing = i === glowIndex;
@@ -340,7 +351,7 @@ const Index = () => {
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--foreground) / var(--a-dim))",
-              animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.0s both`,
+              animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.1s both`,
             }}
           >
             By Referral Only
@@ -361,7 +372,7 @@ const Index = () => {
                 letterSpacing: "0.25em",
               }}
             >
-              Our Altitude
+              Our Approach to Communications
             </p>
           </RevealBlock>
           <RevealBlock delay={0.15}>
@@ -374,7 +385,7 @@ const Index = () => {
                 color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
-              You're on the ground doing the work.
+              Your communications are on the ground. We see them from orbit.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.3}>
@@ -387,7 +398,7 @@ const Index = () => {
                 color: t.ink(0.85),
               }}
             >
-              We see the field from orbit.
+              One picture. Every sector. Every gap.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.5}>
@@ -396,14 +407,13 @@ const Index = () => {
               className="text-xs leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
             >
-              Six sectors. One picture. We identify alignment that nobody in any single sector can
-              see from where they sit.
+              We identify the communications alignment that nobody in any single sector can see from where they sit.
             </p>
             <p
               className="mt-4 max-w-2xl"
               style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.45), lineHeight: 1.8 }}
             >
-              We're specialists in cultural strategy, media-based organizing, and philanthropy — working across six sectors to help donors and their grantees get strategic communications right.
+              We're strategic communications specialists — cultural strategy, media-based organizing, and cross-sector coordination — helping donors and their grantees close the gap between spend and impact.
             </p>
           </RevealBlock>
         </div>
@@ -417,7 +427,7 @@ const Index = () => {
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
               style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
-              Capabilities
+              Communications Capabilities
             </div>
           </RevealBlock>
 
@@ -501,7 +511,7 @@ const Index = () => {
                         transition: `color 0.3s ${EASE_OUT_QUART}, gap 0.4s ${EASE_OUT_EXPO}`,
                       }}
                     >
-                      <span className="group-hover:text-[hsl(var(--foreground))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>Explore</span>
+                      <span className="group-hover:text-[hsl(var(--foreground))]" style={{ transition: `color 0.3s ${EASE_OUT_QUART}` }}>See how we do it</span>
                       <span className="inline-block transition-transform duration-500 group-hover:translate-x-1.5" style={{ transitionTimingFunction: EASE_OUT_EXPO }}>→</span>
                     </div>
                   </div>
@@ -521,7 +531,7 @@ const Index = () => {
             className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
             style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-mid))" }}
           >
-            Strategic Diagnostic
+            Communications Diagnostic
           </span>
         </RevealBlock>
 
@@ -589,7 +599,7 @@ const Index = () => {
               className="text-[10px] tracking-[0.25em] uppercase mb-4"
               style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
-              Our Network
+              Our Communications Network
             </div>
           </RevealBlock>
           <RevealBlock delay={0.15}>
@@ -597,7 +607,7 @@ const Index = () => {
               className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
               style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
             >
-              We collaborate with a network of over 400 practitioners across every sector that moves policy, culture, and capital.
+              Over 400 communications practitioners across every sector that moves policy, culture, and capital.
             </p>
           </RevealBlock>
           <AnimatedLine width={50} />
@@ -663,6 +673,14 @@ const Index = () => {
       {/* ═══ FOOTER ═══ */}
       <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
+          <span
+            className="text-[11px] tracking-[0.2em] uppercase mb-6 block"
+            style={{ fontFamily: t.sans, color: t.ink(0.25) }}
+          >
+            Strategic Communications Advisory · Van Gelder Co.
+          </span>
+        </RevealBlock>
+        <RevealBlock delay={0.1}>
           <a
             href="mailto:hello@vangelder.co"
             className="text-[13px] tracking-[0.18em] no-underline"
@@ -677,12 +695,12 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.15}>
+        <RevealBlock delay={0.2}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
           >
-            By Referral Only
+            By Referral Only · <a href="mailto:hello@vangelder.co" className="no-underline" style={{ color: t.ink(0.25), transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = t.ink(0.5)} onMouseLeave={(e) => e.currentTarget.style.color = t.ink(0.25)}>Request an introduction</a>
           </span>
         </RevealBlock>
       </section>
