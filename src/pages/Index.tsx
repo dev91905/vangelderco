@@ -130,7 +130,7 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
       className="my-8"
       style={{
         height: 1,
-        background: "hsl(var(--foreground) / var(--a-low))",
+        background: ox(0.5),
         width: hasRevealed ? width : 0,
         transition: `width 1.2s ${EASE_OUT_EXPO} 0.3s`,
       }}
@@ -156,7 +156,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
           ? hovered ? "translateX(8px)" : "translateX(0)"
           : "translateX(-30px)",
         transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-dim))"}`,
+        borderLeft: `2px solid ${hovered ? ox(0.9) : ox(0.3)}`,
         paddingLeft: "24px",
         willChange: "opacity, transform",
       }}
@@ -311,9 +311,9 @@ const Index = () => {
                   style={{
                     fontFamily: t.sans,
                     color: isGlowing ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-mid))",
-                    background: isGlowing ? "hsl(var(--foreground) / 0.14)" : "hsl(var(--foreground) / var(--a-bg))",
-                    border: `1px solid ${isGlowing ? "hsl(var(--foreground) / 0.45)" : "hsl(var(--foreground) / var(--a-border))"}`,
-                    boxShadow: isGlowing ? "0 0 20px -4px hsl(var(--foreground) / 0.2)" : "none",
+                    background: isGlowing ? ox(0.12) : "hsl(var(--foreground) / var(--a-bg))",
+                    border: `1px solid ${isGlowing ? ox(0.5) : "hsl(var(--foreground) / var(--a-border))"}`,
+                    boxShadow: isGlowing ? `0 0 24px -4px ${ox(0.25)}` : "none",
                     transition: "all 0.6s ease",
                     animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                   }}
@@ -438,7 +438,7 @@ const Index = () => {
                   <div
                     className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{
-                      background: "linear-gradient(180deg, hsl(var(--foreground) / var(--a-high)) 0%, hsl(var(--foreground) / var(--a-border)) 100%)",
+                      background: `linear-gradient(180deg, ${ox(0.9)} 0%, ${ox(0.2)} 100%)`,
                       transition: `opacity 0.4s ${EASE_OUT_QUART}`,
                     }}
                   />
@@ -552,10 +552,10 @@ const Index = () => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.background = "hsl(var(--foreground))";
+              e.currentTarget.style.background = ox(1);
               e.currentTarget.style.color = "hsl(var(--background))";
-              e.currentTarget.style.borderColor = "hsl(var(--foreground))";
-              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--foreground) / 0.35)";
+              e.currentTarget.style.borderColor = ox(1);
+              e.currentTarget.style.boxShadow = `0 12px 40px -8px ${ox(0.4)}`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
