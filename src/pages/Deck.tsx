@@ -213,7 +213,7 @@ const Deck = () => {
   const [hasMediaExperience, setHasMediaExperience] = useState<boolean | null>(null);
 
   /* CTA form state */
-  const [ctaMode, setCtaMode] = useState<"choose" | "email" | "thanks" | null>(null);
+  const [ctaMode, setCtaMode] = useState<"thanks" | null>(null);
   const [ctaForm, setCtaForm] = useState({ firstName: "", lastName: "", organization: "", email: "" });
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
@@ -279,9 +279,6 @@ const Deck = () => {
       capabilities_ranked: capabilitiesRanked.length > 0 ? capabilitiesRanked : null,
       has_media_experience: hasMediaExperience,
     } as any);
-    if (customSaved && customMessage.trim()) {
-      await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
-    }
     setCtaSubmitting(false);
     setCtaMode("thanks");
   };
