@@ -1101,7 +1101,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(5)} mode="wide">
         <div ref={r6.ref} className="flex flex-col gap-8">
           <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r6.stagger(0) }}>
-            How people typically engage with us.
+            Standard Services
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
