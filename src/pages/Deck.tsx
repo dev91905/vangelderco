@@ -590,10 +590,10 @@ const Deck = () => {
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
-              Where are your communications right now?
+              Which best describes where you are?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1, 200, "blur-up"), flex: "1 1 auto", paddingBottom: "clamp(6px, 0.8vw, 12px)" }}>
-              This helps us understand your situation before we talk. Select everything that resonates.
+              Pick the one that's closest. This helps us tailor what comes next.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 300, "blur-scale")}>
@@ -698,7 +698,9 @@ const Deck = () => {
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
                 ? "Here's what your answers tell us."
-                : `What's your approach to ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
+                : isFreshStart
+                  ? `How would you approach ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
+                  : `How does your portfolio currently approach ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
               }
             </p>
             {quizRevealed && (
