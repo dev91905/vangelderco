@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TOTAL_FRAMES = 12; // removed Frame 10 (The Promise)
+const TOTAL_FRAMES = 11; // consolidated domains into Frame 2
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
