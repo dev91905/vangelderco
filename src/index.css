@@ -242,6 +242,15 @@
 }
 .snap-section {
   min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Allow sections with lots of content to scroll internally */
+.snap-section-scroll {
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
 }
 
 
