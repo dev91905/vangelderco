@@ -1,50 +1,26 @@
 
 
-# Fix Homepage: Consistent Widths + Snap Scroll
+# Fix Altitude Section — Implement Missing Changes
 
-## Problems
-1. **Misaligned widths** — every section uses a different `max-w`: Hero is `max-w-3xl`, Altitude is `max-w-xl`, Capabilities is `max-w-5xl`, Network is `max-w-4xl`, Field Notes is `max-w-6xl`
-2. **No snap scrolling** — sections use `minHeight: 100vh` but scroll continuously with no snap behavior
+## What you asked for (message #803)
+You wanted the Altitude section to:
+1. Add **"Our Altitude"** as a section header
+2. Add copy that actually tells the viewer **what you do** — specialists in cultural strategy, media organizing, and philanthropy helping donors get strategic communications right
+3. Keep the existing poetic lines ("You're on the ground doing the work / We see the field from orbit")
+
+## What's there now
+Just the two poetic lines and the "Six sectors" subcopy. No section header, no description of services. The changes from that earlier conversation never stuck.
 
 ## Changes
 
-### `src/pages/Index.tsx`
+### `src/pages/Index.tsx` — Altitude section (~lines 337-377)
 
-**Snap scroll container**: Add `scroll-snap-type: y mandatory` to the outer scroll div (line 246). Each section gets `scroll-snap-align: start` and `height: 100dvh` (not `minHeight`).
+Add before the first `RevealBlock`:
+- **Section header**: `"Our Altitude"` — uppercase, tracked, `10px`, same style as the "Capabilities" header below it
 
-**Normalize widths**: Set all section inner containers to `max-w-4xl mx-auto` to match the Network section:
-- Hero: keep centered layout, cap at `max-w-4xl`
-- Altitude: `max-w-xl` → `max-w-4xl` (content stays left-aligned within)
-- Capabilities: `max-w-5xl` → `max-w-4xl`
-- Intake CTA: add `max-w-4xl` wrapper
-- Network: already `max-w-4xl` ✓
-- Field Notes: `max-w-6xl` → `max-w-4xl`
-- Footer: add `max-w-4xl` wrapper
-
-**Each section becomes full-screen with snap**:
-```
-height: 100dvh
-overflow: hidden (prevent content bleed)
-scroll-snap-align: start
-display: flex + items-center (vertically center content)
-```
-
-### `src/index.css`
-
-Update `.snap-scroll-container` to enable mandatory snap:
-```css
-.snap-scroll-container {
-  scroll-snap-type: y mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-.snap-section {
-  scroll-snap-align: start;
-  height: 100dvh;
-  min-height: 100dvh;
-}
-```
+After the "Six sectors" subcopy, add:
+- **Services statement**: "We're specialists in cultural strategy, media organizing, and philanthropy — working across six sectors to help donors and foundations get strategic communications right." — `14px`, `max-w-2xl`, muted ink color
 
 ### Files touched
-- `src/pages/Index.tsx` — width normalization + section structure
-- `src/index.css` — snap scroll CSS
+- `src/pages/Index.tsx` only
 
