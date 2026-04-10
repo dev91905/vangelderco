@@ -178,6 +178,8 @@ const Index = () => {
         Van Gelder Co.
       </span>
 
+      <div className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden">
+
       {/* ═══ HERO ═══ */}
       <section
         className="snap-section flex items-center justify-center w-full relative z-20"
