@@ -979,97 +979,119 @@ const Deck = () => {
               We know how this works because we've done it ourselves.
             </p>
 
-            {/* Domain selector pills */}
-            <div className="flex flex-wrap gap-3" style={r5.stagger(2)}>
-              {DOMAINS.map((d) => {
-                const isActive = activeDomain === d.id;
-                return (
-                  <button
-                    key={d.id}
-                    onClick={() => setActiveDomain(isActive ? null : d.id)}
-                    style={{
-                      fontFamily: f.sans,
-                      fontSize: "13px",
-                      letterSpacing: "0.04em",
-                      fontWeight: 600,
-                      padding: "12px 24px",
-                      borderRadius: "999px",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      background: isActive
-                        ? "hsl(var(--destructive) / var(--a-bg))"
-                        : "transparent",
-                      border: isActive
-                        ? "1px solid hsl(var(--destructive) / var(--a-border))"
-                        : `1px solid ${f.ink(0.1)}`,
-                      color: isActive
-                        ? "hsl(var(--destructive) / var(--a-high))"
-                        : f.ink(0.5),
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.borderColor = f.ink(0.2);
-                        e.currentTarget.style.color = f.ink(0.7);
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.borderColor = f.ink(0.1);
-                        e.currentTarget.style.color = f.ink(0.5);
-                      }
-                    }}
-                  >
-                    {d.title}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Detail panel */}
+            {/* Connected three-column domain module */}
             <div
+              className="overflow-hidden rounded-[28px] border"
               style={{
-                maxHeight: activeDomainData ? "600px" : "0px",
-                opacity: activeDomainData ? 1 : 0,
-                overflow: "hidden",
-                transition: "max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease",
-                marginTop: activeDomainData ? "24px" : "0px",
+                ...r5.stagger(2),
+                background: "hsl(var(--destructive) / var(--a-bg-subtle))",
+                borderColor: "hsl(var(--destructive) / var(--a-border-card))",
               }}
             >
-              {activeDomainData && (
-                <div
-                  key={activeDomain}
-                  style={{
-                    padding: "32px",
-                    background: "hsl(var(--destructive) / var(--a-bg-subtle))",
-                    border: "1px solid hsl(var(--destructive) / var(--a-border-card))",
-                    borderRadius: "20px",
-                  }}
-                >
-                  <div className="flex flex-col gap-7">
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, maxWidth: "56ch" }}>
-                      {activeDomainData.tagline}
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-6">
-                      <div>
-                        <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "8px" }}>What it is</span>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.what}</p>
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                {DOMAINS.map((d, i) => {
+                  const isActive = activeDomain === d.id;
+                  return (
+                    <button
+                      key={d.id}
+                      onClick={() => setActiveDomain(isActive ? null : d.id)}
+                      className={`text-left w-full hover:bg-background/20 transition-colors ${i < DOMAINS.length - 1 ? "border-b lg:border-b-0 lg:border-r" : ""}`}
+                      style={{
+                        padding: "26px 26px 24px",
+                        background: isActive ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                        borderColor: isActive ? "hsl(var(--destructive) / var(--a-border))" : "hsl(var(--border))",
+                        boxShadow: isActive ? "inset 0 0 0 1px hsl(var(--destructive) / var(--a-border))" : "none",
+                        transition: "background 0.2s ease, box-shadow 0.2s ease",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div className="flex h-full flex-col gap-5">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0">
+                            <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: isActive ? "hsl(var(--destructive))" : f.ink(0.82), lineHeight: 1.2, marginBottom: "8px" }}>
+                              {d.title}
+                            </p>
+                            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.42), lineHeight: 1.55, maxWidth: "30ch" }}>
+                              {d.tagline}
+                            </p>
+                          </div>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke={isActive ? "hsl(var(--destructive))" : f.ink(0.28)}
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ transform: isActive ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease", flexShrink: 0, marginTop: "2px" }}
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+
+                        <div style={{ paddingTop: "18px", borderTop: `1px solid ${isActive ? "hsl(var(--destructive) / var(--a-border))" : f.ink(0.08)}` }}>
+                          <span style={{ ...label("9px"), color: isActive ? "hsl(var(--destructive) / var(--a-mid))" : f.ink(0.28), display: "block", marginBottom: "8px" }}>
+                            What it is
+                          </span>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>
+                            {d.what}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "8px" }}>What it unlocks</span>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.unlocks}</p>
-                      </div>
-                      <div>
-                        <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "8px" }}>What most advisors miss</span>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.missed}</p>
-                      </div>
-                      <div>
-                        <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "8px" }}>Example</span>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.45), lineHeight: 1.65, fontStyle: "italic" }}>{activeDomainData.example}</p>
-                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div
+                style={{
+                  maxHeight: activeDomainData ? "520px" : "0px",
+                  opacity: activeDomainData ? 1 : 0,
+                  overflow: "hidden",
+                  borderTop: activeDomainData ? "1px solid hsl(var(--destructive) / var(--a-border-card))" : "1px solid transparent",
+                  background: activeDomainData ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                  transition: "max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease, border-color 0.2s ease",
+                }}
+              >
+                {activeDomainData && (
+                  <div key={activeDomain} className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr_1fr] gap-8" style={{ padding: "28px 30px 32px" }}>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                        Selected focus
+                      </span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, marginBottom: "10px" }}>
+                        {activeDomainData.title}
+                      </p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.48), lineHeight: 1.65 }}>
+                        {activeDomainData.tagline}
+                      </p>
+                    </div>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                        What it unlocks
+                      </span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>
+                        {activeDomainData.unlocks}
+                      </p>
+                    </div>
+                    <div>
+                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                        What most advisors miss
+                      </span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65, marginBottom: "18px" }}>
+                        {activeDomainData.missed}
+                      </p>
+                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                        Example
+                      </span>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.46), lineHeight: 1.65, fontStyle: "italic" }}>
+                        {activeDomainData.example}
+                      </p>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
