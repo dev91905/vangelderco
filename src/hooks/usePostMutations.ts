@@ -23,6 +23,7 @@ export type PostFormData = {
   is_featured: boolean;
   sector_label: string | null;
   featured_stat: string | null;
+  link_url: string | null;
 };
 
 export function useCreatePost() {

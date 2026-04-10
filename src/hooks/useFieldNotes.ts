@@ -10,6 +10,7 @@ export type FieldNote = {
   featured_stat: string | null;
   capability: string;
   published_at: string | null;
+  link_url: string | null;
 };
 
 export function useFieldNotes() {
@@ -18,7 +19,7 @@ export function useFieldNotes() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("capability_posts")
-        .select("id, title, slug, excerpt, sector_label, featured_stat, capability, published_at")
+        .select("id, title, slug, excerpt, sector_label, featured_stat, capability, published_at, link_url")
         .eq("type", "field-note")
         .eq("is_published", true)
         .order("published_at", { ascending: false })
