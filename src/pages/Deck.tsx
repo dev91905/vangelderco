@@ -8,7 +8,7 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown } from "lucide-react";
-import { calculateReadinessScore, type QuizAnswer } from "@/lib/deckScoring";
+import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
 import {
   Dialog,
   DialogContent,
@@ -228,6 +228,7 @@ const Deck = () => {
   const [quizAnswers, setQuizAnswers] = useState<(QuizAnswer | null)[]>(Array(QUIZ_ROWS.length).fill(null));
   const [quizStep, setQuizStep] = useState(0); // 0..5 = questions, 6 = reveal
   const [quizRevealed, setQuizRevealed] = useState(false);
+  const [expandedDimension, setExpandedDimension] = useState<number | null>(null);
 
   // Randomize left/right placement per row (stable across re-renders)
   const quizOrderRef = useRef(QUIZ_ROWS.map(() => Math.random() > 0.5));
@@ -796,103 +797,146 @@ const Deck = () => {
           )}
 
 
-          {quizRevealed && (
-            <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
-              <div className="flex flex-col lg:flex-row gap-8">
-                {/* ── Sticky left: summary ── */}
-                <div className="lg:w-[38%] lg:sticky lg:top-8 lg:self-start flex flex-col gap-6">
-                  <div
-                    style={{
-                      padding: "clamp(22px, 3vw, 30px)",
-                      borderRadius: "20px",
-                      background: "hsl(var(--foreground) / var(--a-bg))",
-                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                    }}
-                  >
-                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your results</p>
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                      {nextgenPickCount} of {QUIZ_ROWS.length} advanced approaches identified
-                    </p>
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                      {nextgenPickCount >= 4
-                        ? "You're already thinking the way the most effective operators in the field think. The question is whether your portfolio is actually executing at this level — or whether there's a gap between how you think and what you're funding."
-                        : nextgenPickCount >= 2
-                          ? "You identified some of the shifts that separate the most effective programs from the rest. The dimensions where you picked the conventional approach are exactly where most portfolios have blind spots — and where the other side is operating differently."
-                          : "The approaches you picked are what most programs default to. They're necessary — but they're not sufficient. The operators who are winning do all of this and more. The breakdown below shows you exactly where the gaps are."
-                      }
-                    </p>
-                  </div>
+          {quizRevealed && (() => {
+            const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
+            return (
+            <div style={{ width: "100%", maxWidth: "860px", animation: "fade-up 0.5s ease-out" }}>
+              {/* ── Grade card ── */}
+              <div
+                style={{
+                  padding: "clamp(28px, 4vw, 40px)",
+                  borderRadius: "20px",
+                  background: "hsl(var(--foreground) / var(--a-bg))",
+                  border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                  marginBottom: "clamp(32px, 5vw, 48px)",
+                }}
+              >
+                <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(22px, 2.8vw, 32px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
+                  {grade.grade}
+                </p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "640px" }}>
+                  {grade.summary}
+                </p>
+              </div>
 
-                  <button
-                    onClick={() => {
-                      containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
-                      setTimeout(() => {
-                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                        setQuizStep(0);
-                        setQuizRevealed(false);
-                      }, 400);
-                    }}
-                    style={{
-                      fontFamily: f.sans,
-                      fontSize: "12px",
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      fontWeight: 600,
-                      color: f.ink(0.72),
-                      background: "hsl(var(--background))",
-                      border: `1px solid ${f.ink(0.1)}`,
-                      padding: "12px 18px",
-                      borderRadius: "999px",
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      alignSelf: "flex-start",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = f.ink(0.24);
-                      e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = f.ink(0.1);
-                      e.currentTarget.style.background = "hsl(var(--background))";
-                    }}
-                  >
-                    Start over
-                  </button>
-                </div>
+              {/* ── Dimension breakdown ── */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 2vw, 16px)" }}>
+                {QUIZ_ROWS.map((row, i) => {
+                  const answer = quizAnswers[i];
+                  const pickedNextGen = answer?.picked === "nextgen";
+                  const bulletSummary = pickedNextGen
+                    ? `You chose the advanced approach. Your instinct is right — this is how the most effective programs operate.`
+                    : `You chose the conventional approach. This is where most portfolios have a blind spot.`;
+                  const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
+                  const isExpanded = expandedDimension === i;
 
-                {/* ── Scrollable right: breakdown cards ── */}
-                <div className="lg:w-[62%] flex flex-col gap-4">
-                  {QUIZ_ROWS.map((row, i) => {
-                    const answer = quizAnswers[i];
-                    const pickedNextGen = answer?.picked === "nextgen";
-                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
-                    const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
-                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
-
-                    return (
-                      <div
-                        key={i}
-                        style={{
-                          padding: "clamp(18px, 2vw, 24px)",
-                          borderRadius: "16px",
-                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                          border: `1px solid ${f.ink(0.06)}`,
-                        }}
-                      >
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82), marginBottom: "10px" }}>{row.dimension}</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.4), lineHeight: 1.65, fontStyle: "italic", marginBottom: "14px", paddingLeft: "12px", borderLeft: `2px solid ${f.ink(0.08)}` }}>
-                          {selectedCopy}
-                        </p>
-                        <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "6px" }}>{explanationLabel}</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.7 }}>{explanationCopy}</p>
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "clamp(20px, 2.5vw, 28px)",
+                        borderRadius: "16px",
+                        background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                        border: `1px solid ${f.ink(0.06)}`,
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                        <span style={{
+                          display: "inline-block",
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2),
+                          flexShrink: 0,
+                        }} />
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
                       </div>
-                    );
-                  })}
-                </div>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.65, marginBottom: isExpanded ? "16px" : "0" }}>
+                        {bulletSummary}
+                      </p>
+
+                      {isExpanded && (
+                        <p style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(13px, 1.15vw, 14px)",
+                          color: f.ink(0.42),
+                          lineHeight: 1.7,
+                          paddingTop: "14px",
+                          borderTop: `1px solid ${f.ink(0.06)}`,
+                          animation: "fade-up 0.3s ease-out",
+                        }}>
+                          {explanationCopy}
+                        </p>
+                      )}
+
+                      <button
+                        onClick={() => setExpandedDimension(isExpanded ? null : i)}
+                        style={{
+                          fontFamily: f.sans,
+                          fontSize: "12px",
+                          fontWeight: 600,
+                          color: f.ink(0.35),
+                          background: "none",
+                          border: "none",
+                          padding: "0",
+                          marginTop: "10px",
+                          cursor: "pointer",
+                          letterSpacing: "0.03em",
+                          transition: "color 0.15s ease",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+                      >
+                        {isExpanded ? "Show less" : "Read more"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* ── Start over ── */}
+              <div style={{ marginTop: "clamp(28px, 4vw, 40px)" }}>
+                <button
+                  onClick={() => {
+                    containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                    setTimeout(() => {
+                      setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                      setQuizStep(0);
+                      setQuizRevealed(false);
+                      setExpandedDimension(null);
+                    }, 400);
+                  }}
+                  style={{
+                    fontFamily: f.sans,
+                    fontSize: "12px",
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                    color: f.ink(0.72),
+                    background: "hsl(var(--background))",
+                    border: `1px solid ${f.ink(0.1)}`,
+                    padding: "12px 18px",
+                    borderRadius: "999px",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = f.ink(0.24);
+                    e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = f.ink(0.1);
+                    e.currentTarget.style.background = "hsl(var(--background))";
+                  }}
+                >
+                  Start over
+                </button>
               </div>
             </div>
-          )}
+            );
+          })()}
         </div>
       </DeckFrame>
 
@@ -1370,7 +1414,7 @@ const Deck = () => {
                     {quizRevealed && (
                       <div style={{ marginBottom: "10px" }}>
                         <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Quiz result</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>Identified {nextgenPickCount} / {QUIZ_ROWS.length} emerging approaches</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>{getQuizGrade(nextgenPickCount, QUIZ_ROWS.length).grade}</p>
                       </div>
                     )}
                     {selectedDomains.length > 0 && (
