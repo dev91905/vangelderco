@@ -145,7 +145,7 @@ const AdminEditor = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: "hsl(40 30% 96%)" }}>
+    <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(40 30% 96%)", colorScheme: "light" }}>
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(40 30% 96% / 0.9)", borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
         <div className="flex items-center gap-3">

@@ -111,7 +111,46 @@
     --a-border: 0.22;
     --a-border-card: 0.2;
   }
-}
+  }
+
+  /* Force light-mode tokens inside admin (or any .light container) */
+  .dark .light {
+    --background: 40 30% 96%;
+    --foreground: 30 10% 12%;
+    --card: 40 25% 98%;
+    --card-foreground: 30 10% 12%;
+    --primary: 30 10% 12%;
+    --primary-foreground: 40 30% 96%;
+    --muted: 30 10% 92%;
+    --muted-foreground: 30 10% 45%;
+    --accent: 30 10% 90%;
+    --accent-foreground: 30 10% 12%;
+    --border: 30 10% 88%;
+    --input: 30 10% 88%;
+    --ring: 30 10% 12%;
+    --ink-h: 30;
+    --ink-s: 10%;
+    --ink-l: 12%;
+    --cream-h: 40;
+    --cream-s: 30%;
+    --cream-l: 96%;
+    --card-h: 40;
+    --card-s: 25%;
+    --card-l: 98%;
+    --accent-h: 0;
+    --accent-s: 40%;
+    --accent-l: 35%;
+    --a-high: 0.6;
+    --a-mid: 0.5;
+    --a-low: 0.4;
+    --a-dim: 0.3;
+    --a-bg: 0.04;
+    --a-bg-subtle: 0.03;
+    --a-border: 0.12;
+    --a-border-card: 0.1;
+    --destructive: 12 45% 38%;
+    --destructive-foreground: 40 30% 96%;
+  }
 
 @layer base {
   * {

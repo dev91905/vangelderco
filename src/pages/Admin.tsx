@@ -96,7 +96,7 @@ const Admin = () => {
   ];
 
   return (
-    <div className="min-h-screen" style={{ background: t.cream }}>
+    <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: t.border(0.06) }}>
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
