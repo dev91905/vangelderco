@@ -663,7 +663,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
-      <DeckFrame ref={setRef(2)} mode="wide">
+      <DeckFrame ref={setRef(2)} mode="wide" scrollable={quizRevealed}>
         <div ref={r3.ref} className="flex flex-col justify-center" style={{ height: "100%", width: "100%" }}>
           {/* Header */}
           <div style={{ marginBottom: "clamp(24px, 4vw, 48px)" }}>
