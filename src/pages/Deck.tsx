@@ -8,7 +8,7 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown } from "lucide-react";
-import { calculateReadinessScore, getScoreLabel, type QuizAnswer } from "@/lib/deckScoring";
+import { calculateReadinessScore, type QuizAnswer } from "@/lib/deckScoring";
 import {
   Dialog,
   DialogContent,
