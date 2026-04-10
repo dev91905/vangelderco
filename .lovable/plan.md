@@ -1,50 +1,82 @@
 
 
-# Admin Panel Color Audit + WYSIWYG Editor
+# Growth Audit: Anchor "Communications" Everywhere
 
-## Two problems
+## The Problem
+A prospect scrolling the site sees: "Cultural Strategy," "Cross-Sector Intelligence," "Deep Organizing," "Our Altitude," "Our Network," "Field Notes." The word **communications** appears exactly once in the Altitude body copy and once buried in a capability card detail paragraph. A $100M donor scanning this site has no idea this is a communications firm. They think it's a strategy consultancy, an organizing shop, or a think tank.
 
-### 1. White-on-cream hover effect
-The admin panel background is cream (`hsl(40 30% 96%)`). Hover states use `t.white` which is `hsl(40 25% 98%)` — a 2% lightness difference. Invisible. Every hover across the admin is broken:
-- PostListTable row hover → `t.white`
-- Settings/logout button hover → `t.white`
-- EditorMetaBar settings gear hover → `t.surface.hover` (`t.ink(0.04)`)
-- BlockEditor delete button bg → `hsl(0 0% 100%)`
+The deck is worse — 12 frames, the word "communications" appears once (in the quiz row for "Content"). The hero says "Let's figure out if there's a fit." Fit for what? Communications advisory? Political consulting? Management consulting?
 
-**Fix**: Replace all admin hover backgrounds with a visible contrast. Use `t.ink(0.04)` for subtle hover (which is dark ink at 4% opacity — visible on cream), and `t.ink(0.06)` for active states. Audit every `onMouseEnter`/`onMouseLeave` and `hover:bg-` in:
-- `src/pages/Admin.tsx` — button hovers, post row hovers
-- `src/pages/AdminEditor.tsx` — toolbar button hovers
-- `src/components/admin/EditorMetaBar.tsx` — drawer close, settings gear
-- `src/components/admin/BlockCanvas.tsx` — insert point buttons, empty state
-- `src/components/admin/BlockEditor.tsx` — delete button, drag handle
-- `src/components/admin/PostListTable.tsx` — row hover
+## Copy Changes — Every Section Gets "Communications"
 
-Specifically `t.white` and `hsl(0 0% 100%)` on hover backgrounds all become `t.ink(0.05)`.
+### Homepage (`src/pages/Index.tsx`)
 
-### 2. Editor should match published view (WYSIWYG-style)
-Current editor: flat text areas with raw `DM Sans` at generic sizes, no visual hierarchy, no centered layout matching the published post.
+| Section | Current | Proposed |
+|---------|---------|----------|
+| **Hero subtitle** (below the 3 nav links) | No subtitle — just 6 sector pills | Add a one-line descriptor above the pills: **"Strategic Communications Advisory"** |
+| **Altitude label** | "Our Altitude" | **"Our Approach to Communications"** |
+| **Altitude serif line 1** | "You're on the ground doing the work." | **"Your communications are on the ground. We see them from orbit."** |
+| **Altitude serif line 2** | "We see the field from orbit." | **"One picture. Every sector. Every gap."** |
+| **Altitude body** | "Six sectors. One picture. We identify alignment..." | **"We identify the communications alignment that nobody in any single sector can see from where they sit."** |
+| **Altitude body p2** | "We're specialists in cultural strategy, media-based organizing, and philanthropy..." | **"We're strategic communications specialists — cultural strategy, media-based organizing, and cross-sector coordination — helping donors and their grantees close the gap between spend and impact."** |
+| **Capabilities label** | "Capabilities" | **"Communications Capabilities"** |
+| **Cap 1 tagline** | "Communications is the floor. Uptake is the ceiling." | **"Strategic communications that become cultural moments."** |
+| **Cap 2 tagline** | "Nothing moves unless multiple sectors push together." | **"Communications coordinated across every sector that matters."** |
+| **Cap 3 tagline** | "Not mobilization. Recruitment and retention." | **"Communications infrastructure that grows your base."** |
+| **Intake CTA chip** | "Strategic Diagnostic" | **"Communications Diagnostic"** |
+| **Intake CTA subhead** | "A short diagnostic that benchmarks your communications strategy against the opposition..." | Keep — already has "communications" ✓ |
+| **Network label** | "Our Network" | **"Our Communications Network"** |
+| **Network body** | "We collaborate with a network of over 400 practitioners across every sector that moves policy, culture, and capital." | **"Over 400 communications practitioners across every sector that moves policy, culture, and capital."** |
+| **Footer** | Just email + "By Referral Only" | Add: **"Strategic Communications Advisory · Van Gelder Co."** above email |
 
-Published BlogPostView: centered at `max-w-[680px]`, proper heading sizes (`32px-44px`), body at `15-16px`, serif quotes, callouts with backgrounds, proper spacing.
+### Deck (`src/pages/Deck.tsx`)
 
-**Fix**: Restyle the BlockEditor to match ContentBlockRenderer and BlogPostView typography:
+| Frame | Current | Proposed |
+|-------|---------|----------|
+| **Frame 1 hero** | "Let's figure out if there's a fit." | **"Let's diagnose your communications."** |
+| **Frame 1 body** | "This is a five-minute walkthrough that helps us understand your situation..." | **"A five-minute diagnostic that benchmarks your strategic communications against the other side — and shows you exactly where the gaps are."** |
+| **Frame 1 time label** | "5 min · interactive diagnostic" | **"5 min · communications diagnostic"** |
+| **Frame 2 heading** | "Tell us where you are." | **"Where are your communications right now?"** |
+| **Frame 3 subhead** | "Two approaches to {dimension}. Pick whichever you think works better." | **"Two communications approaches to {dimension}. Pick the one you think works better."** |
+| **Frame 4 heading** | "Here's what separates portfolios that move policy from ones that report on awareness." | **"Here's what separates communications that move policy from ones that report on awareness."** |
+| **Frame 5 heading** | "Where do you need the most help?" | **"Where do your communications need the most help?"** |
+| **Frame 7 heading** | "Which of these do you currently track?" | **"How do you measure your communications today?"** |
+| **Frame 8 heading** | "How do you want to start?" | **"How do you want to start working on your communications?"** |
+| **Frame 9 heading** | "We've been where you are." | **"We've built the communications you're trying to buy."** |
+| **Frame 10 heading** | "We've got a picture. Let's talk." | **"We've got a picture of your communications. Let's talk."** |
+| **Frame 11 heading** | "Selected case work." | **"Selected communications work."** |
+| **Frame 12 button** | "Send your intake →" | **"Send your communications intake →"** |
 
-- **Headings**: Match published sizes — H1 `text-[24px] md:text-[32px]`, H2 `text-[20px] md:text-[26px]`, H3 `text-[17px] md:text-[21px]`. Use `t.sans` with `font-bold` (not `font-medium`).
-- **Paragraphs**: `text-[15px] md:text-[16px]`, color `t.ink(0.55)`, line-height `1.9`.
-- **Quotes**: Use `t.serif` italic, left border `2px solid t.ink(0.12)`, proper padding. Match ContentBlockRenderer exactly.
-- **Callouts**: Match the published callout style — `t.ink(0.04)` background, `t.border(0.08)` border.
-- **Overall canvas wrapper** in AdminEditor: keep `max-w-3xl` (close to published `680px`), center it.
-- **Title input** in EditorMetaBar: size it closer to the published `text-[32px] md:text-[44px]`.
-- **Excerpt/dek textarea**: match published excerpt styling — `clamp(17px, 1.9vw, 19px)`, `t.ink(0.55)`.
+### Capability Pages
 
-Replace hardcoded `hsl(30 10% 12% / ...)` values in BlockEditor.tsx and BlockCanvas.tsx with `t.ink(...)` from theme — these files bypass the theme system entirely.
+| Page | Current Title | Proposed |
+|------|--------------|----------|
+| **CulturalStrategy.tsx** | "Cultural Strategy" | Keep title, update description: add "communications" — **"...turning strategic communications into cultural moments."** |
+| **CrossSector.tsx** | "Cross-Sector Intelligence" | Update description: **"We map the communications alignments that nobody in any single sector can see."** |
+| **DeepOrganizing.tsx** | "Deep Organizing" | Update description: **"...sustaining their participation over time. That's the difference between communications that grow a movement and ones that stall."** |
+
+### Meta/SEO (`index.html`)
+
+| Current | Proposed |
+|---------|----------|
+| `<title>VGC StratComm Advisors</title>` | **`<title>Van Gelder Co. · Strategic Communications Advisory</title>`** |
+| `<meta name="description" content="Strategic communications advisory. By referral only.">` | Keep ✓ |
+
+## Additional Growth Recommendations
+
+1. **Add a persistent tagline to the header** — The top-right "Van Gelder Co." label should include "Strategic Communications" beneath it in smaller type. Every scroll position should reinforce what you do.
+
+2. **Capability card CTAs should say what they are** — "Explore →" tells me nothing. Change to "Explore Communications Capability →" or just "See how we do it →".
+
+3. **The "By Referral Only" tag is a growth killer in isolation** — It signals exclusivity, but without context it just tells cold traffic "you can't use this." Add context: "By Referral Only · Request an introduction" with a mailto link.
 
 ## Files to change
-| File | What |
-|------|------|
-| `src/pages/Admin.tsx` | Fix hover backgrounds — replace `t.white` with `t.ink(0.05)` |
-| `src/pages/AdminEditor.tsx` | Fix toolbar hover colors, use theme tokens |
-| `src/components/admin/EditorMetaBar.tsx` | Fix drawer hover states, make title/excerpt match published sizes |
-| `src/components/admin/BlockEditor.tsx` | Restyle all block types to match published typography (heading sizes, paragraph color/size, quote serif + border, callout bg). Replace all hardcoded HSL with `t.*` |
-| `src/components/admin/BlockCanvas.tsx` | Replace hardcoded HSL with `t.*`, fix insert point hover |
-| `src/components/admin/PostListTable.tsx` | Fix row hover from `t.white` to `t.ink(0.05)` |
+| File | Changes |
+|------|---------|
+| `src/pages/Index.tsx` | Copy updates across Hero, Altitude, Capabilities, Intake CTA, Network, Footer sections + header tagline |
+| `src/pages/Deck.tsx` | Copy updates across all 12 frames |
+| `src/pages/CulturalStrategy.tsx` | Description copy |
+| `src/pages/CrossSector.tsx` | Description copy |
+| `src/pages/DeepOrganizing.tsx` | Description copy |
+| `index.html` | Title tag update |
 
