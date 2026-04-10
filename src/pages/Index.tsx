@@ -521,72 +521,112 @@ const Index = () => {
       </section>
 
       {/* ═══ INTAKE CTA ═══ */}
-      <section
-        className="snap-section relative z-10 flex flex-col items-center justify-center px-6"
-      >
-        <RevealBlock>
-          <span
-            className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
-            style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-mid))" }}
-          >
-            Strategic Diagnostic
-          </span>
-        </RevealBlock>
+      <section className="snap-section relative z-10 flex items-center justify-center px-6 md:px-10">
+        <div className="w-full max-w-4xl mx-auto">
+          <RevealBlock>
+            <div
+              className="relative overflow-hidden rounded-2xl"
+              style={{
+                background: "hsl(var(--foreground))",
+                border: "1px solid hsl(var(--foreground) / 0.15)",
+                minHeight: "420px",
+              }}
+            >
+              {/* Visual texture layer — grid + noise */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  backgroundImage: `
+                    radial-gradient(circle at 20% 50%, hsl(var(--background) / 0.06) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 30%, hsl(var(--background) / 0.04) 0%, transparent 40%),
+                    radial-gradient(circle at 60% 80%, hsl(var(--background) / 0.05) 0%, transparent 45%)
+                  `,
+                }}
+              />
+              {/* Subtle grid overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(hsl(var(--background)) 1px, transparent 1px),
+                    linear-gradient(90deg, hsl(var(--background)) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "40px 40px",
+                }}
+              />
+              {/* Diagonal accent line */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: 0,
+                  right: 0,
+                  width: "60%",
+                  height: "100%",
+                  background: `linear-gradient(135deg, transparent 0%, hsl(var(--background) / 0.03) 40%, transparent 70%)`,
+                }}
+              />
 
-        <RevealBlock delay={0.1}>
-          <h2
-            className="text-[26px] md:text-[36px] lg:text-[42px] leading-[1.15] text-center mb-5 max-w-xl"
-            style={{ fontFamily: t.serif, color: t.ink(0.85), fontWeight: 400 }}
-          >
-            See where your strategy has gaps — before they become losses.
-          </h2>
-        </RevealBlock>
+              {/* Content */}
+              <div className="relative z-10 p-10 md:p-14 lg:p-16 flex flex-col justify-center min-h-[420px]">
+                <span
+                  className="text-[10px] tracking-[0.25em] uppercase mb-8 inline-block"
+                  style={{ fontFamily: t.sans, color: "hsl(var(--background) / 0.4)" }}
+                >
+                  3-Minute Diagnostic
+                </span>
 
-        <RevealBlock delay={0.2}>
-          <p
-            className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-sm mb-12"
-            style={{ fontFamily: t.sans, color: t.ink(0.4) }}
-          >
-            A five-minute walkthrough that maps your current approach against what's actually working on the other side — and scores your strategic readiness.
-          </p>
-        </RevealBlock>
+                <h2
+                  className="text-[28px] md:text-[36px] lg:text-[44px] font-bold leading-[1.1] mb-6 max-w-lg"
+                  style={{ fontFamily: t.sans, color: "hsl(var(--background))" }}
+                >
+                  Find the gaps before your opponents do.
+                </h2>
 
-        <RevealBlock delay={0.35} direction="scale">
-          <Link
-            to="/deck"
-            className="group inline-flex items-center gap-2.5 no-underline rounded-full"
-            style={{
-              fontFamily: t.sans,
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase" as const,
-              color: "hsl(var(--foreground))",
-              border: "1px solid hsl(var(--foreground) / var(--a-dim))",
-              background: "hsl(var(--foreground) / var(--a-bg))",
-              padding: "14px 36px",
-              transition: `all 0.5s ${EASE_OUT_EXPO}`,
-              boxShadow: "0 0 0 0 hsl(var(--foreground) / 0)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.background = ox(1);
-              e.currentTarget.style.color = "hsl(var(--background))";
-              e.currentTarget.style.borderColor = ox(1);
-              e.currentTarget.style.boxShadow = `0 12px 40px -8px ${ox(0.4)}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))";
-              e.currentTarget.style.color = "hsl(var(--foreground))";
-              e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-dim))";
-              e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--foreground) / 0)";
-            }}
-          >
-            Explore
-            <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
-          </Link>
-        </RevealBlock>
+                <p
+                  className="text-[15px] md:text-[17px] leading-[1.7] max-w-md mb-4"
+                  style={{ fontFamily: t.serif, fontStyle: "italic", color: "hsl(var(--background) / 0.55)" }}
+                >
+                  Your portfolio has blind spots. The other side is already funding around them.
+                </p>
+
+                <p
+                  className="text-[13px] md:text-[14px] leading-[1.7] max-w-sm mb-10"
+                  style={{ fontFamily: t.sans, color: "hsl(var(--background) / 0.35)" }}
+                >
+                  Walk through a scored assessment of your strategic readiness — and get a clear picture of where to reallocate for impact.
+                </p>
+
+                <Link
+                  to="/deck"
+                  className="group inline-flex items-center gap-2.5 no-underline rounded-full self-start"
+                  style={{
+                    fontFamily: t.sans,
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase" as const,
+                    color: "hsl(var(--foreground))",
+                    background: "hsl(var(--background))",
+                    padding: "14px 36px",
+                    transition: `all 0.5s ${EASE_OUT_EXPO}`,
+                    boxShadow: `0 0 0 0 hsl(var(--background) / 0)`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = `0 12px 40px -8px hsl(var(--background) / 0.3)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = `0 0 0 0 hsl(var(--background) / 0)`;
+                  }}
+                >
+                  Take the Diagnostic
+                  <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
+                </Link>
+              </div>
+            </div>
+          </RevealBlock>
+        </div>
       </section>
 
       {/* ═══ NETWORK ═══ */}
