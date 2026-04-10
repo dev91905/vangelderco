@@ -678,12 +678,11 @@ const Deck = () => {
                 : `What's your approach to ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
               }
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
-              {quizRevealed
-                ? "The summary is at the top. Scroll for the breakdown and why each one matters."
-                : "Pick your approach."
-              }
-            </p>
+            {quizRevealed && (
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
+                The summary is at the top. Scroll for the breakdown and why each one matters.
+              </p>
+            )}
           </div>
 
           {/* Quiz questions — one at a time */}
