@@ -43,8 +43,8 @@ const PAIN_POINTS = [
 
 /* ─── Quiz rows — genuinely competitive A/B ─── */
 const QUIZ_ROWS = [
-  { dimension: "Research", traditional: "Commission message testing, focus groups, and polling before launching. Ground your strategy in data before you spend.", nextgen: "Monitor what's already resonating organically across platforms and communities. Let the market tell you what works.", traditionalExplanation: "The most effective programs now monitor what's already resonating across platforms — not what people say in a focus group. Real signals come from organic behavior, not controlled environments.", nextgenExplanation: "Organic monitoring catches real signals — what people actually share, repeat, and act on — rather than what they say they'd do in a controlled setting." },
-  { dimension: "Content", traditional: "Fund high-quality media — documentaries, explainers, investigative journalism. Invest in credibility and production value.", nextgen: "Fund creator economies and round-the-clock digital content. Prioritize volume, velocity, and constant presence over polish.", traditionalExplanation: "The other side isn't making documentaries. They're funding thousands of creators producing content around the clock. Volume and velocity are beating polish.", nextgenExplanation: "Always-on content keeps narratives alive between campaigns. Creator economies produce at a pace and scale that traditional production can't match." },
+  { dimension: "Research", traditional: "Run focus groups and message testing to validate your strategy before launch. Ground decisions in structured research.", nextgen: "Monitor what's already resonating across platforms and communities — sentiment, sharing patterns, organic behavior — then validate with targeted research.", traditionalExplanation: "Focus groups are useful for validation, but they can't tell you what you don't know to ask. The most effective programs start by listening — tracking what's already moving through culture, what language people actually use, what resonates across psychographic segments that don't map neatly to party labels. Then they validate with research. The order matters.", nextgenExplanation: "Starting with organic signals means you discover the real audience segments — not just demographics, but the underlying value systems that drive behavior. Focus groups validate. But you have to know what to test first, and that comes from listening at scale." },
+  { dimension: "Content", traditional: "Invest in high-quality productions — documentaries, long-form journalism, flagship campaigns. Lead with credibility and production value.", nextgen: "Fund always-on content across creators, journalists, and digital-first formats. Prioritize volume, velocity, and constant presence alongside quality.", traditionalExplanation: "The other side isn't choosing between documentaries and creators — they're doing both, all the time. Investigative journalism, creator content, short-form, long-form, around the clock. The gap isn't genre. It's operating tempo. Campaign-cycle productions leave dead air between tentpoles. Always-on presence compounds.", nextgenExplanation: "Always-on content across formats — investigative journalism, creators, short-form — keeps narratives alive between campaigns. It's not about choosing volume over quality. It's about maintaining presence at a pace that compounds, instead of going dark between flagship productions." },
   { dimension: "Distribution", traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency through paid media.", nextgen: "Invest in owning or shaping the platforms and channels themselves — editorial direction, algorithms, programming.", traditionalExplanation: "Buying placements rents attention. The most effective operators are buying or shaping the platforms themselves — the algorithms, the editorial direction, the programming.", nextgenExplanation: "Owning infrastructure means you influence how attention flows, not just where your ad appears. It's the difference between renting and owning." },
   { dimension: "Engagement", traditional: "Partner with trusted voices and influencers who can extend your message to aligned audiences.", nextgen: "Organize through institutions — faith communities, campuses, labor, veteran networks — that have built-in trust and show up offline.", traditionalExplanation: "Influencer reach stays online and often stays inside existing audiences. Institutional organizing — faith, labor, campuses, veterans — builds constituencies that show up offline and in person.", nextgenExplanation: "Institutions carry built-in trust and built-in turnout. They don't just amplify a message — they mobilize people who act on it." },
   { dimension: "Measurement", traditional: "Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there.", nextgen: "Track who's new to the table, what policy moved, and what infrastructure outlasts the campaign. Measure power, not exposure.", traditionalExplanation: "Reach and impressions measure exposure. The programs that move policy measure who's new to the table and what actually changed. Power, not awareness.", nextgenExplanation: "Measuring who's new and what policy moved tells you whether you're building power — not just making noise." },
@@ -432,7 +432,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Domains", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Hallmarks", "Domains", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
 
   return (
     <div
@@ -671,18 +671,18 @@ const Deck = () => {
             }}
           >
             {quizRevealed && (
-              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Quiz results</p>
+              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your strategy read</p>
             )}
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
                 ? "Here's what your answers tell us."
-                : `Two approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}.`
+                : `What's your approach to ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
               }
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
               {quizRevealed
                 ? "The summary is at the top. Scroll for the breakdown and why each one matters."
-                : "Both are used by major funders. Pick the one you'd bet on."
+                : "Pick your approach."
               }
             </p>
           </div>
@@ -725,7 +725,7 @@ const Deck = () => {
                         marginBottom: "clamp(16px, 2vw, 28px)",
                       }}
                     >
-                      {row.dimension} · Question {i + 1} of {QUIZ_ROWS.length}
+                      {row.dimension}
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: "clamp(16px, 3vw, 32px)" }}>
@@ -871,7 +871,7 @@ const Deck = () => {
                       e.currentTarget.style.background = "hsl(var(--background))";
                     }}
                   >
-                    Retake quiz
+                    Start over
                   </button>
                 </div>
 
