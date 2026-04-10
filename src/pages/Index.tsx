@@ -389,7 +389,7 @@ const Index = () => {
                 color: "hsl(var(--foreground))",
               }}
             >
-              For donor advisors and program officers who know their portfolios should be hitting harder.
+              For donor advisors and program officers who want their portfolio to hit harder.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.5}>
