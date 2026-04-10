@@ -524,6 +524,8 @@ const Deck = () => {
                   onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
                   className="text-left"
                   style={{
+                    display: "flex",
+                    flexDirection: "column",
                     padding: "28px 24px",
                     border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
                     background: isSelected ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
@@ -533,12 +535,13 @@ const Deck = () => {
                     transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                     filter: r2.isActive ? "blur(0px)" : "blur(4px)",
                     transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, background 0.15s ease, border 0.15s ease`,
+                    minHeight: "180px",
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px", minHeight: "clamp(20px, 2.4vw, 28px)" }}>
                     {pain.short}
                   </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, flex: "1 1 auto" }}>
                     {pain.detail}
                   </p>
                 </button>
@@ -547,6 +550,8 @@ const Deck = () => {
             {/* 6th card — Something else */}
             <div
               style={{
+                display: "flex",
+                flexDirection: "column",
                 padding: "28px 24px",
                 border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
                 background: customSaved ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
@@ -555,24 +560,13 @@ const Deck = () => {
                 transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                 filter: r2.isActive ? "blur(0px)" : "blur(4px)",
                 transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.15s ease, border 0.15s ease",
+                minHeight: "180px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
-                  Something else
-                </p>
-                <span style={{
-                  fontFamily: f.sans,
-                  fontSize: "11px",
-                  color: f.ink(0.25),
-                  lineHeight: 1,
-                  opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
-                  transition: "opacity 0.2s ease",
-                }}>
-                  {customSaved ? "Click to edit" : "Press ↵ to submit"}
-                </span>
-              </div>
-              <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); } }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px", minHeight: "clamp(20px, 2.4vw, 28px)" }}>
+                Something else
+              </p>
+              <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); } }} style={{ display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
                 <textarea
                   value={customMessage}
                   onChange={(e) => {
@@ -593,19 +587,31 @@ const Deck = () => {
                     fontSize: "clamp(12px, 1.3vw, 14px)",
                     color: customSaved ? f.ink(0.6) : f.ink(0.8),
                     background: customSaved ? "transparent" : `${f.ink(0.03)}`,
-                    border: customSaved ? "none" : `1px solid ${f.ink(0.08)}`,
+                    border: customSaved ? `1px solid transparent` : `1px solid ${f.ink(0.08)}`,
                     borderRadius: "6px",
-                    padding: customSaved ? "0" : "10px 12px",
+                    padding: "10px 12px",
                     resize: "none",
                     outline: "none",
                     width: "100%",
                     lineHeight: 1.6,
+                    flex: "1 1 auto",
                     cursor: customSaved ? "pointer" : "text",
-                    transition: "background 0.15s ease, border 0.15s ease, padding 0.15s ease",
+                    transition: "background 0.15s ease, border 0.15s ease",
                   }}
                   onFocus={(e) => { if (!customSaved) e.currentTarget.style.borderColor = f.ink(0.15); }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = f.ink(0.08); }}
                 />
+                <p style={{
+                  fontFamily: f.sans,
+                  fontSize: "11px",
+                  color: f.ink(0.25),
+                  marginTop: "6px",
+                  lineHeight: 1,
+                  opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
+                  transition: "opacity 0.2s ease",
+                }}>
+                  {customSaved ? "Click to edit" : "Press ↵ to submit"}
+                </p>
               </form>
             </div>
           </div>
