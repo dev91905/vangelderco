@@ -310,16 +310,6 @@ const Index = () => {
             ))}
           </h1>
 
-          <span
-            className="text-[12px] md:text-[13px] tracking-[0.2em] uppercase"
-            style={{
-              fontFamily: t.sans,
-              color: t.ink(0.35),
-              animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.3s both",
-            }}
-          >
-            Strategic Communications Advisory
-          </span>
 
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
