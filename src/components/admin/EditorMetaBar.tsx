@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import { Settings, X, Eye, EyeOff, Copy, RefreshCw, Trash2, Lock, Check } from "lucide-react";
 import ImageUploader from "./ImageUploader";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -66,6 +67,18 @@ const CAPABILITIES = [
   { value: "deep-organizing", label: "Deep Organizing" },
 ];
 
+const capabilityLabel: Record<string, string> = {
+  "cultural-strategy": "Cultural Strategy",
+  "cross-sector": "Cross-Sector Intelligence",
+  "deep-organizing": "Deep Organizing",
+};
+
+const typeLabel: Record<string, string> = {
+  "blog-post": "Blog Post",
+  "case-study": "Case Study",
+  "field-note": "Field Note",
+};
+
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const EditorMetaBar = (props: EditorMetaBarProps) => {
@@ -77,32 +90,72 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
     if (!slugManual && props.title) props.onSlugChange(slugify(props.title));
   }, [props.title, slugManual]);
 
+  const isCaseStudy = props.type === "case-study";
+
+  // Title sizes: blog = 32/44, case-study = 28/40
+  const titleSize = isCaseStudy ? "clamp(28px, 4vw, 40px)" : "clamp(32px, 4vw, 44px)";
+  const maxWidth = isCaseStudy ? "720px" : "680px";
+
   return (
     <>
-      <div className="max-w-[680px] mx-auto pt-4 pb-2">
-        <input value={props.title} onChange={(e) => props.onTitleChange(e.target.value)} placeholder="Untitled"
-          className="w-full bg-transparent outline-none font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.9), fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.15 }} />
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>/post/</span>
-          <input value={props.slug} onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
-            className="bg-transparent outline-none text-sm flex-1" style={{ fontFamily: t.sans, color: t.ink(0.4) }} />
-          <button onClick={() => setDrawerOpen(true)} className="p-2 rounded-xl transition-colors" title="Post settings"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-            <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
-          </button>
-        </div>
-        {props.type !== "field-note" && (
-          <div className="mt-3">
-            <label className="text-[11px] uppercase tracking-[0.06em] mb-1 flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
-              DEK
-              {!props.excerpt?.trim() && props.isPublished && <span style={{ color: t.error(0.6), fontSize: "10px" }}>MISSING</span>}
-            </label>
-            <textarea value={props.excerpt} onChange={(e) => props.onExcerptChange(e.target.value)} placeholder="Short description shown on listing cards and below the title"
-              rows={2} className="w-full bg-transparent outline-none resize-none" style={{ fontFamily: t.sans, color: t.ink(0.55), fontSize: "clamp(17px, 1.9vw, 19px)", lineHeight: 1.7 }} />
+      {/* Published-style article header */}
+      <div className="w-full flex flex-col items-center px-6" style={{ minHeight: isCaseStudy ? "20vh" : (props.heroImageUrl ? undefined : "20vh"), paddingTop: isCaseStudy ? "8vh" : "6vh" }}>
+
+        {/* Hero image for blog posts */}
+        {!isCaseStudy && props.heroImageUrl && (
+          <div className="w-full relative mb-8 -mx-6" style={{ height: "40vh", marginTop: "-6vh" }}>
+            <img src={props.heroImageUrl} alt={props.title} className="w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, hsl(40 30% 96%) 100%)` }} />
           </div>
         )}
+
+        <div className="flex flex-col items-center w-full" style={{ maxWidth }}>
+          {/* Meta row: type // capability */}
+          <div className="flex items-center gap-3 mb-5">
+            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>{typeLabel[props.type] || props.type}</span>
+            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>//</span>
+            <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{capabilityLabel[props.capability] || props.capability}</span>
+            {/* Settings gear inline */}
+            <button onClick={() => setDrawerOpen(true)} className="ml-2 p-1.5 rounded-lg transition-colors opacity-40 hover:opacity-80"
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              <Settings className="w-3.5 h-3.5" style={{ color: t.ink(0.5) }} />
+            </button>
+          </div>
+
+          {/* Editable title — styled exactly like published */}
+          <input
+            value={props.title}
+            onChange={(e) => props.onTitleChange(e.target.value)}
+            placeholder="Untitled"
+            className="w-full bg-transparent outline-none font-bold leading-[1.15] text-center"
+            style={{ fontFamily: t.sans, color: t.ink(0.9), fontSize: titleSize, lineHeight: 1.15 }}
+          />
+
+          {/* Editable excerpt — styled exactly like published */}
+          {props.type !== "field-note" && (
+            <textarea
+              value={props.excerpt}
+              onChange={(e) => props.onExcerptChange(e.target.value)}
+              placeholder="Short description shown below the title"
+              rows={2}
+              className="w-full bg-transparent outline-none resize-none text-center mt-4 max-w-2xl"
+              style={{ fontFamily: t.sans, color: t.ink(0.55), fontSize: "clamp(17px, 1.9vw, 19px)", lineHeight: 1.7 }}
+            />
+          )}
+
+          {/* Date */}
+          {props.publishedAt && (
+            <span className="text-[13px] mt-4" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
+              {format(new Date(props.publishedAt), "MMMM d, yyyy")}
+            </span>
+          )}
+        </div>
+
+        {/* Divider — matches published */}
+        <div className="w-12 mt-8 mb-2" style={{ height: "1px", background: t.ink(0.1) }} />
       </div>
 
+      {/* Settings Drawer */}
       {drawerOpen && (
         <>
           <div className="fixed inset-0 z-50" style={{ background: t.ink(0.15) }} onClick={() => setDrawerOpen(false)} />
@@ -116,10 +169,21 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
               </button>
             </div>
             <div className="p-5 space-y-6">
+              {/* Slug / URL */}
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>URL Slug</label>
+                <div className="flex items-center rounded-xl overflow-hidden" style={{ border: t.border(0.08) }}>
+                  <span className="text-[12px] pl-3 shrink-0" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>/post/</span>
+                  <input value={props.slug} onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
+                    className="flex-1 px-1 py-2.5 text-sm bg-transparent outline-none min-w-0" style={{ fontFamily: t.sans, color: t.ink(0.5) }} />
+                </div>
+              </div>
+
+              {/* Type */}
               <div className="space-y-2">
                 <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Type</label>
                 <div className="flex gap-1 rounded-xl overflow-hidden" style={{ border: t.border(0.08) }}>
-                {["blog-post", "case-study", "field-note"].map((tp) => (
+                  {["blog-post", "case-study", "field-note"].map((tp) => (
                     <button key={tp} onClick={() => props.onTypeChange(tp)} className="flex-1 px-3 py-2.5 text-[12px] transition-colors"
                       style={{ fontFamily: t.sans, background: props.type === tp ? t.ink(1) : "transparent", color: props.type === tp ? t.cream : t.ink(0.4) }}>
                       {tp === "blog-post" ? "Blog Post" : tp === "case-study" ? "Case Study" : "Field Note"}
@@ -127,6 +191,8 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   ))}
                 </div>
               </div>
+
+              {/* Capability */}
               <div className="space-y-2">
                 <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Capability</label>
                 <div className="space-y-1">
@@ -138,6 +204,8 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   ))}
                 </div>
               </div>
+
+              {/* Status */}
               <div className="space-y-2">
                 <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Status</label>
                 <button onClick={() => { const next = !props.isPublished; props.onPublishedChange(next); if (next && !props.publishedAt) props.onPublishedAtChange(new Date().toISOString()); }}
@@ -148,12 +216,16 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   </div>
                 </button>
               </div>
+
+              {/* Hero Image */}
               {props.type !== "field-note" && (
                 <div className="space-y-2">
                   <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Hero Image</label>
                   <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
                 </div>
               )}
+
+              {/* Password */}
               {props.type !== "field-note" && (
                 <PasswordField value={props.password} onChange={props.onPasswordChange} />
               )}
