@@ -65,27 +65,27 @@
     --card-foreground: 0 0% 93%;
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 93%;
-    --primary: 0 65% 45%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 90%;
+    --primary-foreground: 0 0% 5%;
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 70%;
     --muted: 0 0% 8%;
     --muted-foreground: 0 0% 50%;
     --accent: 0 0% 10%;
     --accent-foreground: 0 0% 93%;
-    --destructive: 0 65% 45%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 12%;
     --input: 0 0% 12%;
-    --ring: 0 65% 45%;
+    --ring: 0 0% 40%;
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 50%;
-    --sidebar-primary: 0 65% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 90%;
+    --sidebar-primary-foreground: 0 0% 5%;
     --sidebar-accent: 0 0% 8%;
     --sidebar-accent-foreground: 0 0% 70%;
     --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 65% 45%;
+    --sidebar-ring: 0 0% 40%;
 
     /* Theme bridge tokens — dark */
     --ink-h: 0;
@@ -97,9 +97,9 @@
     --card-h: 0;
     --card-s: 0%;
     --card-l: 5%;
-    --accent-h: 355;
-    --accent-s: 45%;
-    --accent-l: 38%;
+    --accent-h: 0;
+    --accent-s: 0%;
+    --accent-l: 60%;
 
     /* Accent opacity tiers — pop in dark mode */
     --a-high: 0.9;
@@ -233,15 +233,15 @@
 /* Sector pill sequential glow — dark mode only */
 @keyframes pill-glow {
   0%, 10% {
-    background: hsl(var(--destructive) / 0.14);
-    border-color: hsl(var(--destructive) / 0.45);
-    color: hsl(var(--destructive));
-    box-shadow: 0 0 20px -4px hsl(var(--destructive) / 0.2);
+    background: hsl(var(--foreground) / 0.12);
+    border-color: hsl(var(--foreground) / 0.35);
+    color: hsl(var(--foreground));
+    box-shadow: 0 0 20px -4px hsl(var(--foreground) / 0.15);
   }
   20%, 100% {
-    background: hsl(var(--destructive) / var(--a-bg));
-    border-color: hsl(var(--destructive) / var(--a-border));
-    color: hsl(var(--destructive) / var(--a-mid));
-    box-shadow: 0 0 0 0 hsl(var(--destructive) / 0);
+    background: hsl(var(--foreground) / var(--a-bg));
+    border-color: hsl(var(--foreground) / var(--a-border));
+    color: hsl(var(--foreground) / var(--a-mid));
+    box-shadow: 0 0 0 0 hsl(var(--foreground) / 0);
   }
 }
