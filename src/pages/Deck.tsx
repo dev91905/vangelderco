@@ -124,7 +124,7 @@ const METRICS_ROWS = [
 
 /* ─── Case studies ─── */
 const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
-  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: "hsl(var(--destructive))", border: "none" }}>
+  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: "hsl(var(--foreground))", border: "none" }}>
     <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{value}</span>
     <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(var(--primary-foreground) / 0.7)" }}>{lbl}</span>
   </div>
@@ -409,7 +409,7 @@ const Deck = () => {
             style={{
               height: "100%",
               width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
-              background: "hsl(var(--destructive) / var(--a-mid))",
+              background: "hsl(var(--foreground) / var(--a-mid))",
               borderRadius: "1px",
               transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
             }}
@@ -487,16 +487,16 @@ const Deck = () => {
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: "hsl(var(--destructive))",
-                background: "hsl(var(--destructive) / var(--a-bg))",
-                border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                color: "hsl(var(--foreground))",
+                background: "hsl(var(--foreground) / var(--a-bg))",
+                border: "1px solid hsl(var(--foreground) / var(--a-border))",
                 padding: "16px 32px",
                 borderRadius: "999px",
                 transition: "transform 180ms ease, background 180ms ease, border-color 180ms ease",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-high))"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-high))"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border))"; }}
             >
               Get started →
             </button>
@@ -530,9 +530,9 @@ const Deck = () => {
                     display: "flex",
                     flexDirection: "column",
                     padding: "28px 24px",
-                    border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
-                    background: isSelected ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
-                    boxShadow: isSelected ? "0 0 24px hsl(var(--destructive) / 0.15), inset 0 1px 0 hsl(var(--destructive) / 0.1)" : "none",
+                    border: isSelected ? `1px solid hsl(var(--foreground) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
+                    background: isSelected ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                    boxShadow: isSelected ? "0 0 24px hsl(var(--foreground) / 0.15), inset 0 1px 0 hsl(var(--foreground) / 0.1)" : "none",
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
@@ -557,9 +557,9 @@ const Deck = () => {
                 display: "flex",
                 flexDirection: "column",
                 padding: "28px 24px",
-                border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
-                background: customSaved ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
-                boxShadow: customSaved ? "0 0 24px hsl(var(--destructive) / 0.15), inset 0 1px 0 hsl(var(--destructive) / 0.1)" : "none",
+                border: customSaved ? `1px solid hsl(var(--foreground) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
+                background: customSaved ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                boxShadow: customSaved ? "0 0 24px hsl(var(--foreground) / 0.15), inset 0 1px 0 hsl(var(--foreground) / 0.1)" : "none",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
@@ -805,7 +805,7 @@ const Deck = () => {
                       <div style={{
                       height: "100%",
                       width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
-                      background: "hsl(var(--destructive) / var(--a-mid))",
+                      background: "hsl(var(--foreground) / var(--a-mid))",
                       borderRadius: "1px",
                       transition: "width 0.4s ease",
                     }} />
@@ -970,8 +970,8 @@ const Deck = () => {
                   className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
-                    border: `1px solid ${isExpanded ? "hsl(var(--destructive) / var(--a-border))" : f.ink(0.06)}`,
+                    background: isExpanded ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                    border: `1px solid ${isExpanded ? "hsl(var(--foreground) / var(--a-border))" : f.ink(0.06)}`,
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
@@ -1019,8 +1019,8 @@ const Deck = () => {
               className="overflow-hidden rounded-[28px] border"
               style={{
                 ...r5.stagger(2, 400, "blur-scale"),
-                background: "hsl(var(--destructive) / var(--a-bg-subtle))",
-                borderColor: "hsl(var(--destructive) / var(--a-border-card))",
+                background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                borderColor: "hsl(var(--foreground) / var(--a-border-card))",
               }}
             >
               <div className="grid grid-cols-1 lg:grid-cols-3">
@@ -1036,9 +1036,9 @@ const Deck = () => {
                       className={`text-left w-full hover:bg-background/20 transition-colors ${i < DOMAINS.length - 1 ? "border-b lg:border-b-0 lg:border-r" : ""}`}
                       style={{
                         padding: "26px 26px 24px",
-                        background: isActive ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
-                        borderColor: isActive ? "hsl(var(--destructive) / var(--a-border))" : "hsl(var(--border))",
-                        boxShadow: isActive ? "inset 0 0 0 1px hsl(var(--destructive) / var(--a-border))" : "none",
+                        background: isActive ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                        borderColor: isActive ? "hsl(var(--foreground) / var(--a-border))" : "hsl(var(--border))",
+                        boxShadow: isActive ? "inset 0 0 0 1px hsl(var(--foreground) / var(--a-border))" : "none",
                         transition: "background 0.2s ease, box-shadow 0.2s ease",
                         cursor: "pointer",
                       }}
@@ -1046,7 +1046,7 @@ const Deck = () => {
                       <div className="flex h-full flex-col gap-5">
                         <div className="flex items-start justify-between gap-4">
                           <div className="min-w-0">
-                            <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: isActive ? "hsl(var(--destructive))" : f.ink(0.82), lineHeight: 1.2, marginBottom: "8px" }}>
+                            <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: isActive ? "hsl(var(--foreground))" : f.ink(0.82), lineHeight: 1.2, marginBottom: "8px" }}>
                               {d.title}
                             </p>
                             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.42), lineHeight: 1.55, maxWidth: "30ch" }}>
@@ -1058,7 +1058,7 @@ const Deck = () => {
                             height="16"
                             viewBox="0 0 24 24"
                             fill="none"
-                            stroke={isActive ? "hsl(var(--destructive))" : f.ink(0.28)}
+                            stroke={isActive ? "hsl(var(--foreground))" : f.ink(0.28)}
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -1068,8 +1068,8 @@ const Deck = () => {
                           </svg>
                         </div>
 
-                        <div style={{ paddingTop: "18px", borderTop: `1px solid ${isActive ? "hsl(var(--destructive) / var(--a-border))" : f.ink(0.08)}` }}>
-                          <span style={{ ...label("9px"), color: isActive ? "hsl(var(--destructive) / var(--a-mid))" : f.ink(0.28), display: "block", marginBottom: "8px" }}>
+                        <div style={{ paddingTop: "18px", borderTop: `1px solid ${isActive ? "hsl(var(--foreground) / var(--a-border))" : f.ink(0.08)}` }}>
+                          <span style={{ ...label("9px"), color: isActive ? "hsl(var(--foreground) / var(--a-mid))" : f.ink(0.28), display: "block", marginBottom: "8px" }}>
                             What it is
                           </span>
                           <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>
@@ -1087,15 +1087,15 @@ const Deck = () => {
                   maxHeight: activeDomainData ? "520px" : "0px",
                   opacity: activeDomainData ? 1 : 0,
                   overflow: "hidden",
-                  borderTop: activeDomainData ? "1px solid hsl(var(--destructive) / var(--a-border-card))" : "1px solid transparent",
-                  background: activeDomainData ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                  borderTop: activeDomainData ? "1px solid hsl(var(--foreground) / var(--a-border-card))" : "1px solid transparent",
+                  background: activeDomainData ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
                   transition: "max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease, border-color 0.2s ease",
                 }}
               >
                 {activeDomainData && (
                   <div key={activeDomain} className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr_1fr] gap-8" style={{ padding: "28px 30px 32px" }}>
                     <div>
-                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
                         Selected focus
                       </span>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, marginBottom: "10px" }}>
@@ -1106,7 +1106,7 @@ const Deck = () => {
                       </p>
                     </div>
                     <div>
-                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
                         What it unlocks
                       </span>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65 }}>
@@ -1114,13 +1114,13 @@ const Deck = () => {
                       </p>
                     </div>
                     <div>
-                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
                         What most advisors miss
                       </span>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.58), lineHeight: 1.65, marginBottom: "18px" }}>
                         {activeDomainData.missed}
                       </p>
-                      <span style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
+                      <span style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", display: "block", marginBottom: "10px" }}>
                         Example
                       </span>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.46), lineHeight: 1.65, fontStyle: "italic" }}>
@@ -1186,7 +1186,7 @@ const Deck = () => {
           <div className="lg:w-[60%]">
             <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ ...label("10px"), padding: "14px 20px" }}>What most grantees report</div>
-              <div style={{ ...label("10px"), padding: "14px 20px", color: "hsl(var(--destructive) / var(--a-mid))" }}>What we track</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: "hsl(var(--foreground) / var(--a-mid))" }}>What we track</div>
             </div>
             {METRICS_ROWS.map((row, i) => {
               const delay = 300 + i * 200;
@@ -1203,7 +1203,7 @@ const Deck = () => {
                   }}
                 >
                   <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: "hsl(var(--destructive) / var(--a-high))", lineHeight: 1.6 }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: "hsl(var(--foreground) / var(--a-high))", lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
@@ -1231,7 +1231,7 @@ const Deck = () => {
                   style={{
                     padding: "32px 28px",
                     border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
+                    background: isSelected ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
                     borderRadius: "12px",
                     opacity: isDimmed ? 0.4 : 1,
                     cursor: "pointer",
@@ -1250,7 +1250,7 @@ const Deck = () => {
                 { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
                 { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
               ].map((p, pi) => (
-                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
+                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(var(--foreground) / var(--a-high))", borderRadius: "12px" }}>
                   <div className="flex items-baseline gap-3 mb-4">
                     <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.6)" }}>{p.phase}</span>
                     <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{p.title}</span>
@@ -1268,7 +1268,7 @@ const Deck = () => {
           )}
 
           {engagementPath === "experienced" && (
-            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
+            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(var(--foreground) / var(--a-high))", borderRadius: "12px" }}>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))", marginBottom: "12px" }}>Custom scope, fast start.</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(var(--primary-foreground) / 0.8)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
@@ -1376,12 +1376,12 @@ const Deck = () => {
                 maxWidth: "480px",
                 padding: "20px 24px",
                 borderRadius: "12px",
-                background: "hsl(var(--destructive) / var(--a-bg))",
-                border: "1px solid hsl(var(--destructive) / var(--a-border-card))",
+                background: "hsl(var(--foreground) / var(--a-bg))",
+                border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                 textAlign: "left",
               }}
             >
-              <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", marginBottom: "12px" }}>
+              <p style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", marginBottom: "12px" }}>
                 Your intake summary
               </p>
               {selectedPains.length > 0 && (
@@ -1432,15 +1432,15 @@ const Deck = () => {
                   textTransform: "uppercase" as const,
                   fontWeight: 600,
                   color: "hsl(var(--primary-foreground))",
-                  background: "hsl(var(--destructive) / var(--a-high))",
+                  background: "hsl(var(--foreground) / var(--a-high))",
                   padding: "18px 32px",
                   borderRadius: "999px",
                   border: "none",
                   cursor: "pointer",
                   transition: "background 300ms, transform 180ms",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive))"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; e.currentTarget.style.transform = "translateY(0)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--foreground))"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-high))"; e.currentTarget.style.transform = "translateY(0)"; }}
               >
                 Send Intake for Review
               </button>
@@ -1460,14 +1460,14 @@ const Deck = () => {
                     background: "transparent",
                     padding: "18px 32px",
                     borderRadius: "999px",
-                    border: `1px solid hsl(var(--destructive) / var(--a-border))`,
+                    border: `1px solid hsl(var(--foreground) / var(--a-border))`,
                     cursor: "pointer",
                     textDecoration: "none",
                     textAlign: "center",
                     transition: "all 300ms",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-mid))"; e.currentTarget.style.color = f.ink(0.9); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; e.currentTarget.style.color = f.ink(0.7); }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-mid))"; e.currentTarget.style.color = f.ink(0.9); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border))"; e.currentTarget.style.color = f.ink(0.7); }}
                 >
                   Book a Call
                 </a>
@@ -1581,7 +1581,7 @@ const Deck = () => {
                     letterSpacing: "0.06em",
                     fontWeight: 600,
                     color: "hsl(var(--primary-foreground))",
-                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
+                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--foreground) / var(--a-high))" : f.ink(0.2),
                     border: "none",
                     padding: "14px 36px",
                     borderRadius: "999px",
@@ -1669,7 +1669,7 @@ const Deck = () => {
                 className="text-left transition-all duration-300"
                 style={{
                   padding: "20px 16px",
-                  background: cs.content ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
+                  background: cs.content ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
                   border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
                   borderRadius: "10px",
                   cursor: "pointer",
@@ -1710,16 +1710,16 @@ const Deck = () => {
                   letterSpacing: "0.06em",
                   textTransform: "uppercase" as const,
                   fontWeight: 500,
-                  color: "hsl(var(--destructive))",
-                  background: "hsl(var(--destructive) / var(--a-bg))",
-                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                  color: "hsl(var(--foreground))",
+                  background: "hsl(var(--foreground) / var(--a-bg))",
+                  border: "1px solid hsl(var(--foreground) / var(--a-border))",
                   padding: "14px 28px",
                   borderRadius: "999px",
                   cursor: "pointer",
                   transition: "all 200ms ease",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-low))"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))"; }}
               >
                 Send your intake →
               </button>
