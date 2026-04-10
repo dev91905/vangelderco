@@ -41,17 +41,15 @@ const PAIN_POINTS = [
   { id: "expertise", short: "No media expertise in-house", detail: "When leadership asks what's broken or whether a pitch is worth it, you lack the operational media experience to answer with confidence.", consequence: "When stakeholders ask what's broken, it takes operational experience most teams lack.", capRelevance: "Our team comes from commercial media — we bring pattern recognition, not just advice." },
 ];
 
-/* ─── Quiz rows (confrontation) — unlabeled A/B ─── */
+/* ─── Quiz rows — genuinely competitive A/B ─── */
 const QUIZ_ROWS = [
-  { dimension: "Research", yours: "Test messages in a lab. Focus groups, message testing, pre-launch polling — all before a single dollar goes to market.", theirs: "Monitor what's already resonating organically across platforms and communities. Skip the lab — study the wild.", explanation: "Lab testing tells you what people say they think. Monitoring organic resonance tells you what they actually respond to. The other side doesn't guess — they watch, listen, and move on real signals." },
-  { dimension: "Content", yours: "Produce polished ads, post explainers, place op-eds — and if there's budget, fund a documentary that nobody sees.", theirs: "Invest in digital creator economies and fund investigative journalism so political ideology and conspiracies form in real time. Round-the-clock content, constantly.", explanation: "Polished campaigns launch and end. Creator economies and investigative media produce content continuously — shaping narratives 24/7. Your opponents aren't making ads. They're building content infrastructure." },
-  { dimension: "Distribution", yours: "Buy placements on platforms where a 3-second scroll-by counts as a \"view.\" No one remembers it.", theirs: "Buy the platforms themselves. Change the algorithms, the programming, the editorial direction. Own the infrastructure attention flows through.", explanation: "Buying placements means renting attention on someone else's terms. Owning infrastructure means controlling how attention flows in the first place. One is a media buy. The other is a power play." },
-  { dimension: "Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree.", theirs: "Take the conversation offline. Organize and fund mega-structures — faith communities, campuses, business networks, legal networks, veterans groups.", explanation: "Influencer posts reach people who already agree. Organizing through trusted institutions — churches, unions, campuses, veteran networks — builds real constituencies that show up when it matters." },
-  { dimension: "Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics.", explanation: "Impressions measure exposure. Growth measures power. If your metrics can't tell you who's new to your side and what policy moved, you're measuring the wrong things." },
-  { dimension: "Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization.", explanation: "Grant-cycle thinking locks you into plans regardless of results. The other side kills what doesn't work in weeks, doubles down on what does, and compounds gains across years — not grant periods." },
+  { dimension: "Research", traditional: "Commission message testing, focus groups, and polling before launching. Ground your strategy in data before you spend.", nextgen: "Monitor what's already resonating organically across platforms and communities. Let the market tell you what works.", explanation: "Traditional research tells you what people say they think. Monitoring organic resonance tells you what they actually respond to — in real time, at scale. The most effective programs do both, but the field is shifting toward the latter." },
+  { dimension: "Content", traditional: "Fund high-quality media — documentaries, explainers, investigative journalism. Invest in credibility and production value.", nextgen: "Fund creator economies and round-the-clock digital content. Prioritize volume, velocity, and constant presence over polish.", explanation: "High-production content builds credibility but launches and ends. Creator economies and always-on content shape narratives continuously — 24/7. The most effective portfolios are shifting toward constant presence." },
+  { dimension: "Distribution", traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency through paid media.", nextgen: "Invest in owning or shaping the platforms and channels themselves — editorial direction, algorithms, programming.", explanation: "Paid placements rent attention on someone else's terms. Owning or shaping infrastructure means influencing how attention flows in the first place. One is a media buy. The other is a structural advantage." },
+  { dimension: "Engagement", traditional: "Partner with trusted voices and influencers who can extend your message to aligned audiences.", nextgen: "Organize through institutions — faith communities, campuses, labor, veteran networks — that have built-in trust and show up offline.", explanation: "Influencer partnerships extend reach but often stay within existing audiences. Institutional organizing builds real constituencies through trusted structures that show up when it matters — offline and in person." },
+  { dimension: "Measurement", traditional: "Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there.", nextgen: "Track who's new to the table, what policy moved, and what infrastructure outlasts the campaign. Measure power, not exposure.", explanation: "Reach metrics measure exposure. Power metrics measure what changed. If your measurement can't tell you who's new to your side and what policy moved, you may be tracking the wrong things." },
+  { dimension: "Iteration", traditional: "Evaluate at the end of the grant cycle. Report results, identify learnings, and apply them to the next proposal.", nextgen: "Cut what's failing mid-cycle. Double down on what's working. Compound gains across years, not grant periods.", explanation: "Grant-cycle evaluation is thorough but slow. Mid-cycle iteration lets you kill what isn't working in weeks and compound what is — across years, not proposal timelines." },
 ];
-const COL_TRADITIONAL = "Traditional Approach";
-const COL_NEXTGEN = "Next-Gen Approach";
 
 /* ─── Three domains ─── */
 const DOMAINS = [
@@ -390,7 +388,7 @@ const Deck = () => {
   const r12 = useFrameReveal();
 
   /* ─── Quiz helpers ─── */
-  const handleQuizPick = (rowIndex: number, picked: "yours" | "theirs") => {
+  const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
     setQuizAnswers(prev => {
       const next = [...prev];
       next[rowIndex] = { dimension: QUIZ_ROWS[rowIndex].dimension, picked };
@@ -407,7 +405,7 @@ const Deck = () => {
     }, 400);
   };
 
-  const opponentPickCount = quizAnswers.filter(a => a?.picked === "theirs").length;
+  const nextgenPickCount = quizAnswers.filter(a => a?.picked === "nextgen").length;
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
@@ -654,18 +652,14 @@ const Deck = () => {
             )}
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
-                ? "Here’s what your answers say."
-                : isFreshStart
-                  ? "Which approach sounds more effective?"
-                  : "How does your current portfolio work?"
+                ? "Here's what your answers tell us."
+                : `Two approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}.`
               }
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
               {quizRevealed
-                ? "The summary is at the top. Scroll for the breakdown and why each answer was right or wrong."
-                : isFreshStart
-                  ? `Two communications approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.`
-                  : `For ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"} — which of these is closer to how your portfolio operates today?`
+                ? "The summary is at the top. Scroll for the breakdown and why each one matters."
+                : "Both are used by major funders. Pick the one you'd bet on."
               }
             </p>
           </div>
@@ -676,11 +670,11 @@ const Deck = () => {
               {QUIZ_ROWS.map((row, i) => {
                 const isCurrent = i === quizStep;
                 const answered = quizAnswers[i] !== null;
-                const leftIsTheirs = quizOrder[i];
-                const leftText = leftIsTheirs ? row.theirs : row.yours;
-                const rightText = leftIsTheirs ? row.yours : row.theirs;
-                const leftValue: "yours" | "theirs" = leftIsTheirs ? "theirs" : "yours";
-                const rightValue: "yours" | "theirs" = leftIsTheirs ? "yours" : "theirs";
+                const leftIsNextgen = quizOrder[i];
+                const leftText = leftIsNextgen ? row.nextgen : row.traditional;
+                const rightText = leftIsNextgen ? row.traditional : row.nextgen;
+                const leftValue: "traditional" | "nextgen" = leftIsNextgen ? "nextgen" : "traditional";
+                const rightValue: "traditional" | "nextgen" = leftIsNextgen ? "traditional" : "nextgen";
 
                 return (
                   <div
@@ -808,20 +802,14 @@ const Deck = () => {
                     <div className="max-w-[720px]">
                       <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                        {opponentPickCount} of {QUIZ_ROWS.length} next-gen instincts
+                        {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
                       </p>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                        {isFreshStart
-                          ? opponentPickCount >= 5
-                            ? "Your instincts are really sharp. Most people aren't doing what you identified here — but your opponents are, and that's exactly what's going to make the difference."
-                            : opponentPickCount >= 3
-                              ? "You've got some work to do — but the fact that you spotted some of these tells us you're thinking in the right direction. We can close the rest of these gaps."
-                              : "You've got some work to do, but we can help. Most people pick the same way you did. The problem is, your opponents are running the other playbook — and it's working."
-                          : opponentPickCount >= 5
-                            ? "You're thinking ahead of the curve. Your portfolio is already oriented toward what works — we can help you execute at scale and stay ahead."
-                            : opponentPickCount >= 3
-                              ? "Your portfolio has some of the right instincts built in, but there are real gaps. Your opponents are already operating the way you're not — and that's what makes the difference."
-                              : "Your portfolio needs work. The approaches you're running are what most organizations default to — but they're not what moves power. Your opponents are already doing it differently."
+                        {nextgenPickCount >= 5
+                          ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
+                          : nextgenPickCount >= 3
+                            ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
+                            : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
                         }
                       </p>
                     </div>
@@ -870,8 +858,8 @@ const Deck = () => {
                   <div className="flex flex-col gap-4">
                     {QUIZ_ROWS.map((row, i) => {
                       const answer = quizAnswers[i];
-                      const pickedNextGen = answer?.picked === "theirs";
-                      const selectedCopy = pickedNextGen ? row.theirs : row.yours;
+                      const pickedNextGen = answer?.picked === "nextgen";
+                      const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
 
                       return (
                         <div
@@ -892,18 +880,18 @@ const Deck = () => {
                               style={{
                                 fontFamily: f.sans,
                                 fontSize: "10px",
-                                fontWeight: 700,
+                                fontWeight: 600,
                                 letterSpacing: "0.08em",
                                 textTransform: "uppercase",
                                 padding: "6px 10px",
                                 borderRadius: "999px",
-                                color: f.ink(0.65),
-                                background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg))" : "hsl(var(--background))",
-                                border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
+                                color: f.ink(0.5),
+                                background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                                border: `1px solid ${f.ink(0.08)}`,
                                 alignSelf: "flex-start",
                               }}
                             >
-                              {pickedNextGen ? "You picked the next-gen answer" : "You picked the traditional answer"}
+                              Your selection
                             </span>
                           </div>
 
@@ -921,8 +909,8 @@ const Deck = () => {
 
                               {!pickedNextGen && (
                                 <>
-                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Stronger approach</p>
-                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.theirs}</p>
+                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Emerging approach</p>
+                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.nextgen}</p>
                                 </>
                               )}
                             </div>
@@ -935,7 +923,7 @@ const Deck = () => {
                                 border: `1px solid ${f.ink(0.08)}`,
                               }}
                             >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>{pickedNextGen ? "Why this was right" : "Why this was wrong"}</p>
+                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>Why this matters</p>
                               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.75 }}>{row.explanation}</p>
                             </div>
                           </div>
@@ -1424,7 +1412,7 @@ const Deck = () => {
                     {quizRevealed && (
                       <div style={{ marginBottom: "10px" }}>
                         <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Quiz result</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>Picked opponent's approach {opponentPickCount} / {QUIZ_ROWS.length} times</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>Identified {nextgenPickCount} / {QUIZ_ROWS.length} emerging approaches</p>
                       </div>
                     )}
                     {selectedDomains.length > 0 && (

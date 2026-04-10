@@ -13,7 +13,7 @@
 
 export interface QuizAnswer {
   dimension: string;
-  picked: "yours" | "theirs";
+  picked: "traditional" | "nextgen";
 }
 
 export interface DeckDiagnosticInput {
@@ -46,9 +46,9 @@ export function calculateReadinessScore(input: DeckDiagnosticInput): number {
   // Custom challenge written: -5
   if (input.hasCustomChallenge) score -= 5;
 
-  // Quiz: -8 per opponent pick (max 48 for 6 rows)
-  const opponentPicks = input.quizAnswers.filter(a => a.picked === "theirs").length;
-  score -= opponentPicks * 8;
+  // Quiz: -8 per traditional pick (picking traditional = penalized)
+  const traditionalPicks = input.quizAnswers.filter(a => a.picked === "traditional").length;
+  score -= traditionalPicks * 8;
 
   // All three domains selected: -5
   if (input.selectedDomains.length >= 3) score -= 5;
