@@ -79,30 +79,36 @@ export type Database = {
           created_at: string
           custom_challenge: string | null
           email: string
+          engagement_path: string | null
           first_name: string
           id: string
           last_name: string
           organization: string | null
+          selected_domains: string[] | null
           selected_pains: string[] | null
         }
         Insert: {
           created_at?: string
           custom_challenge?: string | null
           email: string
+          engagement_path?: string | null
           first_name: string
           id?: string
           last_name: string
           organization?: string | null
+          selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
         Update: {
           created_at?: string
           custom_challenge?: string | null
           email?: string
+          engagement_path?: string | null
           first_name?: string
           id?: string
           last_name?: string
           organization?: string | null
+          selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
         Relationships: []
