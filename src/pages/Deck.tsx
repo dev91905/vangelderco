@@ -23,6 +23,7 @@ const f = {
   ink: t.ink,
   cream: t.cream,
   rule: t.rule,
+  accent: t.accent,
 };
 
 const heading = t.heading;
@@ -122,9 +123,9 @@ const METRICS_ROWS = [
 
 /* ─── Case studies ─── */
 const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
-  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: f.ink(0.9), border: "none" }}>
-    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: f.cream }}>{value}</span>
-    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(40 30% 80%)" }}>{lbl}</span>
+  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: "hsl(var(--destructive))", border: "none" }}>
+    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{value}</span>
+    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(var(--primary-foreground) / 0.7)" }}>{lbl}</span>
   </div>
 );
 
@@ -375,7 +376,7 @@ const Deck = () => {
         scrollSnapType: "x mandatory",
         display: "flex",
         flexDirection: "row",
-        background: f.cream,
+        background: "hsl(var(--background))",
       }}
     >
 
@@ -404,7 +405,7 @@ const Deck = () => {
             style={{
               height: "100%",
               width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
-              background: f.ink(0.25),
+              background: "hsl(var(--destructive) / var(--a-mid))",
               borderRadius: "1px",
               transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
             }}
@@ -483,16 +484,16 @@ const Deck = () => {
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: f.cream,
-                background: f.ink(0.88),
+                color: "hsl(var(--primary-foreground))",
+                background: "hsl(var(--destructive) / var(--a-high))",
                 border: "none",
                 padding: "16px 32px",
                 borderRadius: "999px",
                 transition: "transform 180ms ease, background 180ms ease",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = f.ink(1); }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = f.ink(0.88); }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive))"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; }}
             >
               Start the walkthrough →
             </button>
@@ -524,8 +525,8 @@ const Deck = () => {
                   className="text-left"
                   style={{
                     padding: "28px 24px",
-                    border: isSelected ? `1px solid ${f.ink(0.15)}` : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? f.ink(0.08) : "transparent",
+                    border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
@@ -563,8 +564,8 @@ const Deck = () => {
               className="flex flex-col justify-center"
               style={{
                 padding: "28px 24px",
-                border: customSaved ? `1px solid ${f.ink(0.12)}` : `1px dashed ${f.ink(0.12)}`,
-                background: customOpen || customSaved ? f.ink(0.03) : "transparent",
+                border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px dashed ${f.ink(0.12)}`,
+                background: customOpen || customSaved ? "hsl(var(--destructive) / var(--a-bg-subtle))" : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
@@ -599,7 +600,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.3),
-                      background: "white",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.08)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -626,7 +627,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -645,8 +646,8 @@ const Deck = () => {
                         fontSize: "12px",
                         letterSpacing: "0.04em",
                         fontWeight: 600,
-                        color: f.cream,
-                        background: customMessage.trim() ? f.ink(0.85) : f.ink(0.2),
+                        color: "hsl(var(--primary-foreground))",
+                        background: customMessage.trim() ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
                         border: "none",
                         padding: "8px 20px",
                         borderRadius: "999px",
@@ -789,7 +790,7 @@ const Deck = () => {
                               }}>{row.yours}</p>
                             </div>
                             <div>
-                              <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, marginBottom: "10px" }}>Their side</p>
+                              <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700, marginBottom: "10px" }}>Their side</p>
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(16px, 1.6vw, 21px)",
@@ -816,12 +817,12 @@ const Deck = () => {
                       overflow: "hidden",
                     }}>
                       <div style={{
-                        height: "100%",
-                        width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
-                        background: f.ink(0.25),
-                        borderRadius: "1px",
-                        transition: "width 0.4s ease",
-                      }} />
+                      height: "100%",
+                      width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
+                      background: "hsl(var(--destructive) / var(--a-mid))",
+                      borderRadius: "1px",
+                      transition: "width 0.4s ease",
+                    }} />
                     </div>
                     <span style={{
                       fontFamily: f.sans,
@@ -846,7 +847,7 @@ const Deck = () => {
                       paddingBottom: "6px",
                     }}>
                       <p style={{ ...label("9px"), color: f.ink(0.3) }}>Your side</p>
-                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700 }}>Their side</p>
+                      <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700 }}>Their side</p>
                     </div>
 
                     {/* Rows */}
@@ -935,8 +936,8 @@ const Deck = () => {
                   className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? f.ink(0.08) : "transparent",
-                    border: `1px solid ${isExpanded ? f.ink(0.15) : f.ink(0.06)}`,
+                    background: isExpanded ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                    border: `1px solid ${isExpanded ? "hsl(var(--destructive) / var(--a-border))" : f.ink(0.06)}`,
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
@@ -993,7 +994,7 @@ const Deck = () => {
                     style={{
                       padding: activeDomain ? "18px 24px 16px" : "24px 24px 22px",
                       minHeight: activeDomain ? "auto" : "132px",
-                      background: isActive ? f.ink(0.05) : "transparent",
+                      background: isActive ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
@@ -1003,7 +1004,7 @@ const Deck = () => {
                     }}
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.7vw, 19px)", fontWeight: 700, color: f.ink(isActive ? 0.9 : 0.7), lineHeight: 1.25, transition: "color 0.2s ease" }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.7vw, 19px)", fontWeight: 700, color: isActive ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.7), lineHeight: 1.25, transition: "color 0.2s ease" }}>
                         {d.title}
                       </p>
                       <svg
@@ -1137,7 +1138,7 @@ const Deck = () => {
           <div className="lg:w-[60%]">
             <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ ...label("10px"), padding: "14px 20px" }}>What most grantees report</div>
-              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6) }}>What we track</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: "hsl(var(--destructive) / var(--a-mid))" }}>What we track</div>
             </div>
             {METRICS_ROWS.map((row, i) => {
               const delay = 300 + i * 200;
@@ -1153,7 +1154,7 @@ const Deck = () => {
                   }}
                 >
                   <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: "hsl(var(--destructive) / var(--a-high))", lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
@@ -1181,14 +1182,14 @@ const Deck = () => {
                   style={{
                     padding: "32px 28px",
                     border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? f.ink(0.9) : "transparent",
+                    background: isSelected ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
                     borderRadius: "12px",
                     opacity: isDimmed ? 0.4 : 1,
                     cursor: "pointer",
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? "hsl(var(--primary-foreground))" : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(var(--primary-foreground) / 0.8)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
                 </button>
               );
             })}
@@ -1200,17 +1201,17 @@ const Deck = () => {
                 { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
                 { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
               ].map((p, pi) => (
-                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
+                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
                   <div className="flex items-baseline gap-3 mb-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 65%)" }}>{p.phase}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream }}>{p.title}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 60%)" }}>{p.time}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.6)" }}>{p.phase}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{p.title}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.5)" }}>{p.time}</span>
                   </div>
                   {p.bullets.map((b, i) => (
-                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
+                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.8)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
                   ))}
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", marginTop: "12px", lineHeight: 1.7 }}>
-                    <strong style={{ color: f.cream }}>Output:</strong> {p.output}
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.75)", marginTop: "12px", lineHeight: 1.7 }}>
+                    <strong style={{ color: "hsl(var(--primary-foreground))" }}>Output:</strong> {p.output}
                   </p>
                 </div>
               ))}
@@ -1218,9 +1219,9 @@ const Deck = () => {
           )}
 
           {engagementPath === "experienced" && (
-            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream, marginBottom: "12px" }}>Custom scope, fast start.</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(40 30% 80%)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
+            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))", marginBottom: "12px" }}>Custom scope, fast start.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(var(--primary-foreground) / 0.8)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
           )}
 
@@ -1328,16 +1329,16 @@ const Deck = () => {
                   letterSpacing: "0.06em",
                   textTransform: "uppercase" as const,
                   fontWeight: 600,
-                  color: f.cream,
-                  background: f.ink(0.88),
+                  color: "hsl(var(--primary-foreground))",
+                  background: "hsl(var(--destructive) / var(--a-high))",
                   padding: "18px 32px",
                   borderRadius: "999px",
                   border: "none",
                   cursor: "pointer",
                   transition: "background 300ms, transform 180ms",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(1); e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = f.ink(0.88); e.currentTarget.style.transform = "translateY(0)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive))"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; e.currentTarget.style.transform = "translateY(0)"; }}
               >
                 Email Us
               </button>
@@ -1357,14 +1358,14 @@ const Deck = () => {
                     background: "transparent",
                     padding: "18px 32px",
                     borderRadius: "999px",
-                    border: `1px solid ${f.ink(0.12)}`,
+                    border: `1px solid hsl(var(--destructive) / var(--a-border))`,
                     cursor: "pointer",
                     textDecoration: "none",
                     textAlign: "center",
                     transition: "all 300ms",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.12); e.currentTarget.style.color = f.ink(0.7); }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-mid))"; e.currentTarget.style.color = f.ink(0.9); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; e.currentTarget.style.color = f.ink(0.7); }}
                 >
                   Schedule a Meeting
                 </a>
@@ -1392,7 +1393,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                    background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1414,7 +1415,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                    background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1436,7 +1437,7 @@ const Deck = () => {
                     fontFamily: f.sans,
                     fontSize: "14px",
                     color: f.ink(0.8),
-                    background: "white",
+                    background: "hsl(var(--card))",
                     border: `1px solid ${f.ink(0.1)}`,
                     borderRadius: "8px",
                     padding: "12px",
@@ -1458,7 +1459,7 @@ const Deck = () => {
                     fontFamily: f.sans,
                     fontSize: "14px",
                     color: f.ink(0.8),
-                    background: "white",
+                    background: "hsl(var(--card))",
                     border: `1px solid ${f.ink(0.1)}`,
                     borderRadius: "8px",
                     padding: "12px",
@@ -1477,8 +1478,8 @@ const Deck = () => {
                     fontSize: "13px",
                     letterSpacing: "0.06em",
                     fontWeight: 600,
-                    color: f.cream,
-                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? f.ink(0.88) : f.ink(0.2),
+                    color: "hsl(var(--primary-foreground))",
+                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
                     border: "none",
                     padding: "14px 36px",
                     borderRadius: "999px",
@@ -1540,7 +1541,7 @@ const Deck = () => {
                 className="text-left transition-all duration-300"
                 style={{
                   padding: "20px 16px",
-                  background: cs.content ? f.ink(0.9) : "transparent",
+                  background: cs.content ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
                   border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
                   borderRadius: "10px",
                   cursor: "pointer",
@@ -1551,8 +1552,8 @@ const Deck = () => {
                 onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } else { e.currentTarget.style.transform = "translateY(-2px)"; } }}
                 onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } else { e.currentTarget.style.transform = "translateY(0)"; } }}
               >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? f.cream : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(40 30% 70%)" : f.ink(0.25) }}>{cs.outcome}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? "hsl(var(--primary-foreground))" : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(var(--primary-foreground) / 0.7)" : f.ink(0.25) }}>{cs.outcome}</p>
               </button>
             ))}
           </div>
@@ -1571,7 +1572,7 @@ const Deck = () => {
       <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
         <DialogContent
           className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl"
-          style={{ background: f.cream, border: `1px solid ${f.ink(0.08)}` }}
+          style={{ background: "hsl(var(--background))", border: `1px solid ${f.ink(0.08)}` }}
         >
           <DialogHeader>
             <DialogTitle style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.9) }}>
