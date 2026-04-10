@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Timer } from "lucide-react";
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
@@ -554,63 +555,70 @@ const Index = () => {
       >
         <RevealBlock>
           <span
-            className="text-[10px] tracking-[0.25em] uppercase mb-6 block text-center"
+            className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
             style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-mid))" }}
           >
+            <Timer size={13} strokeWidth={1.5} />
             Five minutes
           </span>
         </RevealBlock>
 
         <RevealBlock delay={0.1}>
           <h2
-            className="text-[28px] md:text-[40px] lg:text-[48px] font-bold leading-[1.1] text-center mb-4 max-w-2xl"
-            style={{ fontFamily: t.serif, color: t.ink(0.9) }}
+            className="text-[26px] md:text-[36px] lg:text-[42px] leading-[1.15] text-center mb-5 max-w-xl"
+            style={{ fontFamily: t.serif, color: t.ink(0.85), fontWeight: 400 }}
           >
-            See what's broken.<br />See how to fix it.
+            You already know something isn't working.
           </h2>
         </RevealBlock>
 
         <RevealBlock delay={0.2}>
           <p
-            className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-md mb-10"
-            style={{ fontFamily: t.sans, color: t.ink(0.45) }}
+            className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-sm mb-12"
+            style={{ fontFamily: t.sans, color: t.ink(0.4) }}
           >
-            A sharp, visual walkthrough of why your grantees' communications fail — and what their opponents do instead.
+            This will show you exactly what — and what to do about it.
           </p>
         </RevealBlock>
 
-        <RevealBlock delay={0.3} direction="scale">
+        <RevealBlock delay={0.35} direction="scale">
           <Link
             to="/deck"
-            className="group relative inline-flex items-center gap-3 no-underline"
+            className="group inline-flex items-center gap-2.5 no-underline rounded-full"
             style={{
               fontFamily: t.sans,
-              fontSize: "13px",
-              fontWeight: 600,
-              letterSpacing: "0.12em",
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "0.15em",
               textTransform: "uppercase" as const,
-              color: "hsl(var(--destructive-foreground))",
-              background: "hsl(var(--destructive))",
-              padding: "16px 40px",
-              borderRadius: "4px",
+              color: "hsl(var(--destructive))",
+              border: "1px solid hsl(var(--destructive) / var(--a-dim))",
+              background: "hsl(var(--destructive) / var(--a-bg))",
+              padding: "14px 36px",
               transition: `all 0.5s ${EASE_OUT_EXPO}`,
               boxShadow: "0 0 0 0 hsl(var(--destructive) / 0)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--destructive) / 0.4)";
+              e.currentTarget.style.background = "hsl(var(--destructive))";
+              e.currentTarget.style.color = "hsl(var(--destructive-foreground))";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive))";
+              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--destructive) / 0.35)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+              e.currentTarget.style.color = "hsl(var(--destructive))";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-dim))";
               e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--destructive) / 0)";
             }}
           >
-            Enter the Deck
+            Show me
             <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
           </Link>
         </RevealBlock>
 
-        <RevealBlock delay={0.5}>
+        <RevealBlock delay={0.55}>
           <div
             ref={(el) => {
               if (!el) return;
@@ -628,7 +636,7 @@ const Index = () => {
             }}
           />
         </RevealBlock>
-        <RevealBlock delay={0.55}>
+        <RevealBlock delay={0.6}>
           <a
             href="mailto:hello@vangelder.co"
             className="text-[13px] tracking-[0.18em] no-underline"
@@ -643,7 +651,7 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.65}>
+        <RevealBlock delay={0.7}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
