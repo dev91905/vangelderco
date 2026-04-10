@@ -843,19 +843,17 @@ const Deck = () => {
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              Here's what separates communications that move policy from ones that report on awareness.
+              We've studied hundreds of organizations. The effective ones do three things.
             </p>
-            {selectedPainDatas.length > 0 && (
-              <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
-                You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
-              </p>
-            )}
+            <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
+              A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
+            </p>
           </div>
           <div className="lg:w-[65%] flex flex-col gap-4">
             {[
-              { title: "They use the full culture stack.", rationale: "The other side isn't just running ads — they're embedded in music, faith communities, digital creator economies, campuses, and veteran networks.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
-              { title: "They coordinate across sectors.", rationale: "Effective opposition campaigns don't launch content and hope — they have a policy pathway pre-engineered.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
-              { title: "They organize for growth.", rationale: "The most effective portfolios aren't recycling the same audiences. They're doing sustained base-building with trusted local leaders.", help: "We run live campaigns that bring in new audiences and build the local leadership infrastructure that turns engagement into lasting power." },
+              { title: "They engage the full culture stack.", rationale: "They don't just push content out — they work behind the scenes so distribution platforms across different sectors are pulling the message up. Music, faith communities, creator economies, campuses, veteran networks. Not just strategic comms.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
+              { title: "They coordinate across sectors.", rationale: "Communications becomes the organizing infrastructure — the scaffolding that brings different sectors together around a focal point and gives them the cover and momentum to push for policy together. Without multiple sectors engaged, policy doesn't move.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
+              { title: "They organize for growth.", rationale: "It's not about organizing people who already agree. To win, you have to demonstrate that your communications are bringing new people in — people who weren't there before. Only by demonstrating real persuasion can you persuade the people in power.", help: "We run live campaigns that bring in new audiences and build the local leadership infrastructure that turns engagement into lasting power." },
             ].map((h, i) => {
               const isExpanded = expandedHallmark === i;
               return (
