@@ -369,7 +369,30 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  /* Wheel handler removed — vertical snap scroll is native browser behavior */
+  /* Wheel handler — prevent scroll wheel from crossing frame boundaries */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      const frameEl = frameRefs.current[currentFrame];
+      if (!frameEl) return;
+      const frameTop = frameEl.offsetTop;
+      const frameBottom = frameTop + frameEl.offsetHeight;
+      const scrollTop = el.scrollTop;
+      const viewBottom = scrollTop + el.clientHeight;
+
+      // If scrolling down and we'd leave the current frame, prevent it
+      if (e.deltaY > 0 && viewBottom >= frameBottom - 2) {
+        e.preventDefault();
+      }
+      // If scrolling up and we'd leave the current frame, prevent it
+      if (e.deltaY < 0 && scrollTop <= frameTop + 2) {
+        e.preventDefault();
+      }
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [currentFrame]);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
