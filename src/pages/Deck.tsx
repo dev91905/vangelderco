@@ -928,7 +928,7 @@ const Deck = () => {
         <div ref={r4.ref} className="flex flex-col w-full">
           {/* Section label + heading */}
           <div style={r4.stagger(0, 0, "blur-up")}>
-            <p style={{ ...label(0.35), marginBottom: "8px" }}>Culture Strategy</p>
+            <p style={{ ...label("11px"), color: f.ink(0.35), marginBottom: "8px" }}>Culture Strategy</p>
             <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700 }}>
               The effective ones do three things.
             </p>
