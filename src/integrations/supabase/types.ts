@@ -76,38 +76,53 @@ export type Database = {
       }
       deck_contacts: {
         Row: {
+          capabilities_ranked: string[] | null
           created_at: string
           custom_challenge: string | null
           email: string
           engagement_path: string | null
           first_name: string
+          has_media_experience: boolean | null
           id: string
           last_name: string
+          metrics_checked: string[] | null
           organization: string | null
+          quiz_answers: Json | null
+          readiness_score: number | null
           selected_domains: string[] | null
           selected_pains: string[] | null
         }
         Insert: {
+          capabilities_ranked?: string[] | null
           created_at?: string
           custom_challenge?: string | null
           email: string
           engagement_path?: string | null
           first_name: string
+          has_media_experience?: boolean | null
           id?: string
           last_name: string
+          metrics_checked?: string[] | null
           organization?: string | null
+          quiz_answers?: Json | null
+          readiness_score?: number | null
           selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
         Update: {
+          capabilities_ranked?: string[] | null
           created_at?: string
           custom_challenge?: string | null
           email?: string
           engagement_path?: string | null
           first_name?: string
+          has_media_experience?: boolean | null
           id?: string
           last_name?: string
+          metrics_checked?: string[] | null
           organization?: string | null
+          quiz_answers?: Json | null
+          readiness_score?: number | null
           selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
