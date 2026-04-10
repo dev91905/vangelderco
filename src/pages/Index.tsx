@@ -389,7 +389,7 @@ const Index = () => {
                 color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
-              Building next-generation strategic communications portfolios.
+              We build next-generation strategic communications portfolios.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.3}>
