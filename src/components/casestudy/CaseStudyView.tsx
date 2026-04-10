@@ -21,7 +21,7 @@ interface CaseStudyViewProps {
 }
 
 const capabilityRoute: Record<string, string> = { "cultural-strategy": "/cultural-strategy", "cross-sector": "/cross-sector", "deep-organizing": "/deep-organizing" };
-const capabilityLabel: Record<string, string> = { "cultural-strategy": "Cultural Strategy", "cross-sector": "Cross-Sector Intelligence", "deep-organizing": "Deep Organizing" };
+const capabilityLabel: Record<string, string> = { "cultural-strategy": "Cultural Strategy", "cross-sector": "Cross-Sector Campaigns", "deep-organizing": "Deep Organizing" };
 
 const CaseStudyView = ({ post }: CaseStudyViewProps) => {
   const [showStats, setShowStats] = useState(true);
