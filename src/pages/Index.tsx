@@ -134,58 +134,9 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
   );
 }
 
-/* ── Case fragment with premium motion ── */
-function CaseFragment({ sector, brief, result, slug, index }: { sector: string; brief: string; result: string; slug?: string | null; index: number }) {
-  const { ref, hasRevealed } = useScrollReveal(0.15);
-  const [hovered, setHovered] = useState(false);
-
-  const content = (
-    <div
-      ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`mb-14 ${slug ? "cursor-pointer" : "cursor-default"}`}
-      style={{
-        opacity: hasRevealed ? 1 : 0,
-        transform: hasRevealed
-          ? hovered ? "translateX(8px)" : "translateX(0)"
-          : "translateX(-30px)",
-        transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-dim))"}`,
-        paddingLeft: "24px",
-        willChange: "opacity, transform",
-      }}
-    >
-      <div
-        className="text-[10px] tracking-[0.2em] uppercase mb-2"
-        style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-      >
-        {sector}
-      </div>
-      <div
-        className="text-lg leading-relaxed mb-2 italic"
-        style={{ fontFamily: t.serif, color: t.ink(0.5) }}
-      >
-        {brief}
-      </div>
-      <div
-        className="text-[11px]"
-        style={{
-          fontFamily: t.sans,
-          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / var(--a-mid))",
-          transition: `color 0.4s ${EASE_OUT_QUART}`,
-        }}
-      >
-        {result}
-      </div>
-    </div>
-  );
-
-  if (slug) {
-    return <Link to={`/post/${slug}`} className="block no-underline">{content}</Link>;
-  }
-  return content;
-}
+/* ── Consistent section width ── */
+const SECTION_MAX = "max-w-6xl";
+const SECTION_PX = "px-6 md:px-10 lg:px-16";
 
 /* ── Index page ── */
 const Index = () => {
@@ -337,7 +288,7 @@ const Index = () => {
 
       {/* ═══ ALTITUDE ═══ */}
       <section className="snap-section flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
-        <div className="max-w-xl px-6 md:px-10">
+        <div className={`${SECTION_MAX} ${SECTION_PX}`}>
           <RevealBlock>
             <p
              className="italic font-light"
@@ -379,7 +330,7 @@ const Index = () => {
 
       {/* ═══ CAPABILITIES ═══ */}
       <section className="snap-section relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
-        <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
+        <div className={`w-full py-24 md:py-32 ${SECTION_PX} ${SECTION_MAX} mx-auto`}>
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
@@ -553,7 +504,7 @@ const Index = () => {
 
       {/* ═══ NETWORK ═══ */}
       <section className="snap-section relative z-10">
-        <div className="py-24 md:py-32 px-6 md:px-10 max-w-4xl mx-auto">
+        <div className={`py-24 md:py-32 ${SECTION_PX} ${SECTION_MAX} mx-auto`}>
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-4"
@@ -604,28 +555,126 @@ const Index = () => {
 
       {/* ═══ FIELD NOTES ═══ */}
       <section className="snap-section relative z-10">
-        <div className="relative z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto">
+        <div className={`py-24 md:py-32 ${SECTION_PX} ${SECTION_MAX} mx-auto`}>
           <RevealBlock direction="left">
             <div
-              className="text-[10px] tracking-[0.25em] uppercase"
+              className="text-[10px] tracking-[0.25em] uppercase mb-12"
               style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
             >
               Field Notes
             </div>
           </RevealBlock>
-        </div>
 
-        <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {(featuredPosts || []).map((note, i) => (
-            <CaseFragment
-              key={note.id}
-              sector={note.sector_label || note.title}
-              brief={note.excerpt || ""}
-              result={note.featured_stat || ""}
-              slug={note.slug}
-              index={i}
-            />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(featuredPosts || []).map((note, i) => {
+              const hasImage = !!note.hero_image_url;
+              const content = (
+                <RevealBlock key={note.id} delay={0.1 + i * 0.1} direction="up">
+                  <div
+                    className="group relative overflow-hidden rounded-2xl cursor-pointer"
+                    style={{
+                      background: "hsl(var(--destructive) / var(--a-bg-subtle))",
+                      border: "1px solid hsl(var(--destructive) / var(--a-border-card))",
+                      transition: `border-color 0.4s ${EASE_OUT_QUART}, transform 0.5s ${EASE_OUT_EXPO}, box-shadow 0.4s ${EASE_OUT_QUART}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.style.boxShadow = "0 16px 48px -12px hsl(var(--destructive) / 0.2)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border-card))";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
+                    {/* Cover image or gradient placeholder */}
+                    <div className="relative w-full" style={{ aspectRatio: "16/10", overflow: "hidden" }}>
+                      {hasImage ? (
+                        <img
+                          src={note.hero_image_url!}
+                          alt={note.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
+                          style={{ transitionTimingFunction: EASE_OUT_EXPO }}
+                          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background: `linear-gradient(135deg, hsl(var(--destructive) / 0.15) 0%, hsl(var(--destructive) / 0.05) 50%, hsl(var(--background)) 100%)`,
+                          }}
+                        >
+                          <div
+                            className="absolute inset-0 flex items-center justify-center"
+                            style={{ opacity: 0.08 }}
+                          >
+                            <span
+                              style={{
+                                fontFamily: t.serif,
+                                fontSize: "clamp(48px, 8vw, 80px)",
+                                fontWeight: 400,
+                                fontStyle: "italic",
+                                color: "hsl(var(--destructive))",
+                              }}
+                            >
+                              VGC
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card content */}
+                    <div className="p-6">
+                      <div
+                        className="text-[9px] tracking-[0.2em] uppercase mb-3"
+                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+                      >
+                        {note.sector_label || note.capability}
+                      </div>
+                      <h3
+                        className="text-[16px] md:text-[18px] font-bold mb-2 leading-snug"
+                        style={{ fontFamily: t.sans, color: t.ink(0.85) }}
+                      >
+                        {note.title}
+                      </h3>
+                      {note.excerpt && (
+                        <p
+                          className="text-[13px] leading-relaxed line-clamp-2"
+                          style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
+                        >
+                          {note.excerpt}
+                        </p>
+                      )}
+                      {note.featured_stat && (
+                        <div
+                          className="mt-4 text-[10px] tracking-[0.12em] uppercase"
+                          style={{
+                            fontFamily: t.sans,
+                            color: "hsl(var(--destructive) / var(--a-mid))",
+                          }}
+                        >
+                          {note.featured_stat}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </RevealBlock>
+              );
+
+              if (note.slug) {
+                return (
+                  <Link key={note.id} to={`/post/${note.slug}`} className="block no-underline">
+                    {content}
+                  </Link>
+                );
+              }
+              return content;
+            })}
+          </div>
         </div>
       </section>
 
