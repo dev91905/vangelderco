@@ -480,87 +480,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section relative z-10">
-        <div className="relative z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase"
-              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-            >
-              Field Notes
-            </div>
-          </RevealBlock>
-        </div>
-
-        <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {(featuredPosts || []).map((note, i) => (
-            <CaseFragment
-              key={note.id}
-              sector={note.sector_label || note.title}
-              brief={note.excerpt || ""}
-              result={note.featured_stat || ""}
-              slug={note.slug}
-              index={i}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ═══ NETWORK ═══ */}
-      <section className="snap-section relative z-10">
-        <div className="py-24 md:py-32 px-6 md:px-10 max-w-4xl mx-auto">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-4"
-              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-            >
-              Our Network
-            </div>
-          </RevealBlock>
-          <RevealBlock delay={0.15}>
-            <p
-              className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
-              style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
-            >
-              We collaborate with a network of over 400 practitioners across every sector that moves policy, culture, and capital.
-            </p>
-          </RevealBlock>
-          <AnimatedLine width={50} />
-          <div className="flex flex-wrap gap-2.5 md:gap-3 mt-10">
-            {NETWORK_SECTORS.map((sector, i) => (
-              <RevealBlock key={sector} delay={0.25 + i * 0.04}>
-                <span
-                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
-                  style={{
-                    fontFamily: t.sans,
-                    color: "hsl(var(--destructive) / var(--a-high))",
-                    background: "hsl(var(--destructive) / var(--a-bg))",
-                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
-                    transition: `all 0.4s ${EASE_OUT_QUART}`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
-                    e.currentTarget.style.color = "hsl(var(--destructive))";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
-                  }}
-                >
-                  {sector}
-                </span>
-              </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      {/* ═══ INTAKE CTA ═══ */}
       <section
         className="snap-section relative z-10 flex flex-col items-center justify-center px-6"
-        style={{ height: "100vh" }}
+        style={{ minHeight: "100vh" }}
       >
         <RevealBlock>
           <span
@@ -626,26 +549,89 @@ const Index = () => {
             <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
           </Link>
         </RevealBlock>
+      </section>
 
-        <RevealBlock delay={0.55}>
-          <div
-            ref={(el) => {
-              if (!el) return;
-              const obs = new IntersectionObserver(([e]) => {
-                if (e.isIntersecting) el.style.width = "40px";
-              }, { threshold: 0.5 });
-              obs.observe(el);
-            }}
-            className="mx-auto mt-16 mb-8"
-            style={{
-              width: 0,
-              height: 1,
-              background: t.ink(0.1),
-              transition: `width 1s ${EASE_OUT_EXPO} 0.2s`,
-            }}
-          />
-        </RevealBlock>
-        <RevealBlock delay={0.6}>
+      {/* ═══ NETWORK ═══ */}
+      <section className="snap-section relative z-10">
+        <div className="py-24 md:py-32 px-6 md:px-10 max-w-4xl mx-auto">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-4"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              Our Network
+            </div>
+          </RevealBlock>
+          <RevealBlock delay={0.15}>
+            <p
+              className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
+              style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
+            >
+              We collaborate with a network of over 400 practitioners across every sector that moves policy, culture, and capital.
+            </p>
+          </RevealBlock>
+          <AnimatedLine width={50} />
+          <div className="flex flex-wrap gap-2.5 md:gap-3 mt-10">
+            {NETWORK_SECTORS.map((sector, i) => (
+              <RevealBlock key={sector} delay={0.25 + i * 0.04}>
+                <span
+                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
+                  style={{
+                    fontFamily: t.sans,
+                    color: "hsl(var(--destructive) / var(--a-high))",
+                    background: "hsl(var(--destructive) / var(--a-bg))",
+                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                    transition: `all 0.4s ${EASE_OUT_QUART}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
+                    e.currentTarget.style.color = "hsl(var(--destructive))";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
+                    e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
+                  }}
+                >
+                  {sector}
+                </span>
+              </RevealBlock>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FIELD NOTES ═══ */}
+      <section className="snap-section relative z-10">
+        <div className="relative z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              Field Notes
+            </div>
+          </RevealBlock>
+        </div>
+
+        <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
+          {(featuredPosts || []).map((note, i) => (
+            <CaseFragment
+              key={note.id}
+              sector={note.sector_label || note.title}
+              brief={note.excerpt || ""}
+              result={note.featured_stat || ""}
+              slug={note.slug}
+              index={i}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ FOOTER ═══ */}
+      <section className="relative z-10 flex flex-col items-center justify-center px-6 py-24">
+        <RevealBlock>
           <a
             href="mailto:hello@vangelder.co"
             className="text-[13px] tracking-[0.18em] no-underline"
@@ -660,7 +646,7 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.7}>
+        <RevealBlock delay={0.15}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
