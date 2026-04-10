@@ -181,7 +181,7 @@ const Index = () => {
         Van Gelder Co.
       </span>
 
-      <div className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden">
+      <div ref={scrollRef} className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden">
 
       {/* ═══ HERO ═══ */}
       <section
