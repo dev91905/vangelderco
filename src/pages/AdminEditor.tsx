@@ -8,6 +8,10 @@ import BlockCanvas from "@/components/admin/BlockCanvas";
 import StatChipsEditor from "@/components/admin/StatChipsEditor";
 import { ArrowLeft, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const label: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
 
@@ -35,6 +39,7 @@ const AdminEditor = () => {
   const [featuredStat, setFeaturedStat] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasLoadedRef = useRef(false);
 
@@ -149,9 +154,16 @@ const AdminEditor = () => {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(40 30% 96% / 0.9)", borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
         <div className="flex items-center gap-3">
-          <Link to="/admin" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
+          <button
+            onClick={() => {
+              if (isNew && dirty) { setShowLeaveDialog(true); return; }
+              if (!isNew && dirty) { setShowLeaveDialog(true); return; }
+              navigate("/admin");
+            }}
+            className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl"
+          >
             <ArrowLeft className="w-4 h-4" style={{ color: "hsl(30 10% 12% / 0.4)" }} />
-          </Link>
+          </button>
           <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>
             {title || "Untitled"}
           </span>
@@ -216,6 +228,42 @@ const AdminEditor = () => {
           <span>⌘⇧P publish</span>
         </div>
       </div>
+
+      <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
+        <AlertDialogContent className="light" style={{ background: "hsl(40 30% 96%)", border: "1px solid hsl(30 10% 12% / 0.08)", fontFamily: "'Inter', system-ui, sans-serif" }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle style={{ color: "hsl(30 10% 12% / 0.85)" }}>Unsaved changes</AlertDialogTitle>
+            <AlertDialogDescription style={{ color: "hsl(30 10% 12% / 0.5)" }}>
+              You have unsaved changes. Would you like to save as a draft before leaving?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => navigate("/admin")}
+              style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "hsl(30 10% 12% / 0.5)", border: "1px solid hsl(30 10% 12% / 0.12)" }}
+            >
+              Discard
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setShowLeaveDialog(false);
+                if (isNew) {
+                  createPost.mutate(formData(), {
+                    onSuccess: () => { toast.success("Saved as draft"); navigate("/admin"); },
+                  });
+                } else {
+                  updatePost.mutate({ id: id!, data: formData() }, {
+                    onSuccess: () => { toast.success("Changes saved"); navigate("/admin"); },
+                  });
+                }
+              }}
+              style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "hsl(30 10% 12%)", color: "hsl(40 30% 96%)" }}
+            >
+              Save & leave
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
