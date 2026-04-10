@@ -527,14 +527,15 @@ const Deck = () => {
                     display: "flex",
                     flexDirection: "column",
                     padding: "28px 24px",
-                    border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
+                    border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
                     background: isSelected ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                    boxShadow: isSelected ? "0 0 24px hsl(var(--destructive) / 0.15), inset 0 1px 0 hsl(var(--destructive) / 0.1)" : "none",
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
                     transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                     filter: r2.isActive ? "blur(0px)" : "blur(4px)",
-                    transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, background 0.15s ease, border 0.15s ease`,
+                    transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, background 0.2s ease, border 0.2s ease, box-shadow 0.3s ease`,
                     minHeight: "180px",
                   }}
                 >
