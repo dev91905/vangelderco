@@ -5,7 +5,7 @@ const CrossSector = () => (
     capability="cross-sector"
     label="VGC Domain // 002"
     title="Cross-Sector Campaigns"
-    description="We map the communications alignments that nobody in any single sector can see. Energy, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target."
+    description="Nothing moves until multiple sectors are pushing on the same thing. We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it."
   />
 );
 
