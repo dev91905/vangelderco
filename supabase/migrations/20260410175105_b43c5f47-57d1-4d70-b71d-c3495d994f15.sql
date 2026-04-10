@@ -1,0 +1,1 @@
+ALTER TABLE public.capability_posts ADD COLUMN link_url text;
