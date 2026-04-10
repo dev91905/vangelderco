@@ -315,25 +315,39 @@ const Index = () => {
           </div>
         </RevealBlock>
 
-        <div className="grid gap-6">
+        <div className="grid gap-3">
           {CAPABILITIES.map((cap, i) => (
             <RevealBlock key={cap.title} delay={i * 0.12}>
-              <Link to={cap.to} className="capability-card block">
+              <Link
+                to={cap.to}
+                className="block p-5 md:p-6 rounded-xl transition-all duration-300 no-underline"
+                style={{ background: "transparent", border: `1px solid ${t.ink(0.08)}` }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget;
+                  el.style.borderColor = t.ink(0.2);
+                  el.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.borderColor = t.ink(0.08);
+                  el.style.transform = "translateY(0)";
+                }}
+              >
                 <h3
-                  className="text-2xl md:text-3xl font-normal mb-3"
-                  style={{ fontFamily: t.serif, color: t.ink(0.8) }}
+                  className="text-[17px] md:text-[19px] font-bold mb-2"
+                  style={{ fontFamily: t.sans, color: t.ink(0.8) }}
                 >
                   {cap.title}
                 </h3>
                 <p
-                  className="text-xs tracking-wide mb-4"
+                  className="text-xs tracking-wide mb-3"
                   style={{ fontFamily: t.sans, color: "hsl(var(--destructive))", letterSpacing: "0.03em" }}
                 >
                   {cap.sub}
                 </p>
                 <p
-                  className="text-[15px] leading-relaxed"
-                  style={{ fontFamily: t.serif, color: t.ink(0.38) }}
+                  className="text-[13px] leading-relaxed"
+                  style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
                 >
                   {cap.detail}
                 </p>
