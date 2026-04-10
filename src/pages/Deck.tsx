@@ -761,30 +761,21 @@ const Deck = () => {
             paddingBottom: quizRevealed ? "clamp(128px, 18vh, 180px)" : "0",
           }}
         >
-          {/* Header */}
-          <div
-            style={{
-              marginBottom: quizRevealed ? "clamp(24px, 3vw, 32px)" : "clamp(24px, 4vw, 48px)",
-              maxWidth: quizRevealed ? "960px" : "none",
-            }}
-          >
-             {quizRevealed && (
-               <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your results</p>
-             )}
-             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
-               {quizRevealed
-                 ? "Here's what your answers tell us."
-                 : isFreshStart
+          {/* Header — only shown during quiz, not results */}
+          {!quizRevealed && (
+            <div
+              style={{
+                marginBottom: "clamp(24px, 4vw, 48px)",
+              }}
+            >
+               <p style={{ ...heading("clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
+                 {isFreshStart
                    ? "Which feels more like how you'd operate?"
                    : "Which feels more like how your portfolio operates?"
-               }
-             </p>
-             {quizRevealed && (
-               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
-                 The summary is at the top. Scroll for the breakdown and why each one matters.
+                 }
                </p>
-             )}
-          </div>
+            </div>
+          )}
 
           {/* Quiz questions — one at a time */}
           {!quizRevealed && quizStep < QUIZ_ROWS.length && (
@@ -909,22 +900,43 @@ const Deck = () => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
             return (
             <div style={{ width: "100%", maxWidth: "1100px", height: "100dvh", animation: "fade-up 0.5s ease-out" }}>
-              <div className="flex flex-col lg:flex-row gap-8" style={{ alignItems: "flex-start", height: "100%" }}>
-                {/* ── Sticky left: diagnostic grade ── */}
-                <div className="lg:w-[38%] lg:self-start flex flex-col gap-6 justify-center" style={{ height: "100%", paddingTop: "40px", paddingBottom: "40px" }}>
+              <div className="flex flex-col lg:flex-row" style={{ alignItems: "flex-start", height: "100dvh" }}>
+                {/* ── Sticky left: header + diagnostic grade ── */}
+                <div
+                  className="lg:w-[38%] flex flex-col gap-5"
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    height: "100dvh",
+                    overflow: "hidden",
+                    paddingTop: "clamp(40px, 6vh, 72px)",
+                    paddingBottom: "40px",
+                    paddingRight: "clamp(16px, 2vw, 32px)",
+                    justifyContent: "center",
+                  }}
+                >
+                  <p style={{ ...label("11px"), color: f.ink(0.32) }}>Your results</p>
+                  <p style={{ ...heading("clamp(20px, 2.4vw, 28px)"), fontWeight: 700 }}>
+                    Here's what your answers tell us.
+                  </p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.4), lineHeight: 1.6 }}>
+                    The summary is at the top. Scroll for the breakdown and why each one matters.
+                  </p>
+
                   <div
                     style={{
-                      padding: "clamp(28px, 4vw, 40px)",
+                      padding: "clamp(24px, 3vw, 36px)",
                       borderRadius: "20px",
                       background: "hsl(var(--foreground) / var(--a-bg))",
                       border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                      marginTop: "8px",
                     }}
                   >
                     <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(22px, 2.8vw, 32px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2.4vw, 28px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
                       {grade.grade}
                     </p>
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
                       {grade.summary}
                     </p>
                   </div>
@@ -980,8 +992,9 @@ const Deck = () => {
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingRight: "8px",
-                    paddingTop: "40px",
-                    paddingBottom: "60px",
+                    paddingTop: "clamp(40px, 6vh, 72px)",
+                    paddingBottom: "140px",
+                    paddingLeft: "clamp(8px, 1.5vw, 24px)",
                   }}
                 >
                   {QUIZ_ROWS.map((row, i) => {
