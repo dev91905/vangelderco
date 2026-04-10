@@ -1,44 +1,33 @@
 
 
-# Field Note Editor Overhaul
+# Fix Intake CTA Copy
 
 ## Problem
-- Sector Label and Featured Stat are buried in Post Settings sidebar — they only apply to Field Notes
-- The "DEK" label changes to "ALERT / BRIEF" for field notes, which is confusing
-- When you select Field Note type, the block editor disappears but there's a weird orphan "Impact Metric" field
-- No way to link a Field Note to another post or external URL
-- The editor doesn't feel like a purpose-built form for Field Notes
+The current intake CTA section is generic and lifeless:
+- "Five minutes" appears twice (chip + headline)
+- "Five minutes. One walkthrough. See if there's a fit." — passive, says nothing about the agency or the value of doing the intake
+- Timer icon + "Five minutes" chip frames this as a time commitment, not an invitation
 
-## What changes
+## Copy rewrite
 
-### 1. Field Note gets its own dedicated inline form
-When `type === "field-note"`, instead of showing the generic meta bar + block canvas, the editor shows a clean 4-field form right in the main content area:
+**Chip** (small uppercase label above headline):
+- Current: `Five minutes` with timer icon
+- New: `Strategic Diagnostic` (no timer icon — remove the time-cost framing entirely)
 
-1. **Title** (already exists at top)
-2. **Sector Label** — e.g. "ENERGY x LABOR" (moved from sidebar)  
-3. **Excerpt / Brief** — one to two sentences (moved inline, clearer label)
-4. **Impact Stat** — e.g. "$12M mobilized" (moved from sidebar)
-5. **Link (optional)** — URL field. Can be an internal post slug (`/post/clean-energy`) or external URL (`https://nytimes.com/...`). If set, the Field Note on the homepage links there instead of to `/post/{slug}`
+**Headline** (the big serif line):
+- Current: `Five minutes. One walkthrough. See if there's a fit.`
+- New: `Find out what your opponents already know about you.`
 
-### 2. Remove from Post Settings sidebar
-When type is `field-note`:
-- Remove Sector Label field from sidebar
-- Remove Featured Stat field from sidebar  
-- Remove Hero Image (not used for field notes)
-- Remove Password Protection (not used for field notes)
-- Keep: Type selector, Capability selector, Status toggle, Homepage Feature toggle
+This hooks directly into the quiz reveal from the deck — the confrontation data. It's specific to this agency's value prop and creates genuine curiosity. It implies stakes.
 
-### 3. Database
-- Add `link_url` column (text, nullable) to `capability_posts` for the optional link field
+**Subhead** (the smaller paragraph):
+- Current: `A guided intake that helps us understand your situation — and shows you how we think about it.`
+- New: `A short diagnostic that benchmarks your communications strategy against the opposition — and shows you exactly where the gaps are.`
 
-### 4. Homepage Field Notes rendering
-- Update `CaseFragment` to use `link_url` when present — if it starts with `http`, render as `<a>` with external link; if internal, use `<Link>`
-- Update `useFieldNotes` to also select `link_url`
+This tells the prospect what they'll actually get: a benchmark, a comparison, concrete gaps identified. Not "helps us understand your situation" (which centers the agency, not the prospect).
+
+**Button text** stays `Let's see →` — that's fine, low-commitment and confident.
 
 ## Files to change
-- `supabase/migrations/...` — add `link_url` column
-- `src/pages/AdminEditor.tsx` — replace the field-note section with a full inline form containing all 4 fields
-- `src/components/admin/EditorMetaBar.tsx` — hide sector_label, featured_stat, hero image, password when type is field-note
-- `src/hooks/useFieldNotes.ts` — add `link_url` to select + type
-- `src/pages/Index.tsx` — update CaseFragment to support `link_url`
+- `src/pages/Index.tsx` — lines 519–544, three text changes + remove Timer import if unused elsewhere
 
