@@ -777,7 +777,7 @@ const Deck = () => {
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(15px, 1.5vw, 20px)",
-                                color: "hsl(0 60% 50% / var(--a-high))",
+                                color: f.ink(0.88),
                                 lineHeight: 1.65,
                                 fontWeight: 500,
                               }}>{row.theirs}</p>
@@ -862,7 +862,7 @@ const Deck = () => {
                             <p style={{
                               fontFamily: f.sans,
                               fontSize: "clamp(13px, 1.4vw, 17px)",
-                              color: "hsl(0 60% 50% / var(--a-high))",
+                              color: f.ink(0.88),
                               lineHeight: 1.6,
                               fontWeight: 500,
                             }}>{overall.theirs}</p>
