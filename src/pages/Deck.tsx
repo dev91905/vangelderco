@@ -72,12 +72,12 @@ const PAIN_POINTS = [
 
 /* ─── Confrontation rows ─── */
 const CONFRONTATION_ROWS = [
-  { dimension: "01 Research", yours: "Commission focus groups and test messages before launching a campaign.", theirs: "Monitor what's already resonating organically across platforms and communities." },
-  { dimension: "02 Content", yours: "Produce polished ads, place op-eds, and fund a documentary on a campaign calendar.", theirs: "Invest in digital creator economies where ideology forms in real time — and fund investigative journalism to develop new media talent." },
-  { dimension: "03 Distribution", yours: "Buy placements on platforms and hope the right audiences see them.", theirs: "Acquire the platforms themselves and change the programming, algorithms, and editorial direction." },
-  { dimension: "04 Engagement", yours: "Hire influencers to post scripted content for a single grant cycle.", theirs: "Organize at scale through churches, veteran groups, campuses, and local business networks — building durable infrastructure." },
-  { dimension: "05 Measurement", yours: "Count impressions and media mentions when the grant closes.", theirs: "Run public polls designed to shift policy baselines and track what's actually moving legislation in real time." },
-  { dimension: "06 Iteration", yours: "Declare success when the grant period ends and move to the next proposal.", theirs: "Cut what's failing mid-cycle, pour resources into what's working, and compound gains across years." },
+  { dimension: "01 Research", yours: "Test messages in a lab. Focus groups, message testing, pre-launch polling — all before a single dollar goes to market.", theirs: "Monitor what's already resonating organically across platforms and communities. Skip the lab — study the wild." },
+  { dimension: "02 Content", yours: "Produce polished ads, post explainers, place op-eds — and if there's budget, fund a documentary that nobody sees.", theirs: "Invest in digital creator economies and fund investigative journalism so political ideology and conspiracies form in real time. Round-the-clock content, constantly." },
+  { dimension: "03 Distribution", yours: "Buy placements on platforms where a 3-second scroll-by counts as a \"view.\" No one remembers it. They forget the moment they scroll past.", theirs: "Buy the platforms themselves. Change the algorithms, the programming, the editorial direction. Own the infrastructure attention flows through." },
+  { dimension: "04 Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree.", theirs: "Take the conversation offline. Organize and fund mega-structures — faith communities, campuses, business networks, legal networks, veterans groups. That's culture." },
+  { dimension: "05 Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics." },
+  { dimension: "06 Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization." },
   { dimension: "Overall", yours: "Test messages in a controlled environment, then pay people to watch the winners.", theirs: "Fund everything, find what catches fire organically, and supercharge it with infrastructure and capital." },
 ];
 
