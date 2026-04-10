@@ -376,7 +376,7 @@ const Index = () => {
                 letterSpacing: "0.25em",
               }}
             >
-              The Altitude
+              The Approach
             </p>
           </RevealBlock>
           <RevealBlock delay={0.15}>
@@ -389,7 +389,7 @@ const Index = () => {
                 color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
-              You're in the spy plane. We're in the satellite.
+              Next-generation strategic communications for donor advisors and program officers who know their portfolios should be hitting harder.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.3}>
@@ -402,7 +402,7 @@ const Index = () => {
                 color: t.ink(0.85),
               }}
             >
-              Most firms see one sector. We see all of them at once.
+              We're communications strategists with a background in culture, media-based organizing, and philanthropy — operating across multiple sectors.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.5}>
@@ -411,7 +411,7 @@ const Index = () => {
               className="text-xs leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
             >
-              At 30,000 feet you see your sector clearly. At 80,000 feet you see where energy, labor, culture, faith, policy, and philanthropy are already aligned on things they don't know they're aligned on. That's where the leverage is — and that's where we operate.
+              We build strategic communications portfolios that work across sectors — cultural strategy, cross-sector coordination, and deep organizing — so your grants don't just fund content, they build power.
             </p>
           </RevealBlock>
         </div>
