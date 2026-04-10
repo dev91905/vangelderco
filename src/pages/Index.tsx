@@ -424,7 +424,7 @@ const Index = () => {
       </section>
 
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="snap-section relative z-10 flex items-center">
+      <section className="snap-section-scroll relative z-10 flex items-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
           <RevealBlock direction="left">
             <div
@@ -596,7 +596,7 @@ const Index = () => {
       </section>
 
       {/* ═══ NETWORK ═══ */}
-      <section className="snap-section relative z-10 flex items-center">
+      <section className="snap-section-scroll relative z-10 flex items-center">
         <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">
             <div
@@ -647,7 +647,7 @@ const Index = () => {
       </section>
 
       {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section relative z-10 flex items-center">
+      <section className="snap-section-scroll relative z-10 flex items-center">
         <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">
             <div
