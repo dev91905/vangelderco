@@ -286,3 +286,22 @@
     box-shadow: 0 0 0 0 hsl(var(--foreground) / 0);
   }
 }
+
+/* Custom scrollbar for results panel */
+.results-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.results-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.results-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground) / 0.12);
+  border-radius: 999px;
+}
+.results-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground) / 0.22);
+}
+.results-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground) / 0.12) transparent;
+}

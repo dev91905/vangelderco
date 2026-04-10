@@ -970,13 +970,14 @@ const Deck = () => {
 
                 {/* ── Scrollable right: dimension breakdown ── */}
                 <div
-                  className="lg:w-[62%] flex flex-col gap-4"
+                  className="lg:w-[62%] flex flex-col gap-4 results-scrollbar"
                   data-results-scroll="true"
                   style={{
-                    maxHeight: "calc(100dvh - 160px)",
+                    maxHeight: "calc(100dvh - 80px)",
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingRight: "8px",
+                    paddingBottom: "40px",
                   }}
                 >
                   {QUIZ_ROWS.map((row, i) => {
