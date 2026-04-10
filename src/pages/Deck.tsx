@@ -747,21 +747,37 @@ const Deck = () => {
                             gridTemplateColumns: "1fr 1fr",
                             gap: "clamp(32px, 5vw, 80px)",
                           }}>
-                            <div>
-                              <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "10px" }}>Your side</p>
+                            <div style={{
+                              padding: "clamp(12px, 1.5vw, 20px)",
+                              borderRadius: "8px",
+                              background: "hsl(0 60% 50% / var(--a-bg))",
+                              border: "1px solid hsl(0 60% 50% / var(--a-border-card))",
+                            }}>
+                              <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-mid))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-mid))" }} />
+                                Your side
+                              </p>
                               <p style={{
                                 fontFamily: f.sans,
-                                fontSize: "clamp(16px, 1.6vw, 21px)",
-                                color: f.ink(0.5),
+                                fontSize: "clamp(15px, 1.5vw, 20px)",
+                                color: f.ink(0.55),
                                 lineHeight: 1.65,
                               }}>{row.yours}</p>
                             </div>
-                            <div>
-                              <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700, marginBottom: "10px" }}>Their side</p>
+                            <div style={{
+                              padding: "clamp(12px, 1.5vw, 20px)",
+                              borderRadius: "8px",
+                              background: "hsl(145 50% 40% / var(--a-bg))",
+                              border: "1px solid hsl(145 50% 40% / var(--a-border-card))",
+                            }}>
+                              <p style={{ ...label("9px"), color: "hsl(145 50% 40% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                                <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(145 50% 40% / var(--a-high))" }} />
+                                Their side
+                              </p>
                               <p style={{
                                 fontFamily: f.sans,
-                                fontSize: "clamp(16px, 1.6vw, 21px)",
-                                color: f.ink(0.85),
+                                fontSize: "clamp(15px, 1.5vw, 20px)",
+                                color: f.ink(0.88),
                                 lineHeight: 1.65,
                                 fontWeight: 500,
                               }}>{row.theirs}</p>
