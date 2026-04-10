@@ -557,19 +557,37 @@ const Deck = () => {
                 transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.15s ease, border 0.15s ease",
               }}
             >
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
-                Something else
-              </p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
+                  Something else
+                </p>
+                <span style={{
+                  fontFamily: f.sans,
+                  fontSize: "11px",
+                  color: f.ink(0.25),
+                  lineHeight: 1,
+                  opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
+                  transition: "opacity 0.2s ease",
+                }}>
+                  {customSaved ? "Click to edit" : "Press ↵ to submit"}
+                </span>
+              </div>
               <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); } }}>
                 <textarea
                   value={customMessage}
-                  onChange={(e) => { setCustomMessage(e.target.value); if (customSaved) setCustomSaved(false); }}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const lines = val.split("\n");
+                    if (lines.length > 3) return;
+                    if (val.length > 200) return;
+                    setCustomMessage(val);
+                    if (customSaved) setCustomSaved(false);
+                  }}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && customMessage.trim()) { e.preventDefault(); setCustomSaved(true); } }}
                   placeholder="Tell us what you're dealing with…"
                   readOnly={customSaved}
                   onClick={() => { if (customSaved) setCustomSaved(false); }}
-                  rows={2}
-                  maxLength={500}
+                  rows={3}
                   style={{
                     fontFamily: f.sans,
                     fontSize: "clamp(12px, 1.3vw, 14px)",
@@ -588,15 +606,6 @@ const Deck = () => {
                   onFocus={(e) => { if (!customSaved) e.currentTarget.style.borderColor = f.ink(0.15); }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = f.ink(0.08); }}
                 />
-                <p style={{
-                  fontFamily: f.sans,
-                  fontSize: "11px",
-                  color: f.ink(0.25),
-                  marginTop: "4px",
-                  lineHeight: 1,
-                }}>
-                  {customSaved ? "Click to edit" : customMessage.trim() ? "Press ↵ to submit" : "\u00A0"}
-                </p>
               </form>
             </div>
           </div>
