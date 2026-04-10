@@ -370,27 +370,26 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  /* Wheel handler — keep wheel scrolling trapped inside the current frame */
+  /* Wheel handler — never allow mouse wheel to move between frames */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const handler = (e: WheelEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("[data-results-scroll='true']")) {
+        return;
+      }
+
       const frameEl = frameRefs.current[currentFrame];
       if (!frameEl) return;
+
+      e.preventDefault();
+
       const frameTop = frameEl.offsetTop;
       const frameBottom = frameTop + frameEl.scrollHeight;
-      const viewHeight = el.clientHeight;
-      const scrollTop = el.scrollTop;
-      const maxScrollTop = Math.max(frameTop, frameBottom - viewHeight);
-
-      if (e.deltaY > 0 && scrollTop + e.deltaY > maxScrollTop) {
-        e.preventDefault();
-        el.scrollTop = maxScrollTop;
-      } else if (e.deltaY < 0 && scrollTop + e.deltaY < frameTop) {
-        e.preventDefault();
-        el.scrollTop = frameTop;
-      }
+      const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
+      el.scrollTop = Math.min(maxScrollTop, Math.max(frameTop, el.scrollTop));
     };
 
     el.addEventListener("wheel", handler, { passive: false });
@@ -861,7 +860,15 @@ const Deck = () => {
                 </div>
 
                 {/* ── Scrollable right: dimension breakdown ── */}
-                <div className="lg:w-[62%] flex flex-col gap-4">
+                <div
+                  className="lg:w-[62%] flex flex-col gap-4"
+                  data-results-scroll="true"
+                  style={{
+                    maxHeight: "calc(100dvh - 160px)",
+                    overflowY: "auto",
+                    paddingRight: "8px",
+                  }}
+                >
                   {QUIZ_ROWS.map((row, i) => {
                     const answer = quizAnswers[i];
                     const pickedNextGen = answer?.picked === "nextgen";
