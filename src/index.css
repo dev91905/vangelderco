@@ -164,23 +164,12 @@
     overflow-x: hidden;
   }
 
-  /* Horizontal deck scrollbar */
+  /* Hide native horizontal scrollbar — custom progress bar handles it */
   .deck-scroll::-webkit-scrollbar {
-    height: 3px;
-  }
-  .deck-scroll::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
-  }
-  .deck-scroll::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.4);
-    border-radius: 4px;
-  }
-  .deck-scroll::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.6);
+    display: none;
   }
   .deck-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted-foreground) / 0.4) hsl(var(--muted));
+    scrollbar-width: none;
   }
 }
 
