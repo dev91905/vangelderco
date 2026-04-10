@@ -574,23 +574,28 @@ const Deck = () => {
                     fontFamily: f.sans,
                     fontSize: "clamp(12px, 1.3vw, 14px)",
                     color: customSaved ? f.ink(0.6) : f.ink(0.8),
-                    background: "transparent",
-                    border: "none",
-                    padding: 0,
+                    background: customSaved ? "transparent" : `${f.ink(0.03)}`,
+                    border: customSaved ? "none" : `1px solid ${f.ink(0.08)}`,
+                    borderRadius: "6px",
+                    padding: customSaved ? "0" : "10px 12px",
                     resize: "none",
                     outline: "none",
                     width: "100%",
                     lineHeight: 1.6,
                     cursor: customSaved ? "pointer" : "text",
+                    transition: "background 0.15s ease, border 0.15s ease, padding 0.15s ease",
                   }}
+                  onFocus={(e) => { if (!customSaved) e.currentTarget.style.borderColor = f.ink(0.15); }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = f.ink(0.08); }}
                 />
                 <p style={{
                   fontFamily: f.sans,
                   fontSize: "11px",
                   color: f.ink(0.25),
-                  marginTop: "8px",
+                  marginTop: "4px",
+                  lineHeight: 1,
                 }}>
-                  {customSaved ? "Click to edit" : customMessage.trim() ? "Press Enter to submit" : "\u00A0"}
+                  {customSaved ? "Click to edit" : customMessage.trim() ? "Press ↵ to submit" : "\u00A0"}
                 </p>
               </form>
             </div>
