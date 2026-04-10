@@ -35,22 +35,22 @@ const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: str
             {value ? "Active" : "Not set"}
           </span>
         </div>
-        <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.white }}>
+        <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.ink(0.02) }}>
           <input
             type={show ? "text" : "password"} value={value} onChange={(e) => onChange(e.target.value)} placeholder="No global password"
             className="w-full px-3 py-2.5 text-sm bg-transparent outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8) }}
           />
           <div className="flex items-center gap-px px-1 pb-1">
             <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} {show ? "Hide" : "Show"}
             </button>
             <button onClick={handleGen} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               <RefreshCw className="w-3 h-3" /> Generate
             </button>
             <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors disabled:opacity-20" style={{ fontFamily: t.sans, color: copied ? t.success() : t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} {copied ? "Copied" : "Copy"}
             </button>
             {value && (
@@ -131,7 +131,7 @@ const Admin = () => {
           <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-2xl overflow-hidden" style={{ background: t.cream, border: t.border(0.08), boxShadow: `0 25px 50px -12px ${t.ink(0.15)}` }}>
             <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: t.border(0.06) }}>
               <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.5) }}>Site Settings</span>
-              <button onClick={() => setSettingsOpen(false)} className="p-1.5 rounded-lg transition-colors" onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              <button onClick={() => setSettingsOpen(false)} className="p-1.5 rounded-lg transition-colors" onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
                 <X className="w-4 h-4" style={{ color: t.ink(0.4) }} />
               </button>
             </div>
@@ -150,7 +150,7 @@ const Admin = () => {
                 onChange={(e) => setBookingLink(e.target.value)}
                 placeholder="https://calendly.com/your-link"
                 className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
-                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.white }}
+                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.02) }}
               />
               <p className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
                 Used for "Schedule a Meeting" on the deck CTA page.

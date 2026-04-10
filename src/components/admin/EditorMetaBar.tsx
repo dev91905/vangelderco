@@ -29,15 +29,15 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
         </div>
         <div className="flex items-center gap-px px-1 pb-1">
           <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} {show ? "Hide" : "Show"}
           </button>
           <button onClick={handleGenerate} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <RefreshCw className="w-3 h-3" /> Generate
           </button>
           <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors disabled:opacity-20" style={{ fontFamily: t.sans, color: copied ? t.success() : t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} {copied ? "Copied" : "Copy"}
           </button>
           {value && (
