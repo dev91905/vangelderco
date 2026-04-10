@@ -835,8 +835,8 @@ const Deck = () => {
 
                     <button
                       onClick={() => {
-                        const frame = frameRefs.current[2];
-                        if (frame) frame.scrollTop = 0;
+                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                        setTimeout(() => {
                         setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
                         setQuizStep(0);
                         setQuizRevealed(false);
