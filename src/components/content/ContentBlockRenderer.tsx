@@ -58,8 +58,8 @@ const ContentBlockRenderer = ({ blocks, renderExtended, compact }: ContentBlockR
             );
           case "callout":
             return (
-              <div key={i} className="p-4 md:p-5 rounded-xl" style={{ background: t.ink(0.02), border: t.border(0.04) }}>
-                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ fontFamily: t.sans, color: t.ink(0.82), fontSize: "clamp(15px, 1.5vw, 16px)", lineHeight: 1.8 }}>{block.text}</p>
+              <div key={i} className="p-4 md:p-5 rounded-xl backdrop-blur-sm" style={{ background: t.accent(0.08), border: `1px solid ${t.accent(0.18)}` }}>
+                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ fontFamily: t.sans, color: t.accent(0.75), fontSize: "clamp(15px, 1.5vw, 16px)", lineHeight: 1.8 }}>{block.text}</p>
               </div>
             );
           default:
