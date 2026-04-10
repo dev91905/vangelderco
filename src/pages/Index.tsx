@@ -241,17 +241,21 @@ const Index = () => {
   return (
     <AtmosphericLayout>
       {/* HUD: top-right */}
-      <span
-        className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
+      <div
+        className="fixed top-6 right-6 z-30 flex flex-col items-end"
         style={{
-          color: t.ink(0.3),
           fontFamily: t.sans,
           transition: `opacity 0.6s ${EASE_OUT_QUART}`,
           opacity: heroProgress > 0.8 ? 0.15 : 0.3,
         }}
       >
-        Van Gelder Co.
-      </span>
+        <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: t.ink(0.3) }}>
+          Van Gelder Co.
+        </span>
+        <span className="text-[8px] tracking-[0.12em] uppercase mt-0.5" style={{ color: t.ink(0.2) }}>
+          Strategic Communications
+        </span>
+      </div>
 
       <div
         ref={scrollRef}
