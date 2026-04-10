@@ -508,7 +508,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(1)} mode="wide">
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-baseline gap-4 lg:gap-24">
-            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "0 0 auto", maxWidth: "50%" }}>
+            <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "0 0 auto", maxWidth: "340px" }}>
               What's getting in your way?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1), flex: "1 1 auto", paddingTop: "clamp(4px, 0.5vw, 10px)" }}>
