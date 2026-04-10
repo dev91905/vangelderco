@@ -7,6 +7,8 @@
  *   import { t } from "@/lib/theme";
  *   <div style={{ color: t.ink(0.5), fontFamily: t.serif }}>
  *
+ * Dark-mode accent (red): use t.accent(alpha) for elements that should
+ * be red in dark mode but ink-colored in light mode.
  * To change the entire site's look, edit ONLY this file + index.css variables.
  *
  * Colors now read from CSS custom properties so they automatically
@@ -22,6 +24,8 @@ const white = "hsl(var(--card-h) var(--card-s) var(--card-l))";
 
 const error = (alpha = 1) => `hsl(var(--destructive) / ${alpha})`;
 const success = (alpha = 1) => `hsl(150 40% 40% / ${alpha})`;
+/** Red in dark mode, ink in light mode — reads --accent-h/s/l from CSS */
+const accent = (alpha = 1) => `hsl(var(--accent-h) var(--accent-s) var(--accent-l) / ${alpha})`;
 
 /* ── Typography ── */
 const serif = "'Source Serif 4', Georgia, serif";
