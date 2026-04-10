@@ -43,9 +43,9 @@
     --card-h: 40;
     --card-s: 25%;
     --card-l: 98%;
-    --accent-h: 0;
+    --accent-h: 5;
     --accent-s: 40%;
-    --accent-l: 35%;
+    --accent-l: 30%;
 
     /* Accent opacity tiers — muted in light mode */
     --a-high: 0.6;
@@ -97,9 +97,9 @@
     --card-h: 30;
     --card-s: 5%;
     --card-l: 5.5%;
-    --accent-h: 35;
-    --accent-s: 5%;
-    --accent-l: 60%;
+    --accent-h: 5;
+    --accent-s: 40%;
+    --accent-l: 38%;
 
     /* Accent opacity tiers — pop in dark mode */
     --a-high: 0.9;
