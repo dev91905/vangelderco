@@ -758,8 +758,9 @@ const Deck = () => {
                             left: 0,
                             width: "100%",
                             opacity: isCurrent ? 1 : 0,
-                            transform: isCurrent ? "translateY(0)" : i > confrontationStep ? "translateY(20px)" : "translateY(-20px)",
-                            transition: "opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                            transform: isCurrent ? "translateY(0)" : i > confrontationStep ? "translateY(24px)" : "translateY(-24px)",
+                            filter: isCurrent ? "blur(0px)" : "blur(6px)",
+                            transition: "opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
                             pointerEvents: isCurrent ? "auto" : "none",
                           }}
                         >
