@@ -429,6 +429,7 @@ const Index = () => {
           </span>
         </RevealBlock>
       </section>
+      </div>
     </AtmosphericLayout>
   );
 };
