@@ -28,7 +28,7 @@ const CAPABILITIES = [
     title: "Cultural Strategy",
     sub: "Strategic communications that become cultural moments.",
     detail:
-      "Most firms get the message out. We work across music, entertainment, news media, creators, brands, athletes, faith, campuses, and more to make sure it gets taken up — absorbed by the sectors that turn messaging into culture.",
+      "Most firms get the message out. We work across music, entertainment, news media, creators, brands, athletes, faith, campuses, and more to make sure it gets taken up.",
     to: "/cultural-strategy",
   },
   {
