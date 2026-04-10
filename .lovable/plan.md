@@ -1,57 +1,39 @@
 
 
-# Add "Field Note" as a Third Post Type
+# Dark Mode: Black & White, No Red
 
-## What It Is
+## Direction
+Strip all red/oxblood from dark mode. Pure black-and-white palette with a slight warm cast to the whites (not cool/blue) to prevent it from feeling clinical. Remove the CRT breathing red glow. Keep scan lines and scan beam as optional texture (they're white, not red), or remove them too for full clean.
 
-Field Notes are short, structured dispatches — more like alerts than articles. Three fixed fields:
+## Changes
 
-1. **Domain** — one of the three capabilities (Cultural Strategy, Cross-Sector Intelligence, Deep Organizing)
-2. **Brief** — one to two sentences: what happened, what was accomplished
-3. **Impact** — a standardized metrics line (e.g. "$12M mobilized across 3 foundations")
+### 1. `src/index.css` — Dark mode CSS variables
+Replace all red-tinted values with neutral white/black:
+- `--primary`: `0 0% 90%` (light gray instead of red)
+- `--primary-foreground`: `0 0% 5%` (near-black)
+- `--destructive`: `0 60% 50%` (keep red only for actual errors/destructive actions — this is semantic, not brand)
+- `--ring`: `0 0% 40%` (neutral gray ring)
+- `--sidebar-primary`: `0 0% 90%`
+- `--sidebar-ring`: `0 0% 40%`
+- `--accent-h/s/l`: `0, 0%, 60%` — accent becomes a medium gray, no color
 
-No free-form content blocks. No hero images. Just the structured data.
+### 2. `src/components/CRTOverlay.tsx`
+Remove the breathing red glow div entirely. Keep scan lines + scan beam (they're already white) as subtle texture — or remove those too if you want fully clean.
 
-## What Changes
+### 3. `src/index.css` — `pill-glow` keyframes
+Update the `.dark` pill-glow animation to use white/gray instead of `--destructive` (red). Network section pills glow white on hover instead of red.
 
-### 1. Add "field-note" as a Post Type in the Editor
+### 4. Update memory files
+- Update `mem://design/dark-mode` to reflect the new black & white palette
+- Update `mem://design/accent-opacity` to note accent is now neutral in dark mode
 
-**EditorMetaBar.tsx**: Add `"field-note"` to the type toggle (currently `["blog-post", "case-study"]` → `["blog-post", "case-study", "field-note"]`).
+### What stays
+- Light mode is completely unchanged (warm cream + gold)
+- The dark mode background (`0 0% 2.5%`) and surface hierarchy stay the same
+- `--destructive` remains red for semantic error states only (delete buttons, validation errors) — that's UX convention, not brand
 
-### 2. Adapt the Editor for Field Notes
-
-**AdminEditor.tsx**: When `type === "field-note"`, hide the BlockCanvas (no free-form content blocks needed) and hide the StatChipsEditor. Instead, show a compact structured form with:
-- **Domain**: Already handled by the `capability` selector in the settings drawer
-- **Brief**: Already the `excerpt` field — just relabel it as "Alert / Brief" when type is field-note
-- **Impact**: Use the existing `featured_stat` field — relabel it as "Impact Metric" and surface it directly in the editor (not buried in the settings drawer)
-
-This means no new database columns are needed. The existing fields map cleanly:
-- `capability` → domain
-- `excerpt` → brief
-- `featured_stat` → impact metric
-- `type` = `"field-note"`
-
-### 3. Update the Homepage Field Notes Section
-
-**Index.tsx**: The `CaseFragment` component and the Field Notes query already render `sector_label`, `excerpt` (brief), and `featured_stat` (result). The `useFeaturedPosts` hook already fetches featured published posts. Field Notes will appear here automatically if marked as featured.
-
-Optionally, create a dedicated `useFieldNotes` hook that queries `type = "field-note"` posts instead of relying on the `is_featured` flag — so Field Notes always appear in this section regardless of the featured toggle.
-
-### 4. Update PostCard and Listing Pages
-
-**PostCard.tsx**: Add `"field-note"` label rendering (currently shows "Case Study" or "Blog Post").
-
-### 5. Field Note Detail View
-
-Since field notes are short alerts with no content blocks, the detail page (`PostDetail.tsx`) should render a minimal view — just the brief and impact metric, no block canvas. Check and handle the `type === "field-note"` case.
-
-## Technical Summary
-
-- **No migration needed** — reuses existing columns (`type`, `capability`, `excerpt`, `featured_stat`)
-- **EditorMetaBar.tsx** — add "Field Note" to type picker
-- **AdminEditor.tsx** — conditional UI: hide BlockCanvas for field-notes, surface impact field inline
-- **Index.tsx** — optionally switch Field Notes section to query by type instead of `is_featured`
-- **PostCard.tsx** — add "Field Note" label
-- **PostDetail.tsx** — minimal render for field-note type
-- **useFeaturedPosts.ts** — potentially rename/refactor to `useFieldNotes` querying `type = "field-note"`
+### Files touched
+- `src/index.css` (CSS variables + pill-glow keyframes)
+- `src/components/CRTOverlay.tsx` (remove red glow)
+- Memory files (2)
 
