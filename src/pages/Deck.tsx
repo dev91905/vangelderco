@@ -975,10 +975,10 @@ const Deck = () => {
             transition: "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
             transform: activeDomain ? "translateY(-20px)" : "translateY(0)",
           }}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0), marginBottom: "12px" }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up"), marginBottom: "12px" }}>
               You're ready to level up. We can help.
             </p>
-            <p style={{ ...body(0.4), ...r5.stagger(1), marginBottom: activeDomain ? "24px" : "48px", maxWidth: "500px", transition: "margin 0.4s ease" }}>
+            <p style={{ ...body(0.4), ...r5.stagger(1, 200, "blur-up"), marginBottom: activeDomain ? "24px" : "48px", maxWidth: "500px", transition: "margin 0.4s ease" }}>
               We know how this works because we've done it ourselves.
             </p>
 
@@ -986,7 +986,7 @@ const Deck = () => {
             <div
               className="overflow-hidden rounded-[28px] border"
               style={{
-                ...r5.stagger(2),
+                ...r5.stagger(2, 400, "blur-scale"),
                 background: "hsl(var(--destructive) / var(--a-bg-subtle))",
                 borderColor: "hsl(var(--destructive) / var(--a-border-card))",
               }}
@@ -1103,7 +1103,7 @@ const Deck = () => {
       {/* ═══ FRAME 6: Capabilities ═══ */}
       <DeckFrame ref={setRef(5)} mode="wide">
         <div ref={r6.ref} className="flex flex-col gap-8">
-          <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r6.stagger(0) }}>
+          <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r6.stagger(0, 0, "blur-up") }}>
             Standard Services
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1122,8 +1122,9 @@ const Deck = () => {
                   padding: "28px 24px",
                   borderTop: `1px solid ${f.ink(0.06)}`,
                   opacity: r6.isActive ? 1 : 0,
-                  transform: r6.isActive ? "translateY(0)" : "translateY(12px)",
-                  transition: `all 0.5s ease ${200 + i * 100}ms`,
+                  transform: r6.isActive ? "translateY(0) scale(1)" : "translateY(16px) scale(0.96)",
+                  filter: r6.isActive ? "blur(0px)" : "blur(5px)",
+                  transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 100}ms`,
                 }}
               >
                 <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "8px" }}>{cap.title}</p>
@@ -1137,12 +1138,12 @@ const Deck = () => {
       {/* ═══ FRAME 7: Impact Measurement ═══ */}
       <DeckFrame ref={setRef(6)} mode="wide">
         <div ref={r7.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0)}>
+          <div className="lg:w-[40%] flex flex-col justify-center" style={r7.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Most grantee reports measure activity.{" "}
               <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", color: f.ink(0.55), fontStyle: "italic", lineHeight: 1.7 }}>
+            <p style={{ ...r7.stagger(1, 600, "blur-up"), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", color: f.ink(0.55), fontStyle: "italic", lineHeight: 1.7 }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
@@ -1161,8 +1162,9 @@ const Deck = () => {
                   style={{
                     borderBottom: i < METRICS_ROWS.length - 1 ? `1px solid ${f.ink(0.04)}` : "none",
                     opacity: r7.isActive ? 1 : 0,
-                    transform: r7.isActive ? "translateX(0)" : "translateX(12px)",
-                    transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
+                    transform: r7.isActive ? "translateX(0)" : "translateX(20px)",
+                    filter: r7.isActive ? "blur(0px)" : "blur(4px)",
+                    transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
                   }}
                 >
                   <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
