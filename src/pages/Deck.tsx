@@ -1116,12 +1116,12 @@ const Deck = () => {
             {CAPABILITIES.map((cap, i) => {
               const isSelected = capabilitiesRanked.includes(cap.id);
               const desc = [
-                "Deep dive into your grantees, past investments, and records.",
-                "Customized decision-making rubric for evaluating grants against strategy.",
-                "Co-designed around your objectives. Real indicators of power.",
+                "Deep dive into your grantees, past investments, and institutional record.",
+                "Customized decision-making frameworks for evaluating and directing grants.",
                 "Cultural operatives across music, film/TV, digital, news. A 480-member network.",
-                "When the work surfaces a gap, we help build what doesn't exist.",
-                "No dependency. You learn to evaluate and run multi-sector campaigns.",
+                "Co-designed around your objectives. Real indicators of power, not vanity metrics.",
+                "Your team learns to evaluate, strategize, and run multi-sector campaigns independently.",
+                "When the work surfaces a gap, we help build the infrastructure that doesn't exist yet.",
               ][i];
               return (
                 <button
