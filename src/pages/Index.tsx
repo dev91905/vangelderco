@@ -19,7 +19,7 @@ const NETWORK_SECTORS = [
 
 const HERO_LINKS = [
   { label: "Cultural Strategy", to: "/cultural-strategy" },
-  { label: "Cross-Sector Intelligence", to: "/cross-sector" },
+  { label: "Cross-Sector Campaigns", to: "/cross-sector" },
   { label: "Deep Organizing", to: "/deep-organizing" },
 ];
 
