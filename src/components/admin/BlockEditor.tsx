@@ -73,7 +73,7 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
           <div className="relative">
             <AutoTextarea value={block.text || ""} onChange={(v) => update({ text: v })} onKeyDown={handleKeyDown} placeholder="Heading..."
               className={block.level === 1 ? "text-2xl font-medium" : block.level === 3 ? "text-base font-medium" : "text-xl font-medium"}
-              style={{ ...serif, color: "hsl(30 10% 12% / 0.85)" }} />
+              style={{ ...label, fontWeight: 500, fontSize: "inherit", color: "hsl(30 10% 12% / 0.85)" }} />
             <button
               onClick={() => update({ level: ((block.level || 2) % 3) + 1 })}
               className="absolute right-0 top-1 text-[11px] px-1.5 py-0.5 rounded-lg transition-opacity duration-200 hover:bg-[hsl(30_10%_12%_/_0.04)]"
