@@ -53,6 +53,9 @@ const CAPABILITIES = [
 const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
 const EASE_OUT_QUART = "cubic-bezier(0.25, 1, 0.5, 1)";
 
+/* Oxblood accent helper */
+const ox = (alpha = 1) => `hsl(var(--accent-h) var(--accent-s) var(--accent-l) / ${alpha})`;
+
 /* ── Scroll-progress hook (0-1 within viewport) ── */
 function useScrollReveal(threshold = 0.08) {
   const ref = useRef<HTMLDivElement>(null);
