@@ -8,7 +8,7 @@ interface AtmosphericLayoutProps {
 
 const AtmosphericLayout = ({ children }: AtmosphericLayoutProps) => {
   return (
-    <div className="relative min-h-dvh w-full overflow-x-hidden overflow-y-auto bg-background snap-scroll-container">
+    <div className="relative min-h-dvh w-full overflow-x-hidden overflow-y-auto bg-background">
       <Link
         to="/admin"
         className="fixed bottom-6 right-6 z-30"

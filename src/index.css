@@ -96,10 +96,6 @@
     font-family: 'Source Serif 4', Georgia, serif;
     overflow-x: hidden;
   }
-  html {
-    scroll-snap-type: y proximity;
-    scroll-behavior: smooth;
-  }
 
   /* Horizontal deck scrollbar */
   .deck-scroll::-webkit-scrollbar {
