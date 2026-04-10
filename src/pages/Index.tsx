@@ -5,7 +5,7 @@ import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
-const SECTORS = ["Energy", "Labor", "Philanthropy", "Culture", "Policy", "National Security"];
+const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "National Security"];
 
 const NETWORK_SECTORS = [
   "Music", "Film & TV", "News Media", "Digital Creators", "Brands & Advertising",
