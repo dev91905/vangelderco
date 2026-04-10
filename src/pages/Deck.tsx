@@ -830,16 +830,16 @@ const Deck = () => {
                       border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                     }}
                   >
-                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
+                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your results</p>
                     <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                      {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
+                      {nextgenPickCount} of {QUIZ_ROWS.length} advanced approaches identified
                     </p>
                     <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                      {nextgenPickCount >= 5
-                        ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
-                        : nextgenPickCount >= 3
-                          ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
-                          : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
+                      {nextgenPickCount >= 4
+                        ? "You're already thinking the way the most effective operators in the field think. The question is whether your portfolio is actually executing at this level — or whether there's a gap between how you think and what you're funding."
+                        : nextgenPickCount >= 2
+                          ? "You identified some of the shifts that separate the most effective programs from the rest. The dimensions where you picked the conventional approach are exactly where most portfolios have blind spots — and where the other side is operating differently."
+                          : "The approaches you picked are what most programs default to. They're necessary — but they're not sufficient. The operators who are winning do all of this and more. The breakdown below shows you exactly where the gaps are."
                       }
                     </p>
                   </div>
