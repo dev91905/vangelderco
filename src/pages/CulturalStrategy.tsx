@@ -5,7 +5,7 @@ const CulturalStrategy = () => (
     capability="cultural-strategy"
     label="VGC Domain // 001"
     title="Cultural Strategy"
-    description="We operate across music, entertainment, news media, film, digital creators, brands, athletes, labor, faith, campuses, and veterans — turning strategic communications into cultural moments."
+    description="We don't just push your message out. We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence."
   />
 );
 
