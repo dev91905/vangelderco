@@ -99,7 +99,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Source Serif 4', Georgia, serif;
+    font-family: 'Inter', system-ui, sans-serif;
     overflow-x: hidden;
   }
 

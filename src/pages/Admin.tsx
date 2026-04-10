@@ -272,7 +272,7 @@ const ContactsFeed = () => {
                 {c.email}
               </a>
               {c.custom_challenge && (
-                <p style={{ fontFamily: t.serif, fontSize: "12px", color: t.ink(0.5), lineHeight: 1.6, marginTop: "8px", paddingTop: "8px", borderTop: t.border(0.04), fontStyle: "italic" }}>
+                <p style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.5), lineHeight: 1.6, marginTop: "8px", paddingTop: "8px", borderTop: t.border(0.04), fontStyle: "italic" }}>
                   "{c.custom_challenge}"
                 </p>
               )}

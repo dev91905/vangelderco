@@ -144,7 +144,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
             { l: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed. The issue wasn't lack of demand. It was that nobody had organized supply." },
             { l: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
               <strong style={{ color: f.ink(0.85) }}>{item.l}:</strong> {item.text}
             </p>
           ))}
@@ -156,7 +156,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
             { l: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were. This expanded the artist pool dramatically." },
             { l: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
           ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
               <strong style={{ color: f.ink(0.85) }}>{item.l}.</strong> {item.text}
             </p>
           ))}
@@ -168,7 +168,7 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
           <StatChip value="10–11%" lbl="Conversion Rate" />
           <StatChip value="$40–80" lbl="Cost per Lead" />
         </div>
-        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), marginTop: "4px", lineHeight: 1.7 }}>
+        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), marginTop: "4px", lineHeight: 1.7 }}>
           Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors. Governor's and mayor's offices engaged directly. White House held briefings on the model.
         </p>
       </div>
@@ -463,7 +463,7 @@ const Deck = () => {
             }}
           >
             For donor advisors and program officers who know{" "}
-            <em style={{ fontFamily: f.serif, fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
+            <em style={{ fontFamily: f.sans, fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
           </p>
           <div
             style={{
@@ -510,7 +510,7 @@ const Deck = () => {
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0), flex: "0 0 auto", maxWidth: "50%" }}>
               What's getting in your way?
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1), flex: "1 1 auto", paddingTop: "clamp(4px, 0.5vw, 10px)" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1), flex: "1 1 auto", paddingTop: "clamp(4px, 0.5vw, 10px)" }}>
               More foundations are rethinking their stratcomm portfolios than ever. These are the challenges we see most — select all that resonate.
             </p>
           </div>
@@ -545,7 +545,7 @@ const Deck = () => {
                         marginTop: "16px",
                         paddingTop: "12px",
                         borderTop: `1px solid ${f.ink(0.1)}`,
-                        fontFamily: f.serif,
+                        fontFamily: f.sans,
                         fontSize: "clamp(12px, 1.3vw, 14px)",
                         color: f.ink(0.5),
                         lineHeight: 1.6,
@@ -576,7 +576,7 @@ const Deck = () => {
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
                     Your challenge ✓
                   </p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.6), lineHeight: 1.6, marginBottom: "12px" }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.6), lineHeight: 1.6, marginBottom: "12px" }}>
                     "{customMessage}"
                   </p>
                   <button
@@ -730,7 +730,7 @@ const Deck = () => {
                   </div>
                   {isSequence && (
                     <p style={{
-                      fontFamily: f.serif,
+                      fontFamily: f.sans,
                       fontSize: "clamp(13px, 1.3vw, 16px)",
                       color: f.ink(0.35),
                       marginTop: "8px",
@@ -782,7 +782,7 @@ const Deck = () => {
                             <div>
                               <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "10px" }}>Your side</p>
                               <p style={{
-                                fontFamily: f.serif,
+                                fontFamily: f.sans,
                                 fontSize: "clamp(16px, 1.6vw, 21px)",
                                 color: f.ink(0.5),
                                 lineHeight: 1.65,
@@ -791,7 +791,7 @@ const Deck = () => {
                             <div>
                               <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, marginBottom: "10px" }}>Their side</p>
                               <p style={{
-                                fontFamily: f.serif,
+                                fontFamily: f.sans,
                                 fontSize: "clamp(16px, 1.6vw, 21px)",
                                 color: f.ink(0.85),
                                 lineHeight: 1.65,
@@ -877,7 +877,7 @@ const Deck = () => {
                           </div>
                           <div style={{ padding: "clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 16px)", borderLeft: `1px solid ${f.ink(0.05)}` }}>
                             <p style={{
-                              fontFamily: f.serif,
+                              fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
                               color: f.ink(0.5),
                               lineHeight: 1.55,
@@ -889,7 +889,7 @@ const Deck = () => {
                             background: isLast ? f.ink(0.02) : "transparent",
                           }}>
                             <p style={{
-                              fontFamily: f.serif,
+                              fontFamily: f.sans,
                               fontSize: "clamp(11px, 1vw, 13px)",
                               color: f.ink(0.75),
                               lineHeight: 1.55,
@@ -915,7 +915,7 @@ const Deck = () => {
               Stratcomm portfolios that get results do these three things.
             </p>
             {selectedPainDatas.length > 0 && (
-              <p style={{ marginTop: "20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
+              <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
                 You flagged: {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — each of these addresses that directly.
               </p>
             )}
@@ -950,9 +950,9 @@ const Deck = () => {
                     <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }} />
                   </div>
                   <div style={{ maxHeight: isExpanded ? "500px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
-                    <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), marginTop: "16px", marginLeft: "48px", lineHeight: 1.7 }}>{h.rationale}</p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), marginTop: "16px", marginLeft: "48px", lineHeight: 1.7 }}>{h.rationale}</p>
                     <div style={{ margin: "16px 0 0 48px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "14px" }}>
-                      <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.5), lineHeight: 1.6 }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.5), lineHeight: 1.6 }}>
                         <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
                       </p>
                     </div>
@@ -1015,7 +1015,7 @@ const Deck = () => {
                       </svg>
                     </div>
                     <p style={{
-                      fontFamily: f.serif,
+                      fontFamily: f.sans,
                       fontSize: "clamp(13px, 1.25vw, 15px)",
                       color: f.ink(0.42),
                       lineHeight: 1.55,
@@ -1057,26 +1057,26 @@ const Deck = () => {
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.88), marginBottom: "8px" }}>
                         {activeDomainData.title}
                       </p>
-                      <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.4vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, maxWidth: "56ch" }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, maxWidth: "56ch" }}>
                         {activeDomainData.tagline}
                       </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-5">
                       <div>
                         <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it is</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.what}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.what}</p>
                       </div>
                       <div>
                         <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What it unlocks</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.unlocks}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.unlocks}</p>
                       </div>
                       <div>
                         <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>What most advisors miss</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.missed}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.55), lineHeight: 1.65 }}>{activeDomainData.missed}</p>
                       </div>
                       <div>
                         <span style={{ ...label("9px"), display: "block", marginBottom: "8px" }}>Example</span>
-                        <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.45), lineHeight: 1.65, fontStyle: "italic" }}>{activeDomainData.example}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.25vw, 15px)", color: f.ink(0.45), lineHeight: 1.65, fontStyle: "italic" }}>{activeDomainData.example}</p>
                       </div>
                     </div>
                   </div>
@@ -1114,7 +1114,7 @@ const Deck = () => {
                 }}
               >
                 <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "8px" }}>{cap.title}</p>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.8 }}>{cap.desc}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), lineHeight: 1.8 }}>{cap.desc}</p>
               </div>
             ))}
           </div>
@@ -1129,7 +1129,7 @@ const Deck = () => {
               Most grantee reports measure activity.{" "}
               <span style={{ color: f.ink(0.4) }}>We measure power.</span>
             </p>
-            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.serif, fontSize: "clamp(13px, 1.6vw, 17px)", color: f.ink(0.55), fontStyle: "italic", lineHeight: 1.7 }}>
+            <p style={{ ...r7.stagger(1, 600), marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(13px, 1.6vw, 17px)", color: f.ink(0.55), fontStyle: "italic", lineHeight: 1.7 }}>
               A campaign with 73 million views that doesn't convene a single new partner, catalyze a single policy conversation, or unlock a single dollar — that campaign failed.
             </p>
           </div>
@@ -1152,8 +1152,8 @@ const Deck = () => {
                     transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
                   }}
                 >
-                  <div style={{ padding: "16px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.serif, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
@@ -1188,7 +1188,7 @@ const Deck = () => {
                   }}
                 >
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
                 </button>
               );
             })}
@@ -1207,9 +1207,9 @@ const Deck = () => {
                     <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 60%)" }}>{p.time}</span>
                   </div>
                   {p.bullets.map((b, i) => (
-                    <p key={i} style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
+                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
                   ))}
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", marginTop: "12px", lineHeight: 1.7 }}>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", marginTop: "12px", lineHeight: 1.7 }}>
                     <strong style={{ color: f.cream }}>Output:</strong> {p.output}
                   </p>
                 </div>
@@ -1220,7 +1220,7 @@ const Deck = () => {
           {engagementPath === "experienced" && (
             <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream, marginBottom: "12px" }}>Custom scope, fast start.</p>
-              <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(40 30% 80%)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(40 30% 80%)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
           )}
 
@@ -1233,7 +1233,7 @@ const Deck = () => {
                 <div key={i} className="flex-1 transition-all duration-300" style={{ padding: "28px 24px", borderTop: `1px solid ${f.ink(0.06)}` }}>
                   <span style={{ ...label("10px"), color: f.ink(0.35) }}>{opt.lbl}</span>
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginTop: "8px", marginBottom: "8px" }}>{opt.title}</p>
-                  <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.8 }}>{opt.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.8 }}>{opt.desc}</p>
                 </div>
               ))}
             </div>
@@ -1252,10 +1252,10 @@ const Deck = () => {
             <p style={{ ...r9.stagger(0), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
               We've been where you are.
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
               Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
               What's holding most donor advisors back isn't effort — it's <strong style={{ color: f.ink(0.8) }}>access and pattern recognition</strong> across these industries. That's what we transfer.
             </p>
           </div>
@@ -1281,7 +1281,7 @@ const Deck = () => {
                 }}
               >
                 <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 700, color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
-                <p style={{ fontFamily: f.serif, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -1295,11 +1295,11 @@ const Deck = () => {
             Everything we know becomes everything you know.
           </p>
           <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.ink(0.1) }} />
-          <p style={{ ...r10.stagger(2, 600), fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
+          <p style={{ ...r10.stagger(2, 600), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
           {selectedPainDatas.length > 0 && (
-            <p style={{ ...r10.stagger(3, 900), fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
+            <p style={{ ...r10.stagger(3, 900), fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
               {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
@@ -1312,7 +1312,7 @@ const Deck = () => {
           <h2 style={{ ...r11.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
             What's next?
           </h2>
-          <p style={{ ...r11.stagger(1, 200), fontFamily: f.serif, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
+          <p style={{ ...r11.stagger(1, 200), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
             Let's look at your portfolio together.
           </p>
 
@@ -1513,7 +1513,7 @@ const Deck = () => {
               <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px" }}>
                 Received ✓
               </p>
-              <p style={{ fontFamily: f.serif, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "400px", margin: "0 auto" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "400px", margin: "0 auto" }}>
                 A team member is reviewing and will reach out shortly.
               </p>
             </div>
@@ -1528,7 +1528,7 @@ const Deck = () => {
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Selected case work.
             </p>
-            <p style={{ fontFamily: f.serif, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>
               Click any case to read the full story.
             </p>
           </div>
