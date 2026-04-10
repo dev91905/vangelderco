@@ -123,9 +123,9 @@ const METRICS_ROWS = [
 
 /* ─── Case studies ─── */
 const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
-  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: f.ink(0.9), border: "none" }}>
-    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: f.cream }}>{value}</span>
-    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(40 30% 80%)" }}>{lbl}</span>
+  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: "hsl(var(--destructive))", border: "none" }}>
+    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{value}</span>
+    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(var(--primary-foreground) / 0.7)" }}>{lbl}</span>
   </div>
 );
 
@@ -376,7 +376,7 @@ const Deck = () => {
         scrollSnapType: "x mandatory",
         display: "flex",
         flexDirection: "row",
-        background: f.cream,
+        background: "hsl(var(--background))",
       }}
     >
 
@@ -405,7 +405,7 @@ const Deck = () => {
             style={{
               height: "100%",
               width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
-              background: f.ink(0.25),
+              background: "hsl(var(--destructive) / var(--a-mid))",
               borderRadius: "1px",
               transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
             }}
@@ -484,16 +484,16 @@ const Deck = () => {
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: f.cream,
-                background: f.ink(0.88),
+                color: "hsl(var(--primary-foreground))",
+                background: "hsl(var(--destructive) / var(--a-high))",
                 border: "none",
                 padding: "16px 32px",
                 borderRadius: "999px",
                 transition: "transform 180ms ease, background 180ms ease",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = f.ink(1); }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = f.ink(0.88); }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive))"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; }}
             >
               Start the walkthrough →
             </button>
@@ -525,8 +525,8 @@ const Deck = () => {
                   className="text-left"
                   style={{
                     padding: "28px 24px",
-                    border: isSelected ? `1px solid ${f.ink(0.15)}` : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? f.ink(0.08) : "transparent",
+                    border: isSelected ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
@@ -564,8 +564,8 @@ const Deck = () => {
               className="flex flex-col justify-center"
               style={{
                 padding: "28px 24px",
-                border: customSaved ? `1px solid ${f.ink(0.12)}` : `1px dashed ${f.ink(0.12)}`,
-                background: customOpen || customSaved ? f.ink(0.03) : "transparent",
+                border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px dashed ${f.ink(0.12)}`,
+                background: customOpen || customSaved ? "hsl(var(--destructive) / var(--a-bg-subtle))" : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
@@ -600,7 +600,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.3),
-                      background: "white",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.08)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -627,7 +627,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                      background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -646,8 +646,8 @@ const Deck = () => {
                         fontSize: "12px",
                         letterSpacing: "0.04em",
                         fontWeight: 600,
-                        color: f.cream,
-                        background: customMessage.trim() ? f.ink(0.85) : f.ink(0.2),
+                        color: "hsl(var(--primary-foreground))",
+                        background: customMessage.trim() ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
                         border: "none",
                         padding: "8px 20px",
                         borderRadius: "999px",
