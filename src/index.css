@@ -18,8 +18,8 @@
     --muted-foreground: 30 10% 45%;
     --accent: 30 10% 90%;
     --accent-foreground: 30 10% 12%;
-    --destructive: 0 80% 48%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 12 45% 38%;
+    --destructive-foreground: 40 30% 96%;
     --border: 30 10% 88%;
     --input: 30 10% 88%;
     --ring: 30 10% 12%;
@@ -52,7 +52,7 @@
     --card-foreground: 0 0% 93%;
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 93%;
-    --primary: 0 80% 48%;
+    --primary: 8 55% 48%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 70%;
@@ -60,19 +60,19 @@
     --muted-foreground: 0 0% 50%;
     --accent: 0 0% 10%;
     --accent-foreground: 0 0% 93%;
-    --destructive: 0 80% 48%;
+    --destructive: 8 55% 48%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 12%;
     --input: 0 0% 12%;
-    --ring: 0 80% 48%;
+    --ring: 8 55% 48%;
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 50%;
-    --sidebar-primary: 0 80% 48%;
+    --sidebar-primary: 8 55% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 8%;
     --sidebar-accent-foreground: 0 0% 70%;
     --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 80% 48%;
+    --sidebar-ring: 8 55% 48%;
 
     /* Theme bridge tokens — dark */
     --ink-h: 0;
