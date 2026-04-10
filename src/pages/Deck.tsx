@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import TypewriterHeading from "@/components/deck/TypewriterHeading";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -438,9 +439,10 @@ const Deck = () => {
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
-          <h1
+          <TypewriterHeading
+            text="Building a Next-Generation StratComm Portfolio"
+            active={r1.isActive}
             style={{
-              ...r1.stagger(0),
               fontFamily: f.sans,
               fontSize: "clamp(36px, 5.5vw, 64px)",
               fontWeight: 700,
@@ -448,11 +450,8 @@ const Deck = () => {
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
               maxWidth: "720px",
-              animation: r1.isActive ? "deck-clip-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards" : "none",
             }}
-          >
-            Building a Next-Generation StratComm Portfolio
-          </h1>
+          />
           <p
             style={{
               ...r1.stagger(1, 300),
