@@ -909,10 +909,10 @@ const Deck = () => {
                     top: 0,
                     height: "100dvh",
                     overflow: "hidden",
-                    paddingTop: "clamp(40px, 6vh, 72px)",
+                    paddingTop: "clamp(80px, 14vh, 160px)",
                     paddingBottom: "40px",
                     paddingRight: "clamp(16px, 2vw, 32px)",
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
                   }}
                 >
                   <p style={{ ...label("11px"), color: f.ink(0.32) }}>Your results</p>
@@ -992,7 +992,7 @@ const Deck = () => {
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingRight: "8px",
-                    paddingTop: "clamp(40px, 6vh, 72px)",
+                    paddingTop: "clamp(80px, 14vh, 160px)",
                     paddingBottom: "140px",
                     paddingLeft: "clamp(8px, 1.5vw, 24px)",
                   }}
