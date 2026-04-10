@@ -19,7 +19,7 @@ const NETWORK_SECTORS = [
 
 const HERO_LINKS = [
   { label: "Cultural Strategy", to: "/cultural-strategy" },
-  { label: "Cross-Sector Intelligence", to: "/cross-sector" },
+  { label: "Cross-Sector Campaigns", to: "/cross-sector" },
   { label: "Deep Organizing", to: "/deep-organizing" },
 ];
 
@@ -28,21 +28,21 @@ const CAPABILITIES = [
     title: "Cultural Strategy",
     sub: "Strategic communications that become cultural moments.",
     detail:
-      "We operate across music, entertainment, news media, film, digital creators, brands, athletes, labor, faith, campuses, and veterans — turning strategic communications into cultural moments.",
+      "Most firms get the message out. We work across music, entertainment, news media, creators, brands, athletes, faith, campuses, and more to make sure it gets taken up — absorbed by the sectors that turn messaging into culture.",
     to: "/cultural-strategy",
   },
   {
-    title: "Cross-Sector Intelligence",
-    sub: "Communications coordinated across every sector that matters.",
+    title: "Cross-Sector Campaigns",
+    sub: "Nothing moves until every sector is pushing in the same direction.",
     detail:
-      "We map the communications alignments that nobody in any single sector can see. Industry, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target.",
+      "We bring industry, labor, philanthropy, culture, policy, and national security to the same table — then build and coordinate large-scale campaigns around shared interests. That's how you win.",
     to: "/cross-sector",
   },
   {
     title: "Deep Organizing",
-    sub: "Communications infrastructure that grows your base.",
+    sub: "Build your movement for growth, not just mobilization.",
     detail:
-      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between communications that grow a movement and ones that stall.",
+      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between a movement that grows and one that stalls.",
     to: "/deep-organizing",
   },
 ];
