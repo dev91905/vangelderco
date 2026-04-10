@@ -1,52 +1,69 @@
 
 
-# Quiz Copy Audit — Research & Content Rewrites
+# Fix: Quiz Results Not Scrollable
 
-## Problems You Identified
+## Problem
 
-### 1. Research: False dichotomy between focus groups and organic listening
-The current copy frames it as either/or. In reality, focus groups are still useful for validation — the problem is relying on them *as your primary signal* without also monitoring what's already resonating organically. The deeper issue: most programs test their own messaging against demographic segments, but miss the real psychographic clusters beneath the party labels (collective action, don't-tread-on-me, tough cookie, YOLO). You need organic listening + sentiment analysis to even discover those segments before you can validate with research.
+The wheel event handler (lines 372-395) blocks scrolling when `viewBottom >= frameBottom - 2`. When quiz results are revealed, the frame content is much taller than the viewport — but the handler still prevents downward scrolling because the view bottom has reached the frame bottom boundary. The logic was designed to keep you *within* a frame, but it's too aggressive: it doesn't account for frames whose content exceeds the viewport height.
 
-### 2. Content: "The other side isn't making documentaries" — false
-They are. The real distinction isn't documentaries vs. creators. It's the *operating model*: high-polish tentpole productions on a campaign cycle vs. always-on volume across investigative journalism AND creators AND everything else. The other side does investigative journalism too — a fuckton of it — plus creators. The gap is velocity and volume, not genre.
+## Fix
 
-### 3. Question framing still says "Two approaches to [dimension]"
-Previous plan to rewrite this to "What's your approach to [dimension]?" wasn't implemented yet. Also still says "Quiz results" and "Question X of 6."
+In the wheel handler, only `preventDefault` when the frame content fits within the viewport (i.e., the frame isn't internally scrollable). If the frame is taller than the viewport, allow free scrolling within it — only block at the actual top and bottom edges of that frame's content.
 
-## Proposed Rewrites
+**`src/pages/Deck.tsx` lines 376-391** — replace the handler logic:
 
-### QUIZ_ROWS — Research
-- **Traditional:** "Run focus groups and message testing to validate your strategy before launch. Ground decisions in structured research."
-- **Nextgen:** "Monitor what's already resonating across platforms and communities — sentiment, sharing patterns, organic behavior — then validate with targeted research."
-- **traditionalExplanation (The shift):** "Focus groups are useful for validation, but they can't tell you what you don't know to ask. The most effective programs start by listening — tracking what's already moving through culture, what language people actually use, what resonates across psychographic segments that don't map neatly to party labels. Then they validate with research. The order matters."
-- **nextgenExplanation (Why this works):** "Starting with organic signals means you discover the real audience segments — not just demographics, but the underlying value systems that drive behavior. Focus groups validate. But you have to know what to test first, and that comes from listening at scale."
+```typescript
+const handler = (e: WheelEvent) => {
+  const frameEl = frameRefs.current[currentFrame];
+  if (!frameEl) return;
+  const frameTop = frameEl.offsetTop;
+  const frameBottom = frameTop + frameEl.offsetHeight;
+  const scrollTop = el.scrollTop;
+  const viewBottom = scrollTop + el.clientHeight;
 
-### QUIZ_ROWS — Content
-- **Traditional:** "Invest in high-quality productions — documentaries, long-form journalism, flagship campaigns. Lead with credibility and production value."
-- **Nextgen:** "Fund always-on content across creators, journalists, and digital-first formats. Prioritize volume, velocity, and constant presence alongside quality."
-- **traditionalExplanation (The shift):** "The other side isn't choosing between documentaries and creators — they're doing both, all the time. Investigative journalism, creator content, short-form, long-form, around the clock. The gap isn't genre. It's operating tempo. Campaign-cycle productions leave dead air between tentpoles. Always-on presence compounds."
-- **nextgenExplanation (Why this works):** "Always-on content across formats — investigative journalism, creators, short-form — keeps narratives alive between campaigns. It's not about choosing volume over quality. It's about maintaining presence at a pace that compounds, instead of going dark between flagship productions."
+  const atBottom = viewBottom >= frameBottom - 2;
+  const atTop = scrollTop <= frameTop + 2;
 
-### Question framing (lines 676-687)
-- Headline: `What's your approach to ${dimension.toLowerCase()}?`
-- Sub-header: "Pick your approach."
-- Results label: "Your strategy read" (not "Quiz results")
-- Remove "Question X of 6" from cards
+  // Scrolling down past the frame's bottom edge
+  if (e.deltaY > 0 && atBottom) {
+    e.preventDefault();
+  }
+  // Scrolling up past the frame's top edge
+  if (e.deltaY < 0 && atTop) {
+    e.preventDefault();
+  }
+};
+```
 
-### Step label (line ~435)
-- Change "Quiz" to "Strategy" in `STEP_LABELS`
+Wait — this is already what it does. The real issue is likely that the frame's `offsetHeight` doesn't reflect the full content height because the DeckFrame sets `minHeight: 100dvh` but the quiz results content overflows it. Let me check: the quiz frame uses `DeckFrame` which wraps in a `<section>` with `minHeight: 100dvh`. When `quizRevealed` is true, the inner content is much taller. The section *should* expand to fit. But the wheel handler uses `frameEl.offsetHeight` which should reflect the actual rendered height.
 
-### Retake button text
-- Change "Retake quiz" to "Retake assessment" or just "Start over"
+The more likely issue: `containerRef` is the outer scroll container. If it uses `overflow: hidden` or `scroll-snap-type: y mandatory`, the snap behavior itself may be fighting the scroll. Let me check the container setup.
 
-## Files Changed
+Actually — the simplest and most reliable fix: when the current frame's content is taller than the viewport, don't block wheel events at all. The boundary check already handles it correctly *if* the frame height is calculated properly. The bug is likely that `frameEl.offsetHeight` returns only `100dvh` (the min-height) rather than the actual content height when `quizRevealed` expands the content.
 
-**`src/pages/Deck.tsx`** — All changes in this single file:
-- Rewrite Research and Content rows in `QUIZ_ROWS` (lines 46-47) with new options + explanations
-- Update headline from "Two approaches to..." to "What's your approach to..." (line 679)
-- Update sub-header to "Pick your approach." (line 685)
-- Change "Quiz results" label to "Your strategy read" (line 674)
-- Remove "Question X of 6" text from dimension label (line 728)
-- Change step label from "Quiz" to "Strategy" in `STEP_LABELS`
-- Change "Retake quiz" button text to "Start over"
+**Root cause**: DeckFrame's `<section>` has `minHeight: 100dvh` but may not be expanding to fit the quiz results content. Or the scroll snap is forcing the container to snap back.
+
+## Changes — `src/pages/Deck.tsx`
+
+1. **Wheel handler** (lines 376-391): Add a check — if the frame's scrollable content height exceeds the viewport, allow scrolling freely within it. Only block at the true edges:
+
+```typescript
+const handler = (e: WheelEvent) => {
+  const frameEl = frameRefs.current[currentFrame];
+  if (!frameEl) return;
+  const frameTop = frameEl.offsetTop;
+  const frameBottom = frameTop + frameEl.scrollHeight; // use scrollHeight, not offsetHeight
+  const scrollTop = el.scrollTop;
+  const viewBottom = scrollTop + el.clientHeight;
+
+  if (e.deltaY > 0 && viewBottom >= frameBottom - 2) {
+    e.preventDefault();
+  }
+  if (e.deltaY < 0 && scrollTop <= frameTop + 2) {
+    e.preventDefault();
+  }
+};
+```
+
+2. Also ensure the scroll snap on the container doesn't force snapping back. If `scroll-snap-type: y mandatory` is set, change to `proximity` or remove snap entirely (since navigation is button-driven now).
 
