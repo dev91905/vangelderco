@@ -569,14 +569,14 @@ const Index = () => {
                   className="text-[15px] md:text-[17px] leading-[1.7] max-w-md mb-4"
                   style={{ fontFamily: t.serif, fontStyle: "italic", color: "hsl(var(--background) / 0.55)" }}
                 >
-                  Your portfolio has blind spots. The other side is already funding around them.
+                  A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table.
                 </p>
 
                 <p
                   className="text-[13px] md:text-[14px] leading-[1.7] max-w-sm mb-10"
                   style={{ fontFamily: t.sans, color: "hsl(var(--background) / 0.35)" }}
                 >
-                  Walk through a scored assessment of your strategic readiness — and get a clear picture of where to reallocate for impact.
+                  A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table.
                 </p>
 
                 <Link
