@@ -180,7 +180,7 @@ function CaseFragment({ sector, brief, result, index }: { sector: string; brief:
       </div>
       <div
         className="text-lg leading-relaxed mb-2"
-        style={{ fontFamily: t.serif, color: t.ink(0.6) }}
+        style={{ fontFamily: t.sans, color: t.ink(0.6) }}
       >
         {brief}
       </div>
@@ -340,7 +340,7 @@ const Index = () => {
             <p
               className="italic font-light"
               style={{
-                fontFamily: t.serif,
+                fontFamily: t.sans,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
                 color: "hsl(var(--destructive) / 0.6)",
@@ -353,7 +353,7 @@ const Index = () => {
             <p
               className="font-semibold mt-4"
               style={{
-                fontFamily: t.serif,
+                fontFamily: t.sans,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
                 color: t.ink(0.85),
