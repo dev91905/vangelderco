@@ -33,7 +33,7 @@ const CAPABILITIES = [
     title: "Cross-Sector Intelligence",
     sub: "Nothing moves unless multiple sectors push together.",
     detail:
-      "We map the alignments that nobody in any single sector can see. Energy, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target.",
+      "We map the alignments that nobody in any single sector can see. Industry, labor, philanthropy, culture, policy, and national security — at the same table, moving on the same target.",
     to: "/cross-sector",
   },
   {
