@@ -35,22 +35,22 @@ const GlobalPasswordPanel = ({ value, onChange, onSave, onRemove }: { value: str
             {value ? "Active" : "Not set"}
           </span>
         </div>
-        <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.white }}>
+        <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.ink(0.02) }}>
           <input
             type={show ? "text" : "password"} value={value} onChange={(e) => onChange(e.target.value)} placeholder="No global password"
             className="w-full px-3 py-2.5 text-sm bg-transparent outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8) }}
           />
           <div className="flex items-center gap-px px-1 pb-1">
             <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} {show ? "Hide" : "Show"}
             </button>
             <button onClick={handleGen} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               <RefreshCw className="w-3 h-3" /> Generate
             </button>
             <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] tracking-[0.05em] transition-colors disabled:opacity-20" style={{ fontFamily: t.sans, color: copied ? t.success() : t.ink(0.4), background: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
               {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} {copied ? "Copied" : "Copy"}
             </button>
             {value && (
@@ -102,7 +102,7 @@ const Admin = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
             style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.white; }}
+            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
             onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
             <ArrowLeft className="w-3 h-3" /> Back to Site
           </Link>
@@ -111,11 +111,11 @@ const Admin = () => {
         <div className="flex items-center gap-2">
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.white)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <LogOut className="w-4 h-4" style={{ color: t.ink(0.3) }} />
           </button>
           <button onClick={() => setSettingsOpen(true)} className="p-2 rounded-xl relative transition-colors" style={{ border: t.border(0.06) }} title="Site settings"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.white)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
             {settings?.global_article_password && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: t.ink(1) }} />}
           </button>
@@ -131,7 +131,7 @@ const Admin = () => {
           <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-2xl overflow-hidden" style={{ background: t.cream, border: t.border(0.08), boxShadow: `0 25px 50px -12px ${t.ink(0.15)}` }}>
             <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: t.border(0.06) }}>
               <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.5) }}>Site Settings</span>
-              <button onClick={() => setSettingsOpen(false)} className="p-1.5 rounded-lg transition-colors" onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+              <button onClick={() => setSettingsOpen(false)} className="p-1.5 rounded-lg transition-colors" onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
                 <X className="w-4 h-4" style={{ color: t.ink(0.4) }} />
               </button>
             </div>
@@ -150,7 +150,7 @@ const Admin = () => {
                 onChange={(e) => setBookingLink(e.target.value)}
                 placeholder="https://calendly.com/your-link"
                 className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
-                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.white }}
+                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.02) }}
               />
               <p className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
                 Used for "Schedule a Meeting" on the deck CTA page.
@@ -260,7 +260,7 @@ const ContactsFeed = () => {
             const info = score != null ? getScoreLabel(score) : null;
             const isExpanded = expandedId === c.id;
             return (
-              <div key={c.id} style={{ padding: "16px 18px", borderRadius: "10px", border: t.border(0.06), background: t.white }}>
+              <div key={c.id} style={{ padding: "16px 18px", borderRadius: "10px", border: t.border(0.06), background: t.ink(0.02) }}>
                 <div className="flex items-center gap-2 mb-1">
                   <p style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>{c.first_name} {c.last_name}</p>
                   {c.organization && <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35) }}>· {c.organization}</span>}

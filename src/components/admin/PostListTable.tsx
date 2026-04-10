@@ -43,7 +43,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
         <Link key={post.id} to={`/admin/edit/${post.id}`}
           className="flex items-center gap-4 p-4 transition-all group rounded-xl"
           style={{ background: "transparent", borderBottom: t.border(0.04) }}
-          onPointerEnter={(e) => { playHoverGlitch(); e.currentTarget.style.background = t.white; }}
+          onPointerEnter={(e) => { playHoverGlitch(); e.currentTarget.style.background = t.ink(0.05); }}
           onPointerLeave={(e) => { e.currentTarget.style.background = "transparent"; }}>
           <div className="flex-1 min-w-0">
             <h3 className="text-[15px] font-bold truncate flex items-center gap-2 transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
@@ -64,7 +64,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
           </div>
           <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); playClickGlitch(); togglePublish.mutate({ id: post.id, is_published: !post.is_published }); }}
             className="p-2 rounded-lg transition-all" style={{ background: "transparent" }} title={post.is_published ? "Unpublish" : "Publish"}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.active)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.06))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             {post.is_published ? <Eye className="w-4 h-4" style={{ color: t.ink(0.5) }} /> : <EyeOff className="w-4 h-4" style={{ color: t.ink(0.2) }} />}
           </button>
         </Link>

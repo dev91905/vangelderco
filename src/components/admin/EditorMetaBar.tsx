@@ -22,22 +22,22 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
       <label className="text-[11px] uppercase tracking-[0.06em] flex items-center gap-1.5" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
         <Lock className="w-3 h-3" /> Password Protection
       </label>
-      <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.white }}>
+      <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.08), background: t.ink(0.02) }}>
         <div className="flex items-center">
           <input type={show ? "text" : "password"} value={value || ""} onChange={(e) => onChange(e.target.value || null)} placeholder="No password set"
             className="flex-1 px-3 py-2.5 text-sm bg-transparent outline-none min-w-0" style={{ fontFamily: t.sans, color: t.ink(0.7) }} />
         </div>
         <div className="flex items-center gap-px px-1 pb-1">
           <button onClick={() => setShow(!show)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             {show ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} {show ? "Hide" : "Show"}
           </button>
           <button onClick={handleGenerate} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <RefreshCw className="w-3 h-3" /> Generate
           </button>
           <button onClick={handleCopy} disabled={!value} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] transition-colors disabled:opacity-20" style={{ fontFamily: t.sans, color: copied ? t.success() : t.ink(0.35), background: "transparent" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} {copied ? "Copied" : "Copy"}
           </button>
           {value && (
@@ -81,13 +81,13 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
     <>
       <div className="px-4 md:px-8 pt-4 pb-2">
         <input value={props.title} onChange={(e) => props.onTitleChange(e.target.value)} placeholder="Untitled"
-          className="w-full bg-transparent outline-none text-3xl md:text-4xl font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.9) }} />
+          className="w-full bg-transparent outline-none font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.9), fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.15 }} />
         <div className="flex items-center gap-2 mt-2">
           <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>/post/</span>
           <input value={props.slug} onChange={(e) => { setSlugManual(true); props.onSlugChange(e.target.value); }}
             className="bg-transparent outline-none text-sm flex-1" style={{ fontFamily: t.sans, color: t.ink(0.4) }} />
           <button onClick={() => setDrawerOpen(true)} className="p-2 rounded-xl transition-colors" title="Post settings"
-            onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
           </button>
         </div>
@@ -98,7 +98,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
               {!props.excerpt?.trim() && props.isPublished && <span style={{ color: t.error(0.6), fontSize: "10px" }}>MISSING</span>}
             </label>
             <textarea value={props.excerpt} onChange={(e) => props.onExcerptChange(e.target.value)} placeholder="Short description shown on listing cards and below the title"
-              rows={2} className="w-full bg-transparent outline-none text-sm resize-none" style={{ fontFamily: t.sans, color: t.ink(0.55), lineHeight: "1.6" }} />
+              rows={2} className="w-full bg-transparent outline-none resize-none" style={{ fontFamily: t.sans, color: t.ink(0.55), fontSize: "clamp(17px, 1.9vw, 19px)", lineHeight: 1.7 }} />
           </div>
         )}
       </div>
@@ -111,7 +111,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
             <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: t.border(0.06) }}>
               <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Post Settings</span>
               <button onClick={() => setDrawerOpen(false)} className="p-1.5 rounded-lg transition-colors"
-                onMouseEnter={(e) => (e.currentTarget.style.background = t.surface.hover)} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
                 <X className="w-4 h-4" style={{ color: t.ink(0.4) }} />
               </button>
             </div>
