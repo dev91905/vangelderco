@@ -800,139 +800,140 @@ const Deck = () => {
           {quizRevealed && (() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
             return (
-            <div style={{ width: "100%", maxWidth: "860px", animation: "fade-up 0.5s ease-out" }}>
-              {/* ── Grade card ── */}
-              <div
-                style={{
-                  padding: "clamp(28px, 4vw, 40px)",
-                  borderRadius: "20px",
-                  background: "hsl(var(--foreground) / var(--a-bg))",
-                  border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                  marginBottom: "clamp(32px, 5vw, 48px)",
-                }}
-              >
-                <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(22px, 2.8vw, 32px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
-                  {grade.grade}
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "640px" }}>
-                  {grade.summary}
-                </p>
-              </div>
+            <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
+              <div className="flex flex-col lg:flex-row gap-8" style={{ alignItems: "flex-start" }}>
+                {/* ── Sticky left: diagnostic grade ── */}
+                <div className="lg:w-[38%] lg:sticky lg:top-8 lg:self-start flex flex-col gap-6">
+                  <div
+                    style={{
+                      padding: "clamp(28px, 4vw, 40px)",
+                      borderRadius: "20px",
+                      background: "hsl(var(--foreground) / var(--a-bg))",
+                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                    }}
+                  >
+                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(22px, 2.8vw, 32px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
+                      {grade.grade}
+                    </p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.3vw, 16px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+                      {grade.summary}
+                    </p>
+                  </div>
 
-              {/* ── Dimension breakdown ── */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 2vw, 16px)" }}>
-                {QUIZ_ROWS.map((row, i) => {
-                  const answer = quizAnswers[i];
-                  const pickedNextGen = answer?.picked === "nextgen";
-                  const bulletSummary = pickedNextGen
-                    ? `You chose the advanced approach. Your instinct is right — this is how the most effective programs operate.`
-                    : `You chose the conventional approach. This is where most portfolios have a blind spot.`;
-                  const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
-                  const isExpanded = expandedDimension === i;
+                  <button
+                    onClick={() => {
+                      containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                      setTimeout(() => {
+                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                        setQuizStep(0);
+                        setQuizRevealed(false);
+                        setExpandedDimension(null);
+                      }, 400);
+                    }}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "12px",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      color: f.ink(0.72),
+                      background: "hsl(var(--background))",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      padding: "12px 18px",
+                      borderRadius: "999px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      alignSelf: "flex-start",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.24);
+                      e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.1);
+                      e.currentTarget.style.background = "hsl(var(--background))";
+                    }}
+                  >
+                    Start over
+                  </button>
+                </div>
 
-                  return (
-                    <div
-                      key={i}
-                      style={{
-                        padding: "clamp(20px, 2.5vw, 28px)",
-                        borderRadius: "16px",
-                        background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                        border: `1px solid ${f.ink(0.06)}`,
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-                        <span style={{
-                          display: "inline-block",
-                          width: "8px",
-                          height: "8px",
-                          borderRadius: "50%",
-                          background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2),
-                          flexShrink: 0,
-                        }} />
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
-                      </div>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.65, marginBottom: isExpanded ? "16px" : "0" }}>
-                        {bulletSummary}
-                      </p>
+                {/* ── Scrollable right: dimension breakdown ── */}
+                <div className="lg:w-[62%] flex flex-col gap-4">
+                  {QUIZ_ROWS.map((row, i) => {
+                    const answer = quizAnswers[i];
+                    const pickedNextGen = answer?.picked === "nextgen";
+                    const bulletSummary = pickedNextGen
+                      ? `You chose the advanced approach. Your instinct is right — this is how the most effective programs operate.`
+                      : `You chose the conventional approach. This is where most portfolios have a blind spot.`;
+                    const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
+                    const isExpanded = expandedDimension === i;
 
-                      {isExpanded && (
-                        <p style={{
-                          fontFamily: f.sans,
-                          fontSize: "clamp(13px, 1.15vw, 14px)",
-                          color: f.ink(0.42),
-                          lineHeight: 1.7,
-                          paddingTop: "14px",
-                          borderTop: `1px solid ${f.ink(0.06)}`,
-                          animation: "fade-up 0.3s ease-out",
-                        }}>
-                          {explanationCopy}
-                        </p>
-                      )}
-
-                      <button
-                        onClick={() => setExpandedDimension(isExpanded ? null : i)}
+                    return (
+                      <div
+                        key={i}
                         style={{
-                          fontFamily: f.sans,
-                          fontSize: "12px",
-                          fontWeight: 600,
-                          color: f.ink(0.35),
-                          background: "none",
-                          border: "none",
-                          padding: "0",
-                          marginTop: "10px",
-                          cursor: "pointer",
-                          letterSpacing: "0.03em",
-                          transition: "color 0.15s ease",
+                          padding: "clamp(20px, 2.5vw, 28px)",
+                          borderRadius: "16px",
+                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                          border: `1px solid ${f.ink(0.06)}`,
                         }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
                       >
-                        {isExpanded ? "Show less" : "Read more"}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                          <span style={{
+                            display: "inline-block",
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
+                            background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2),
+                            flexShrink: 0,
+                          }} />
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
+                        </div>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.65, marginBottom: isExpanded ? "16px" : "0" }}>
+                          {bulletSummary}
+                        </p>
 
-              {/* ── Start over ── */}
-              <div style={{ marginTop: "clamp(28px, 4vw, 40px)" }}>
-                <button
-                  onClick={() => {
-                    containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
-                    setTimeout(() => {
-                      setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                      setQuizStep(0);
-                      setQuizRevealed(false);
-                      setExpandedDimension(null);
-                    }, 400);
-                  }}
-                  style={{
-                    fontFamily: f.sans,
-                    fontSize: "12px",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    fontWeight: 600,
-                    color: f.ink(0.72),
-                    background: "hsl(var(--background))",
-                    border: `1px solid ${f.ink(0.1)}`,
-                    padding: "12px 18px",
-                    borderRadius: "999px",
-                    cursor: "pointer",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = f.ink(0.24);
-                    e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = f.ink(0.1);
-                    e.currentTarget.style.background = "hsl(var(--background))";
-                  }}
-                >
-                  Start over
-                </button>
+                        {isExpanded && (
+                          <p style={{
+                            fontFamily: f.sans,
+                            fontSize: "clamp(13px, 1.15vw, 14px)",
+                            color: f.ink(0.42),
+                            lineHeight: 1.7,
+                            paddingTop: "14px",
+                            borderTop: `1px solid ${f.ink(0.06)}`,
+                            animation: "fade-up 0.3s ease-out",
+                          }}>
+                            {explanationCopy}
+                          </p>
+                        )}
+
+                        <button
+                          onClick={() => setExpandedDimension(isExpanded ? null : i)}
+                          style={{
+                            fontFamily: f.sans,
+                            fontSize: "12px",
+                            fontWeight: 600,
+                            color: f.ink(0.35),
+                            background: "none",
+                            border: "none",
+                            padding: "0",
+                            marginTop: "10px",
+                            cursor: "pointer",
+                            letterSpacing: "0.03em",
+                            transition: "color 0.15s ease",
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+                        >
+                          {isExpanded ? "Show less" : "Read more"}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
             );
