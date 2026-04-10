@@ -31,7 +31,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended, compact }: ContentBlockR
             return <Tag key={i} className={`${sizes[block.level] || sizes[3]} font-bold leading-[1.3]`} style={{ fontFamily: t.sans, color: t.ink(0.85) }}>{block.text}</Tag>;
           }
           case "paragraph":
-            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={{ ...t.body(), ...(compact ? { fontSize: "clamp(15px, 1.5vw, 16px)" } : {}) }}>{block.text}</p>;
+            return <p key={i} className="text-[15px] md:text-[16px] leading-[1.9]" style={{ fontFamily: t.sans, color: t.ink(0.55), lineHeight: 1.9, ...(compact ? { fontSize: "clamp(15px, 1.5vw, 16px)" } : {}) }}>{block.text}</p>;
           case "image":
             return (
               <figure key={i} className="flex flex-col gap-2">
@@ -59,7 +59,7 @@ const ContentBlockRenderer = ({ blocks, renderExtended, compact }: ContentBlockR
           case "callout":
             return (
               <div key={i} className="p-4 md:p-5 rounded-xl" style={{ background: t.ink(0.02), border: t.border(0.04) }}>
-                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ ...t.body(0.82), fontSize: "clamp(15px, 1.5vw, 16px)" }}>{block.text}</p>
+                <p className="text-[13px] md:text-[14px] leading-[1.8]" style={{ fontFamily: t.sans, color: t.ink(0.82), fontSize: "clamp(15px, 1.5vw, 16px)", lineHeight: 1.8 }}>{block.text}</p>
               </div>
             );
           default:
