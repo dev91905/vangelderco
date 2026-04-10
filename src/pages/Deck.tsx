@@ -605,18 +605,34 @@ const Deck = () => {
                   onFocus={(e) => { if (!customSaved) e.currentTarget.style.borderColor = f.ink(0.15); }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = f.ink(0.08); }}
                 />
-                <p style={{
-                  fontFamily: f.sans,
-                  fontSize: "11px",
-                  color: f.ink(0.25),
+                <div style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   marginTop: "6px",
-                  lineHeight: 1,
                   minHeight: "11px",
-                  opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
-                  transition: "opacity 0.2s ease",
                 }}>
-                  {customSaved ? "Click to edit" : "Press ↵ to submit"}
-                </p>
+                  <p style={{
+                    fontFamily: f.sans,
+                    fontSize: "11px",
+                    color: f.ink(0.25),
+                    lineHeight: 1,
+                    opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
+                    transition: "opacity 0.2s ease",
+                  }}>
+                    {customSaved ? "Click to edit" : "Press ↵ to submit"}
+                  </p>
+                  <p style={{
+                    fontFamily: f.sans,
+                    fontSize: "11px",
+                    color: f.ink(customMessage.length > 120 ? 0.5 : 0.2),
+                    lineHeight: 1,
+                    opacity: customMessage.length > 0 ? 1 : 0,
+                    transition: "opacity 0.2s ease, color 0.2s ease",
+                  }}>
+                    {customMessage.length}/140
+                  </p>
+                </div>
               </form>
             </div>
           </div>
