@@ -546,35 +546,68 @@ const Index = () => {
       </section>
 
       <section
-        className="snap-section relative z-10 flex flex-col items-center justify-center"
+        className="snap-section relative z-10 flex flex-col items-center justify-center px-6"
         style={{ height: "100vh" }}
       >
-        <RevealBlock direction="scale">
+        <RevealBlock>
+          <span
+            className="text-[10px] tracking-[0.25em] uppercase mb-6 block text-center"
+            style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-mid))" }}
+          >
+            Five minutes
+          </span>
+        </RevealBlock>
+
+        <RevealBlock delay={0.1}>
+          <h2
+            className="text-[28px] md:text-[40px] lg:text-[48px] font-bold leading-[1.1] text-center mb-4 max-w-2xl"
+            style={{ fontFamily: t.serif, color: t.ink(0.9) }}
+          >
+            See what's broken.<br />See how to fix it.
+          </h2>
+        </RevealBlock>
+
+        <RevealBlock delay={0.2}>
+          <p
+            className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-md mb-10"
+            style={{ fontFamily: t.sans, color: t.ink(0.45) }}
+          >
+            A sharp, visual walkthrough of why your grantees' communications fail — and what their opponents do instead.
+          </p>
+        </RevealBlock>
+
+        <RevealBlock delay={0.3} direction="scale">
           <Link
             to="/deck"
-            className="inline-block px-6 py-3 rounded-full text-[11px] tracking-[0.15em] uppercase no-underline mb-16"
+            className="group relative inline-flex items-center gap-3 no-underline"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive))",
-              border: "1px solid hsl(var(--destructive) / var(--a-dim))",
-              background: "hsl(var(--destructive) / var(--a-bg))",
-              transition: `all 0.4s ${EASE_OUT_EXPO}`,
+              fontSize: "13px",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase" as const,
+              color: "hsl(var(--destructive-foreground))",
+              background: "hsl(var(--destructive))",
+              padding: "16px 40px",
+              borderRadius: "4px",
+              transition: `all 0.5s ${EASE_OUT_EXPO}`,
+              boxShadow: "0 0 0 0 hsl(var(--destructive) / 0)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.5)";
-              e.currentTarget.style.transform = "scale(1.04)";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 12px 40px -8px hsl(var(--destructive) / 0.4)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-dim))";
-              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--destructive) / 0)";
             }}
           >
-            Explore Our Work
+            Enter the Deck
+            <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
           </Link>
         </RevealBlock>
-        <RevealBlock delay={0.15}>
+
+        <RevealBlock delay={0.5}>
           <div
             ref={(el) => {
               if (!el) return;
@@ -583,16 +616,16 @@ const Index = () => {
               }, { threshold: 0.5 });
               obs.observe(el);
             }}
-            className="mx-auto mb-8"
+            className="mx-auto mt-16 mb-8"
             style={{
               width: 0,
               height: 1,
-              background: "hsl(var(--destructive) / var(--a-low))",
+              background: t.ink(0.1),
               transition: `width 1s ${EASE_OUT_EXPO} 0.2s`,
             }}
           />
         </RevealBlock>
-        <RevealBlock delay={0.25}>
+        <RevealBlock delay={0.55}>
           <a
             href="mailto:hello@vangelder.co"
             className="text-[13px] tracking-[0.18em] no-underline"
@@ -607,7 +640,7 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.35}>
+        <RevealBlock delay={0.65}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
