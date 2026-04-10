@@ -502,7 +502,7 @@ const Index = () => {
               className="text-[10px] tracking-[0.25em] uppercase mb-4"
               style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
             >
-              The Network
+              Our Network
             </div>
           </RevealBlock>
           <RevealBlock delay={0.15}>
