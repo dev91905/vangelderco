@@ -817,12 +817,12 @@ const Deck = () => {
                       overflow: "hidden",
                     }}>
                       <div style={{
-                        height: "100%",
-                        width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
-                        background: f.ink(0.25),
-                        borderRadius: "1px",
-                        transition: "width 0.4s ease",
-                      }} />
+                      height: "100%",
+                      width: `${((confrontationStep + 1) / CONFRONTATION_ROWS.length) * 100}%`,
+                      background: "hsl(var(--destructive) / var(--a-mid))",
+                      borderRadius: "1px",
+                      transition: "width 0.4s ease",
+                    }} />
                     </div>
                     <span style={{
                       fontFamily: f.sans,
@@ -847,7 +847,7 @@ const Deck = () => {
                       paddingBottom: "6px",
                     }}>
                       <p style={{ ...label("9px"), color: f.ink(0.3) }}>Your side</p>
-                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700 }}>Their side</p>
+                      <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700 }}>Their side</p>
                     </div>
 
                     {/* Rows */}
@@ -936,8 +936,8 @@ const Deck = () => {
                   className="text-left w-full transition-all duration-300"
                   style={{
                     padding: "28px 24px",
-                    background: isExpanded ? f.ink(0.08) : "transparent",
-                    border: `1px solid ${isExpanded ? f.ink(0.15) : f.ink(0.06)}`,
+                    background: isExpanded ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
+                    border: `1px solid ${isExpanded ? "hsl(var(--destructive) / var(--a-border))" : f.ink(0.06)}`,
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
@@ -994,7 +994,7 @@ const Deck = () => {
                     style={{
                       padding: activeDomain ? "18px 24px 16px" : "24px 24px 22px",
                       minHeight: activeDomain ? "auto" : "132px",
-                      background: isActive ? f.ink(0.05) : "transparent",
+                      background: isActive ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
@@ -1004,7 +1004,7 @@ const Deck = () => {
                     }}
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.7vw, 19px)", fontWeight: 700, color: f.ink(isActive ? 0.9 : 0.7), lineHeight: 1.25, transition: "color 0.2s ease" }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.7vw, 19px)", fontWeight: 700, color: isActive ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.7), lineHeight: 1.25, transition: "color 0.2s ease" }}>
                         {d.title}
                       </p>
                       <svg
@@ -1138,7 +1138,7 @@ const Deck = () => {
           <div className="lg:w-[60%]">
             <div className="grid grid-cols-2 gap-0" style={{ borderBottom: `1px solid ${f.ink(0.08)}` }}>
               <div style={{ ...label("10px"), padding: "14px 20px" }}>What most grantees report</div>
-              <div style={{ ...label("10px"), padding: "14px 20px", color: f.ink(0.6) }}>What we track</div>
+              <div style={{ ...label("10px"), padding: "14px 20px", color: "hsl(var(--destructive) / var(--a-mid))" }}>What we track</div>
             </div>
             {METRICS_ROWS.map((row, i) => {
               const delay = 300 + i * 200;
@@ -1154,7 +1154,7 @@ const Deck = () => {
                   }}
                 >
                   <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.25), lineHeight: 1.6, textDecoration: r7.isActive ? "line-through" : "none", textDecorationColor: f.ink(0.15) }}>{row.left}</div>
-                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: f.ink(0.7), lineHeight: 1.6 }}>{row.right}</div>
+                  <div style={{ padding: "16px 20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.4vw, 15px)", color: "hsl(var(--destructive) / var(--a-high))", lineHeight: 1.6 }}>{row.right}</div>
                 </div>
               );
             })}
