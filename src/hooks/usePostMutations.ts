@@ -15,6 +15,9 @@ export type PostFormData = {
   password: string | null;
   is_published: boolean;
   published_at: string | null;
+  is_featured: boolean;
+  sector_label: string | null;
+  featured_stat: string | null;
 };
 
 export function useCreatePost() {
