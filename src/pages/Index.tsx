@@ -405,6 +405,15 @@ const Index = () => {
               For donor advisors and program officers who know their portfolios should be hitting harder.
             </p>
           </RevealBlock>
+          <RevealBlock delay={0.5}>
+            <AnimatedLine width={60} />
+            <p
+              className="text-xs leading-relaxed max-w-md"
+              style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
+            >
+              We build strategic communications portfolios that work across sectors — cultural strategy, cross-sector coordination, and deep organizing — so your grants don't just fund content, they build power.
+            </p>
+          </RevealBlock>
         </div>
       </section>
 
