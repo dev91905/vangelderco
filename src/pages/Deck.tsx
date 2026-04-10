@@ -63,11 +63,11 @@ const DOMAINS = [
 /* ─── Capabilities for ranking ─── */
 const CAPABILITIES = [
   { id: "audit", title: "Portfolio Audit" },
-  { id: "framework", title: "Strategic Framework" },
-  { id: "measurement", title: "Impact Measurement" },
+  { id: "framework", title: "Strategy Development" },
   { id: "access", title: "Access & Introductions" },
-  { id: "program", title: "Program Development" },
-  { id: "training", title: "Training" },
+  { id: "measurement", title: "Impact Measurement" },
+  { id: "training", title: "Staff Training" },
+  { id: "program", title: "Program Management" },
 ];
 
 /* ─── Metrics ─── */
