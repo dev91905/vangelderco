@@ -189,7 +189,7 @@ const Index = () => {
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: t.ink(0.4),
+              color: "hsl(var(--destructive) / 0.6)",
               animation: "fade-up 0.6s ease-out 0.3s both",
             }}
           >
@@ -235,9 +235,9 @@ const Index = () => {
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
                   fontFamily: t.sans,
-                  color: t.ink(0.35),
-                  background: t.ink(0.04),
-                  border: t.border(0.08),
+                  color: "hsl(var(--destructive) / 0.5)",
+                  background: "hsl(var(--destructive) / 0.04)",
+                  border: "1px solid hsl(var(--destructive) / 0.12)",
                 }}
               >
                 {sector}
@@ -250,7 +250,7 @@ const Index = () => {
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: t.ink(0.25),
+              color: "hsl(var(--destructive) / 0.3)",
               animation: "fade-up 0.6s ease-out 2.0s both",
             }}
           >
@@ -269,7 +269,7 @@ const Index = () => {
                 fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
-                color: t.ink(0.55),
+                color: "hsl(var(--destructive) / 0.6)",
               }}
             >
               You're on the ground doing the work.
