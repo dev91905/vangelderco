@@ -7,7 +7,7 @@ import TypewriterHeading from "@/components/deck/TypewriterHeading";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { ChevronDown, RotateCcw } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
 import {
   Dialog,
@@ -964,7 +964,6 @@ const Deck = () => {
                       e.currentTarget.style.background = "hsl(var(--background))";
                     }}
                   >
-                    <RotateCcw size={15} style={{ marginRight: "6px" }} />
                     Start over
                   </button>
                 </div>
@@ -1078,7 +1077,7 @@ const Deck = () => {
               We've studied hundreds of organizations. The effective ones do three things.
             </p>
             <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
-              Open each one and tell us where you stand.
+              A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
             </p>
           </div>
           <div className="lg:w-[65%] flex flex-col gap-4">
