@@ -398,7 +398,7 @@ const Index = () => {
               className="leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, fontSize: "clamp(14px, 1.4vw, 16px)", color: t.ink(0.4), lineHeight: 1.8 }}
             >
-              Cultural strategy, cross-sector coordination, and deep organizing — integrated so your grants don't just fund content, they build power.
+              Cultural strategy, media-based organizing, and campaign development, so your grants don't just fund content — they build power.
             </p>
           </RevealBlock>
         </div>
