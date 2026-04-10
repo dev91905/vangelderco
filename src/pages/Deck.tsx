@@ -595,11 +595,17 @@ const Deck = () => {
               </form>
             </div>
           </div>
-          {selectedPains.length === 0 && (
-            <p style={{ ...label("9px"), ...r2.stagger(3, 1000, "blur-up") }}>
-              → or skip and keep scrolling
-            </p>
-          )}
+          <p style={{
+            ...label("9px"),
+            ...r2.stagger(3, 1000, "blur-up"),
+            opacity: selectedPains.length === 0 && !customSaved ? 1 : 0,
+            maxHeight: selectedPains.length === 0 && !customSaved ? "30px" : "0px",
+            marginTop: selectedPains.length === 0 && !customSaved ? undefined : "0px",
+            overflow: "hidden",
+            transition: "opacity 0.3s ease, max-height 0.4s ease, margin 0.4s ease",
+          }}>
+            → or skip and keep scrolling
+          </p>
         </div>
       </DeckFrame>
 
