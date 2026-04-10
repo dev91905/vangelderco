@@ -159,11 +159,14 @@ function CaseFragment({ sector, brief, result }: { sector: string; brief: string
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const [scrollY, setScrollY] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => setScrollY(el.scrollTop);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   const heroOpacity = Math.max(0, 1 - scrollY / 600);
