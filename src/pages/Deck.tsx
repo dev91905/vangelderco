@@ -230,8 +230,9 @@ const Deck = () => {
   const [quizStep, setQuizStep] = useState(0); // 0..5 = questions, 6 = reveal
   const [quizRevealed, setQuizRevealed] = useState(false);
 
-  // Randomize left/right placement per row (seeded on mount)
-  const quizOrder = useMemo(() => QUIZ_ROWS.map(() => Math.random() > 0.5), []);
+  // Randomize left/right placement per row (stable across re-renders)
+  const quizOrderRef = useRef(QUIZ_ROWS.map(() => Math.random() > 0.5));
+  const quizOrder = quizOrderRef.current;
 
   /* ─── Capabilities ranking (Frame 6) ─── */
   const [capabilitiesRanked, setCapabilitiesRanked] = useState<string[]>([]);
