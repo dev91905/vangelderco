@@ -553,7 +553,7 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Top ─── */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
-        <div className="flex items-center justify-between pointer-events-auto">
+        <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1280px", margin: "0 auto", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
             {STEP_LABELS[currentFrame] || ""} · {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
           </span>
@@ -572,7 +572,7 @@ const Deck = () => {
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
         <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 32px 28px" }}>
-          <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1280px", margin: "0 auto", gap: "16px" }}>
+          <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1280px", margin: "0 auto", gap: "16px", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             {/* Typeform-style thin progress bar */}
             <div style={{ flex: 1, maxWidth: "280px", height: "3px", borderRadius: "2px", background: f.ink(0.06), overflow: "hidden" }}>
@@ -1121,7 +1121,7 @@ const Deck = () => {
               A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
             </p>
           </div>
-          <div className="lg:w-[58%] flex flex-col gap-4">
+          <div className="lg:w-[62%] flex flex-col gap-4">
             {[
               { title: "They engage the full culture stack.", rationale: "They don't just push content out — they work behind the scenes so distribution platforms across different sectors are pulling the message up. Music, faith communities, creator economies, campuses, veteran networks. Not just strategic comms.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
               { title: "They coordinate across sectors.", rationale: "Communications becomes the organizing infrastructure — the scaffolding that brings different sectors together around a focal point and gives them the cover and momentum to push for policy together. Without multiple sectors engaged, policy doesn't move.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
