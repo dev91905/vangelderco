@@ -423,9 +423,9 @@ const Index = () => {
                   }}
                    onMouseEnter={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--foreground) / 0.45)";
+                    el.style.borderColor = ox(0.5);
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--foreground) / 0.25)`;
+                    el.style.boxShadow = `0 20px 60px -15px ${ox(0.3)}`;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
