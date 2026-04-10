@@ -177,14 +177,12 @@
   background: hsl(var(--foreground) / 0.03) !important;
 }
 
-/* Scroll snap for full-page sections */
+/* Smooth scroll container (no snap — let content flow naturally) */
 .snap-scroll-container {
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 .snap-section {
-  scroll-snap-align: start;
+  /* kept as layout marker */
 }
 
 
