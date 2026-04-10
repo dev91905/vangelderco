@@ -530,8 +530,9 @@ const Deck = () => {
                     borderRadius: "12px",
                     cursor: "pointer",
                     opacity: r2.isActive ? 1 : 0,
-                    transform: r2.isActive ? "translateY(0)" : "translateY(10px)",
-                    transition: `opacity 0.3s ease ${100 + i * 60}ms, transform 0.3s ease ${100 + i * 60}ms, background 0.15s ease, border 0.15s ease`,
+                    transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
+                    filter: r2.isActive ? "blur(0px)" : "blur(4px)",
+                    transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, background 0.15s ease, border 0.15s ease`,
                   }}
                 >
                   <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
