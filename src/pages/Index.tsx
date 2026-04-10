@@ -508,8 +508,8 @@ const Index = () => {
       </section>
 
       {/* ═══ INTAKE CTA ═══ */}
-      <section className="snap-section relative z-10 flex items-center justify-center px-6 md:px-10">
-        <div className="w-full max-w-4xl mx-auto">
+      <section className="snap-section relative z-10 flex items-center justify-center">
+        <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
           <RevealBlock>
             <div
               className="relative overflow-hidden rounded-2xl"
