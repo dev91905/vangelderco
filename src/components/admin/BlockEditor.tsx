@@ -201,24 +201,31 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
           </div>
         )}
 
-        {/* ── Stat Grid ── */}
+        {/* ── Stat Grid: match published StatChips ── */}
         {block.type === "stat-grid" && (
-          <div className="space-y-2">
-            {(block.stats || []).map((stat: any, idx: number) => (
-              <div key={idx} className="flex items-center gap-2">
-                <input value={stat.label || ""} onChange={(e) => { const stats = [...block.stats]; stats[idx] = { ...stat, label: e.target.value }; update({ stats }); }}
-                  placeholder="Label" className="bg-transparent outline-none text-sm px-2 py-1.5 flex-1 rounded-lg" style={{ fontFamily: t.sans, color: t.ink(0.7), border: t.border(0.08) }} />
-                <input value={stat.description || ""} onChange={(e) => { const stats = [...block.stats]; stats[idx] = { ...stat, description: e.target.value }; update({ stats }); }}
-                  placeholder="Description" className="bg-transparent outline-none text-sm px-2 py-1.5 flex-1 rounded-lg" style={{ fontFamily: t.sans, color: t.ink(0.5), border: t.border(0.08) }} />
-                <button onClick={() => update({ stats: block.stats.filter((_: any, i: number) => i !== idx) })} className="p-1">
-                  <X className="w-3 h-3" style={{ color: t.ink(0.3) }} />
-                </button>
-              </div>
-            ))}
-            <button onClick={() => update({ stats: [...(block.stats || []), { label: "", description: "" }] })}
-              className="text-[11px] flex items-center gap-1 py-1" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
-              <Plus className="w-3 h-3" /> Add stat
-            </button>
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-3">
+              {(block.stats || []).map((stat: any, idx: number) => (
+                <div key={idx} className="group/stat relative flex flex-col px-4 py-3 min-w-[140px] max-w-[220px] rounded-xl"
+                  style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}` }}>
+                  <button onClick={() => update({ stats: block.stats.filter((_: any, i: number) => i !== idx) })}
+                    className="absolute top-1 right-1 p-1 rounded opacity-0 group-hover/stat:opacity-100 transition-opacity" style={{ color: t.ink(0.3) }}>
+                    <X className="w-3 h-3" />
+                  </button>
+                  <input value={stat.label || ""} onChange={(e) => { const stats = [...block.stats]; stats[idx] = { ...stat, label: e.target.value }; update({ stats }); }}
+                    placeholder="$200M" className="bg-transparent outline-none border-none w-full text-[18px] md:text-[22px] font-bold"
+                    style={{ fontFamily: t.sans, color: t.ink(0.85) }} />
+                  <input value={stat.description || ""} onChange={(e) => { const stats = [...block.stats]; stats[idx] = { ...stat, description: e.target.value }; update({ stats }); }}
+                    placeholder="Description" className="bg-transparent outline-none border-none text-[10px] tracking-[0.08em] uppercase mt-1 w-full"
+                    style={{ fontFamily: t.sans, color: t.ink(0.4) }} />
+                </div>
+              ))}
+              <button onClick={() => update({ stats: [...(block.stats || []), { label: "", description: "" }] })}
+                className="flex flex-col items-center justify-center min-w-[100px] min-h-[72px] px-4 py-3 transition-all rounded-xl"
+                style={{ border: `1px dashed ${t.ink(0.1)}`, background: "transparent", color: t.ink(0.2) }}>
+                <Plus className="w-3 h-3" />
+              </button>
+            </div>
           </div>
         )}
       </div>
