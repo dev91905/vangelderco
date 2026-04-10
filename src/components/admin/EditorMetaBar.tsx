@@ -105,7 +105,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
         {!isCaseStudy && props.heroImageUrl && (
           <div className="w-full relative mb-8 -mx-6" style={{ height: "40vh", marginTop: "-6vh" }}>
             <img src={props.heroImageUrl} alt={props.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, hsl(40 30% 96%) 100%)` }} />
+            <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, hsl(var(--background)) 100%)` }} />
           </div>
         )}
 
