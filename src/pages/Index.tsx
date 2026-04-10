@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
@@ -64,45 +64,68 @@ const FIELD_NOTES = [
   },
 ];
 
-/* ── Scroll-reveal hook ── */
-function useReveal(threshold = 0.15) {
+/* ── Premium easing curves ── */
+const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
+const EASE_OUT_QUART = "cubic-bezier(0.25, 1, 0.5, 1)";
+
+/* ── Scroll-progress hook (0-1 within viewport) ── */
+function useScrollReveal(threshold = 0.08) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [ratio, setRatio] = useState(0);
+  const [hasRevealed, setHasRevealed] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setVisible(true);
+        const r = entry.intersectionRatio;
+        setRatio(r);
+        if (r > threshold) setHasRevealed(true);
       },
-      { threshold }
+      { threshold: [0, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1] }
     );
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
 
-  return { ref, visible };
+  return { ref, ratio, hasRevealed };
 }
 
+/* ── Reveal block with premium motion ── */
 function RevealBlock({
   children,
   delay = 0,
   className = "",
+  direction = "up",
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  direction?: "up" | "left" | "right" | "scale";
 }) {
-  const { ref, visible } = useReveal(0.1);
+  const { ref, hasRevealed } = useScrollReveal(0.08);
+
+  const hidden: CSSProperties = {
+    up: { opacity: 0, transform: "translateY(40px) scale(0.98)" },
+    left: { opacity: 0, transform: "translateX(-30px)" },
+    right: { opacity: 0, transform: "translateX(30px)" },
+    scale: { opacity: 0, transform: "scale(0.92)" },
+  }[direction];
+
+  const shown: CSSProperties = {
+    opacity: 1,
+    transform: "translateY(0) translateX(0) scale(1)",
+  };
+
   return (
     <div
       ref={ref}
       className={className}
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 0.8s ease ${delay}s, transform 0.8s ease ${delay}s`,
+        ...(hasRevealed ? shown : hidden),
+        transition: `opacity 1s ${EASE_OUT_EXPO} ${delay}s, transform 1.2s ${EASE_OUT_EXPO} ${delay}s`,
+        willChange: "opacity, transform",
       }}
     >
       {children}
@@ -110,9 +133,26 @@ function RevealBlock({
   );
 }
 
-/* ── Case fragment ── */
-function CaseFragment({ sector, brief, result }: { sector: string; brief: string; result: string }) {
-  const { ref, visible } = useReveal(0.2);
+/* ── Animated divider line ── */
+function AnimatedLine({ width = 60 }: { width?: number }) {
+  const { ref, hasRevealed } = useScrollReveal(0.1);
+  return (
+    <div
+      ref={ref}
+      className="my-8"
+      style={{
+        height: 1,
+        background: "hsl(var(--destructive) / 0.4)",
+        width: hasRevealed ? width : 0,
+        transition: `width 1.2s ${EASE_OUT_EXPO} 0.3s`,
+      }}
+    />
+  );
+}
+
+/* ── Case fragment with premium motion ── */
+function CaseFragment({ sector, brief, result, index }: { sector: string; brief: string; result: string; index: number }) {
+  const { ref, hasRevealed } = useScrollReveal(0.15);
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -120,13 +160,16 @@ function CaseFragment({ sector, brief, result }: { sector: string; brief: string
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="mb-12 cursor-default"
+      className="mb-14 cursor-default"
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? (hovered ? "translateX(8px)" : "translateX(0)") : "translateX(-20px)",
-        transition: "all 0.6s ease",
+        opacity: hasRevealed ? 1 : 0,
+        transform: hasRevealed
+          ? hovered ? "translateX(8px)" : "translateX(0)"
+          : "translateX(-30px)",
+        transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
         borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / 0.3)"}`,
-        paddingLeft: "20px",
+        paddingLeft: "24px",
+        willChange: "opacity, transform",
       }}
     >
       <div
@@ -146,7 +189,7 @@ function CaseFragment({ sector, brief, result }: { sector: string; brief: string
         style={{
           fontFamily: t.sans,
           color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / 0.5)",
-          transition: "color 0.3s ease",
+          transition: `color 0.4s ${EASE_OUT_QUART}`,
         }}
       >
         {result}
@@ -160,41 +203,70 @@ const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const [scrollY, setScrollY] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const onScroll = () => setScrollY(el.scrollTop);
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => setScrollY(el.scrollTop));
+    };
     el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
-  const heroOpacity = Math.max(0, 1 - scrollY / 600);
+  // Hero parallax calculations
+  const heroProgress = Math.min(scrollY / 800, 1);
+  const heroOpacity = Math.max(0, 1 - heroProgress * 1.5);
+  const heroScale = 1 - heroProgress * 0.06;
+  const heroBlur = heroProgress * 8;
+  const heroY = scrollY * 0.3;
 
   return (
     <AtmosphericLayout>
       {/* HUD: top-right */}
       <span
         className="fixed top-6 right-6 z-30 text-[10px] tracking-[0.15em] uppercase"
-        style={{ color: t.ink(0.3), fontFamily: t.sans }}
+        style={{
+          color: t.ink(0.3),
+          fontFamily: t.sans,
+          transition: `opacity 0.6s ${EASE_OUT_QUART}`,
+          opacity: heroProgress > 0.8 ? 0.15 : 0.3,
+        }}
       >
         Van Gelder Co.
       </span>
 
-      <div ref={scrollRef} className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden">
+      <div
+        ref={scrollRef}
+        className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden"
+        style={{ scrollBehavior: "smooth" }}
+      >
 
       {/* ═══ HERO ═══ */}
       <section
         className="snap-section flex items-center justify-center w-full relative z-20"
-        style={{ height: "100vh", opacity: heroOpacity }}
+        style={{ height: "100vh" }}
       >
-        <main className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14">
+        <main
+          className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14"
+          style={{
+            opacity: heroOpacity,
+            transform: `translateY(${heroY}px) scale(${heroScale})`,
+            filter: `blur(${heroBlur}px)`,
+            willChange: "transform, opacity, filter",
+          }}
+        >
           <span
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--destructive) / 0.6)",
-              animation: "fade-up 0.6s ease-out 0.3s both",
+              animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
             }}
           >
             VGC StratComm Advisors
@@ -210,16 +282,16 @@ const Index = () => {
                 onFocus={() => playHoverGlitch()}
                 onClick={() => playClickGlitch()}
                 style={{
-                  animation: `clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.4 + i * 0.35}s both`,
+                  animation: `clip-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) ${0.5 + i * 0.25}s both`,
                 }}
               >
                 <span
                   className="hero-nav-wash absolute inset-0 pointer-events-none rounded-lg"
-                  style={{ background: "transparent", transition: "background 0.15s ease" }}
+                  style={{ background: "transparent", transition: `background 0.3s ${EASE_OUT_QUART}` }}
                 />
                 <span
-                  className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-bold leading-[1.15] transition-colors duration-150"
-                  style={{ fontFamily: t.sans, color: t.ink(0.8) }}
+                  className="hero-nav-text relative z-10 text-[22px] md:text-[44px] lg:text-[48px] font-bold leading-[1.15]"
+                  style={{ fontFamily: t.sans, color: t.ink(0.8), transition: `color 0.3s ${EASE_OUT_QUART}, transform 0.4s ${EASE_OUT_EXPO}` }}
                 >
                   {link.label}
                 </span>
@@ -229,9 +301,9 @@ const Index = () => {
 
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
-            style={{ animation: "fade-up 0.7s ease-out 1.6s both" }}
+            style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both` }}
           >
-            {SECTORS.map((sector) => (
+            {SECTORS.map((sector, i) => (
               <span
                 key={sector}
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
@@ -240,6 +312,7 @@ const Index = () => {
                   color: "hsl(var(--destructive) / 0.5)",
                   background: "hsl(var(--destructive) / 0.04)",
                   border: "1px solid hsl(var(--destructive) / 0.12)",
+                  animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                 }}
               >
                 {sector}
@@ -252,7 +325,7 @@ const Index = () => {
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--destructive) / 0.3)",
-              animation: "fade-up 0.6s ease-out 2.0s both",
+              animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.0s both`,
             }}
           >
             By Referral Only
@@ -276,7 +349,7 @@ const Index = () => {
               You're on the ground doing the work.
             </p>
           </RevealBlock>
-          <RevealBlock delay={0.2}>
+          <RevealBlock delay={0.25}>
             <p
               className="font-semibold mt-4"
               style={{
@@ -289,11 +362,8 @@ const Index = () => {
               We see the field from orbit.
             </p>
           </RevealBlock>
-          <RevealBlock delay={0.4}>
-            <div
-              className="my-8"
-              style={{ width: 60, height: 1, background: "hsl(var(--destructive) / 0.4)" }}
-            />
+          <RevealBlock delay={0.5}>
+            <AnimatedLine width={60} />
             <p
               className="text-xs leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
@@ -308,7 +378,7 @@ const Index = () => {
       {/* ═══ CAPABILITIES ═══ */}
       <section className="snap-section relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
         <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
-          <RevealBlock>
+          <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
               style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
@@ -319,20 +389,26 @@ const Index = () => {
 
           <div className="grid gap-3">
             {CAPABILITIES.map((cap, i) => (
-              <RevealBlock key={cap.title} delay={i * 0.12}>
+              <RevealBlock key={cap.title} delay={0.1 + i * 0.15} direction="up">
                 <Link
                   to={cap.to}
-                  className="block p-5 md:p-6 rounded-xl transition-all duration-300 no-underline"
-                  style={{ background: "transparent", border: `1px solid ${t.ink(0.08)}` }}
+                  className="group block p-5 md:p-6 rounded-xl no-underline"
+                  style={{
+                    background: "transparent",
+                    border: `1px solid ${t.ink(0.08)}`,
+                    transition: `border-color 0.4s ${EASE_OUT_QUART}, transform 0.5s ${EASE_OUT_EXPO}, box-shadow 0.4s ${EASE_OUT_QUART}`,
+                  }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget;
                     el.style.borderColor = t.ink(0.2);
-                    el.style.transform = "translateY(-1px)";
+                    el.style.transform = "translateY(-2px)";
+                    el.style.boxShadow = `0 8px 30px -12px ${t.ink(0.08)}`;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
                     el.style.borderColor = t.ink(0.08);
                     el.style.transform = "translateY(0)";
+                    el.style.boxShadow = "none";
                   }}
                 >
                   <h3
@@ -360,21 +436,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ FIELD NOTES — sticky header with scrollable content ═══ */}
+      {/* ═══ FIELD NOTES ═══ */}
       <section className="snap-section relative z-10">
-        {/* Sticky label */}
         <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "hsl(var(--background))" }}>
-          <div
-            className="text-[10px] tracking-[0.25em] uppercase"
-            style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-          >
-            Field Notes
-          </div>
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              Field Notes
+            </div>
+          </RevealBlock>
         </div>
 
         <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {FIELD_NOTES.map((note) => (
-            <CaseFragment key={note.sector} {...note} />
+          {FIELD_NOTES.map((note, i) => (
+            <CaseFragment key={note.sector} {...note} index={i} />
           ))}
         </div>
       </section>
@@ -384,46 +461,65 @@ const Index = () => {
         className="snap-section relative z-10 flex flex-col items-center justify-center"
         style={{ height: "100vh" }}
       >
-        <RevealBlock>
+        <RevealBlock direction="scale">
           <Link
             to="/deck"
-            className="inline-block px-6 py-3 rounded-full text-[11px] tracking-[0.15em] uppercase no-underline transition-all duration-300 mb-16"
+            className="inline-block px-6 py-3 rounded-full text-[11px] tracking-[0.15em] uppercase no-underline mb-16"
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--destructive))",
               border: "1px solid hsl(var(--destructive) / 0.3)",
               background: "hsl(var(--destructive) / 0.04)",
+              transition: `all 0.4s ${EASE_OUT_EXPO}`,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
               e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.5)";
+              e.currentTarget.style.transform = "scale(1.04)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
               e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.3)";
+              e.currentTarget.style.transform = "scale(1)";
             }}
           >
             Explore Our Work
           </Link>
         </RevealBlock>
-        <RevealBlock delay={0.1}>
+        <RevealBlock delay={0.15}>
           <div
+            ref={(el) => {
+              if (!el) return;
+              const obs = new IntersectionObserver(([e]) => {
+                if (e.isIntersecting) el.style.width = "40px";
+              }, { threshold: 0.5 });
+              obs.observe(el);
+            }}
             className="mx-auto mb-8"
-            style={{ width: 40, height: 1, background: "hsl(var(--destructive) / 0.4)" }}
+            style={{
+              width: 0,
+              height: 1,
+              background: "hsl(var(--destructive) / 0.4)",
+              transition: `width 1s ${EASE_OUT_EXPO} 0.2s`,
+            }}
           />
         </RevealBlock>
-        <RevealBlock delay={0.2}>
+        <RevealBlock delay={0.25}>
           <a
             href="mailto:hello@vangelder.co"
-            className="text-[13px] tracking-[0.18em] no-underline transition-colors duration-300"
-            style={{ fontFamily: t.sans, color: t.ink(0.45) }}
+            className="text-[13px] tracking-[0.18em] no-underline"
+            style={{
+              fontFamily: t.sans,
+              color: t.ink(0.45),
+              transition: `color 0.4s ${EASE_OUT_QUART}`,
+            }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(var(--destructive))")}
             onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.45))}
           >
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.3}>
+        <RevealBlock delay={0.35}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
