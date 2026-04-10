@@ -755,7 +755,7 @@ const Deck = () => {
                             }}>
                               <p style={{ ...label("9px"), color: f.ink(0.35), fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
                                 <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: f.ink(0.25) }} />
-                                Your side
+                                Your grantees
                               </p>
                               <p style={{
                                 fontFamily: f.sans,
@@ -772,7 +772,7 @@ const Deck = () => {
                             }}>
                               <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
                                 <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-high))" }} />
-                                Their side
+                                Their opponents
                               </p>
                               <p style={{
                                 fontFamily: f.sans,
@@ -840,7 +840,7 @@ const Deck = () => {
                           }}>
                             <p style={{ ...label("9px"), color: f.ink(0.35), fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
                               <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: f.ink(0.25) }} />
-                              Your approach
+                              Your grantees
                             </p>
                             <p style={{
                               fontFamily: f.sans,
@@ -857,7 +857,7 @@ const Deck = () => {
                           }}>
                             <p style={{ ...label("9px"), color: "hsl(0 60% 50% / var(--a-high))", fontWeight: 700, marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
                               <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "hsl(0 60% 50% / var(--a-high))" }} />
-                              Their approach
+                              Their opponents
                             </p>
                             <p style={{
                               fontFamily: f.sans,
@@ -879,8 +879,8 @@ const Deck = () => {
                       paddingBottom: "6px",
                     }}>
                       <div />
-                      <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Your side</p>
-                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Their side</p>
+                      <p style={{ ...label("9px"), color: f.ink(0.3), paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Your grantees</p>
+                      <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, paddingLeft: "clamp(10px, 1.2vw, 16px)" }}>Their opponents</p>
                     </div>
 
                     {/* Detail rows (exclude Overall) */}
