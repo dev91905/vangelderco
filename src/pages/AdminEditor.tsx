@@ -74,7 +74,7 @@ const AdminEditor = () => {
     title, slug, type, capability,
     excerpt: excerpt || null, content: null,
     hero_image_url: heroImageUrl,
-    content_blocks: contentBlocks,
+    content_blocks: type === "field-note" ? [] : contentBlocks,
     stats: type === "case-study" ? stats : null,
     password: password || null,
     is_published: isPublished,
@@ -194,9 +194,21 @@ const AdminEditor = () => {
           </div>
         )}
 
-        <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto">
-          <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={type === "case-study"} />
-        </div>
+        {type === "field-note" && (
+          <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto space-y-4">
+            <div className="space-y-2">
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Impact Metric</label>
+              <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)} placeholder="e.g. $12M mobilized across 3 foundations"
+                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
+            </div>
+          </div>
+        )}
+
+        {type !== "field-note" && (
+          <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto">
+            <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={type === "case-study"} />
+          </div>
+        )}
 
         <div className="flex items-center justify-center gap-4 text-[11px] py-8 mt-12" style={{ ...label, color: "hsl(30 10% 12% / 0.15)" }}>
           <span>⌘S save</span>

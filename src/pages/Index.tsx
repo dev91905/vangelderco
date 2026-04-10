@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
+import { useFieldNotes } from "@/hooks/useFieldNotes";
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
@@ -192,6 +193,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
+  const { data: fieldNotes } = useFieldNotes();
   const [scrollY, setScrollY] = useState(0);
   const [glowIndex, setGlowIndex] = useState(0);
 
@@ -616,7 +618,7 @@ const Index = () => {
           </RevealBlock>
 
           <div className="columns-1 md:columns-2 gap-x-16" style={{ columnFill: "balance" }}>
-            {(featuredPosts || []).map((note, i) => (
+            {(fieldNotes || []).map((note, i) => (
               <CaseFragment
                 key={note.id}
                 sector={note.sector_label || note.capability}
