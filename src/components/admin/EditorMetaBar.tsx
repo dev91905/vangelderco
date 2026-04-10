@@ -79,7 +79,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
 
   return (
     <>
-      <div className="px-4 md:px-8 pt-4 pb-2">
+      <div className="max-w-[680px] mx-auto pt-4 pb-2">
         <input value={props.title} onChange={(e) => props.onTitleChange(e.target.value)} placeholder="Untitled"
           className="w-full bg-transparent outline-none font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.9), fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.15 }} />
         <div className="flex items-center gap-2 mt-2">
