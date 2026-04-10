@@ -678,12 +678,11 @@ const Deck = () => {
                 : `What's your approach to ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
               }
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
-              {quizRevealed
-                ? "The summary is at the top. Scroll for the breakdown and why each one matters."
-                : "Pick your approach."
-              }
-            </p>
+            {quizRevealed && (
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
+                The summary is at the top. Scroll for the breakdown and why each one matters.
+              </p>
+            )}
           </div>
 
           {/* Quiz questions — one at a time */}
@@ -713,18 +712,18 @@ const Deck = () => {
                       pointerEvents: isCurrent ? "auto" : "none",
                     }}
                   >
+                    {/* Quiz step counter — minimal "3 of 6" */}
                     <p
                       style={{
                         fontFamily: f.sans,
                         fontSize: "10px",
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.15em",
-                        color: f.ink(0.25),
+                        fontWeight: 500,
+                        letterSpacing: "0.1em",
+                        color: f.ink(0.2),
                         marginBottom: "clamp(16px, 2vw, 28px)",
                       }}
                     >
-                      {row.dimension}
+                      {i + 1} of {QUIZ_ROWS.length}
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: "clamp(16px, 3vw, 32px)" }}>
@@ -792,22 +791,6 @@ const Deck = () => {
             </div>
           )}
 
-          {!quizRevealed && (
-            <div style={{ marginTop: "clamp(24px, 4vw, 40px)", display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
-              {QUIZ_ROWS.map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: i === quizStep ? "24px" : "8px",
-                    height: "8px",
-                    borderRadius: "4px",
-                    background: quizAnswers[i] !== null ? "hsl(var(--foreground) / var(--a-high))" : i === quizStep ? "hsl(var(--foreground) / var(--a-mid))" : f.ink(0.1),
-                    transition: "all 0.3s ease",
-                  }}
-                />
-              ))}
-            </div>
-          )}
 
           {quizRevealed && (
             <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
