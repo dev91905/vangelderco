@@ -837,9 +837,10 @@ const Deck = () => {
                       onClick={() => {
                         containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
                         setTimeout(() => {
-                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                        setQuizStep(0);
-                        setQuizRevealed(false);
+                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                          setQuizStep(0);
+                          setQuizRevealed(false);
+                        }, 400);
                       }}
                       style={{
                         fontFamily: f.sans,
