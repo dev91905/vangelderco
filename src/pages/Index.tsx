@@ -447,7 +447,7 @@ const Index = () => {
 
       {/* ═══ FIELD NOTES ═══ */}
       <section className="snap-section relative z-10">
-        <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "linear-gradient(to bottom, hsl(var(--background)) 60%, hsl(var(--background) / 0))" }}>
+        <div className="relative z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto">
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase"
