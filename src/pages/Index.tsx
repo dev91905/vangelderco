@@ -604,28 +604,28 @@ const Index = () => {
 
       {/* ═══ FIELD NOTES ═══ */}
       <section className="snap-section relative z-10">
-        <div className="relative z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto">
+        <div className={`py-24 md:py-32 ${SECTION_PX} ${SECTION_MAX} mx-auto`}>
           <RevealBlock direction="left">
             <div
-              className="text-[10px] tracking-[0.25em] uppercase"
+              className="text-[10px] tracking-[0.25em] uppercase mb-16"
               style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
             >
               Field Notes
             </div>
           </RevealBlock>
-        </div>
 
-        <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {(featuredPosts || []).map((note, i) => (
-            <CaseFragment
-              key={note.id}
-              sector={note.sector_label || note.title}
-              brief={note.excerpt || ""}
-              result={note.featured_stat || ""}
-              slug={note.slug}
-              index={i}
-            />
-          ))}
+          <div className="columns-1 md:columns-2 gap-x-16" style={{ columnFill: "balance" }}>
+            {(featuredPosts || []).map((note, i) => (
+              <CaseFragment
+                key={note.id}
+                sector={note.sector_label || note.capability}
+                brief={note.excerpt || ""}
+                result={note.featured_stat || ""}
+                slug={note.slug}
+                index={i}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
