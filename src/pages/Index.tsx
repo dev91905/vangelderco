@@ -134,58 +134,9 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
   );
 }
 
-/* ── Case fragment with premium motion ── */
-function CaseFragment({ sector, brief, result, slug, index }: { sector: string; brief: string; result: string; slug?: string | null; index: number }) {
-  const { ref, hasRevealed } = useScrollReveal(0.15);
-  const [hovered, setHovered] = useState(false);
-
-  const content = (
-    <div
-      ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`mb-14 ${slug ? "cursor-pointer" : "cursor-default"}`}
-      style={{
-        opacity: hasRevealed ? 1 : 0,
-        transform: hasRevealed
-          ? hovered ? "translateX(8px)" : "translateX(0)"
-          : "translateX(-30px)",
-        transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-dim))"}`,
-        paddingLeft: "24px",
-        willChange: "opacity, transform",
-      }}
-    >
-      <div
-        className="text-[10px] tracking-[0.2em] uppercase mb-2"
-        style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-      >
-        {sector}
-      </div>
-      <div
-        className="text-lg leading-relaxed mb-2 italic"
-        style={{ fontFamily: t.serif, color: t.ink(0.5) }}
-      >
-        {brief}
-      </div>
-      <div
-        className="text-[11px]"
-        style={{
-          fontFamily: t.sans,
-          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / var(--a-mid))",
-          transition: `color 0.4s ${EASE_OUT_QUART}`,
-        }}
-      >
-        {result}
-      </div>
-    </div>
-  );
-
-  if (slug) {
-    return <Link to={`/post/${slug}`} className="block no-underline">{content}</Link>;
-  }
-  return content;
-}
+/* ── Consistent section width ── */
+const SECTION_MAX = "max-w-6xl";
+const SECTION_PX = "px-6 md:px-10 lg:px-16";
 
 /* ── Index page ── */
 const Index = () => {

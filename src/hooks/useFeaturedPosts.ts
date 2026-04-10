@@ -8,6 +8,7 @@ export type FeaturedPost = {
   excerpt: string | null;
   sector_label: string | null;
   featured_stat: string | null;
+  hero_image_url: string | null;
   type: string;
   capability: string;
   published_at: string | null;
@@ -19,11 +20,11 @@ export function useFeaturedPosts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("capability_posts")
-        .select("id, title, slug, excerpt, sector_label, featured_stat, type, capability, published_at")
+        .select("id, title, slug, excerpt, sector_label, featured_stat, hero_image_url, type, capability, published_at")
         .eq("is_featured", true)
         .eq("is_published", true)
         .order("published_at", { ascending: false })
-        .limit(4);
+        .limit(6);
 
       if (error) throw error;
       return data as FeaturedPost[];
