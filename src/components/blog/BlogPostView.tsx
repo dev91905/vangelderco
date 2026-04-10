@@ -23,7 +23,7 @@ const capabilityRoute: Record<string, string> = {
 
 const capabilityLabel: Record<string, string> = {
   "cultural-strategy": "Cultural Strategy",
-  "cross-sector": "Cross-Sector Intelligence",
+  "cross-sector": "Cross-Sector Campaigns",
   "deep-organizing": "Deep Organizing",
 };
 

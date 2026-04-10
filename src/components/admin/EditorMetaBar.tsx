@@ -63,13 +63,13 @@ interface EditorMetaBarProps {
 
 const CAPABILITIES = [
   { value: "cultural-strategy", label: "Cultural Strategy" },
-  { value: "cross-sector", label: "Cross-Sector Intelligence" },
+  { value: "cross-sector", label: "Cross-Sector Campaigns" },
   { value: "deep-organizing", label: "Deep Organizing" },
 ];
 
 const capabilityLabel: Record<string, string> = {
   "cultural-strategy": "Cultural Strategy",
-  "cross-sector": "Cross-Sector Intelligence",
+  "cross-sector": "Cross-Sector Campaigns",
   "deep-organizing": "Deep Organizing",
 };
 
