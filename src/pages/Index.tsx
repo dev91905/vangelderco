@@ -694,32 +694,9 @@ const Index = () => {
       {/* ═══ FOOTER ═══ */}
       <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
-          <span
-            className="text-[11px] tracking-[0.2em] uppercase mb-6 block"
-            style={{ fontFamily: t.sans, color: t.ink(0.25) }}
-          >
-            Strategic Communications Advisory · Van Gelder Co.
-          </span>
-        </RevealBlock>
-        <RevealBlock delay={0.1}>
-          <a
-            href="mailto:hello@vangelder.co"
-            className="text-[13px] tracking-[0.18em] no-underline"
-            style={{
-              fontFamily: t.sans,
-              color: t.ink(0.45),
-              transition: `color 0.4s ${EASE_OUT_QUART}`,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(var(--foreground))")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.45))}
-          >
-            hello@vangelder.co
-          </a>
-        </RevealBlock>
-        <RevealBlock delay={0.15}>
           <Link
             to="/deck"
-            className="inline-flex items-center gap-2 mt-6 no-underline text-[11px] tracking-[0.18em] uppercase"
+            className="inline-flex items-center gap-2 no-underline text-[11px] tracking-[0.18em] uppercase"
             style={{
               fontFamily: t.sans,
               color: t.ink(0.4),
@@ -732,12 +709,15 @@ const Index = () => {
             <span style={{ fontSize: "14px", lineHeight: 1 }}>→</span>
           </Link>
         </RevealBlock>
-        <RevealBlock delay={0.25}>
+        <RevealBlock delay={0.1}>
+          <div className="w-16 mt-6 mb-6" style={{ height: 1, background: t.ink(0.08) }} />
+        </RevealBlock>
+        <RevealBlock delay={0.15}>
           <span
-            className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
+            className="text-[9px] tracking-[0.3em] uppercase block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
           >
-            By Referral Only · <a href="mailto:hello@vangelder.co" className="no-underline" style={{ color: t.ink(0.25), transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = t.ink(0.5)} onMouseLeave={(e) => e.currentTarget.style.color = t.ink(0.25)}>Request an introduction</a>
+            By Referral Only
           </span>
         </RevealBlock>
       </section>
