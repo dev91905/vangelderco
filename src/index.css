@@ -182,12 +182,22 @@
 }
 
 
+/* Hero nav link hover effects */
+.hero-nav-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.hero-nav-link:hover .hero-nav-wash {
+  background: hsl(var(--foreground) / 0.03) !important;
+}
+
 .hero-nav-link:hover .hero-nav-text {
   color: hsl(var(--foreground) / 1) !important;
-  transform: translateX(6px);
+  transform: translateX(8px);
 }
 
 .hero-nav-text {
-  transition: color 0.15s ease, transform 0.15s ease;
+  transition: color 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
