@@ -24,7 +24,7 @@ const PostDetail = () => {
   if (metaLoading || passwordLoading) {
     return (
       <AtmosphericLayout>
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center min-h-dvh">
           <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Loading...</span>
         </div>
       </AtmosphericLayout>
@@ -34,7 +34,7 @@ const PostDetail = () => {
   if (metaError || !meta) {
     return (
       <AtmosphericLayout>
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center min-h-dvh">
           <span className="text-sm" style={{ fontFamily: t.sans, color: t.error(0.5) }}>Post not found</span>
         </div>
       </AtmosphericLayout>
@@ -52,7 +52,7 @@ const PostDetail = () => {
   if (postLoading || !post) {
     return (
       <AtmosphericLayout>
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center min-h-dvh">
           <span className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Loading...</span>
         </div>
       </AtmosphericLayout>
