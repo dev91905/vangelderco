@@ -152,6 +152,28 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
 ];
 
 
+/* ─── Back button component ─── */
+const BackButton = ({ onClick }: { onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    style={{
+      fontFamily: f.sans,
+      fontSize: "12px",
+      letterSpacing: "0.04em",
+      color: f.ink(0.3),
+      background: "none",
+      border: "none",
+      padding: "14px 12px",
+      cursor: "pointer",
+      transition: "color 200ms ease",
+    }}
+    onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+    onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+  >
+    ← Back
+  </button>
+);
+
 /* ─── Continue button component ─── */
 const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () => void; disabled?: boolean; label?: string }) => (
   <button
@@ -177,6 +199,14 @@ const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () =>
   >
     {btnLabel || "Continue →"}
   </button>
+);
+
+/* ─── Nav row: back + continue together ─── */
+const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: () => void; onNext: () => void; disabled?: boolean; nextLabel?: string; justifyEnd?: boolean }) => (
+  <div style={{ display: "flex", alignItems: "center", justifyContent: justifyEnd ? "flex-end" : "flex-start", gap: "4px" }}>
+    {onBack && <BackButton onClick={onBack} />}
+    <ContinueButton onClick={onNext} disabled={disabled} label={nextLabel} />
+  </div>
 );
 
 /* ═══════════════════════════════════════════════════════════════
