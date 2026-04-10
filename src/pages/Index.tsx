@@ -565,12 +565,6 @@ const Index = () => {
                   Find the gaps before your opponents do.
                 </h2>
 
-                <p
-                  className="text-[15px] md:text-[17px] leading-[1.7] max-w-md mb-4"
-                  style={{ fontFamily: t.serif, fontStyle: "italic", color: "hsl(var(--background) / 0.55)" }}
-                >
-                  A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table.
-                </p>
 
                 <p
                   className="text-[13px] md:text-[14px] leading-[1.7] max-w-sm mb-10"
