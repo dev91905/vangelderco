@@ -1182,14 +1182,14 @@ const Deck = () => {
                   style={{
                     padding: "32px 28px",
                     border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? f.ink(0.9) : "transparent",
+                    background: isSelected ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
                     borderRadius: "12px",
                     opacity: isDimmed ? 0.4 : 1,
                     cursor: "pointer",
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? f.cream : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(40 30% 80%)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? "hsl(var(--primary-foreground))" : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(var(--primary-foreground) / 0.8)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
                 </button>
               );
             })}
@@ -1201,17 +1201,17 @@ const Deck = () => {
                 { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
                 { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
               ].map((p, pi) => (
-                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
+                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
                   <div className="flex items-baseline gap-3 mb-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 65%)" }}>{p.phase}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream }}>{p.title}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(40 30% 60%)" }}>{p.time}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.6)" }}>{p.phase}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{p.title}</span>
+                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.5)" }}>{p.time}</span>
                   </div>
                   {p.bullets.map((b, i) => (
-                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 80%)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
+                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.8)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
                   ))}
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(40 30% 75%)", marginTop: "12px", lineHeight: 1.7 }}>
-                    <strong style={{ color: f.cream }}>Output:</strong> {p.output}
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.75)", marginTop: "12px", lineHeight: 1.7 }}>
+                    <strong style={{ color: "hsl(var(--primary-foreground))" }}>Output:</strong> {p.output}
                   </p>
                 </div>
               ))}
@@ -1219,9 +1219,9 @@ const Deck = () => {
           )}
 
           {engagementPath === "experienced" && (
-            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: f.ink(0.9), borderRadius: "12px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: f.cream, marginBottom: "12px" }}>Custom scope, fast start.</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(40 30% 80%)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
+            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(var(--destructive) / var(--a-high))", borderRadius: "12px" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))", marginBottom: "12px" }}>Custom scope, fast start.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(var(--primary-foreground) / 0.8)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution. Scoped to your timeline and budget.</p>
             </div>
           )}
 
@@ -1329,16 +1329,16 @@ const Deck = () => {
                   letterSpacing: "0.06em",
                   textTransform: "uppercase" as const,
                   fontWeight: 600,
-                  color: f.cream,
-                  background: f.ink(0.88),
+                  color: "hsl(var(--primary-foreground))",
+                  background: "hsl(var(--destructive) / var(--a-high))",
                   padding: "18px 32px",
                   borderRadius: "999px",
                   border: "none",
                   cursor: "pointer",
                   transition: "background 300ms, transform 180ms",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = f.ink(1); e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = f.ink(0.88); e.currentTarget.style.transform = "translateY(0)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--destructive))"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; e.currentTarget.style.transform = "translateY(0)"; }}
               >
                 Email Us
               </button>
@@ -1358,14 +1358,14 @@ const Deck = () => {
                     background: "transparent",
                     padding: "18px 32px",
                     borderRadius: "999px",
-                    border: `1px solid ${f.ink(0.12)}`,
+                    border: `1px solid hsl(var(--destructive) / var(--a-border))`,
                     cursor: "pointer",
                     textDecoration: "none",
                     textAlign: "center",
                     transition: "all 300ms",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.12); e.currentTarget.style.color = f.ink(0.7); }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-mid))"; e.currentTarget.style.color = f.ink(0.9); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; e.currentTarget.style.color = f.ink(0.7); }}
                 >
                   Schedule a Meeting
                 </a>
