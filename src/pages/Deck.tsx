@@ -1393,7 +1393,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                    background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1415,7 +1415,7 @@ const Deck = () => {
                       fontFamily: f.sans,
                       fontSize: "14px",
                       color: f.ink(0.8),
-                      background: "white",
+                    background: "hsl(var(--card))",
                       border: `1px solid ${f.ink(0.1)}`,
                       borderRadius: "8px",
                       padding: "12px",
@@ -1437,7 +1437,7 @@ const Deck = () => {
                     fontFamily: f.sans,
                     fontSize: "14px",
                     color: f.ink(0.8),
-                    background: "white",
+                    background: "hsl(var(--card))",
                     border: `1px solid ${f.ink(0.1)}`,
                     borderRadius: "8px",
                     padding: "12px",
@@ -1459,7 +1459,7 @@ const Deck = () => {
                     fontFamily: f.sans,
                     fontSize: "14px",
                     color: f.ink(0.8),
-                    background: "white",
+                    background: "hsl(var(--card))",
                     border: `1px solid ${f.ink(0.1)}`,
                     borderRadius: "8px",
                     padding: "12px",
@@ -1478,8 +1478,8 @@ const Deck = () => {
                     fontSize: "13px",
                     letterSpacing: "0.06em",
                     fontWeight: 600,
-                    color: f.cream,
-                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? f.ink(0.88) : f.ink(0.2),
+                    color: "hsl(var(--primary-foreground))",
+                    background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
                     border: "none",
                     padding: "14px 36px",
                     borderRadius: "999px",
@@ -1541,7 +1541,7 @@ const Deck = () => {
                 className="text-left transition-all duration-300"
                 style={{
                   padding: "20px 16px",
-                  background: cs.content ? f.ink(0.9) : "transparent",
+                  background: cs.content ? "hsl(var(--destructive) / var(--a-high))" : "transparent",
                   border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
                   borderRadius: "10px",
                   cursor: "pointer",
@@ -1552,8 +1552,8 @@ const Deck = () => {
                 onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } else { e.currentTarget.style.transform = "translateY(-2px)"; } }}
                 onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } else { e.currentTarget.style.transform = "translateY(0)"; } }}
               >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? f.cream : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(40 30% 70%)" : f.ink(0.25) }}>{cs.outcome}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? "hsl(var(--primary-foreground))" : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(var(--primary-foreground) / 0.7)" : f.ink(0.25) }}>{cs.outcome}</p>
               </button>
             ))}
           </div>
@@ -1572,7 +1572,7 @@ const Deck = () => {
       <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
         <DialogContent
           className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl"
-          style={{ background: f.cream, border: `1px solid ${f.ink(0.08)}` }}
+          style={{ background: "hsl(var(--background))", border: `1px solid ${f.ink(0.08)}` }}
         >
           <DialogHeader>
             <DialogTitle style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.9) }}>
