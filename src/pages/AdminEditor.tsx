@@ -205,7 +205,7 @@ const AdminEditor = () => {
         />
 
         {type === "case-study" && (
-          <div className="px-4 md:px-8 py-4">
+          <div className="px-4 md:px-8 py-4 max-w-[680px] mx-auto">
             <StatChipsEditor stats={stats} onChange={markDirty(setStats)} />
           </div>
         )}
@@ -236,7 +236,7 @@ const AdminEditor = () => {
         )}
 
         {type !== "field-note" && (
-          <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto">
+          <div className="px-4 md:px-8 py-6 max-w-[680px] mx-auto">
             <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={type === "case-study"} />
           </div>
         )}
