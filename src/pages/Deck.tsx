@@ -43,11 +43,92 @@ const PAIN_POINTS = [
 
 /* ─── Quiz rows — 5 dimensions of strategic communications ─── */
 const QUIZ_ROWS = [
-  { dimension: "Strategy", traditional: "Start with your message and use research to figure out how to deliver it. Validate your strategy through focus groups and structured testing.", nextgen: "Start with what's already moving — where people are organizing, what's making them act — then put infrastructure and resources behind it.", traditionalExplanation: "This approach starts with your agenda and uses research to figure out how to sell it. That work still matters — but it's not enough on its own. Focus groups test messages you already believe in with people sorted by demographics, not by the value systems that actually drive behavior. If something organic is happening in the world that doesn't fit your framework, you miss it or dismiss it as noise. The most effective operators do all of this and also find where energy is already forming, where people are already organizing, and put infrastructure behind it.", nextgenExplanation: "Starting with what's already moving means you're building on real energy — not manufacturing it. When people are already organizing around something they care about, you don't need to convince them to show up. You need to give them structure, resources, and strategy. This is how the most effective political networks operate. It's how foreign adversaries exploit domestic divisions. They don't create the anger — they find it, fund it, and shape it. The same principle works in reverse when it's used to build power for your side." },
-  { dimension: "Content", traditional: "Lead with credibility and production value — documentaries, op-eds, explainers, paid ads. Build trust through proven formats and platforms.", nextgen: "Fund around-the-clock content built on volume, investigation, and participation — creator ecosystems, investigative journalism, real-time narrative.", traditionalExplanation: "When your strategy starts with your own agenda, your content follows the same logic — polished, controlled, designed to deliver a message. That content still has a role. But on its own, it talks at people rather than inviting them in. The gap is participatory, investigative content — creator ecosystems and journalism running around the clock. Political identity and cultural narrative form in real time. You need the credibility of prestige formats and the reach of always-on participatory content. Most portfolios only fund the first half.", nextgenExplanation: "When your strategy starts with what's already moving, your content has to keep pace. Participatory content and investigative journalism running around the clock means you're inside the conversation as identity, conspiracy, and narrative form in real time. Audiences don't just consume this content — they spread it, remix it, and build identity around it. That's what compounds over time. Prestige content still builds credibility, but participatory content builds community. You need both — and the second one is where most portfolios have the gap." },
-  { dimension: "Distribution", traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency through paid media across the channels that matter most.", nextgen: "Own or acquire the platforms and channels themselves — shape the algorithms, the editorial direction, the programming that decides what gets seen.", traditionalExplanation: "Buying placements rents attention on someone else's platform, under someone else's rules. The algorithm changes, your reach disappears. The platform shifts policy, your content gets deprioritized. You have no control over the infrastructure that determines what gets seen. The most effective operators aren't buying ads on platforms — they're buying the platforms. They own or shape the algorithms, the editorial direction, the programming. When you own the infrastructure, you decide what gets seen — and that doesn't change when someone else rewrites their algorithm.", nextgenExplanation: "Owning infrastructure means you control how attention flows — not just where your ad appears. You shape the algorithm, the editorial direction, the programming. If you own the platform, you decide what millions of people see, how they see it, and what gets amplified. The most effective operators understood this early and invested accordingly. Buying placements is renting someone else's audience. Owning the channel means the rules are yours — and they stay yours when someone else's algorithm changes overnight." },
-  { dimension: "Engagement", traditional: "Partner with influencers and trusted voices who can amplify your message to their audiences online. Extend your reach through digital networks.", nextgen: "Take the conversation offline — organize through faith communities, campuses, business associations, and legal networks that build collective power.", traditionalExplanation: "Influencer partnerships stay online — scripted posts, retweets, celebrity endorsements. That amplification has value, but on its own it's surface-level and stays exactly where the algorithm wants you. The gap is offline. The most effective operators also fund faith communities, show up on every college campus, build through business associations and legal networks — massive in-person infrastructure where real people build collective power. That's what turns into votes, policy, and sustained action. You need online reach and offline organizing. Most portfolios only fund the first.", nextgenExplanation: "Real-world networks and gathering points carry built-in trust and turnout. Faith communities, campuses, music venues, business associations, legal networks — these are massive structures where people already gather, already show up, and already trust each other. When you organize through them, you're not just amplifying a message — you're building constituencies with collective power that shows up in person. Online reach matters too, but offline power is what turns attention into action. The most effective operators invest in both — and the offline side is where most portfolios have the gap." },
-  { dimension: "Measurement", traditional: "Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there and reaching the right people.", nextgen: "Track who's showing up, who's new to the table, what policy moved, and what infrastructure is forming. Measure what changed, not what was seen.", traditionalExplanation: "Here's what most people don't know about those reach numbers: the majority of \"views\" on platforms like Instagram are three-second scroll-bys that Meta counts as a view. Your audience saw your content while their thumb was in motion, and then it was gone. You build a report showing millions of impressions, but nobody's thinking about you after that pass. The programs that move the needle measure something different: Who showed up? Who's new? What policy moved? What infrastructure exists now that didn't before? That's power. Everything else is noise.", nextgenExplanation: "When your strategy starts with real energy and your engagement moves offline, your measurement has to match. Tracking who's new, what policy moved, and what infrastructure formed tells you whether you're building power. Most programs can show you reach numbers. Very few can show you who they brought into the movement, what changed because of it, and what will outlast the grant cycle. One report says \"10 million impressions.\" The other says \"4,000 new people, two bills advanced, three permanent coalitions.\" One is noise. The other is power." },
+  {
+    dimension: "Strategy",
+    traditional: "Start with your message. Use research to figure out how to deliver it.",
+    nextgen: "Start with what's already moving. Put infrastructure and resources behind it.",
+    traditionalLede: "That work still matters — but on its own, it misses what's already moving.",
+    traditionalBullets: [
+      "Focus groups test messages you already believe in, with people sorted by demographics — not by the value systems that actually drive behavior.",
+      "If something organic is happening that doesn't fit your framework, you miss it or dismiss it as noise.",
+      "The most effective operators do all of this and find where energy is already forming — then put infrastructure behind it.",
+    ],
+    nextgenLede: "You're building on real energy — not manufacturing it.",
+    nextgenBullets: [
+      "When people are already organizing around something they care about, you don't need to convince them to show up. You need to give them structure, resources, and strategy.",
+      "This is how the most effective political networks operate. It's how foreign adversaries exploit domestic divisions — they find the anger, fund it, and shape it.",
+      "The same principle works in reverse when it's used to build power for your side.",
+    ],
+  },
+  {
+    dimension: "Content",
+    traditional: "Lead with credibility — documentaries, op-eds, explainers, paid ads.",
+    nextgen: "Fund always-on participatory content and investigative journalism.",
+    traditionalLede: "Credibility content still has a role — but on its own, it talks at people rather than inviting them in.",
+    traditionalBullets: [
+      "The gap is participatory, investigative content — creator ecosystems and journalism running around the clock.",
+      "Political identity and cultural narrative form in real time. You need to be inside those conversations, not reacting after the fact.",
+      "You need the credibility of prestige formats and the reach of always-on participatory content. Most portfolios only fund the first half.",
+    ],
+    nextgenLede: "Participatory content compounds. Prestige content gets filed away.",
+    nextgenBullets: [
+      "Creator ecosystems and investigative journalism running around the clock means you're inside the conversation as identity, conspiracy, and narrative form in real time.",
+      "Audiences don't just consume this content — they spread it, remix it, and build identity around it.",
+      "Prestige content still builds credibility, but participatory content builds community. You need both — the second one is where most portfolios have the gap.",
+    ],
+  },
+  {
+    dimension: "Distribution",
+    traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency.",
+    nextgen: "Own or shape the platforms — the algorithms, editorial, programming.",
+    traditionalLede: "Buying placements rents attention on someone else's platform, under someone else's rules.",
+    traditionalBullets: [
+      "The algorithm changes, your reach disappears. The platform shifts policy, your content gets deprioritized. You have no control.",
+      "The most effective operators aren't buying ads on platforms — they're buying the platforms.",
+      "When you own the infrastructure, you decide what gets seen — and that doesn't change when someone else rewrites their algorithm.",
+    ],
+    nextgenLede: "If you own the platform, you decide what millions of people see.",
+    nextgenBullets: [
+      "You shape the algorithm, the editorial direction, the programming. The most effective operators understood this early and invested accordingly.",
+      "Buying placements is renting someone else's audience. Owning the channel means the rules are yours.",
+      "And they stay yours when someone else's algorithm changes overnight.",
+    ],
+  },
+  {
+    dimension: "Engagement",
+    traditional: "Partner with influencers to amplify your message to online audiences.",
+    nextgen: "Organize offline — faith communities, campuses, business and legal networks.",
+    traditionalLede: "Online amplification has value — but on its own, it stays exactly where the algorithm wants you.",
+    traditionalBullets: [
+      "Influencer partnerships stay online — scripted posts, retweets, celebrity endorsements. That's surface-level.",
+      "The gap is offline. The most effective operators also fund faith communities, campuses, business associations, and legal networks — massive in-person infrastructure.",
+      "You need online reach and offline organizing. Most portfolios only fund the first.",
+    ],
+    nextgenLede: "Real-world networks and gathering points carry built-in trust and turnout.",
+    nextgenBullets: [
+      "Faith communities, campuses, music venues, business associations, legal networks — these are massive structures where people already gather, show up, and trust each other.",
+      "When you organize through them, you're building constituencies with collective power that shows up in person.",
+      "Online reach matters too, but offline power is what turns attention into action. The most effective operators invest in both — the offline side is where most portfolios have the gap.",
+    ],
+  },
+  {
+    dimension: "Measurement",
+    traditional: "Track reach, impressions, and awareness. Build the case it's landing.",
+    nextgen: "Track who's showing up, what policy moved, what infrastructure formed.",
+    traditionalLede: "Most of those \"views\" are three-second scroll-bys that Meta counts as a view.",
+    traditionalBullets: [
+      "Your audience saw your content while their thumb was in motion, and then it was gone. Nobody's thinking about you after that pass.",
+      "You build a report showing millions of impressions, but impressions don't measure power.",
+      "The programs that move the needle measure something different: Who showed up? Who's new? What policy moved? What infrastructure exists now that didn't before?",
+    ],
+    nextgenLede: "Tracking power, not impressions, tells you whether you're actually building something.",
+    nextgenBullets: [
+      "Most programs can show you reach numbers. Very few can show you who they brought into the movement and what changed because of it.",
+      "One report says \"10 million impressions.\" The other says \"4,000 new people, two bills advanced, three permanent coalitions.\"",
+      "One is noise. The other is power.",
+    ],
+  },
+
 ];
 
 /* ─── Three domains ─── */
