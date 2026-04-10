@@ -43,12 +43,12 @@ const PAIN_POINTS = [
 
 /* ─── Quiz rows (confrontation) — unlabeled A/B ─── */
 const QUIZ_ROWS = [
-  { dimension: "Research", yours: "Test messages in a lab. Focus groups, message testing, pre-launch polling — all before a single dollar goes to market.", theirs: "Monitor what's already resonating organically across platforms and communities. Skip the lab — study the wild." },
-  { dimension: "Content", yours: "Produce polished ads, post explainers, place op-eds — and if there's budget, fund a documentary that nobody sees.", theirs: "Invest in digital creator economies and fund investigative journalism so political ideology and conspiracies form in real time. Round-the-clock content, constantly." },
-  { dimension: "Distribution", yours: "Buy placements on platforms where a 3-second scroll-by counts as a \"view.\" No one remembers it.", theirs: "Buy the platforms themselves. Change the algorithms, the programming, the editorial direction. Own the infrastructure attention flows through." },
-  { dimension: "Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree.", theirs: "Take the conversation offline. Organize and fund mega-structures — faith communities, campuses, business networks, legal networks, veterans groups." },
-  { dimension: "Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics." },
-  { dimension: "Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization." },
+  { dimension: "Research", yours: "Test messages in a lab. Focus groups, message testing, pre-launch polling — all before a single dollar goes to market.", theirs: "Monitor what's already resonating organically across platforms and communities. Skip the lab — study the wild.", explanation: "Lab testing tells you what people say they think. Monitoring organic resonance tells you what they actually respond to. The other side doesn't guess — they watch, listen, and move on real signals." },
+  { dimension: "Content", yours: "Produce polished ads, post explainers, place op-eds — and if there's budget, fund a documentary that nobody sees.", theirs: "Invest in digital creator economies and fund investigative journalism so political ideology and conspiracies form in real time. Round-the-clock content, constantly.", explanation: "Polished campaigns launch and end. Creator economies and investigative media produce content continuously — shaping narratives 24/7. Your opponents aren't making ads. They're building content infrastructure." },
+  { dimension: "Distribution", yours: "Buy placements on platforms where a 3-second scroll-by counts as a \"view.\" No one remembers it.", theirs: "Buy the platforms themselves. Change the algorithms, the programming, the editorial direction. Own the infrastructure attention flows through.", explanation: "Buying placements means renting attention on someone else's terms. Owning infrastructure means controlling how attention flows in the first place. One is a media buy. The other is a power play." },
+  { dimension: "Engagement", yours: "Hire influencers to post scripted content that reaches audiences who already agree.", theirs: "Take the conversation offline. Organize and fund mega-structures — faith communities, campuses, business networks, legal networks, veterans groups.", explanation: "Influencer posts reach people who already agree. Organizing through trusted institutions — churches, unions, campuses, veteran networks — builds real constituencies that show up when it matters." },
+  { dimension: "Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics.", explanation: "Impressions measure exposure. Growth measures power. If your metrics can't tell you who's new to your side and what policy moved, you're measuring the wrong things." },
+  { dimension: "Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization.", explanation: "Grant-cycle thinking locks you into plans regardless of results. The other side kills what doesn't work in weeks, doubles down on what does, and compounds gains across years — not grant periods." },
 ];
 const COL_TRADITIONAL = "Traditional Approach";
 const COL_NEXTGEN = "Next-Gen Approach";
@@ -377,6 +377,14 @@ const Deck = () => {
     let accumulated = 0;
     const handler = (e: WheelEvent) => {
       if (selectedCase !== null) return;
+      // Allow vertical scrolling inside scrollable frames
+      const scrollableFrame = (e.target as HTMLElement)?.closest("[data-scrollable]") as HTMLElement | null;
+      if (scrollableFrame && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const atTop = scrollableFrame.scrollTop <= 0;
+        const atBottom = scrollableFrame.scrollTop + scrollableFrame.clientHeight >= scrollableFrame.scrollHeight - 2;
+        // If not at boundary, let native scroll happen
+        if (!(atTop && e.deltaY < 0) && !(atBottom && e.deltaY > 0)) return;
+      }
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
         accumulated += e.deltaY;
@@ -655,7 +663,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
-      <DeckFrame ref={setRef(2)} mode="wide">
+      <DeckFrame ref={setRef(2)} mode="wide" scrollable={quizRevealed}>
         <div ref={r3.ref} className="flex flex-col justify-center" style={{ height: "100%", width: "100%" }}>
           {/* Header */}
           <div style={{ marginBottom: "clamp(24px, 4vw, 48px)" }}>
@@ -821,8 +829,11 @@ const Deck = () => {
                 </p>
               </div>
 
-              {/* Dimension-by-dimension breakdown */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+              {/* Dimension-by-dimension breakdown with explanations */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: f.ink(0.3), marginBottom: "16px" }}>
+                  Dimension by dimension
+                </p>
                 {QUIZ_ROWS.map((row, i) => {
                   const answer = quizAnswers[i];
                   const pickedNextGen = answer?.picked === "theirs";
@@ -830,52 +841,74 @@ const Deck = () => {
                     <div
                       key={i}
                       style={{
-                        display: "grid",
-                        gridTemplateColumns: "clamp(80px, 10vw, 120px) 1fr",
-                        gap: "0",
-                        padding: "clamp(14px, 1.5vw, 20px) 0",
-                        borderBottom: i < QUIZ_ROWS.length - 1 ? `1px solid ${f.ink(0.06)}` : "none",
+                        padding: "clamp(20px, 2vw, 28px)",
+                        marginBottom: "12px",
+                        borderRadius: "12px",
+                        background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg-subtle))" : f.ink(0.02),
+                        border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.06)}`,
                         animation: `fade-up 0.35s ease-out ${i * 80}ms both`,
                       }}
                     >
-                      {/* Dimension label */}
-                      <div style={{ display: "flex", alignItems: "flex-start", paddingTop: "2px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "10px", fontWeight: 600, color: f.ink(0.3), textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                      {/* Header row: dimension + badge */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>
                           {row.dimension}
+                        </p>
+                        <span style={{
+                          fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          padding: "3px 10px", borderRadius: "999px",
+                          color: pickedNextGen ? "hsl(150 50% 36%)" : "hsl(25 80% 50%)",
+                          background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : "hsl(25 80% 50% / 0.1)",
+                        }}>
+                          {pickedNextGen ? "Next-Gen ✓" : "Traditional"}
+                        </span>
+                      </div>
+
+                      {/* What they picked */}
+                      <p style={{
+                        fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)",
+                        color: f.ink(0.55), lineHeight: 1.65, marginBottom: "14px",
+                      }}>
+                        <span style={{ fontWeight: 600, color: f.ink(0.65) }}>You picked: </span>
+                        {pickedNextGen ? row.theirs : row.yours}
+                      </p>
+
+                      {/* Explanation — why this matters */}
+                      <div style={{
+                        borderTop: `1px solid ${f.ink(0.06)}`,
+                        paddingTop: "14px",
+                      }}>
+                        <p style={{
+                          fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)",
+                          color: f.ink(0.5), lineHeight: 1.7, fontStyle: "italic",
+                        }}>
+                          {row.explanation}
                         </p>
                       </div>
 
-                      {/* What they picked — single column, clear label */}
-                      <div style={{ paddingLeft: "clamp(12px, 1.5vw, 20px)" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                          <span style={{
-                            fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            padding: "3px 10px", borderRadius: "999px",
-                            color: pickedNextGen ? "hsl(150 50% 36%)" : f.ink(0.4),
-                            background: pickedNextGen ? "hsl(150 50% 36% / 0.1)" : f.ink(0.05),
-                          }}>
-                            {pickedNextGen ? "Next-Gen" : "Traditional"}
-                          </span>
-                          <span style={{ fontFamily: f.sans, fontSize: "9px", color: f.ink(0.2) }}>
-                            Your pick
-                          </span>
-                        </div>
-                        <p style={{
-                          fontFamily: f.sans,
-                          fontSize: "clamp(12px, 1.2vw, 14px)",
-                          color: pickedNextGen ? f.ink(0.65) : f.ink(0.4),
-                          lineHeight: 1.6,
+                      {/* If they picked traditional, show what the better approach looks like */}
+                      {!pickedNextGen && (
+                        <div style={{
+                          marginTop: "14px", padding: "14px 16px",
+                          borderRadius: "8px",
+                          background: "hsl(var(--foreground) / var(--a-bg))",
+                          border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                         }}>
-                          {pickedNextGen ? row.theirs : row.yours}
-                        </p>
-                      </div>
+                          <p style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: f.ink(0.3), marginBottom: "8px" }}>
+                            The next-gen approach
+                          </p>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.6), lineHeight: 1.65 }}>
+                            {row.theirs}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
 
-              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", display: "flex", justifyContent: "center" }}>
+              <div style={{ marginTop: "clamp(28px, 4vw, 40px)", marginBottom: "40px", display: "flex", justifyContent: "center" }}>
                 <NavRow onBack={() => scrollToFrame(1)} onNext={() => scrollToFrame(3)} />
               </div>
             </div>

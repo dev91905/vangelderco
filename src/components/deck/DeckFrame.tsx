@@ -9,6 +9,7 @@ interface DeckFrameProps {
   mode?: FrameMode;
   align?: FrameAlign;
   onActive?: (active: boolean) => void;
+  scrollable?: boolean;
 }
 
 const modeStyles: Record<FrameMode, string> = {
@@ -24,7 +25,7 @@ const alignStyles: Record<FrameAlign, string> = {
 };
 
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
-  ({ children, mode = "narrow", align = "center", onActive }, ref) => {
+  ({ children, mode = "narrow", align = "center", onActive, scrollable = false }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
 
     const setRefs = (el: HTMLDivElement | null) => {
@@ -49,7 +50,8 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
     return (
       <section
         ref={setRefs}
-        className={`relative flex ${alignStyles[align]}`}
+        data-scrollable={scrollable || undefined}
+        className={`relative flex ${scrollable ? "" : alignStyles[align]}`}
         style={{
           height: "100dvh",
           width: "100vw",
@@ -57,9 +59,10 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
           flexShrink: 0,
           scrollSnapAlign: "start",
           minHeight: "100dvh",
+          ...(scrollable ? { overflowY: "auto", overflowX: "hidden" } : {}),
         }}
       >
-        <div className={`relative z-10 w-full ${modeStyles[mode]}`}>
+        <div className={`relative z-10 w-full ${modeStyles[mode]} ${scrollable ? "py-[max(40px,8vh)]" : ""}`} style={scrollable ? { margin: "0 auto" } : {}}>
           {children}
         </div>
       </section>
