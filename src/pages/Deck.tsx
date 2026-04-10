@@ -377,7 +377,7 @@ const Deck = () => {
       const frameEl = frameRefs.current[currentFrame];
       if (!frameEl) return;
       const frameTop = frameEl.offsetTop;
-      const frameBottom = frameTop + frameEl.offsetHeight;
+      const frameBottom = frameTop + frameEl.scrollHeight;
       const scrollTop = el.scrollTop;
       const viewBottom = scrollTop + el.clientHeight;
 
