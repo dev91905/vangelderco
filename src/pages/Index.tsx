@@ -159,11 +159,14 @@ function CaseFragment({ sector, brief, result }: { sector: string; brief: string
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const [scrollY, setScrollY] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => setScrollY(el.scrollTop);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   const heroOpacity = Math.max(0, 1 - scrollY / 600);
@@ -178,9 +181,11 @@ const Index = () => {
         Van Gelder Co.
       </span>
 
+      <div ref={scrollRef} className="snap-scroll-container h-dvh overflow-y-auto overflow-x-hidden">
+
       {/* ═══ HERO ═══ */}
       <section
-        className="flex items-center justify-center w-full relative z-20"
+        className="snap-section flex items-center justify-center w-full relative z-20"
         style={{ height: "100vh", opacity: heroOpacity }}
       >
         <main className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14">
@@ -256,7 +261,7 @@ const Index = () => {
       </section>
 
       {/* ═══ ALTITUDE ═══ */}
-      <section className="flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
+      <section className="snap-section flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
         <div className="max-w-xl px-6 md:px-10">
           <RevealBlock>
             <p
@@ -301,7 +306,7 @@ const Index = () => {
       </section>
 
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
+      <section className="snap-section relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
         <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
           <RevealBlock>
             <div
@@ -356,7 +361,7 @@ const Index = () => {
       </section>
 
       {/* ═══ FIELD NOTES — sticky header with scrollable content ═══ */}
-      <section className="relative z-10">
+      <section className="snap-section relative z-10">
         {/* Sticky label */}
         <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "hsl(var(--background))" }}>
           <div
@@ -376,7 +381,7 @@ const Index = () => {
 
       {/* ═══ CONTACT ═══ */}
       <section
-        className="relative z-10 flex flex-col items-center justify-center"
+        className="snap-section relative z-10 flex flex-col items-center justify-center"
         style={{ height: "100vh" }}
       >
         <RevealBlock>
@@ -427,6 +432,7 @@ const Index = () => {
           </span>
         </RevealBlock>
       </section>
+      </div>
     </AtmosphericLayout>
   );
 };
