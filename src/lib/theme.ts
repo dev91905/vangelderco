@@ -115,6 +115,7 @@ export const t = {
   white,
   error,
   success,
+  accent,
   rule,
   surface,
   border,
