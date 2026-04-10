@@ -1,39 +1,50 @@
 
 
-# Admin CRM + Deck CTA Overhaul
+# Admin Panel Color Audit + WYSIWYG Editor
 
-## Problem
-1. **Admin**: "Deck Contacts" and "Deck Submissions" are two separate sections. Submissions only stores the custom challenge message, which is already duplicated in `deck_contacts.custom_challenge`. Redundant section.
-2. **Deck CTA (Frame 10)**: Contact info is hidden behind a "Send Intake for Review" button. Name and email should be upfront — part of the flow, not gated behind an extra click. Two clear exit options: book a call, or submit and have you reach out.
+## Two problems
 
-## Changes
+### 1. White-on-cream hover effect
+The admin panel background is cream (`hsl(40 30% 96%)`). Hover states use `t.white` which is `hsl(40 25% 98%)` — a 2% lightness difference. Invisible. Every hover across the admin is broken:
+- PostListTable row hover → `t.white`
+- Settings/logout button hover → `t.white`
+- EditorMetaBar settings gear hover → `t.surface.hover` (`t.ink(0.04)`)
+- BlockEditor delete button bg → `hsl(0 0% 100%)`
 
-### 1. Admin — Merge into single "Contacts" section
-- Remove `SubmissionsFeed` component entirely
-- Rename "Deck Contacts" → "Contacts" — this is now a mini CRM
-- Each contact card already shows all survey answers via the expandable detail view
-- The custom challenge message is already stored in `custom_challenge` on `deck_contacts`
-- No database changes needed — `deck_submissions` table stays (existing data), we just stop showing it separately and stop writing to it
+**Fix**: Replace all admin hover backgrounds with a visible contrast. Use `t.ink(0.04)` for subtle hover (which is dark ink at 4% opacity — visible on cream), and `t.ink(0.06)` for active states. Audit every `onMouseEnter`/`onMouseLeave` and `hover:bg-` in:
+- `src/pages/Admin.tsx` — button hovers, post row hovers
+- `src/pages/AdminEditor.tsx` — toolbar button hovers
+- `src/components/admin/EditorMetaBar.tsx` — drawer close, settings gear
+- `src/components/admin/BlockCanvas.tsx` — insert point buttons, empty state
+- `src/components/admin/BlockEditor.tsx` — delete button, drag handle
+- `src/components/admin/PostListTable.tsx` — row hover
 
-### 2. Deck CTA (Frame 10) — Contact form is always visible
-Current flow: See summary → click "Send Intake" → form appears → fill out → submit
-New flow: See summary + contact form inline (name, org, email already visible) → two buttons at bottom:
-- **"Submit & get your diagnostic"** — submits intake, shows thank-you with "we'll email your results"
-- **"Book a call instead"** — submits intake AND opens booking link
+Specifically `t.white` and `hsl(0 0% 100%)` on hover backgrounds all become `t.ink(0.05)`.
 
-The form fields (first name, last name, org, email) are always visible on Frame 10, not hidden behind a mode toggle. Remove the `ctaMode` state machine — there's no "choose" step anymore.
+### 2. Editor should match published view (WYSIWYG-style)
+Current editor: flat text areas with raw `DM Sans` at generic sizes, no visual hierarchy, no centered layout matching the published post.
 
-Copy for the CTA:
-- Headline: "We've got a picture. Let's talk."
-- Subhead: "Leave your details and we'll send your diagnostic. Or book a call and walk through it together."
-- After submit: "Received ✓ — We're reviewing your intake now. A team member will follow up within two business days."
+Published BlogPostView: centered at `max-w-[680px]`, proper heading sizes (`32px-44px`), body at `15-16px`, serif quotes, callouts with backgrounds, proper spacing.
 
-### 3. Stop double-writing to deck_submissions
-In `handleCtaSubmit`, remove the line that inserts into `deck_submissions`. The custom challenge is already saved in `deck_contacts.custom_challenge`.
+**Fix**: Restyle the BlockEditor to match ContentBlockRenderer and BlogPostView typography:
+
+- **Headings**: Match published sizes — H1 `text-[24px] md:text-[32px]`, H2 `text-[20px] md:text-[26px]`, H3 `text-[17px] md:text-[21px]`. Use `t.sans` with `font-bold` (not `font-medium`).
+- **Paragraphs**: `text-[15px] md:text-[16px]`, color `t.ink(0.55)`, line-height `1.9`.
+- **Quotes**: Use `t.serif` italic, left border `2px solid t.ink(0.12)`, proper padding. Match ContentBlockRenderer exactly.
+- **Callouts**: Match the published callout style — `t.ink(0.04)` background, `t.border(0.08)` border.
+- **Overall canvas wrapper** in AdminEditor: keep `max-w-3xl` (close to published `680px`), center it.
+- **Title input** in EditorMetaBar: size it closer to the published `text-[32px] md:text-[44px]`.
+- **Excerpt/dek textarea**: match published excerpt styling — `clamp(17px, 1.9vw, 19px)`, `t.ink(0.55)`.
+
+Replace hardcoded `hsl(30 10% 12% / ...)` values in BlockEditor.tsx and BlockCanvas.tsx with `t.ink(...)` from theme — these files bypass the theme system entirely.
 
 ## Files to change
-| File | Change |
-|------|--------|
-| `src/pages/Admin.tsx` | Remove `SubmissionsFeed`, rename section to "Contacts" |
-| `src/pages/Deck.tsx` | Flatten CTA — form always visible, remove ctaMode state machine, remove deck_submissions insert, two action buttons below form |
+| File | What |
+|------|------|
+| `src/pages/Admin.tsx` | Fix hover backgrounds — replace `t.white` with `t.ink(0.05)` |
+| `src/pages/AdminEditor.tsx` | Fix toolbar hover colors, use theme tokens |
+| `src/components/admin/EditorMetaBar.tsx` | Fix drawer hover states, make title/excerpt match published sizes |
+| `src/components/admin/BlockEditor.tsx` | Restyle all block types to match published typography (heading sizes, paragraph color/size, quote serif + border, callout bg). Replace all hardcoded HSL with `t.*` |
+| `src/components/admin/BlockCanvas.tsx` | Replace hardcoded HSL with `t.*`, fix insert point hover |
+| `src/components/admin/PostListTable.tsx` | Fix row hover from `t.white` to `t.ink(0.05)` |
 
