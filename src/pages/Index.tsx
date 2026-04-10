@@ -521,20 +521,20 @@ const Index = () => {
                   className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
                   style={{
                     fontFamily: t.sans,
-                    color: "hsl(var(--destructive) / 0.6)",
-                    background: "hsl(var(--destructive) / 0.04)",
-                    border: "1px solid hsl(var(--destructive) / 0.12)",
+                     color: "hsl(var(--destructive) / var(--a-high))",
+                    background: "hsl(var(--destructive) / var(--a-bg))",
+                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.35)";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.9)";
+                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
+                    e.currentTarget.style.color = "hsl(var(--destructive))";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
-                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.12)";
-                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.6)";
+                    e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
+                    e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
                   }}
                 >
                   {sector}
@@ -556,18 +556,18 @@ const Index = () => {
             style={{
               fontFamily: t.sans,
               color: "hsl(var(--destructive))",
-              border: "1px solid hsl(var(--destructive) / 0.3)",
-              background: "hsl(var(--destructive) / 0.04)",
+              border: "1px solid hsl(var(--destructive) / var(--a-dim))",
+              background: "hsl(var(--destructive) / var(--a-bg))",
               transition: `all 0.4s ${EASE_OUT_EXPO}`,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
+              e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
               e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.5)";
               e.currentTarget.style.transform = "scale(1.04)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
-              e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.3)";
+              e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-dim))";
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
@@ -587,7 +587,7 @@ const Index = () => {
             style={{
               width: 0,
               height: 1,
-              background: "hsl(var(--destructive) / 0.4)",
+              background: "hsl(var(--destructive) / var(--a-low))",
               transition: `width 1s ${EASE_OUT_EXPO} 0.2s`,
             }}
           />
