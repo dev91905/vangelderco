@@ -434,6 +434,7 @@ const Deck = () => {
   };
 
   const opponentPickCount = quizAnswers.filter(a => a?.picked === "theirs").length;
+  const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
   const STEP_LABELS = ["Start", "Diagnosis", "Quiz", "Hallmarks", "Domains", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
@@ -659,11 +660,19 @@ const Deck = () => {
           {/* Header */}
           <div style={{ marginBottom: "clamp(24px, 4vw, 48px)" }}>
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.5vw, 32px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
-              {quizRevealed ? "Here's what happened." : "Which approach sounds more effective?"}
+              {quizRevealed
+                ? "Here's what happened."
+                : isFreshStart
+                  ? "Which approach sounds more effective?"
+                  : "How does your current portfolio work?"
+              }
             </p>
             {!quizRevealed && (
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.5 }}>
-                Two communications approaches to {QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.
+                {isFreshStart
+                  ? `Two communications approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.`
+                  : `For ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"} — which of these is closer to how your portfolio operates today?`
+                }
               </p>
             )}
           </div>
@@ -797,11 +806,17 @@ const Deck = () => {
                   {opponentPickCount} of {QUIZ_ROWS.length} next-gen
                 </p>
                 <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 19px)", color: f.ink(0.55), lineHeight: 1.6, maxWidth: "560px" }}>
-                  {opponentPickCount >= 4
-                    ? "You already think the way the strongest portfolios operate. Most people in your position don't — which means you're ahead of your peers and ready to move."
-                    : opponentPickCount >= 2
-                      ? "You're seeing what most of your peers miss. The instincts are right — the next step is building a portfolio that actually executes on them."
-                      : "You've got good instincts — and the fact that you're here means you're already thinking differently. Let's sharpen that into a real advantage."
+                  {isFreshStart
+                    ? opponentPickCount >= 5
+                      ? "Your instincts are really sharp. Most people aren't doing what you identified here — but your opponents are, and that's exactly what's going to make the difference."
+                      : opponentPickCount >= 3
+                        ? "You've got some work to do — but the fact that you spotted some of these tells us you're thinking in the right direction. We can close the rest of these gaps."
+                        : "You've got some work to do, but we can help. Most people pick the same way you did. The problem is, your opponents are running the other playbook — and it's working."
+                    : opponentPickCount >= 5
+                      ? "You're thinking ahead of the curve. Your portfolio is already oriented toward what works — we can help you execute at scale and stay ahead."
+                      : opponentPickCount >= 3
+                        ? "Your portfolio has some of the right instincts built in, but there are real gaps. Your opponents are already operating the way you're not — and that's what makes the difference."
+                        : "Your portfolio needs work. The approaches you're running are what most organizations default to — but they're not what moves power. Your opponents are already doing it differently."
                   }
                 </p>
               </div>
