@@ -39,6 +39,7 @@ const AdminEditor = () => {
   const [featuredStat, setFeaturedStat] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasLoadedRef = useRef(false);
 
