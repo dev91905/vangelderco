@@ -250,10 +250,9 @@ const Index = () => {
       {/* ═══ HERO ═══ */}
       <section
         className="snap-section flex items-center justify-center w-full relative z-20"
-        style={{ height: "100vh" }}
       >
         <main
-          className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14"
+          className="flex flex-col items-center text-center px-6 max-w-4xl mx-auto gap-10 md:gap-14"
           style={{
             opacity: heroOpacity,
             transform: `translateY(${heroY}px) scale(${heroScale})`,
@@ -339,8 +338,8 @@ const Index = () => {
       </section>
 
       {/* ═══ ALTITUDE ═══ */}
-      <section className="snap-section flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
-        <div className="max-w-xl px-6 md:px-10">
+      <section className="snap-section flex items-center justify-center relative z-10">
+        <div className="max-w-4xl mx-auto px-6 md:px-10">
           <RevealBlock>
             <p
              className="italic font-light"
@@ -381,8 +380,8 @@ const Index = () => {
       </section>
 
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="snap-section relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
-        <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
+      <section className="snap-section relative z-10 flex items-center">
+        <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
@@ -486,7 +485,6 @@ const Index = () => {
       {/* ═══ INTAKE CTA ═══ */}
       <section
         className="snap-section relative z-10 flex flex-col items-center justify-center px-6"
-        style={{ minHeight: "100vh" }}
       >
         <RevealBlock>
           <span
@@ -555,8 +553,8 @@ const Index = () => {
       </section>
 
       {/* ═══ NETWORK ═══ */}
-      <section className="snap-section relative z-10">
-        <div className="py-24 md:py-32 px-6 md:px-10 max-w-4xl mx-auto">
+      <section className="snap-section relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-4"
@@ -606,8 +604,8 @@ const Index = () => {
       </section>
 
       {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section relative z-10">
-        <div className="py-24 md:py-32 px-6 md:px-10 lg:px-16 max-w-6xl mx-auto">
+      <section className="snap-section relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
@@ -633,7 +631,7 @@ const Index = () => {
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <section className="relative z-10 flex flex-col items-center justify-center px-6 py-24">
+      <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
           <a
             href="mailto:hello@vangelder.co"

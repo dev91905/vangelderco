@@ -197,12 +197,15 @@
   background: hsl(var(--foreground) / 0.03) !important;
 }
 
-/* Smooth scroll container (no snap — let content flow naturally) */
+/* Snap scroll container — section-by-section */
 .snap-scroll-container {
+  scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
 }
 .snap-section {
-  /* kept as layout marker */
+  scroll-snap-align: start;
+  height: 100dvh;
+  min-height: 100dvh;
 }
 
 
