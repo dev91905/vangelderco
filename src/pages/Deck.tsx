@@ -791,22 +791,6 @@ const Deck = () => {
             </div>
           )}
 
-          {!quizRevealed && (
-            <div style={{ marginTop: "clamp(24px, 4vw, 40px)", display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
-              {QUIZ_ROWS.map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: i === quizStep ? "24px" : "8px",
-                    height: "8px",
-                    borderRadius: "4px",
-                    background: quizAnswers[i] !== null ? "hsl(var(--foreground) / var(--a-high))" : i === quizStep ? "hsl(var(--foreground) / var(--a-mid))" : f.ink(0.1),
-                    transition: "all 0.3s ease",
-                  }}
-                />
-              ))}
-            </div>
-          )}
 
           {quizRevealed && (
             <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
