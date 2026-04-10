@@ -272,10 +272,10 @@
 /* Sector pill sequential glow — dark mode only */
 @keyframes pill-glow {
   0%, 10% {
-    background: hsl(var(--foreground) / 0.12);
-    border-color: hsl(var(--foreground) / 0.35);
+    background: hsl(var(--accent-h) var(--accent-s) var(--accent-l) / 0.12);
+    border-color: hsl(var(--accent-h) var(--accent-s) var(--accent-l) / 0.5);
     color: hsl(var(--foreground));
-    box-shadow: 0 0 20px -4px hsl(var(--foreground) / 0.15);
+    box-shadow: 0 0 24px -4px hsl(var(--accent-h) var(--accent-s) var(--accent-l) / 0.25);
   }
   20%, 100% {
     background: hsl(var(--foreground) / var(--a-bg));
