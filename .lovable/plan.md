@@ -1,39 +1,50 @@
 
 
-# Dark Mode: Black & White, No Red
+# Fix Homepage: Consistent Widths + Snap Scroll
 
-## Direction
-Strip all red/oxblood from dark mode. Pure black-and-white palette with a slight warm cast to the whites (not cool/blue) to prevent it from feeling clinical. Remove the CRT breathing red glow. Keep scan lines and scan beam as optional texture (they're white, not red), or remove them too for full clean.
+## Problems
+1. **Misaligned widths** — every section uses a different `max-w`: Hero is `max-w-3xl`, Altitude is `max-w-xl`, Capabilities is `max-w-5xl`, Network is `max-w-4xl`, Field Notes is `max-w-6xl`
+2. **No snap scrolling** — sections use `minHeight: 100vh` but scroll continuously with no snap behavior
 
 ## Changes
 
-### 1. `src/index.css` — Dark mode CSS variables
-Replace all red-tinted values with neutral white/black:
-- `--primary`: `0 0% 90%` (light gray instead of red)
-- `--primary-foreground`: `0 0% 5%` (near-black)
-- `--destructive`: `0 60% 50%` (keep red only for actual errors/destructive actions — this is semantic, not brand)
-- `--ring`: `0 0% 40%` (neutral gray ring)
-- `--sidebar-primary`: `0 0% 90%`
-- `--sidebar-ring`: `0 0% 40%`
-- `--accent-h/s/l`: `0, 0%, 60%` — accent becomes a medium gray, no color
+### `src/pages/Index.tsx`
 
-### 2. `src/components/CRTOverlay.tsx`
-Remove the breathing red glow div entirely. Keep scan lines + scan beam (they're already white) as subtle texture — or remove those too if you want fully clean.
+**Snap scroll container**: Add `scroll-snap-type: y mandatory` to the outer scroll div (line 246). Each section gets `scroll-snap-align: start` and `height: 100dvh` (not `minHeight`).
 
-### 3. `src/index.css` — `pill-glow` keyframes
-Update the `.dark` pill-glow animation to use white/gray instead of `--destructive` (red). Network section pills glow white on hover instead of red.
+**Normalize widths**: Set all section inner containers to `max-w-4xl mx-auto` to match the Network section:
+- Hero: keep centered layout, cap at `max-w-4xl`
+- Altitude: `max-w-xl` → `max-w-4xl` (content stays left-aligned within)
+- Capabilities: `max-w-5xl` → `max-w-4xl`
+- Intake CTA: add `max-w-4xl` wrapper
+- Network: already `max-w-4xl` ✓
+- Field Notes: `max-w-6xl` → `max-w-4xl`
+- Footer: add `max-w-4xl` wrapper
 
-### 4. Update memory files
-- Update `mem://design/dark-mode` to reflect the new black & white palette
-- Update `mem://design/accent-opacity` to note accent is now neutral in dark mode
+**Each section becomes full-screen with snap**:
+```
+height: 100dvh
+overflow: hidden (prevent content bleed)
+scroll-snap-align: start
+display: flex + items-center (vertically center content)
+```
 
-### What stays
-- Light mode is completely unchanged (warm cream + gold)
-- The dark mode background (`0 0% 2.5%`) and surface hierarchy stay the same
-- `--destructive` remains red for semantic error states only (delete buttons, validation errors) — that's UX convention, not brand
+### `src/index.css`
+
+Update `.snap-scroll-container` to enable mandatory snap:
+```css
+.snap-scroll-container {
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-section {
+  scroll-snap-align: start;
+  height: 100dvh;
+  min-height: 100dvh;
+}
+```
 
 ### Files touched
-- `src/index.css` (CSS variables + pill-glow keyframes)
-- `src/components/CRTOverlay.tsx` (remove red glow)
-- Memory files (2)
+- `src/pages/Index.tsx` — width normalization + section structure
+- `src/index.css` — snap scroll CSS
 
