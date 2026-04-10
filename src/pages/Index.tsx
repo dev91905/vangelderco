@@ -523,11 +523,7 @@ const Index = () => {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  backgroundImage: `
-                    radial-gradient(ellipse at 20% 50%, hsl(var(--background) / 0.05) 0%, hsl(var(--background) / 0.02) 30%, transparent 70%),
-                    radial-gradient(ellipse at 80% 30%, hsl(var(--background) / 0.03) 0%, hsl(var(--background) / 0.01) 25%, transparent 60%),
-                    radial-gradient(ellipse at 60% 80%, hsl(var(--background) / 0.04) 0%, hsl(var(--background) / 0.015) 25%, transparent 65%)
-                  `,
+                  backgroundImage: `linear-gradient(135deg, hsl(var(--foreground) / 0.015) 0%, hsl(var(--foreground) / 0.04) 50%, hsl(var(--foreground) / 0.01) 100%)`,
                 }}
               />
               {/* Subtle grid overlay */}
