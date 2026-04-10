@@ -205,7 +205,7 @@ const AdminEditor = () => {
         />
 
         {type === "case-study" && (
-          <div className="px-4 md:px-8 py-4">
+          <div className="px-4 md:px-8 py-4 max-w-[680px] mx-auto">
             <StatChipsEditor stats={stats} onChange={markDirty(setStats)} />
           </div>
         )}
