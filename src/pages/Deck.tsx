@@ -50,7 +50,7 @@ const PAIN_POINTS = [
   {
     id: "access",
     short: "Limited access to pop culture",
-    detail: "Your grantees keep running the same plays — op-eds, paid media, social. The deeper cultural channels that actually move people stay untapped.",
+    detail: "Your grantees keep running the same plays — op-eds, paid media, social. The cultural channels that actually move people stay untapped.",
     consequence: "The most powerful cultural sectors — music, faith, gaming, campuses — stay untapped.",
     capRelevance: "We open doors across every cultural sector — 480-member network spanning every industry.",
   },
