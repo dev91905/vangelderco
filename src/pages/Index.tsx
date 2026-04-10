@@ -387,38 +387,40 @@ const Index = () => {
             </div>
           </RevealBlock>
 
-          <div className="grid gap-3">
+          <div className="grid gap-5">
             {CAPABILITIES.map((cap, i) => (
               <RevealBlock key={cap.title} delay={0.1 + i * 0.15} direction="up">
                 <Link
                   to={cap.to}
-                  className="group block p-5 md:p-6 rounded-xl no-underline"
+                  className="group block p-6 md:p-8 rounded-xl no-underline"
                   style={{
                     background: "transparent",
                     border: `1px solid ${t.ink(0.08)}`,
-                    transition: `border-color 0.4s ${EASE_OUT_QUART}, transform 0.5s ${EASE_OUT_EXPO}, box-shadow 0.4s ${EASE_OUT_QUART}`,
+                    transition: `border-color 0.4s ${EASE_OUT_QUART}, transform 0.5s ${EASE_OUT_EXPO}, box-shadow 0.4s ${EASE_OUT_QUART}, background 0.4s ${EASE_OUT_QUART}`,
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = t.ink(0.2);
+                    el.style.borderColor = "hsl(var(--destructive) / 0.3)";
                     el.style.transform = "translateY(-2px)";
-                    el.style.boxShadow = `0 8px 30px -12px ${t.ink(0.08)}`;
+                    el.style.boxShadow = `0 8px 30px -12px hsl(var(--destructive) / 0.15)`;
+                    el.style.background = "hsl(var(--destructive) / 0.03)";
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
                     el.style.borderColor = t.ink(0.08);
                     el.style.transform = "translateY(0)";
                     el.style.boxShadow = "none";
+                    el.style.background = "transparent";
                   }}
                 >
                   <h3
-                    className="text-[17px] md:text-[19px] font-bold mb-2"
+                    className="text-[17px] md:text-[19px] font-bold mb-3"
                     style={{ fontFamily: t.sans, color: t.ink(0.8) }}
                   >
                     {cap.title}
                   </h3>
                   <p
-                    className="text-[14px] md:text-[15px] tracking-wide mb-3"
+                    className="text-[14px] md:text-[15px] tracking-wide mb-4"
                     style={{ fontFamily: t.serif, color: "hsl(var(--destructive))", letterSpacing: "0.01em", fontStyle: "italic" }}
                   >
                     {cap.sub}
@@ -438,7 +440,7 @@ const Index = () => {
 
       {/* ═══ FIELD NOTES ═══ */}
       <section className="snap-section relative z-10">
-        <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "hsl(var(--background))" }}>
+        <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "linear-gradient(to bottom, hsl(var(--background)) 60%, hsl(var(--background) / 0))" }}>
           <RevealBlock direction="left">
             <div
               className="text-[10px] tracking-[0.25em] uppercase"
