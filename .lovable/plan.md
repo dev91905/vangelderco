@@ -1,45 +1,28 @@
 
 
-## Unify Field Notes with the Content Manager
+## Sharpening the Card Body Copy
 
-### What this does
-1. Adds a `is_featured` boolean and a `sector_label` text column to `capability_posts` so you can flag posts for homepage display and give them sector-style headings like "ENERGY × LABOR"
-2. The homepage Field Notes section pulls from the database instead of the hardcoded `FIELD_NOTES` array — same visual treatment (sector headings, italic serif summary, red stats), but now each fragment links to a real post
-3. Creates 4 actual posts in the database matching the current hardcoded field notes, with full content blocks so they're real readable case studies / blog posts
+Updating only the `detail` field for each of the five pain-point cards. Headlines (`short`) stay the same. Character counts stay within ±15 of originals so card heights don't shift.
 
-### Database changes
-- **Migration**: Add two columns to `capability_posts`:
-  - `is_featured` boolean, default `false`
-  - `sector_label` text, nullable (e.g. "ENERGY × LABOR") — displayed as the heading in field notes
-- The `excerpt` field already exists and maps to the italic brief
-- The `stats` JSONB field already exists and can hold the red impact line (or we add a simpler `featured_stat` text column for the one-liner)
-- Actually, a `featured_stat` text column is cleaner than parsing JSONB for a single string. Add that too.
+### Current → New
 
-### Homepage changes (`src/pages/Index.tsx`)
-- Replace `FIELD_NOTES` constant with a query: `useQuery` fetching `capability_posts` where `is_featured = true`, ordered by `published_at desc`, limit 4
-- `CaseFragment` component gets a `slug` prop and wraps in a `<Link to={/post/${slug}}>` so clicking navigates to the full post
-- Map: `sector_label` → sector heading, `excerpt` → italic brief, `featured_stat` → red impact line
-- Loading/empty states match existing patterns
+| # | Headline | Current `detail` | New `detail` |
+|---|----------|-------------------|--------------|
+| 1 | I'm just getting started | "You're building a strategic communications portfolio from scratch — no track record of what's been funded or what's working." (122 chars) | "You're new to this role or building from scratch. There's no system, no process — just a mandate and a blank slate." (115 chars) |
+| 2 | We don't have a strategy | "You've got a landscape but no framework. When a proposal lands, you can't tell if it fits a strategy or just sounds good." (121 chars) | "You have a portfolio but no decision-making framework. When a proposal lands, you can't tell if it's genuinely strategic or just sounds good." (141 chars) |
+| 3 | Limited access to pop culture | "Your grantees recycle the same playbook — op-eds, paid media, social. The most powerful cultural channels stay untapped." (120 chars) | "Your grantees keep running the same plays — op-eds, paid media, social. The deeper cultural channels that actually move people stay untapped." (141 chars) |
+| 4 | Not sure how to measure | "Grantees send views and impressions. Other donors tie funding to impossible benchmarks. You need to tell the real impact story." (125 chars) | "Grantees report views and impressions. The numbers look fine — but you don't feel real impact, and you're not sure what better looks like." (137 chars) |
+| 5 | No media expertise in-house | "You're not a media expert. When something isn't working, you can't diagnose why — you've never operated in these sectors." (120 chars) | "When leadership asks what's broken or whether a pitch is worth it, you lack the operational media experience to give a real answer." (130 chars) |
 
-### Seed data — 4 real posts
-Create 4 published posts via database insert with full `content_blocks` arrays:
+### What changes and why
 
-1. **"Energy × Labor"** — Case study on energy transition + building trades alignment. Capability: `cross-sector`. Slug: `energy-labor-alignment`.
-2. **"Culture × Philanthropy"** — Case study on entertainment uptake network for climate narrative. Capability: `cultural-strategy`. Slug: `culture-philanthropy-uptake`.
-3. **"Intelligence"** — Blog post on adversarial network mapping. Capability: `cross-sector`. Slug: `adversarial-network-mapping`.
-4. **"Deep Organizing"** — Case study on organic community leader identification. Capability: `deep-organizing`. Slug: `community-leader-networks`.
+1. **Just getting started** — Captures "new to role OR tasked with building something new" and the feeling of no system/process/ethos. Blank slate, not just "no track record."
+2. **No strategy** — Shifts from "landscape" to "portfolio" (more accurate for donors who already have one) and zeroes in on the real pain: you can't tell if something is *genuinely* strategic or just sounds good.
+3. **Limited access** — Swaps "most powerful cultural channels" for "deeper cultural channels that actually move people" — gets at the user's point that nothing the grantees do is resonating.
+4. **Not sure how to measure** — Removes the "other donors / impossible benchmarks" framing (too specific). Focuses on the core feeling: numbers look fine on paper but you don't feel impact and don't know what to ask for instead.
+5. **No media expertise** — Reframes from "you're not an expert" (slightly condescending) to "leadership is asking you questions you can't answer" — the actual lived pain.
 
-Each gets `is_featured: true`, `is_published: true`, the sector label, excerpt (current brief text), featured stat (current result text), and 4-6 content blocks giving them real substance.
+### Implementation
 
-### Admin support
-- Add an `is_featured` toggle to the post editor (`BlockEditor.tsx` / `EditorMetaBar.tsx`) so you can feature/unfeature posts
-- Add `sector_label` and `featured_stat` fields to the editor meta bar (only shown when featured is toggled on)
-
-### Files changed
-- **Migration**: Add `is_featured`, `sector_label`, `featured_stat` columns
-- **Database insert**: Seed 4 posts with content
-- **`src/pages/Index.tsx`**: Replace hardcoded array with DB query, make fragments linkable
-- **`src/hooks/useFeaturedPosts.ts`**: New hook for featured posts query
-- **`src/components/admin/EditorMetaBar.tsx`**: Add featured toggle + sector label + stat fields
-- **`src/integrations/supabase/types.ts`**: Auto-updates after migration
+Single file edit: `src/pages/Deck.tsx`, lines 36–70, replacing the five `detail` strings.
 
