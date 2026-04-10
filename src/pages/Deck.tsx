@@ -255,6 +255,7 @@ const Deck = () => {
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
   const [hallmarkSelections, setHallmarkSelections] = useState<Record<number, "doing" | "need">>({});
+  const [expandedHallmarkIdx, setExpandedHallmarkIdx] = useState<number | null>(null);
 
   /* Booking link from settings */
   const { data: siteSettings } = useSiteSettings();
