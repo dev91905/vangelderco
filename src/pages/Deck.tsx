@@ -445,7 +445,7 @@ const Deck = () => {
         width: "100vw",
         overflowX: "hidden",
         overflowY: "auto",
-        scrollSnapType: "y mandatory",
+        scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
         background: "hsl(var(--background))",
