@@ -7,6 +7,13 @@ import { t } from "@/lib/theme";
 /* ── Data ── */
 const SECTORS = ["Energy", "Labor", "Philanthropy", "Culture", "Policy", "National Security"];
 
+const NETWORK_SECTORS = [
+  "Music", "Film & TV", "News Media", "Digital Creators", "Brands & Advertising",
+  "Athletes & Sports", "Gaming", "Faith", "Campuses", "Veterans & Defense",
+  "Labor", "Government & Policy", "Philanthropy", "Energy", "Industry Groups",
+  "Technologists", "National Security", "Community Organizations",
+];
+
 const HERO_LINKS = [
   { label: "Cultural Strategy", to: "/cultural-strategy" },
   { label: "Cross-Sector Intelligence", to: "/cross-sector" },
