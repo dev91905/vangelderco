@@ -293,21 +293,28 @@ const Index = () => {
             className="flex flex-wrap justify-center gap-2 md:gap-3"
             style={{ animation: `fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both` }}
           >
-            {SECTORS.map((sector, i) => (
-              <span
-                key={sector}
-                className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
-                style={{
-                  fontFamily: t.sans,
-                  color: "hsl(var(--destructive) / var(--a-mid))",
-                  background: "hsl(var(--destructive) / var(--a-bg))",
-                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
-                  animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
-                }}
-              >
-                {sector}
-              </span>
-            ))}
+            {SECTORS.map((sector, i) => {
+              /* Each pill glows for ~2s then fades. Total cycle = 6 pills × 2s = 12s.
+                 pill-glow keyframe handles the bright flash; delay offsets stagger them. */
+              const cycleDuration = SECTORS.length * 2; // 12s full cycle
+              const delay = 1.5 + i * 0.08; // entrance delay
+              return (
+                <span
+                  key={sector}
+                  className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full dark:animate-[pill-glow_12s_ease-in-out_infinite]"
+                  style={{
+                    fontFamily: t.sans,
+                    color: "hsl(var(--destructive) / var(--a-mid))",
+                    background: "hsl(var(--destructive) / var(--a-bg))",
+                    border: "1px solid hsl(var(--destructive) / var(--a-border))",
+                    animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s both`,
+                    // After entrance, the pill-glow animation kicks in via the class
+                  }}
+                >
+                  {sector}
+                </span>
+              );
+            })}
           </div>
 
           <span
@@ -519,26 +526,23 @@ const Index = () => {
             {NETWORK_SECTORS.map((sector, i) => (
               <RevealBlock key={sector} delay={0.25 + i * 0.04}>
                 <span
-                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default dark:animate-[pill-glow_4s_ease-in-out_infinite]"
+                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
                   style={{
                     fontFamily: t.sans,
                     color: "hsl(var(--destructive) / var(--a-high))",
                     background: "hsl(var(--destructive) / var(--a-bg))",
                     border: "1px solid hsl(var(--destructive) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
-                    animationDelay: `${i * 0.35}s`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
                     e.currentTarget.style.color = "hsl(var(--destructive))";
-                    e.currentTarget.style.animationPlayState = "paused";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
                     e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
-                    e.currentTarget.style.animationPlayState = "running";
                   }}
                 >
                   {sector}
