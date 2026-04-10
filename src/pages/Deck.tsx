@@ -152,6 +152,28 @@ const CASE_STUDIES: { name: string; issue: string; outcome: string; content: Rea
 ];
 
 
+/* ─── Back button component ─── */
+const BackButton = ({ onClick }: { onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    style={{
+      fontFamily: f.sans,
+      fontSize: "12px",
+      letterSpacing: "0.04em",
+      color: f.ink(0.3),
+      background: "none",
+      border: "none",
+      padding: "14px 12px",
+      cursor: "pointer",
+      transition: "color 200ms ease",
+    }}
+    onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+    onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+  >
+    ← Back
+  </button>
+);
+
 /* ─── Continue button component ─── */
 const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () => void; disabled?: boolean; label?: string }) => (
   <button
@@ -177,6 +199,14 @@ const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () =>
   >
     {btnLabel || "Continue →"}
   </button>
+);
+
+/* ─── Nav row: back + continue together ─── */
+const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: () => void; onNext: () => void; disabled?: boolean; nextLabel?: string; justifyEnd?: boolean }) => (
+  <div style={{ display: "flex", alignItems: "center", justifyContent: justifyEnd ? "flex-end" : "flex-start", gap: "4px" }}>
+    {onBack && <BackButton onClick={onBack} />}
+    <ContinueButton onClick={onNext} disabled={disabled} label={nextLabel} />
+  </div>
 );
 
 /* ═══════════════════════════════════════════════════════════════
@@ -615,7 +645,7 @@ const Deck = () => {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", minHeight: "48px" }}>
             {(selectedPains.length > 0 || customSaved) ? (
-              <ContinueButton onClick={() => scrollToFrame(2)} />
+              <NavRow onBack={() => scrollToFrame(0)} onNext={() => scrollToFrame(2)} />
             ) : (
               <p style={{ ...label("9px"), ...r2.stagger(3, 1000, "blur-up") }}>→ Select at least one to continue, or skip and keep scrolling</p>
             )}
@@ -831,7 +861,7 @@ const Deck = () => {
               </div>
 
               <div style={{ marginTop: "clamp(28px, 4vw, 40px)", display: "flex", justifyContent: "center" }}>
-                <ContinueButton onClick={() => scrollToFrame(3)} />
+                <NavRow onBack={() => scrollToFrame(1)} onNext={() => scrollToFrame(3)} />
               </div>
             </div>
           )}
@@ -889,7 +919,7 @@ const Deck = () => {
               );
             })}
             <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
-              <ContinueButton onClick={() => scrollToFrame(4)} label="Continue →" />
+              <NavRow onBack={() => scrollToFrame(2)} onNext={() => scrollToFrame(4)} nextLabel="Continue →" justifyEnd />
             </div>
           </div>
         </div>
@@ -979,7 +1009,7 @@ const Deck = () => {
 
             {selectedDomains.length > 0 && (
               <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
-                <ContinueButton onClick={() => scrollToFrame(5)} />
+                <NavRow onBack={() => scrollToFrame(3)} onNext={() => scrollToFrame(5)} justifyEnd />
               </div>
             )}
           </div>
@@ -1034,7 +1064,7 @@ const Deck = () => {
           </div>
           {capabilitiesRanked.length >= 2 && (
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <ContinueButton onClick={() => scrollToFrame(6)} />
+              <NavRow onBack={() => scrollToFrame(4)} onNext={() => scrollToFrame(6)} justifyEnd />
             </div>
           )}
         </div>
@@ -1052,7 +1082,7 @@ const Deck = () => {
             </p>
             {metricsChecked.length > 0 && (
               <div style={{ marginTop: "20px" }}>
-                <ContinueButton onClick={() => scrollToFrame(7)} />
+                <NavRow onBack={() => scrollToFrame(5)} onNext={() => scrollToFrame(7)} />
               </div>
             )}
           </div>
@@ -1166,7 +1196,7 @@ const Deck = () => {
 
           {engagementPath && (
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <ContinueButton onClick={() => scrollToFrame(8)} />
+              <NavRow onBack={() => scrollToFrame(6)} onNext={() => scrollToFrame(8)} justifyEnd />
             </div>
           )}
 
@@ -1215,7 +1245,7 @@ const Deck = () => {
               </div>
               {hasMediaExperience !== null && (
                 <div style={{ marginTop: "16px" }}>
-                  <ContinueButton onClick={() => scrollToFrame(9)} />
+                  <NavRow onBack={() => scrollToFrame(7)} onNext={() => scrollToFrame(9)} />
                 </div>
               )}
             </div>
