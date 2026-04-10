@@ -456,6 +456,7 @@ const Deck = () => {
             style={{
               ...r1.stagger(1, 300),
               ...body(0.4),
+              fontFamily: f.serif,
               fontSize: "clamp(18px, 2.8vw, 32px)",
               fontWeight: 400,
               maxWidth: "700px",
@@ -463,7 +464,7 @@ const Deck = () => {
             }}
           >
             For donor advisors and program officers who know{" "}
-            <em style={{ fontFamily: f.sans, fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
+            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
           </p>
           <div
             style={{
