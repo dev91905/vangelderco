@@ -254,7 +254,7 @@ const Index = () => {
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / 0.6)",
+              color: "hsl(var(--destructive) / var(--a-high))",
               animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
             }}
           >
@@ -298,9 +298,9 @@ const Index = () => {
                 className="text-[10px] md:text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
                 style={{
                   fontFamily: t.sans,
-                  color: "hsl(var(--destructive) / 0.5)",
-                  background: "hsl(var(--destructive) / 0.04)",
-                  border: "1px solid hsl(var(--destructive) / 0.12)",
+                  color: "hsl(var(--destructive) / var(--a-mid))",
+                  background: "hsl(var(--destructive) / var(--a-bg))",
+                  border: "1px solid hsl(var(--destructive) / var(--a-border))",
                   animation: `fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${1.5 + i * 0.08}s both`,
                 }}
               >
@@ -313,7 +313,7 @@ const Index = () => {
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
               fontFamily: t.sans,
-              color: "hsl(var(--destructive) / 0.3)",
+              color: "hsl(var(--destructive) / var(--a-dim))",
               animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.0s both`,
             }}
           >
