@@ -672,7 +672,7 @@ const Deck = () => {
                       fontWeight: 700,
                       transition: "font-size 0.4s ease",
                     }}>
-                      What you're up against.
+                      Here's how your opponents fund.
                     </p>
                     {isFinal && (
                       <button
