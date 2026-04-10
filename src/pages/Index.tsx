@@ -192,6 +192,13 @@ const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
   const [scrollY, setScrollY] = useState(0);
+  const [glowIndex, setGlowIndex] = useState(0);
+
+  // Cycle glow through the 6 sector pills
+  useEffect(() => {
+    const id = setInterval(() => setGlowIndex((p) => (p + 1) % SECTORS.length), 2000);
+    return () => clearInterval(id);
+  }, []);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
 
