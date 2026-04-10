@@ -888,11 +888,9 @@ const Deck = () => {
                 </button>
               );
             })}
-            {expandedHallmark !== null && (
-              <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
-                <ContinueButton onClick={() => scrollToFrame(4)} label="Got it, next →" />
-              </div>
-            )}
+            <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
+              <ContinueButton onClick={() => scrollToFrame(4)} label="Continue →" />
+            </div>
           </div>
         </div>
       </DeckFrame>
