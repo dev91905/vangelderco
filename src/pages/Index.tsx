@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Timer } from "lucide-react";
+
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
@@ -521,8 +521,7 @@ const Index = () => {
             className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
             style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-mid))" }}
           >
-            <Timer size={13} strokeWidth={1.5} />
-            Five minutes
+            Strategic Diagnostic
           </span>
         </RevealBlock>
 
@@ -531,7 +530,7 @@ const Index = () => {
             className="text-[26px] md:text-[36px] lg:text-[42px] leading-[1.15] text-center mb-5 max-w-xl"
             style={{ fontFamily: t.serif, color: t.ink(0.85), fontWeight: 400 }}
           >
-            Five minutes. One walkthrough. See if there's a fit.
+            Find out what your opponents already know about you.
           </h2>
         </RevealBlock>
 
@@ -540,7 +539,7 @@ const Index = () => {
             className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-sm mb-12"
             style={{ fontFamily: t.sans, color: t.ink(0.4) }}
           >
-            A guided intake that helps us understand your situation — and shows you how we think about it.
+            A short diagnostic that benchmarks your communications strategy against the opposition — and shows you exactly where the gaps are.
           </p>
         </RevealBlock>
 
