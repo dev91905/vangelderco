@@ -37,6 +37,7 @@ const AdminEditor = () => {
   const [isFeatured, setIsFeatured] = useState(false);
   const [sectorLabel, setSectorLabel] = useState<string | null>(null);
   const [featuredStat, setFeaturedStat] = useState<string | null>(null);
+  const [linkUrl, setLinkUrl] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
@@ -71,6 +72,7 @@ const AdminEditor = () => {
       setIsFeatured((post as any).is_featured || false);
       setSectorLabel((post as any).sector_label || null);
       setFeaturedStat((post as any).featured_stat || null);
+      setLinkUrl((post as any).link_url || null);
       setDirty(false);
     }
   }, [post]);
@@ -78,16 +80,17 @@ const AdminEditor = () => {
   const formData = useCallback((): PostFormData => ({
     title, slug, type, capability,
     excerpt: excerpt || null, content: null,
-    hero_image_url: heroImageUrl,
+    hero_image_url: type === "field-note" ? null : heroImageUrl,
     content_blocks: type === "field-note" ? [] : contentBlocks,
     stats: type === "case-study" ? stats : null,
-    password: password || null,
+    password: type === "field-note" ? null : (password || null),
     is_published: isPublished,
     published_at: publishedAt,
     is_featured: isFeatured,
     sector_label: sectorLabel || null,
     featured_stat: featuredStat || null,
-  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt, isFeatured, sectorLabel, featuredStat]);
+    link_url: linkUrl || null,
+  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt, isFeatured, sectorLabel, featuredStat, linkUrl]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
@@ -208,10 +211,25 @@ const AdminEditor = () => {
         )}
 
         {type === "field-note" && (
-          <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto space-y-4">
+          <div className="px-4 md:px-8 py-6 max-w-2xl mx-auto space-y-6">
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Impact Metric</label>
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Sector Label</label>
+              <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)} placeholder="e.g. ENERGY × LABOR"
+                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Brief</label>
+              <textarea value={excerpt} onChange={(e) => markDirty(setExcerpt)(e.target.value)} placeholder="One to two sentences — what happened, what was accomplished"
+                rows={3} className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl resize-none" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)", lineHeight: "1.6" }} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Impact Stat</label>
               <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)} placeholder="e.g. $12M mobilized across 3 foundations"
+                className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[11px] uppercase tracking-[0.06em]" style={{ ...label, color: "hsl(30 10% 12% / 0.35)" }}>Link <span style={{ color: "hsl(30 10% 12% / 0.2)", textTransform: "none", letterSpacing: "0" }}>optional — internal slug or external URL</span></label>
+              <input value={linkUrl || ""} onChange={(e) => markDirty(setLinkUrl)(e.target.value || null)} placeholder="e.g. /post/clean-energy or https://nytimes.com/..."
                 className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ ...label, color: "hsl(30 10% 12% / 0.7)", border: "1px solid hsl(30 10% 12% / 0.08)" }} />
             </div>
           </div>

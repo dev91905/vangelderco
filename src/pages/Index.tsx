@@ -139,16 +139,18 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
 }
 
 /* ── Case fragment with premium motion ── */
-function CaseFragment({ sector, brief, result, slug, index }: { sector: string; brief: string; result: string; slug?: string | null; index: number }) {
+function CaseFragment({ sector, brief, result, slug, linkUrl, index }: { sector: string; brief: string; result: string; slug?: string | null; linkUrl?: string | null; index: number }) {
   const { ref, hasRevealed } = useScrollReveal(0.15);
   const [hovered, setHovered] = useState(false);
+
+  const hasLink = linkUrl || slug;
 
   const content = (
     <div
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`mb-16 ${slug ? "cursor-pointer" : "cursor-default"}`}
+      className={`mb-16 ${hasLink ? "cursor-pointer" : "cursor-default"}`}
       style={{
         breakInside: "avoid" as const,
         opacity: hasRevealed ? 1 : 0,
@@ -186,6 +188,15 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
     </div>
   );
 
+  // External link
+  if (linkUrl && linkUrl.startsWith("http")) {
+    return <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="block no-underline">{content}</a>;
+  }
+  // Internal link_url (e.g. /post/clean-energy)
+  if (linkUrl) {
+    return <Link to={linkUrl} className="block no-underline">{content}</Link>;
+  }
+  // Fallback to slug
   if (slug) {
     return <Link to={`/post/${slug}`} className="block no-underline">{content}</Link>;
   }
@@ -642,6 +653,7 @@ const Index = () => {
                 brief={note.excerpt || ""}
                 result={note.featured_stat || ""}
                 slug={note.slug}
+                linkUrl={note.link_url}
                 index={i}
               />
             ))}

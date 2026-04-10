@@ -26,6 +26,7 @@ export type Database = {
           id: string
           is_featured: boolean
           is_published: boolean
+          link_url: string | null
           password: string | null
           published_at: string | null
           sector_label: string | null
@@ -45,6 +46,7 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_published?: boolean
+          link_url?: string | null
           password?: string | null
           published_at?: string | null
           sector_label?: string | null
@@ -64,6 +66,7 @@ export type Database = {
           id?: string
           is_featured?: boolean
           is_published?: boolean
+          link_url?: string | null
           password?: string | null
           published_at?: string | null
           sector_label?: string | null
