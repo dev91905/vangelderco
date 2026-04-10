@@ -21,11 +21,14 @@ export type Database = {
           content_blocks: Json | null
           created_at: string
           excerpt: string | null
+          featured_stat: string | null
           hero_image_url: string | null
           id: string
+          is_featured: boolean
           is_published: boolean
           password: string | null
           published_at: string | null
+          sector_label: string | null
           slug: string | null
           stats: Json | null
           title: string
@@ -37,11 +40,14 @@ export type Database = {
           content_blocks?: Json | null
           created_at?: string
           excerpt?: string | null
+          featured_stat?: string | null
           hero_image_url?: string | null
           id?: string
+          is_featured?: boolean
           is_published?: boolean
           password?: string | null
           published_at?: string | null
+          sector_label?: string | null
           slug?: string | null
           stats?: Json | null
           title: string
@@ -53,11 +59,14 @@ export type Database = {
           content_blocks?: Json | null
           created_at?: string
           excerpt?: string | null
+          featured_stat?: string | null
           hero_image_url?: string | null
           id?: string
+          is_featured?: boolean
           is_published?: boolean
           password?: string | null
           published_at?: string | null
+          sector_label?: string | null
           slug?: string | null
           stats?: Json | null
           title?: string
