@@ -381,7 +381,7 @@ const Index = () => {
           </RevealBlock>
           <RevealBlock delay={0.15}>
             <p
-             className="italic font-light"
+              className="italic font-light"
               style={{
                 fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
@@ -389,29 +389,20 @@ const Index = () => {
                 color: "hsl(var(--foreground) / var(--a-high))",
               }}
             >
-              Next-generation strategic communications for donor advisors and program officers who know their portfolios should be hitting harder.
+              Building next-generation strategic communications portfolios.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.3}>
             <p
-             className="font-semibold mt-4"
+              className="mt-4"
               style={{
-                fontFamily: t.serif,
-                fontSize: "clamp(26px, 4vw, 42px)",
-                lineHeight: 1.4,
-                color: t.ink(0.85),
+                fontFamily: t.sans,
+                fontSize: "clamp(16px, 2vw, 20px)",
+                lineHeight: 1.6,
+                color: t.ink(0.45),
               }}
             >
-              We're communications strategists with a background in culture, media-based organizing, and philanthropy — operating across multiple sectors.
-            </p>
-          </RevealBlock>
-          <RevealBlock delay={0.5}>
-            <AnimatedLine width={60} />
-            <p
-              className="text-xs leading-relaxed max-w-md"
-              style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
-            >
-              We build strategic communications portfolios that work across sectors — cultural strategy, cross-sector coordination, and deep organizing — so your grants don't just fund content, they build power.
+              For donor advisors and program officers who know their portfolios should be hitting harder.
             </p>
           </RevealBlock>
         </div>
