@@ -369,45 +369,24 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  /* Wheel handler — keep wheel scrolling trapped inside the frame currently in view */
+  /* Wheel handler — keep wheel scrolling trapped inside the current frame */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const getFrameBoundsAtScroll = () => {
-      const probe = el.scrollTop + 1;
-      let fallbackTop = 0;
-      let fallbackBottom = el.clientHeight;
-
-      for (const frameEl of frameRefs.current) {
-        if (!frameEl) continue;
-        const top = frameEl.offsetTop;
-        const bottom = top + frameEl.scrollHeight;
-
-        if (probe >= top && probe < bottom) {
-          return { top, bottom };
-        }
-
-        if (probe >= top) {
-          fallbackTop = top;
-          fallbackBottom = bottom;
-        }
-      }
-
-      return { top: fallbackTop, bottom: fallbackBottom };
-    };
-
     const handler = (e: WheelEvent) => {
-      const { top: frameTop, bottom: frameBottom } = getFrameBoundsAtScroll();
+      const frameEl = frameRefs.current[currentFrame];
+      if (!frameEl) return;
+      const frameTop = frameEl.offsetTop;
+      const frameBottom = frameTop + frameEl.scrollHeight;
       const viewHeight = el.clientHeight;
       const scrollTop = el.scrollTop;
-      const nextScrollTop = scrollTop + e.deltaY;
       const maxScrollTop = Math.max(frameTop, frameBottom - viewHeight);
 
-      if (e.deltaY > 0 && nextScrollTop > maxScrollTop) {
+      if (e.deltaY > 0 && scrollTop + e.deltaY > maxScrollTop) {
         e.preventDefault();
         el.scrollTop = maxScrollTop;
-      } else if (e.deltaY < 0 && nextScrollTop < frameTop) {
+      } else if (e.deltaY < 0 && scrollTop + e.deltaY < frameTop) {
         e.preventDefault();
         el.scrollTop = frameTop;
       }
@@ -415,7 +394,7 @@ const Deck = () => {
 
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
-  }, []);
+  }, [currentFrame]);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
