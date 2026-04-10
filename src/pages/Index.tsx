@@ -289,6 +289,14 @@ const Index = () => {
       {/* ═══ ALTITUDE ═══ */}
       <section className="snap-section flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
         <div className={`${SECTION_MAX} ${SECTION_PX}`}>
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-12"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              Our Altitude
+            </div>
+          </RevealBlock>
           <RevealBlock>
             <p
              className="italic font-light"
@@ -318,11 +326,10 @@ const Index = () => {
           <RevealBlock delay={0.5}>
             <AnimatedLine width={60} />
             <p
-              className="text-xs leading-relaxed max-w-md"
-              style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
+              className="text-[14px] leading-relaxed max-w-2xl mt-2"
+              style={{ fontFamily: t.sans, color: t.ink(0.45), lineHeight: 1.8 }}
             >
-              Six sectors. One picture. We identify alignment that nobody in any single sector can
-              see from where they sit.
+              We're specialists in cultural strategy, media organizing, and philanthropy — working across six sectors to help donors and foundations get strategic communications right. We identify alignment that nobody in any single sector can see from where they sit.
             </p>
           </RevealBlock>
         </div>
