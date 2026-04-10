@@ -1,53 +1,43 @@
 
-Fix the actual leak in `src/pages/Deck.tsx` by stopping scroll chaining, not just clamping the parent.
 
-What’s happening:
-- The deck-level wheel handler currently does this:
-  - if the event is inside `[data-results-scroll='true']`, it returns early
-  - otherwise it prevents default and locks the parent deck scroll
-- That means the right-hand results column is unmanaged.
-- When that inner column hits its top or bottom, the browser passes the remaining wheel delta to the parent scroll container.
-- That is why you can still move from slide 3 to slide 4, or back to slide 2. The leak is coming from the nested scroll area.
+## Problem
 
-What I’ll change:
-1. Keep the outer deck as a hard-locked container
-- Continue preventing default on wheel events at the deck level.
-- Clamp `containerRef` to the active frame bounds using `currentFrame` and `frameRefs.current[currentFrame]`.
+The results layout has three issues:
 
-2. Explicitly handle wheel events inside the results breakdown panel
-- Add a dedicated wheel handler to the right-side results scroller.
-- If the panel can still scroll in the wheel direction, let it scroll normally.
-- If the panel is already at its top or bottom, preventDefault there too so the wheel dies instead of escaping to the parent deck.
+1. **Header spans full width above the two-column layout.** "Your results" / "Here's what your answers tell us" / subtitle sits outside and above the left+right split. This eats ~120px of vertical space, so the right column's `maxHeight: 100dvh` doesn't account for it — the bottom cards get clipped.
 
-3. Add CSS-level overscroll protection
-- On the results column, add `overscrollBehavior: "contain"` to stop browser scroll chaining.
-- On the outer deck container, add `overscrollBehaviorY: "none"` so momentum/trackpad overscroll cannot propagate to the page.
+2. **Left column isn't a proper sticky sidebar.** It's `height: 100%` but not `position: sticky`, so it doesn't stay pinned when the right column scrolls.
 
-4. Make slide 3 a true locked frame
-- Ensure the results state (`quizRevealed`) does not change the frame into a parent-scrollable layout that can extend beyond viewport expectations.
-- Keep the right column as the only vertical scroll region on desktop when results are shown.
+3. **Right column can't scroll far enough** because the height math is wrong and padding is insufficient.
 
-5. Verify the hard rule
-- Mouse wheel on slide 3 should never move the deck to slide 2 or 4.
-- Only explicit navigation controls / keyboard actions should change slides.
-- The right-side results column should remain scrollable independently.
+## Fix
 
-Technical details:
-- File: `src/pages/Deck.tsx`
-- Main bug site:
-  - current wheel handler around lines 455–478
-  - results scroller around lines 956–963
-- Concrete implementation:
-  - replace the current early-return behavior for `[data-results-scroll='true']`
-  - attach a `ref` to the results scroll container
-  - compute:
-    - `atTop = scrollTop <= 0`
-    - `atBottom = scrollTop + clientHeight >= scrollHeight - 1`
-  - if `(deltaY < 0 && atTop) || (deltaY > 0 && atBottom)`, call `preventDefault()` and `stopPropagation()`
-  - add `overscrollBehavior: "contain"` to the results panel
-  - add `overscrollBehaviorY: "none"` to the deck container
+Restructure the results layout so the header text moves INTO the left column, making it a true sticky sidebar with all the context stacked vertically:
 
-Expected result:
-- The mouse wheel cannot move between slides. Period.
-- On the results slide, the wheel only scrolls the right-hand breakdown column.
-- Once that inner panel reaches the end, nothing happens instead of the deck advancing.
+**Left column (sticky, ~38% width):**
+- "Your results" label
+- "Here's what your answers tell us." heading
+- "The summary is at the top..." subtitle
+- Diagnostic grade card
+- Start over button
+- `position: sticky; top: 0; height: 100dvh; overflow: hidden`
+- Content vertically centered or top-aligned with padding
+
+**Right column (scrollable, ~62% width):**
+- Dimension breakdown cards
+- `maxHeight: 100dvh; overflowY: auto; overscrollBehavior: contain`
+- Generous `paddingBottom` (~120px) so the measurement card is fully reachable
+- The existing wheel-trapping handler stays intact — cards scroll within this container only
+
+**Concrete changes in `src/pages/Deck.tsx`:**
+
+1. When `quizRevealed` is true, remove the header block above the two-column flex (lines 764–787) — move its content into the left column div (line 914 area), placed above the diagnostic card.
+
+2. Make the left column `position: sticky; top: 0; height: 100dvh` with vertical padding and `overflow: hidden` so it never scrolls.
+
+3. Set the right column `maxHeight: 100dvh` with `paddingBottom: "120px"` to ensure the last card is fully scrollable into view.
+
+4. The outer container for the results block (line 911) changes from `height: 100dvh` to `min-height: 100dvh` so it can accommodate the scroll region properly.
+
+5. The wheel-trapping fix (`data-results-scroll`, `overscrollBehavior: contain`, the dedicated wheel handler) stays exactly as-is — no changes to scroll lock behavior.
+
