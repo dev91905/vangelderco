@@ -50,6 +50,8 @@ const QUIZ_ROWS = [
   { dimension: "Measurement", yours: "Count impressions and media mentions. Measure awareness, not action. Then wonder why nothing sticks.", theirs: "Track who's coming to the table that wasn't already there. Measure what's actually shifting public policy. Growth over time, not vanity metrics." },
   { dimension: "Iteration", yours: "Declare success when the grant period ends. Say you need more money to do it better. Move to the next proposal. Repeat.", theirs: "Cut what's failing mid-cycle. Pour resources into what's working. Compound gains across years. Brutal honesty, relentless optimization." },
 ];
+const COL_TRADITIONAL = "Traditional Approach";
+const COL_NEXTGEN = "Next-Gen Approach";
 
 /* ─── Three domains ─── */
 const DOMAINS = [
