@@ -184,7 +184,6 @@ const Index = () => {
         style={{ height: "100vh", opacity: heroOpacity }}
       >
         <main className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14">
-          {/* Classification label */}
           <span
             className="text-[11px] tracking-[0.25em] uppercase"
             style={{
@@ -196,7 +195,6 @@ const Index = () => {
             VGC StratComm Advisors
           </span>
 
-          {/* Hero lines — nav links */}
           <h1 className="flex flex-col gap-2 md:gap-3">
             {HERO_LINKS.map((link, i) => (
               <Link
@@ -224,7 +222,6 @@ const Index = () => {
             ))}
           </h1>
 
-          {/* Sector tags */}
           <div
             className="flex flex-wrap justify-center gap-2 md:gap-3"
             style={{ animation: "fade-up 0.7s ease-out 1.6s both" }}
@@ -245,7 +242,6 @@ const Index = () => {
             ))}
           </div>
 
-          {/* Access gate */}
           <span
             className="text-[10px] tracking-[0.3em] uppercase"
             style={{
@@ -260,7 +256,7 @@ const Index = () => {
       </section>
 
       {/* ═══ ALTITUDE ═══ */}
-      <section className="min-h-screen flex items-center justify-center relative z-10">
+      <section className="flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
         <div className="max-w-xl px-6 md:px-10">
           <RevealBlock>
             <p
@@ -305,83 +301,113 @@ const Index = () => {
       </section>
 
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="relative z-10 py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
-        <RevealBlock>
-          <div
-            className="text-[10px] tracking-[0.25em] uppercase mb-16"
-            style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
-          >
-            Capabilities
-          </div>
-        </RevealBlock>
+      <section className="relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
+        <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
+          <RevealBlock>
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-16"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              Capabilities
+            </div>
+          </RevealBlock>
 
-        <div className="grid gap-3">
-          {CAPABILITIES.map((cap, i) => (
-            <RevealBlock key={cap.title} delay={i * 0.12}>
-              <Link
-                to={cap.to}
-                className="block p-5 md:p-6 rounded-xl transition-all duration-300 no-underline"
-                style={{ background: "transparent", border: `1px solid ${t.ink(0.08)}` }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = t.ink(0.2);
-                  el.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = t.ink(0.08);
-                  el.style.transform = "translateY(0)";
-                }}
-              >
-                <h3
-                  className="text-[17px] md:text-[19px] font-bold mb-2"
-                  style={{ fontFamily: t.sans, color: t.ink(0.8) }}
+          <div className="grid gap-3">
+            {CAPABILITIES.map((cap, i) => (
+              <RevealBlock key={cap.title} delay={i * 0.12}>
+                <Link
+                  to={cap.to}
+                  className="block p-5 md:p-6 rounded-xl transition-all duration-300 no-underline"
+                  style={{ background: "transparent", border: `1px solid ${t.ink(0.08)}` }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = t.ink(0.2);
+                    el.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = t.ink(0.08);
+                    el.style.transform = "translateY(0)";
+                  }}
                 >
-                  {cap.title}
-                </h3>
-                <p
-                  className="text-xs tracking-wide mb-3"
-                  style={{ fontFamily: t.sans, color: "hsl(var(--destructive))", letterSpacing: "0.03em" }}
-                >
-                  {cap.sub}
-                </p>
-                <p
-                  className="text-[13px] leading-relaxed"
-                  style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
-                >
-                  {cap.detail}
-                </p>
-              </Link>
-            </RevealBlock>
-          ))}
+                  <h3
+                    className="text-[17px] md:text-[19px] font-bold mb-2"
+                    style={{ fontFamily: t.sans, color: t.ink(0.8) }}
+                  >
+                    {cap.title}
+                  </h3>
+                  <p
+                    className="text-xs tracking-wide mb-3"
+                    style={{ fontFamily: t.sans, color: "hsl(var(--destructive))", letterSpacing: "0.03em" }}
+                  >
+                    {cap.sub}
+                  </p>
+                  <p
+                    className="text-[13px] leading-relaxed"
+                    style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
+                  >
+                    {cap.detail}
+                  </p>
+                </Link>
+              </RevealBlock>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ═══ FIELD NOTES ═══ */}
-      <section className="relative z-10 py-20 md:py-28 px-6 md:px-10 max-w-2xl mx-auto">
-        <RevealBlock>
+      {/* ═══ FIELD NOTES — sticky header with scrollable content ═══ */}
+      <section className="relative z-10">
+        {/* Sticky label */}
+        <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "hsl(var(--background))" }}>
           <div
-            className="text-[10px] tracking-[0.25em] uppercase mb-16"
+            className="text-[10px] tracking-[0.25em] uppercase"
             style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
           >
             Field Notes
           </div>
-        </RevealBlock>
+        </div>
 
-        {FIELD_NOTES.map((note) => (
-          <CaseFragment key={note.sector} {...note} />
-        ))}
+        <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
+          {FIELD_NOTES.map((note) => (
+            <CaseFragment key={note.sector} {...note} />
+          ))}
+        </div>
       </section>
 
       {/* ═══ CONTACT ═══ */}
-      <section className="relative z-10 flex flex-col items-center justify-center" style={{ height: "50vh" }}>
+      <section
+        className="relative z-10 flex flex-col items-center justify-center"
+        style={{ height: "100vh" }}
+      >
         <RevealBlock>
+          <Link
+            to="/deck"
+            className="inline-block px-6 py-3 rounded-full text-[11px] tracking-[0.15em] uppercase no-underline transition-all duration-300 mb-16"
+            style={{
+              fontFamily: t.sans,
+              color: "hsl(var(--destructive))",
+              border: "1px solid hsl(var(--destructive) / 0.3)",
+              background: "hsl(var(--destructive) / 0.04)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
+              e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.3)";
+            }}
+          >
+            Explore Our Work
+          </Link>
+        </RevealBlock>
+        <RevealBlock delay={0.1}>
           <div
             className="mx-auto mb-8"
             style={{ width: 40, height: 1, background: "hsl(var(--destructive) / 0.4)" }}
           />
         </RevealBlock>
-        <RevealBlock delay={0.1}>
+        <RevealBlock delay={0.2}>
           <a
             href="mailto:hello@vangelder.co"
             className="text-[13px] tracking-[0.18em] no-underline transition-colors duration-300"
@@ -392,7 +418,7 @@ const Index = () => {
             hello@vangelder.co
           </a>
         </RevealBlock>
-        <RevealBlock delay={0.2}>
+        <RevealBlock delay={0.3}>
           <span
             className="text-[9px] tracking-[0.3em] uppercase mt-6 block"
             style={{ fontFamily: t.sans, color: t.ink(0.15) }}
