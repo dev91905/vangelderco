@@ -228,6 +228,42 @@ const AdminEditor = () => {
           <span>⌘⇧P publish</span>
         </div>
       </div>
+
+      <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
+        <AlertDialogContent className="light" style={{ background: "hsl(40 30% 96%)", border: "1px solid hsl(30 10% 12% / 0.08)", fontFamily: "'Inter', system-ui, sans-serif" }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle style={{ color: "hsl(30 10% 12% / 0.85)" }}>Unsaved changes</AlertDialogTitle>
+            <AlertDialogDescription style={{ color: "hsl(30 10% 12% / 0.5)" }}>
+              You have unsaved changes. Would you like to save as a draft before leaving?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => navigate("/admin")}
+              style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "hsl(30 10% 12% / 0.5)", border: "1px solid hsl(30 10% 12% / 0.12)" }}
+            >
+              Discard
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setShowLeaveDialog(false);
+                if (isNew) {
+                  createPost.mutate(formData(), {
+                    onSuccess: () => { toast.success("Saved as draft"); navigate("/admin"); },
+                  });
+                } else {
+                  updatePost.mutate({ id: id!, data: formData() }, {
+                    onSuccess: () => { toast.success("Changes saved"); navigate("/admin"); },
+                  });
+                }
+              }}
+              style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "hsl(30 10% 12%)", color: "hsl(40 30% 96%)" }}
+            >
+              Save & leave
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
