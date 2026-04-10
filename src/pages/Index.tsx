@@ -125,7 +125,7 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
       className="my-8"
       style={{
         height: 1,
-        background: "hsl(var(--destructive) / 0.4)",
+        background: "hsl(var(--destructive) / var(--a-low))",
         width: hasRevealed ? width : 0,
         transition: `width 1.2s ${EASE_OUT_EXPO} 0.3s`,
       }}
@@ -150,7 +150,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
           ? hovered ? "translateX(8px)" : "translateX(0)"
           : "translateX(-30px)",
         transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / 0.3)"}`,
+        borderLeft: `2px solid ${hovered ? "hsl(var(--destructive))" : "hsl(var(--destructive) / var(--a-dim))"}`,
         paddingLeft: "24px",
         willChange: "opacity, transform",
       }}
@@ -171,7 +171,7 @@ function CaseFragment({ sector, brief, result, slug, index }: { sector: string; 
         className="text-[11px]"
         style={{
           fontFamily: t.sans,
-          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / 0.5)",
+          color: hovered ? "hsl(var(--destructive) / 0.9)" : "hsl(var(--destructive) / var(--a-mid))",
           transition: `color 0.4s ${EASE_OUT_QUART}`,
         }}
       >
@@ -404,7 +404,7 @@ const Index = () => {
                   <div
                     className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{
-                      background: "linear-gradient(180deg, hsl(var(--destructive) / 0.6) 0%, hsl(var(--destructive) / 0.15) 100%)",
+                      background: "linear-gradient(180deg, hsl(var(--destructive) / var(--a-high)) 0%, hsl(var(--destructive) / var(--a-border)) 100%)",
                       transition: `opacity 0.4s ${EASE_OUT_QUART}`,
                     }}
                   />
