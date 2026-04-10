@@ -583,7 +583,7 @@ const Index = () => {
               e.currentTarget.style.boxShadow = "0 0 0 0 hsl(var(--foreground) / 0)";
             }}
           >
-            Let's see
+            Explore
             <span style={{ transition: `transform 0.3s ${EASE_OUT_EXPO}` }} className="group-hover:translate-x-1 inline-block">→</span>
           </Link>
         </RevealBlock>
