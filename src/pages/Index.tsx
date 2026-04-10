@@ -179,8 +179,8 @@ function CaseFragment({ sector, brief, result, index }: { sector: string; brief:
         {sector}
       </div>
       <div
-        className="text-lg leading-relaxed mb-2"
-        style={{ fontFamily: t.sans, color: t.ink(0.6) }}
+        className="text-lg leading-relaxed mb-2 italic"
+        style={{ fontFamily: t.serif, color: t.ink(0.5) }}
       >
         {brief}
       </div>
@@ -338,9 +338,9 @@ const Index = () => {
         <div className="max-w-xl px-6 md:px-10">
           <RevealBlock>
             <p
-              className="italic font-light"
+             className="italic font-light"
               style={{
-                fontFamily: t.sans,
+                fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
                 color: "hsl(var(--destructive) / 0.6)",
@@ -351,9 +351,9 @@ const Index = () => {
           </RevealBlock>
           <RevealBlock delay={0.25}>
             <p
-              className="font-semibold mt-4"
+             className="font-semibold mt-4"
               style={{
-                fontFamily: t.sans,
+                fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
                 color: t.ink(0.85),
@@ -418,8 +418,8 @@ const Index = () => {
                     {cap.title}
                   </h3>
                   <p
-                    className="text-xs tracking-wide mb-3"
-                    style={{ fontFamily: t.sans, color: "hsl(var(--destructive))", letterSpacing: "0.03em" }}
+                    className="text-[14px] md:text-[15px] tracking-wide mb-3"
+                    style={{ fontFamily: t.serif, color: "hsl(var(--destructive))", letterSpacing: "0.01em", fontStyle: "italic" }}
                   >
                     {cap.sub}
                   </p>
