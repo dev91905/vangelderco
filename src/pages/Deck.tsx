@@ -1113,7 +1113,7 @@ const Deck = () => {
       {/* ═══ FRAME 4: Hallmarks ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[40%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
+          <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               We've studied hundreds of organizations. The effective ones do three things.
             </p>
