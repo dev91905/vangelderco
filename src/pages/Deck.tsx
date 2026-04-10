@@ -465,7 +465,7 @@ const Deck = () => {
       }}
     >
 
-      {/* ─── Fixed UI Chrome ─── */}
+      {/* ─── Fixed UI Chrome — Top ─── */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
         <div className="flex items-center justify-between pointer-events-auto">
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
@@ -482,6 +482,21 @@ const Deck = () => {
           </button>
         </div>
       </div>
+
+      {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
+      {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 28px 24px" }}>
+          <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1400px", margin: "0 auto" }}>
+            <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.2), letterSpacing: "0.04em" }}>
+                Enter ↵ or →
+              </span>
+              <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Fixed progress bar ─── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 0 16px 0" }}>
