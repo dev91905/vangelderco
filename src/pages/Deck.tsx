@@ -915,21 +915,13 @@ const Deck = () => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <p style={{ ...label("11px"), color: f.ink(0.32) }}>Your results</p>
-                  <p style={{ ...heading("clamp(20px, 2.4vw, 28px)"), fontWeight: 700 }}>
-                    Here's what your answers tell us.
-                  </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)", color: f.ink(0.4), lineHeight: 1.6 }}>
-                    The summary is at the top. Scroll for the breakdown and why each one matters.
-                  </p>
-
                   <div
                     style={{
                       padding: "clamp(24px, 3vw, 36px)",
                       borderRadius: "20px",
                       background: "hsl(var(--foreground) / var(--a-bg))",
                       border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                      marginTop: "8px",
+                      marginTop: "0",
                     }}
                   >
                     <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
