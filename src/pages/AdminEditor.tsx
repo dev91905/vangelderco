@@ -182,10 +182,10 @@ const AdminEditor = () => {
       <div className="flex-1 overflow-y-auto">
         <EditorMetaBar
           title={title} slug={slug} excerpt={excerpt} type={type} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
-          password={password}
+          password={password} isFeatured={isFeatured} sectorLabel={sectorLabel} featuredStat={featuredStat}
           onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onExcerptChange={markDirty(setExcerpt)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
           onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
-          onPasswordChange={markDirty(setPassword)}
+          onPasswordChange={markDirty(setPassword)} onFeaturedChange={markDirty(setIsFeatured)} onSectorLabelChange={markDirty(setSectorLabel)} onFeaturedStatChange={markDirty(setFeaturedStat)}
         />
 
         {type === "case-study" && (

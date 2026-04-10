@@ -54,8 +54,10 @@ const PasswordField = ({ value, onChange }: { value: string | null; onChange: (v
 
 interface EditorMetaBarProps {
   title: string; slug: string; excerpt: string; type: string; capability: string; heroImageUrl: string | null; isPublished: boolean; publishedAt: string | null; password: string | null;
+  isFeatured: boolean; sectorLabel: string | null; featuredStat: string | null;
   onTitleChange: (v: string) => void; onSlugChange: (v: string) => void; onExcerptChange: (v: string) => void; onTypeChange: (v: string) => void; onCapabilityChange: (v: string) => void;
   onHeroImageChange: (v: string | null) => void; onPublishedChange: (v: boolean) => void; onPublishedAtChange: (v: string | null) => void; onPasswordChange: (v: string | null) => void;
+  onFeaturedChange: (v: boolean) => void; onSectorLabelChange: (v: string | null) => void; onFeaturedStatChange: (v: string | null) => void;
 }
 
 const CAPABILITIES = [
