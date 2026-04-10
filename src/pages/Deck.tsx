@@ -512,7 +512,7 @@ const Deck = () => {
               What problems are you trying to solve?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1, 200, "blur-up"), flex: "1 1 auto", paddingBottom: "clamp(6px, 0.8vw, 12px)" }}>
-              More foundations are rethinking their stratcomm portfolios than ever. These are the challenges we see most — select all that resonate.
+              More foundations are rethinking their strategic communications portfolios. These are the most common challenges we see. Select all that resonate.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 300, "blur-scale")}>
