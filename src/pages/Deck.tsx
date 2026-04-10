@@ -1416,7 +1416,7 @@ const Deck = () => {
                     {quizRevealed && (
                       <div style={{ marginBottom: "10px" }}>
                         <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Quiz result</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>Picked opponent's approach {opponentPickCount} / {QUIZ_ROWS.length} times</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>Identified {nextgenPickCount} / {QUIZ_ROWS.length} emerging approaches</p>
                       </div>
                     )}
                     {selectedDomains.length > 0 && (
