@@ -269,7 +269,7 @@ const Index = () => {
               animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
             }}
           >
-            VGC StratComm Advisors
+            Van Gelder Co.
           </span>
 
           <h1 className="flex flex-col gap-2 md:gap-3">
