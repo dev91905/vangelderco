@@ -465,7 +465,57 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ CONTACT ═══ */}
+      {/* ═══ NETWORK ═══ */}
+      <section className="snap-section relative z-10">
+        <div className="py-24 md:py-32 px-6 md:px-10 max-w-4xl mx-auto">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-4"
+              style={{ fontFamily: t.sans, color: "hsl(var(--destructive))" }}
+            >
+              The Network
+            </div>
+          </RevealBlock>
+          <RevealBlock delay={0.15}>
+            <p
+              className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
+              style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
+            >
+              480 members across every sector that moves policy, culture, and capital.
+            </p>
+          </RevealBlock>
+          <AnimatedLine width={50} />
+          <div className="flex flex-wrap gap-2.5 md:gap-3 mt-10">
+            {NETWORK_SECTORS.map((sector, i) => (
+              <RevealBlock key={sector} delay={0.25 + i * 0.04}>
+                <span
+                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
+                  style={{
+                    fontFamily: t.sans,
+                    color: "hsl(var(--destructive) / 0.6)",
+                    background: "hsl(var(--destructive) / 0.04)",
+                    border: "1px solid hsl(var(--destructive) / 0.12)",
+                    transition: `all 0.4s ${EASE_OUT_QUART}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.1)";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.35)";
+                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.9)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "hsl(var(--destructive) / 0.04)";
+                    e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.12)";
+                    e.currentTarget.style.color = "hsl(var(--destructive) / 0.6)";
+                  }}
+                >
+                  {sector}
+                </span>
+              </RevealBlock>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         className="snap-section relative z-10 flex flex-col items-center justify-center"
         style={{ height: "100vh" }}
