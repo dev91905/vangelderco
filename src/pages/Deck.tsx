@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import TypewriterHeading from "@/components/deck/TypewriterHeading";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";

@@ -225,3 +225,8 @@
   transition: color 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
