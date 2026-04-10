@@ -212,11 +212,13 @@ const Deck = () => {
   const [ctaForm, setCtaForm] = useState({ firstName: "", lastName: "", organization: "", email: "" });
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
+  /* ─── Domains selected (for intake) ─── */
+  const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
+
   const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
     if (!ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim() || ctaSubmitting) return;
     setCtaSubmitting(true);
-    // Save contact + custom challenge + selected pains
     await supabase.from("deck_contacts" as any).insert({
       first_name: ctaForm.firstName.trim(),
       last_name: ctaForm.lastName.trim(),
@@ -224,8 +226,9 @@ const Deck = () => {
       email: ctaForm.email.trim(),
       custom_challenge: customSaved ? customMessage.trim() || null : null,
       selected_pains: selectedPains.length > 0 ? selectedPains : null,
+      engagement_path: engagementPath || null,
+      selected_domains: selectedDomains.length > 0 ? selectedDomains : null,
     } as any);
-    // Also save the custom challenge to deck_submissions if present
     if (customSaved && customMessage.trim()) {
       await supabase.from("deck_submissions" as any).insert({ message: customMessage.trim() } as any);
     }
@@ -440,7 +443,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <TypewriterHeading
-            text="Building a Next-Generation StratComm Portfolio"
+            text="Let's figure out if there's a fit."
             active={r1.isActive}
             style={{
               fontFamily: f.sans,
@@ -463,8 +466,8 @@ const Deck = () => {
               lineHeight: 1.4,
             }}
           >
-            For donor advisors and program officers who know{" "}
-            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>your grantees could be hitting harder.</em>
+            This is a five-minute walkthrough that helps us understand your situation{" "}
+            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>— and shows you how we think about it.</em>
           </p>
           <div
             style={{
@@ -495,10 +498,10 @@ const Deck = () => {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-high))"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; }}
             >
-              Start the walkthrough →
+              Get started →
             </button>
             <span style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em", color: f.ink(0.25) }}>
-              5 min read · scroll or arrow keys
+              5 min · scroll or arrow keys
             </span>
           </div>
         </div>
@@ -509,10 +512,10 @@ const Deck = () => {
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
-              What are your biggest challenges?
+              Tell us where you are.
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1, 200, "blur-up"), flex: "1 1 auto", paddingBottom: "clamp(6px, 0.8vw, 12px)" }}>
-              More foundations are rethinking their strategic communications portfolios. These are the most common challenges we see. Select all that resonate.
+              This helps us understand your situation before we talk. Select everything that resonates.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 300, "blur-scale")}>
@@ -944,7 +947,7 @@ const Deck = () => {
         <div ref={r4.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[35%] flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              Stratcomm portfolios that get results do these three things.
+              Here's what separates portfolios that move policy from ones that report on awareness.
             </p>
             {selectedPainDatas.length > 0 && (
               <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic" }}>
@@ -1005,10 +1008,10 @@ const Deck = () => {
             transform: activeDomain ? "translateY(-20px)" : "translateY(0)",
           }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up"), marginBottom: "12px" }}>
-              You're ready to level up. We can help.
+              Where do you need the most help?
             </p>
             <p style={{ ...body(0.4), ...r5.stagger(1, 200, "blur-up"), marginBottom: activeDomain ? "24px" : "48px", maxWidth: "500px", transition: "margin 0.4s ease" }}>
-              We know how this works because we've done it ourselves.
+              Select the domains most relevant to your situation. This shapes what we focus on together.
             </p>
 
             {/* Connected three-column domain module */}
