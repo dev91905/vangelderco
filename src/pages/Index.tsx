@@ -510,7 +510,7 @@ const Index = () => {
               className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
               style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
             >
-              480 members across every sector that moves policy, culture, and capital.
+              We collaborate with a network of over 400 practitioners across every sector that moves policy, culture, and capital.
             </p>
           </RevealBlock>
           <AnimatedLine width={50} />
