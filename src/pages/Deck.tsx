@@ -1179,9 +1179,9 @@ const Deck = () => {
       {/* ═══ FRAME 8: Working Together ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="flex flex-col gap-8 w-full">
-          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r8.stagger(0) }}>How do you want to start?</p>
+          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r8.stagger(0, 0, "blur-up") }}>How do you want to start?</p>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full" style={r8.stagger(1, 200)}>
+          <div className="flex flex-col sm:flex-row gap-4 w-full" style={r8.stagger(1, 300, "blur-scale")}>
             {([
               { id: "fresh" as const, title: "Starting fresh", desc: "You need to understand the landscape before you act." },
               { id: "experienced" as const, title: "Already up to speed", desc: "You know the gaps. You need capacity and connections." },
@@ -1255,7 +1255,7 @@ const Deck = () => {
           )}
 
           {!engagementPath && (
-            <p style={{ ...label("9px"), ...r8.stagger(2, 600) }}>↑ Choose a path to see the process</p>
+            <p style={{ ...label("9px"), ...r8.stagger(2, 600, "blur-up") }}>↑ Choose a path to see the process</p>
           )}
         </div>
       </DeckFrame>
@@ -1264,13 +1264,13 @@ const Deck = () => {
       <DeckFrame ref={setRef(8)} mode="wide">
         <div ref={r9.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[45%] flex flex-col justify-center">
-            <p style={{ ...r9.stagger(0), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
+            <p style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
               We've been where you are.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300), marginTop: "20px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300, "blur-up"), marginTop: "20px", maxWidth: "400px" }}>
               Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(2, 600), marginTop: "12px", maxWidth: "400px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(2, 600, "blur-up"), marginTop: "12px", maxWidth: "400px" }}>
               What's holding most donor advisors back isn't effort — it's <strong style={{ color: f.ink(0.8) }}>access and pattern recognition</strong> across these industries. That's what we transfer.
             </p>
           </div>
@@ -1291,8 +1291,9 @@ const Deck = () => {
                   padding: "20px 16px",
                   borderTop: `1px solid ${f.ink(0.06)}`,
                   opacity: r9.isActive ? 1 : 0,
-                  transform: r9.isActive ? "translateY(0)" : "translateY(8px)",
-                  transition: `all 0.5s ease ${400 + i * 100}ms`,
+                  transform: r9.isActive ? "translateY(0) scale(1)" : "translateY(12px) scale(0.96)",
+                  filter: r9.isActive ? "blur(0px)" : "blur(4px)",
+                  transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${500 + i * 100}ms`,
                 }}
               >
                 <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 700, color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
@@ -1306,15 +1307,15 @@ const Deck = () => {
       {/* ═══ FRAME 10: The Promise ═══ */}
       <DeckFrame ref={setRef(9)} mode="narrow">
         <div ref={r10.ref} className="flex flex-col gap-8 items-center text-center">
-          <p style={{ ...r10.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+          <p style={{ ...r10.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 5vw, 64px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.2, letterSpacing: "-0.02em" }}>
             Everything we know becomes everything you know.
           </p>
-          <div style={{ ...r10.stagger(1, 400), width: "40px", height: "1px", background: f.ink(0.1) }} />
-          <p style={{ ...r10.stagger(2, 600), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
+          <div style={{ ...r10.lineDraw(500, "60px") }} />
+          <p style={{ ...r10.stagger(2, 700, "blur-up"), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.8, maxWidth: "560px" }}>
             Strategic communications is expansive and powerful, but it's completely learnable. If you work with us, you'll learn how to do this yourself. That's not a risk to our business — it's the entire point.
           </p>
           {selectedPainDatas.length > 0 && (
-            <p style={{ ...r10.stagger(3, 900), fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
+            <p style={{ ...r10.stagger(3, 1000, "blur-up"), fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.6, fontStyle: "italic", maxWidth: "480px" }}>
               {selectedPainDatas.map(p => `"${p.short}"`).join(", ")} — we've seen it all before. We know how to fix it. And we'll show you how.
             </p>
           )}
@@ -1324,16 +1325,16 @@ const Deck = () => {
       {/* ═══ FRAME 11: CTA — What's Next ═══ */}
       <DeckFrame ref={setRef(10)} mode="narrow">
         <div ref={r11.ref} className="flex flex-col gap-8 items-center text-center">
-          <h2 style={{ ...r11.stagger(0), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+          <h2 style={{ ...r11.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4.5vw, 60px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
             What's next?
           </h2>
-          <p style={{ ...r11.stagger(1, 200), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
+          <p style={{ ...r11.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(15px, 2vw, 21px)", color: f.ink(0.55), lineHeight: 1.7, maxWidth: "480px" }}>
             Let's look at your portfolio together.
           </p>
 
           {/* Two CTA options */}
           {ctaMode !== "email" && ctaMode !== "thanks" && (
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg" style={r11.stagger(2, 400)}>
+            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg" style={r11.stagger(2, 500, "blur-scale")}>
               <button
                 onClick={() => setCtaMode("email")}
                 style={{
@@ -1539,7 +1540,7 @@ const Deck = () => {
       {/* ═══ FRAME 12: Case Studies ═══ */}
       <DeckFrame ref={setRef(11)} mode="wide">
         <div ref={r12.ref} className="flex flex-col gap-8 w-full">
-          <div style={r12.stagger(0)}>
+          <div style={r12.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Selected case work.
             </p>
@@ -1547,7 +1548,7 @@ const Deck = () => {
               Click any case to read the full story.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" style={r12.stagger(1, 200)}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" style={r12.stagger(1, 300, "blur-scale")}>
             {CASE_STUDIES.map((cs, i) => (
               <button
                 key={i}
@@ -1560,8 +1561,9 @@ const Deck = () => {
                   borderRadius: "10px",
                   cursor: "pointer",
                   opacity: r12.isActive ? 1 : 0,
-                  transform: r12.isActive ? "translateY(0)" : "translateY(8px)",
-                  transition: `all 0.4s ease ${200 + i * 50}ms`,
+                  transform: r12.isActive ? "translateY(0) scale(1)" : "translateY(12px) scale(0.95)",
+                  filter: r12.isActive ? "blur(0px)" : "blur(5px)",
+                  transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms`,
                 }}
                 onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } else { e.currentTarget.style.transform = "translateY(-2px)"; } }}
                 onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } else { e.currentTarget.style.transform = "translateY(0)"; } }}
