@@ -43,9 +43,9 @@
     --card-h: 40;
     --card-s: 25%;
     --card-l: 98%;
-    --accent-h: 30;
-    --accent-s: 10%;
-    --accent-l: 12%;
+    --accent-h: 0;
+    --accent-s: 40%;
+    --accent-l: 35%;
   }
 
   .dark {
