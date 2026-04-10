@@ -180,7 +180,7 @@ const Index = () => {
 
       {/* ═══ HERO ═══ */}
       <section
-        className="flex items-center justify-center w-full relative z-20"
+        className="snap-section flex items-center justify-center w-full relative z-20"
         style={{ height: "100vh", opacity: heroOpacity }}
       >
         <main className="flex flex-col items-center text-center px-6 max-w-3xl gap-10 md:gap-14">
@@ -256,7 +256,7 @@ const Index = () => {
       </section>
 
       {/* ═══ ALTITUDE ═══ */}
-      <section className="flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
+      <section className="snap-section flex items-center justify-center relative z-10" style={{ minHeight: "100vh" }}>
         <div className="max-w-xl px-6 md:px-10">
           <RevealBlock>
             <p
@@ -301,7 +301,7 @@ const Index = () => {
       </section>
 
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
+      <section className="snap-section relative z-10 flex items-center" style={{ minHeight: "100vh" }}>
         <div className="w-full py-24 md:py-32 px-6 md:px-10 max-w-5xl mx-auto">
           <RevealBlock>
             <div
@@ -356,7 +356,7 @@ const Index = () => {
       </section>
 
       {/* ═══ FIELD NOTES — sticky header with scrollable content ═══ */}
-      <section className="relative z-10">
+      <section className="snap-section relative z-10">
         {/* Sticky label */}
         <div className="sticky top-0 z-20 pt-16 pb-8 px-6 md:px-10 max-w-2xl mx-auto" style={{ background: "hsl(var(--background))" }}>
           <div
@@ -376,7 +376,7 @@ const Index = () => {
 
       {/* ═══ CONTACT ═══ */}
       <section
-        className="relative z-10 flex flex-col items-center justify-center"
+        className="snap-section relative z-10 flex flex-col items-center justify-center"
         style={{ height: "100vh" }}
       >
         <RevealBlock>
