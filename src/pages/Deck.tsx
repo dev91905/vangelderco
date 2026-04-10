@@ -377,6 +377,14 @@ const Deck = () => {
     let accumulated = 0;
     const handler = (e: WheelEvent) => {
       if (selectedCase !== null) return;
+      // Allow vertical scrolling inside scrollable frames
+      const scrollableFrame = (e.target as HTMLElement)?.closest("[data-scrollable]") as HTMLElement | null;
+      if (scrollableFrame && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const atTop = scrollableFrame.scrollTop <= 0;
+        const atBottom = scrollableFrame.scrollTop + scrollableFrame.clientHeight >= scrollableFrame.scrollHeight - 2;
+        // If not at boundary, let native scroll happen
+        if (!(atTop && e.deltaY < 0) && !(atBottom && e.deltaY > 0)) return;
+      }
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
         accumulated += e.deltaY;
