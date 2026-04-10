@@ -147,16 +147,16 @@ const AdminEditor = () => {
 
   if (!isNew && isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(40 30% 96%)" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(var(--background))" }}>
         <span className="text-sm" style={{ ...label, color: "hsl(30 10% 12% / 0.3)" }}>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(40 30% 96%)", colorScheme: "light" }}>
+    <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(var(--background))", colorScheme: "light" }}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(40 30% 96% / 0.9)", borderBottom: "1px solid hsl(30 10% 12% / 0.06)" }}>
+      <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(var(--background) / 0.9)", borderBottom: "1px solid hsl(var(--foreground) / 0.06)" }}>
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
@@ -188,7 +188,7 @@ const AdminEditor = () => {
           )}
           <button onClick={handleSave} disabled={createPost.isPending || updatePost.isPending}
             className="px-4 py-2 text-sm transition-all rounded-full"
-            style={{ ...label, background: dirty ? "hsl(30 10% 12%)" : "transparent", color: dirty ? "hsl(40 30% 96%)" : "hsl(30 10% 12% / 0.5)", border: dirty ? "none" : "1px solid hsl(30 10% 12% / 0.15)", opacity: (createPost.isPending || updatePost.isPending) ? 0.5 : 1 }}>
+            style={{ ...label, background: dirty ? "hsl(var(--foreground))" : "transparent", color: dirty ? "hsl(var(--background))" : "hsl(var(--foreground) / 0.5)", border: dirty ? "none" : "1px solid hsl(var(--foreground) / 0.15)", opacity: (createPost.isPending || updatePost.isPending) ? 0.5 : 1 }}>
             {createPost.isPending || updatePost.isPending ? "Saving..." : isNew ? "Create" : "Save"}
           </button>
         </div>
@@ -275,7 +275,7 @@ const AdminEditor = () => {
       </div>
 
       <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
-        <AlertDialogContent className="light" style={{ background: "hsl(40 30% 96%)", border: "1px solid hsl(30 10% 12% / 0.08)", fontFamily: "'Inter', system-ui, sans-serif" }}>
+        <AlertDialogContent className="light" style={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--foreground) / 0.08)", fontFamily: "'Inter', system-ui, sans-serif" }}>
           <AlertDialogHeader>
             <AlertDialogTitle style={{ color: "hsl(30 10% 12% / 0.85)" }}>Unsaved changes</AlertDialogTitle>
             <AlertDialogDescription style={{ color: "hsl(30 10% 12% / 0.5)" }}>
@@ -302,7 +302,7 @@ const AdminEditor = () => {
                   });
                 }
               }}
-              style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "hsl(30 10% 12%)", color: "hsl(40 30% 96%)" }}
+              style={{ fontFamily: "'Inter', system-ui, sans-serif", background: "hsl(var(--foreground))", color: "hsl(var(--background))" }}
             >
               Save & leave
             </AlertDialogAction>

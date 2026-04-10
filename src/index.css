@@ -4,50 +4,51 @@
 
 @layer base {
   :root {
-    --background: 40 30% 96%;
-    --foreground: 30 10% 12%;
-    --card: 40 25% 98%;
-    --card-foreground: 30 10% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 30 10% 12%;
-    --primary: 30 10% 12%;
-    --primary-foreground: 40 30% 96%;
-    --secondary: 30 10% 90%;
-    --secondary-foreground: 30 10% 30%;
-    --muted: 30 10% 92%;
-    --muted-foreground: 30 10% 45%;
-    --accent: 30 10% 90%;
-    --accent-foreground: 30 10% 12%;
-    --destructive: 12 45% 38%;
-    --destructive-foreground: 40 30% 96%;
-    --border: 30 10% 88%;
-    --input: 30 10% 88%;
-    --ring: 30 10% 12%;
+    /* Anthropic-inspired warm ivory palette */
+    --background: 38 35% 93%;
+    --foreground: 28 18% 10%;
+    --card: 37 30% 95%;
+    --card-foreground: 28 18% 10%;
+    --popover: 36 28% 96%;
+    --popover-foreground: 28 18% 10%;
+    --primary: 28 18% 10%;
+    --primary-foreground: 38 35% 93%;
+    --secondary: 34 18% 86%;
+    --secondary-foreground: 28 15% 28%;
+    --muted: 35 16% 89%;
+    --muted-foreground: 28 10% 42%;
+    --accent: 34 18% 86%;
+    --accent-foreground: 28 18% 10%;
+    --destructive: 8 50% 40%;
+    --destructive-foreground: 38 35% 93%;
+    --border: 33 14% 84%;
+    --input: 33 14% 84%;
+    --ring: 28 18% 10%;
     --radius: 0.75rem;
-    --sidebar-background: 30 10% 98%;
-    --sidebar-foreground: 30 10% 45%;
-    --sidebar-primary: 30 10% 12%;
-    --sidebar-primary-foreground: 40 30% 96%;
-    --sidebar-accent: 30 10% 94%;
-    --sidebar-accent-foreground: 30 10% 30%;
-    --sidebar-border: 30 10% 90%;
-    --sidebar-ring: 30 10% 12%;
+    --sidebar-background: 36 28% 95%;
+    --sidebar-foreground: 28 10% 42%;
+    --sidebar-primary: 28 18% 10%;
+    --sidebar-primary-foreground: 38 35% 93%;
+    --sidebar-accent: 34 16% 90%;
+    --sidebar-accent-foreground: 28 15% 28%;
+    --sidebar-border: 33 14% 86%;
+    --sidebar-ring: 28 18% 10%;
 
-    /* Theme bridge tokens */
-    --ink-h: 30;
-    --ink-s: 10%;
-    --ink-l: 12%;
-    --cream-h: 40;
-    --cream-s: 30%;
-    --cream-l: 96%;
-    --card-h: 40;
-    --card-s: 25%;
-    --card-l: 98%;
-    --accent-h: 5;
-    --accent-s: 40%;
-    --accent-l: 30%;
+    /* Theme bridge tokens — warm sand */
+    --ink-h: 28;
+    --ink-s: 18%;
+    --ink-l: 10%;
+    --cream-h: 38;
+    --cream-s: 35%;
+    --cream-l: 93%;
+    --card-h: 37;
+    --card-s: 30%;
+    --card-l: 95%;
+    --accent-h: 28;
+    --accent-s: 18%;
+    --accent-l: 10%;
 
-    /* Accent opacity tiers — muted in light mode */
+    /* Accent opacity tiers */
     --a-high: 0.6;
     --a-mid: 0.5;
     --a-low: 0.4;
@@ -59,49 +60,50 @@
   }
 
   .dark {
-    --background: 30 6% 3%;
-    --foreground: 35 5% 93%;
-    --card: 30 5% 5.5%;
-    --card-foreground: 35 5% 93%;
-    --popover: 30 5% 5.5%;
-    --popover-foreground: 35 5% 93%;
-    --primary: 35 5% 90%;
-    --primary-foreground: 30 5% 5%;
-    --secondary: 30 4% 10%;
-    --secondary-foreground: 30 4% 70%;
-    --muted: 30 4% 8%;
-    --muted-foreground: 30 4% 50%;
-    --accent: 30 4% 10%;
-    --accent-foreground: 35 5% 93%;
-    --destructive: 0 60% 50%;
+    /* Anthropic-inspired warm dark palette */
+    --background: 25 14% 5%;
+    --foreground: 34 12% 90%;
+    --card: 26 12% 8%;
+    --card-foreground: 34 12% 90%;
+    --popover: 26 12% 8%;
+    --popover-foreground: 34 12% 90%;
+    --primary: 34 12% 88%;
+    --primary-foreground: 25 14% 5%;
+    --secondary: 27 10% 12%;
+    --secondary-foreground: 30 8% 65%;
+    --muted: 27 10% 10%;
+    --muted-foreground: 28 8% 48%;
+    --accent: 27 10% 12%;
+    --accent-foreground: 34 12% 90%;
+    --destructive: 4 55% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 30 4% 12%;
-    --input: 30 4% 12%;
-    --ring: 30 4% 40%;
-    --sidebar-background: 30 5% 4%;
-    --sidebar-foreground: 30 4% 50%;
-    --sidebar-primary: 35 5% 90%;
-    --sidebar-primary-foreground: 30 5% 5%;
-    --sidebar-accent: 30 4% 8%;
-    --sidebar-accent-foreground: 30 4% 70%;
-    --sidebar-border: 30 4% 12%;
-    --sidebar-ring: 30 4% 40%;
+    --border: 27 10% 14%;
+    --input: 27 10% 14%;
+    --ring: 28 8% 38%;
+    --sidebar-background: 25 14% 4%;
+    --sidebar-foreground: 28 8% 48%;
+    --sidebar-primary: 34 12% 88%;
+    --sidebar-primary-foreground: 25 14% 5%;
+    --sidebar-accent: 27 10% 10%;
+    --sidebar-accent-foreground: 30 8% 65%;
+    --sidebar-border: 27 10% 14%;
+    --sidebar-ring: 28 8% 38%;
 
-    /* Theme bridge tokens — dark (warm neutrals) */
-    --ink-h: 35;
-    --ink-s: 5%;
-    --ink-l: 93%;
-    --cream-h: 30;
-    --cream-s: 6%;
-    --cream-l: 3%;
-    --card-h: 30;
-    --card-s: 5%;
-    --card-l: 5.5%;
-    --accent-h: 5;
-    --accent-s: 40%;
-    --accent-l: 38%;
+    /* Theme bridge tokens — warm dark */
+    --ink-h: 34;
+    --ink-s: 12%;
+    --ink-l: 90%;
+    --cream-h: 25;
+    --cream-s: 14%;
+    --cream-l: 5%;
+    --card-h: 26;
+    --card-s: 12%;
+    --card-l: 8%;
+    --accent-h: 34;
+    --accent-s: 12%;
+    --accent-l: 90%;
 
-    /* Accent opacity tiers — pop in dark mode */
+    /* Accent opacity tiers — dark mode */
     --a-high: 0.9;
     --a-mid: 0.8;
     --a-low: 0.65;
@@ -115,31 +117,31 @@
 
   /* Force light-mode tokens inside admin (or any .light container) */
   .dark .light {
-    --background: 40 30% 96%;
-    --foreground: 30 10% 12%;
-    --card: 40 25% 98%;
-    --card-foreground: 30 10% 12%;
-    --primary: 30 10% 12%;
-    --primary-foreground: 40 30% 96%;
-    --muted: 30 10% 92%;
-    --muted-foreground: 30 10% 45%;
-    --accent: 30 10% 90%;
-    --accent-foreground: 30 10% 12%;
-    --border: 30 10% 88%;
-    --input: 30 10% 88%;
-    --ring: 30 10% 12%;
-    --ink-h: 30;
-    --ink-s: 10%;
-    --ink-l: 12%;
-    --cream-h: 40;
-    --cream-s: 30%;
-    --cream-l: 96%;
-    --card-h: 40;
-    --card-s: 25%;
-    --card-l: 98%;
-    --accent-h: 0;
-    --accent-s: 40%;
-    --accent-l: 35%;
+    --background: 38 35% 93%;
+    --foreground: 28 18% 10%;
+    --card: 37 30% 95%;
+    --card-foreground: 28 18% 10%;
+    --primary: 28 18% 10%;
+    --primary-foreground: 38 35% 93%;
+    --muted: 35 16% 89%;
+    --muted-foreground: 28 10% 42%;
+    --accent: 34 18% 86%;
+    --accent-foreground: 28 18% 10%;
+    --border: 33 14% 84%;
+    --input: 33 14% 84%;
+    --ring: 28 18% 10%;
+    --ink-h: 28;
+    --ink-s: 18%;
+    --ink-l: 10%;
+    --cream-h: 38;
+    --cream-s: 35%;
+    --cream-l: 93%;
+    --card-h: 37;
+    --card-s: 30%;
+    --card-l: 95%;
+    --accent-h: 28;
+    --accent-s: 18%;
+    --accent-l: 10%;
     --a-high: 0.6;
     --a-mid: 0.5;
     --a-low: 0.4;
@@ -148,8 +150,8 @@
     --a-bg-subtle: 0.03;
     --a-border: 0.12;
     --a-border-card: 0.1;
-    --destructive: 12 45% 38%;
-    --destructive-foreground: 40 30% 96%;
+    --destructive: 8 50% 40%;
+    --destructive-foreground: 38 35% 93%;
   }
 
 @layer base {
