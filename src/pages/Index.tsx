@@ -380,26 +380,26 @@ const Index = () => {
             </p>
           </RevealBlock>
           <RevealBlock delay={0.15}>
-            <p
-              className="italic font-light"
+            <h2
+              className="font-bold"
               style={{
-                fontFamily: t.serif,
+                fontFamily: t.sans,
                 fontSize: "clamp(26px, 4vw, 42px)",
-                lineHeight: 1.4,
-                color: "hsl(var(--foreground) / var(--a-high))",
+                lineHeight: 1.25,
+                color: "hsl(var(--foreground))",
               }}
             >
-              We build next-generation strategic communications portfolios.
-            </p>
+              Next-generation strategic communications portfolios.
+            </h2>
           </RevealBlock>
           <RevealBlock delay={0.3}>
             <p
-              className="mt-4"
+              className="mt-6 italic"
               style={{
-                fontFamily: t.sans,
-                fontSize: "clamp(16px, 2vw, 20px)",
+                fontFamily: t.serif,
+                fontSize: "clamp(18px, 2.2vw, 24px)",
                 lineHeight: 1.6,
-                color: t.ink(0.45),
+                color: "hsl(var(--foreground))",
               }}
             >
               For donor advisors and program officers who know their portfolios should be hitting harder.
@@ -408,10 +408,10 @@ const Index = () => {
           <RevealBlock delay={0.5}>
             <AnimatedLine width={60} />
             <p
-              className="text-xs leading-relaxed max-w-md"
-              style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.8 }}
+              className="leading-relaxed max-w-md"
+              style={{ fontFamily: t.serif, fontSize: "clamp(14px, 1.4vw, 16px)", color: t.ink(0.4), lineHeight: 1.8 }}
             >
-              We build strategic communications portfolios that work across sectors — cultural strategy, cross-sector coordination, and deep organizing — so your grants don't just fund content, they build power.
+              Cultural strategy, cross-sector coordination, and deep organizing — integrated so your grants don't just fund content, they build power.
             </p>
           </RevealBlock>
         </div>
