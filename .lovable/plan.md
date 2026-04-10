@@ -2,42 +2,54 @@
 
 ## Problem
 
-The results layout has three issues:
+Frame 4 (Hallmarks) has two issues:
 
-1. **Header spans full width above the two-column layout.** "Your results" / "Here's what your answers tell us" / subtitle sits outside and above the left+right split. This eats ~120px of vertical space, so the right column's `maxHeight: 100dvh` doesn't account for it — the bottom cards get clipped.
+1. **Content too wide** — the right column (`lg:w-[65%]` of 1400px max) extends under the fixed Continue button and other corner chrome (back button, progress bar, ESC). When hallmark cards expand, content overflows beneath these overlays.
 
-2. **Left column isn't a proper sticky sidebar.** It's `height: 100%` but not `position: sticky`, so it doesn't stay pinned when the right column scrolls.
+2. **Content vertically clipped** — the expanded hallmark cards push content below the viewport, but the DeckFrame's `minHeight: 100dvh` doesn't grow enough, and the deck's wheel handler prevents normal scrolling within the frame.
 
-3. **Right column can't scroll far enough** because the height math is wrong and padding is insufficient.
+This is a systemic issue — it affects any `mode="wide"` frame where content gets close to the edges. The fix should ensure all deck content stays clear of the fixed chrome.
 
 ## Fix
 
-Restructure the results layout so the header text moves INTO the left column, making it a true sticky sidebar with all the context stacked vertically:
+### 1. Add safe padding to DeckFrame for chrome clearance
 
-**Left column (sticky, ~38% width):**
-- "Your results" label
-- "Here's what your answers tell us." heading
-- "The summary is at the top..." subtitle
-- Diagnostic grade card
-- Start over button
-- `position: sticky; top: 0; height: 100dvh; overflow: hidden`
-- Content vertically centered or top-aligned with padding
+Add bottom padding to account for the fixed bottom nav bar (~80px tall including its 28px bottom padding). The current `paddingBottom: clamp(120px, 16vh, 180px)` should already clear it, but the horizontal padding on `wide` mode (`lg:px-28` = 112px) may not be enough on smaller viewports when the Continue button sits at the right edge.
 
-**Right column (scrollable, ~62% width):**
-- Dimension breakdown cards
-- `maxHeight: 100dvh; overflowY: auto; overscrollBehavior: contain`
-- Generous `paddingBottom` (~120px) so the measurement card is fully reachable
-- The existing wheel-trapping handler stays intact — cards scroll within this container only
+**In `src/components/deck/DeckFrame.tsx`:**
+- Increase horizontal padding on `wide` mode from `lg:px-28` to `lg:px-32` (128px) to add more clearance from edge chrome.
 
-**Concrete changes in `src/pages/Deck.tsx`:**
+### 2. Constrain the right column width on Frame 4
 
-1. When `quizRevealed` is true, remove the header block above the two-column flex (lines 764–787) — move its content into the left column div (line 914 area), placed above the diagnostic card.
+**In `src/pages/Deck.tsx` (Frame 4, ~line 1124):**
+- Change the right column from `lg:w-[65%]` to `lg:w-[60%]` and add a `max-width` constraint so cards don't run under the Continue button.
+- The left column stays at `lg:w-[35%]` → adjust to `lg:w-[38%]` for balance.
 
-2. Make the left column `position: sticky; top: 0; height: 100dvh` with vertical padding and `overflow: hidden` so it never scrolls.
+### 3. Allow Frame 4 to grow vertically when cards expand
 
-3. Set the right column `maxHeight: 100dvh` with `paddingBottom: "120px"` to ensure the last card is fully scrollable into view.
+The hallmark cards expand to show rationale + "How we help" + assessment buttons. When all three are open, this exceeds the viewport.
 
-4. The outer container for the results block (line 911) changes from `height: 100dvh` to `min-height: 100dvh` so it can accommodate the scroll region properly.
+**In `src/pages/Deck.tsx`:**
+- The DeckFrame already uses `minHeight: 100dvh` so it can grow. The issue is the deck wheel handler locks scrolling. The hallmarks section needs to work within the snap frame's visible area — the cards already use `maxHeight` transitions so they fit. No scroll change needed here; the content just needs to not overlap the chrome.
 
-5. The wheel-trapping fix (`data-results-scroll`, `overscrollBehavior: contain`, the dedicated wheel handler) stays exactly as-is — no changes to scroll lock behavior.
+### 4. Apply consistent content inset across all wide frames
+
+To prevent any future frame from running under corner chrome, update the `wide` mode padding in DeckFrame to provide more breathing room:
+
+**`src/components/deck/DeckFrame.tsx`:**
+```
+wide: "max-w-[1280px] px-8 md:px-20 lg:px-28",
+```
+
+Reduce `max-w` from 1400px to 1280px. This pulls all wide content inward, creating ~60px more clearance on each side at full width — enough that no card edge touches the Continue or Back buttons.
+
+### Summary of changes
+
+| File | Change |
+|------|--------|
+| `src/components/deck/DeckFrame.tsx` | Reduce `wide` max-width from 1400px → 1280px |
+| `src/pages/Deck.tsx` (Frame 4) | Right column `lg:w-[65%]` → `lg:w-[58%]`, left `lg:w-[35%]` → `lg:w-[40%]` |
+| `src/pages/Deck.tsx` (bottom nav) | Update `maxWidth` from 1400px → 1280px to match |
+
+This keeps all content comfortably inside the chrome safe zone without breaking any existing scroll behavior.
 
