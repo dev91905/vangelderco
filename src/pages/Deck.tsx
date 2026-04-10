@@ -993,13 +993,14 @@ const Deck = () => {
                       <div
                         key={i}
                         style={{
-                          padding: "clamp(20px, 2.5vw, 28px)",
+                          padding: "clamp(24px, 3vw, 36px)",
                           borderRadius: "16px",
                           background: "hsl(var(--foreground) / var(--a-bg-subtle))",
                           border: `1px solid ${f.ink(0.06)}`,
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                        {/* ── Header row: dot + dimension title ── */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
                           <span style={{
                             display: "inline-block",
                             width: "8px",
@@ -1008,54 +1009,76 @@ const Deck = () => {
                             background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2),
                             flexShrink: 0,
                           }} />
-                          <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.5vw, 20px)", fontWeight: 700, color: f.ink(0.85), letterSpacing: "-0.01em" }}>{row.dimension}</p>
                         </div>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.35), lineHeight: 1.6, fontStyle: "italic", marginBottom: "12px" }}>
+
+                        {/* ── Selected approach quote ── */}
+                        <p style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(13px, 1.15vw, 14px)",
+                          color: f.ink(0.4),
+                          lineHeight: 1.7,
+                          fontStyle: "italic",
+                          paddingLeft: "20px",
+                          borderLeft: `2px solid ${f.ink(0.08)}`,
+                          marginBottom: "24px",
+                        }}>
                           {selectedCopy}
                         </p>
-                        <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "6px" }}>{explanationLabel}</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.7), lineHeight: 1.6, fontWeight: 600, marginBottom: isExpanded ? "0" : "0" }}>
+
+                        {/* ── Explanation section ── */}
+                        <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "8px", textTransform: "uppercase" as const }}>{explanationLabel}</p>
+                        <p style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(13px, 1.2vw, 15px)",
+                          color: f.ink(0.65),
+                          lineHeight: 1.7,
+                          fontWeight: 500,
+                        }}>
                           {lede}
                         </p>
 
+                        {/* ── Expandable bullets ── */}
                         {isExpanded && (
                           <ul style={{
                             listStyle: "none",
                             padding: 0,
-                            margin: "14px 0 0 0",
+                            margin: "20px 0 0 0",
                             display: "flex",
                             flexDirection: "column",
-                            gap: "10px",
-                            paddingTop: "14px",
+                            gap: "12px",
+                            paddingTop: "20px",
                             borderTop: `1px solid ${f.ink(0.06)}`,
                             animation: "fade-up 0.3s ease-out",
                           }}>
                             {bullets.map((b, bi) => (
                               <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                                <span style={{ color: f.ink(0.15), fontSize: "8px", lineHeight: "22px", flexShrink: 0 }}>●</span>
-                                <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.15vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>{b}</span>
+                                <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
+                                <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
                               </li>
                             ))}
                           </ul>
                         )}
 
+                        {/* ── Toggle ── */}
                         <button
                           onClick={() => setExpandedDimension(isExpanded ? null : i)}
                           style={{
                             fontFamily: f.sans,
-                            fontSize: "12px",
+                            fontSize: "11px",
                             fontWeight: 600,
-                            color: f.ink(0.35),
+                            color: f.ink(0.3),
                             background: "none",
                             border: "none",
                             padding: "0",
-                            marginTop: "10px",
+                            marginTop: "20px",
                             cursor: "pointer",
-                            letterSpacing: "0.03em",
+                            letterSpacing: "0.05em",
+                            textTransform: "uppercase" as const,
                             transition: "color 0.15s ease",
                           }}
                           onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
-                          onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
                         >
                           {isExpanded ? "Show less" : "Read more"}
                         </button>
