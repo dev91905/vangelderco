@@ -574,8 +574,8 @@ const Deck = () => {
                   onChange={(e) => {
                     const val = e.target.value;
                     const lines = val.split("\n");
-                    if (lines.length > 3) return;
-                    if (val.length > 200) return;
+                    if (lines.length > 2) return;
+                    if (val.length > 140) return;
                     setCustomMessage(val);
                     if (customSaved) setCustomSaved(false);
                   }}
@@ -583,7 +583,7 @@ const Deck = () => {
                   placeholder="Tell us what you're dealing with…"
                   readOnly={customSaved}
                   onClick={() => { if (customSaved) setCustomSaved(false); }}
-                  rows={3}
+                  rows={2}
                   style={{
                     fontFamily: f.sans,
                     fontSize: "clamp(12px, 1.3vw, 14px)",
@@ -596,7 +596,9 @@ const Deck = () => {
                     outline: "none",
                     width: "100%",
                     lineHeight: 1.6,
-                    flex: "1 1 auto",
+                    minHeight: "69px",
+                    maxHeight: "69px",
+                    overflow: "hidden",
                     cursor: customSaved ? "pointer" : "text",
                     transition: "background 0.15s ease, border 0.15s ease",
                   }}
@@ -609,6 +611,7 @@ const Deck = () => {
                   color: f.ink(0.25),
                   marginTop: "6px",
                   lineHeight: 1,
+                  minHeight: "11px",
                   opacity: customSaved ? 1 : customMessage.trim() ? 1 : 0,
                   transition: "opacity 0.2s ease",
                 }}>
