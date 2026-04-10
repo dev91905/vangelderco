@@ -290,7 +290,7 @@ const Deck = () => {
     hasMediaExperience,
   }), [selectedPains, customSaved, customMessage, quizAnswers, selectedDomains, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
-  const scoreInfo = useMemo(() => getScoreLabel(diagnosticScore), [diagnosticScore]);
+  
 
   const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
