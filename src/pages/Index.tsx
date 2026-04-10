@@ -272,7 +272,7 @@ const Index = () => {
                 color: t.ink(0.55),
               }}
             >
-              Everyone else operates at 30,000 feet.
+              You're on the ground doing the work.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.2}>
@@ -285,7 +285,7 @@ const Index = () => {
                 color: t.ink(0.85),
               }}
             >
-              We see it from orbit.
+              We see the field from orbit.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.4}>
