@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
@@ -44,32 +45,7 @@ const CAPABILITIES = [
   },
 ];
 
-const FIELD_NOTES = [
-  {
-    sector: "ENERGY × LABOR",
-    brief:
-      "Mapped alignment between energy transition funders and building trades unions on workforce development. Neither side knew the other was moving.",
-    result: "Joint strategy deployed across three states. $12M in coordinated capital.",
-  },
-  {
-    sector: "CULTURE × PHILANTHROPY",
-    brief:
-      "Built uptake network across entertainment, digital creators, and athletic talent for a national climate narrative. Turned a foundation report into a cultural moment.",
-    result: "14M organic impressions. Zero paid media.",
-  },
-  {
-    sector: "INTELLIGENCE",
-    brief:
-      "Mapped adversarial network funding infrastructure across four states. Identified coordination patterns between dark money vehicles and state-level policy shops.",
-    result: "Intelligence product delivered to coalition of seven foundations. Shifted $8M in defensive capital allocation.",
-  },
-  {
-    sector: "DEEP ORGANIZING",
-    brief:
-      "Identified organic community leaders in three metro areas being overlooked by national organizations. Connected them with philanthropic resources and cross-sector partnerships.",
-    result: "Sustained local networks operating 18+ months post-engagement.",
-  },
-];
+/* FIELD_NOTES now pulled from DB via useFeaturedPosts hook */
 
 /* ── Premium easing curves ── */
 const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
@@ -158,16 +134,16 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
 }
 
 /* ── Case fragment with premium motion ── */
-function CaseFragment({ sector, brief, result, index }: { sector: string; brief: string; result: string; index: number }) {
+function CaseFragment({ sector, brief, result, slug, index }: { sector: string; brief: string; result: string; slug?: string | null; index: number }) {
   const { ref, hasRevealed } = useScrollReveal(0.15);
   const [hovered, setHovered] = useState(false);
 
-  return (
+  const content = (
     <div
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="mb-14 cursor-default"
+      className={`mb-14 ${slug ? "cursor-pointer" : "cursor-default"}`}
       style={{
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed
@@ -203,11 +179,17 @@ function CaseFragment({ sector, brief, result, index }: { sector: string; brief:
       </div>
     </div>
   );
+
+  if (slug) {
+    return <Link to={`/post/${slug}`} className="block no-underline">{content}</Link>;
+  }
+  return content;
 }
 
 /* ── Index page ── */
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
+  const { data: featuredPosts } = useFeaturedPosts();
   const [scrollY, setScrollY] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -499,8 +481,15 @@ const Index = () => {
         </div>
 
         <div className="px-6 md:px-10 max-w-2xl mx-auto pb-32">
-          {FIELD_NOTES.map((note, i) => (
-            <CaseFragment key={note.sector} {...note} index={i} />
+          {(featuredPosts || []).map((note, i) => (
+            <CaseFragment
+              key={note.id}
+              sector={note.sector_label || note.title}
+              brief={note.excerpt || ""}
+              result={note.featured_stat || ""}
+              slug={note.slug}
+              index={i}
+            />
           ))}
         </div>
       </section>
