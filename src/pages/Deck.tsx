@@ -388,7 +388,7 @@ const Deck = () => {
   const r12 = useFrameReveal();
 
   /* ─── Quiz helpers ─── */
-  const handleQuizPick = (rowIndex: number, picked: "yours" | "theirs") => {
+  const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
     setQuizAnswers(prev => {
       const next = [...prev];
       next[rowIndex] = { dimension: QUIZ_ROWS[rowIndex].dimension, picked };
@@ -405,7 +405,7 @@ const Deck = () => {
     }, 400);
   };
 
-  const opponentPickCount = quizAnswers.filter(a => a?.picked === "theirs").length;
+  const nextgenPickCount = quizAnswers.filter(a => a?.picked === "nextgen").length;
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
@@ -674,11 +674,11 @@ const Deck = () => {
               {QUIZ_ROWS.map((row, i) => {
                 const isCurrent = i === quizStep;
                 const answered = quizAnswers[i] !== null;
-                const leftIsTheirs = quizOrder[i];
-                const leftText = leftIsTheirs ? row.theirs : row.yours;
-                const rightText = leftIsTheirs ? row.yours : row.theirs;
-                const leftValue: "yours" | "theirs" = leftIsTheirs ? "theirs" : "yours";
-                const rightValue: "yours" | "theirs" = leftIsTheirs ? "yours" : "theirs";
+                const leftIsNextgen = quizOrder[i];
+                const leftText = leftIsNextgen ? row.nextgen : row.traditional;
+                const rightText = leftIsNextgen ? row.traditional : row.nextgen;
+                const leftValue: "traditional" | "nextgen" = leftIsNextgen ? "nextgen" : "traditional";
+                const rightValue: "traditional" | "nextgen" = leftIsNextgen ? "traditional" : "nextgen";
 
                 return (
                   <div
@@ -806,20 +806,14 @@ const Deck = () => {
                     <div className="max-w-[720px]">
                       <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                        {opponentPickCount} of {QUIZ_ROWS.length} next-gen instincts
+                        {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
                       </p>
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                        {isFreshStart
-                          ? opponentPickCount >= 5
-                            ? "Your instincts are really sharp. Most people aren't doing what you identified here — but your opponents are, and that's exactly what's going to make the difference."
-                            : opponentPickCount >= 3
-                              ? "You've got some work to do — but the fact that you spotted some of these tells us you're thinking in the right direction. We can close the rest of these gaps."
-                              : "You've got some work to do, but we can help. Most people pick the same way you did. The problem is, your opponents are running the other playbook — and it's working."
-                          : opponentPickCount >= 5
-                            ? "You're thinking ahead of the curve. Your portfolio is already oriented toward what works — we can help you execute at scale and stay ahead."
-                            : opponentPickCount >= 3
-                              ? "Your portfolio has some of the right instincts built in, but there are real gaps. Your opponents are already operating the way you're not — and that's what makes the difference."
-                              : "Your portfolio needs work. The approaches you're running are what most organizations default to — but they're not what moves power. Your opponents are already doing it differently."
+                        {nextgenPickCount >= 5
+                          ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
+                          : nextgenPickCount >= 3
+                            ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
+                            : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
                         }
                       </p>
                     </div>
@@ -868,8 +862,8 @@ const Deck = () => {
                   <div className="flex flex-col gap-4">
                     {QUIZ_ROWS.map((row, i) => {
                       const answer = quizAnswers[i];
-                      const pickedNextGen = answer?.picked === "theirs";
-                      const selectedCopy = pickedNextGen ? row.theirs : row.yours;
+                      const pickedNextGen = answer?.picked === "nextgen";
+                      const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
 
                       return (
                         <div
@@ -890,18 +884,18 @@ const Deck = () => {
                               style={{
                                 fontFamily: f.sans,
                                 fontSize: "10px",
-                                fontWeight: 700,
+                                fontWeight: 600,
                                 letterSpacing: "0.08em",
                                 textTransform: "uppercase",
                                 padding: "6px 10px",
                                 borderRadius: "999px",
-                                color: f.ink(0.65),
-                                background: pickedNextGen ? "hsl(var(--foreground) / var(--a-bg))" : "hsl(var(--background))",
-                                border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
+                                color: f.ink(0.5),
+                                background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                                border: `1px solid ${f.ink(0.08)}`,
                                 alignSelf: "flex-start",
                               }}
                             >
-                              {pickedNextGen ? "You picked the next-gen answer" : "You picked the traditional answer"}
+                              Your selection
                             </span>
                           </div>
 
@@ -919,8 +913,8 @@ const Deck = () => {
 
                               {!pickedNextGen && (
                                 <>
-                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Stronger approach</p>
-                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.theirs}</p>
+                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Emerging approach</p>
+                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.nextgen}</p>
                                 </>
                               )}
                             </div>
@@ -933,7 +927,7 @@ const Deck = () => {
                                 border: `1px solid ${f.ink(0.08)}`,
                               }}
                             >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>{pickedNextGen ? "Why this was right" : "Why this was wrong"}</p>
+                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>Why this matters</p>
                               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.75 }}>{row.explanation}</p>
                             </div>
                           </div>
