@@ -1166,7 +1166,7 @@ const Deck = () => {
         <div ref={r9.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[45%] flex flex-col justify-center">
             <p style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
-              We've been where you are.
+              We've built the communications you're trying to buy.
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r9.stagger(1, 300, "blur-up"), marginTop: "20px", maxWidth: "400px" }}>
               Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
