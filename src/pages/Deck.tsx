@@ -552,8 +552,8 @@ const Deck = () => {
     >
 
       {/* ─── Fixed UI Chrome — Top ─── */}
-      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 28px" }}>
-        <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1280px", margin: "0 auto", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 32px" }}>
+        <div className="flex items-center justify-between pointer-events-auto">
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
             {STEP_LABELS[currentFrame] || ""} · {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
           </span>
@@ -572,7 +572,7 @@ const Deck = () => {
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
         <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 32px 28px" }}>
-          <div className="flex items-center justify-between pointer-events-auto" style={{ maxWidth: "1280px", margin: "0 auto", gap: "16px", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
+          <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             {/* Typeform-style thin progress bar */}
             <div style={{ flex: 1, maxWidth: "280px", height: "3px", borderRadius: "2px", background: f.ink(0.06), overflow: "hidden" }}>
