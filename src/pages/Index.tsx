@@ -332,7 +332,7 @@ const Index = () => {
                 fontFamily: t.serif,
                 fontSize: "clamp(26px, 4vw, 42px)",
                 lineHeight: 1.4,
-                color: "hsl(var(--destructive) / 0.6)",
+                color: "hsl(var(--destructive) / var(--a-high))",
               }}
             >
               You're on the ground doing the work.
@@ -382,20 +382,20 @@ const Index = () => {
                 <Link
                   to={cap.to}
                   className="group block relative overflow-hidden rounded-2xl no-underline"
-                  style={{
-                    background: "hsl(var(--destructive) / 0.03)",
-                    border: `1px solid hsl(var(--destructive) / 0.1)`,
+                   style={{
+                    background: "hsl(var(--destructive) / var(--a-bg-subtle))",
+                    border: `1px solid hsl(var(--destructive) / var(--a-border-card))`,
                     transition: `border-color 0.5s ${EASE_OUT_QUART}, transform 0.6s ${EASE_OUT_EXPO}, box-shadow 0.5s ${EASE_OUT_QUART}`,
                   }}
-                  onMouseEnter={(e) => {
+                   onMouseEnter={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / 0.35)";
+                    el.style.borderColor = "hsl(var(--destructive) / 0.45)";
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--destructive) / 0.2)`;
+                    el.style.boxShadow = `0 20px 60px -15px hsl(var(--destructive) / 0.25)`;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget;
-                    el.style.borderColor = "hsl(var(--destructive) / 0.1)";
+                    el.style.borderColor = "hsl(var(--destructive) / var(--a-border-card))";
                     el.style.transform = "translateY(0)";
                     el.style.boxShadow = "none";
                   }}
@@ -414,7 +414,7 @@ const Index = () => {
                     <div className="flex items-baseline gap-4 mb-4">
                       <span
                         className="text-[11px] tracking-[0.2em] uppercase"
-                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / 0.4)" }}
+                        style={{ fontFamily: t.sans, color: "hsl(var(--destructive) / var(--a-low))" }}
                       >
                         0{i + 1}
                       </span>
@@ -452,7 +452,7 @@ const Index = () => {
                       className="mt-6 text-[11px] tracking-[0.15em] uppercase flex items-center gap-2"
                       style={{
                         fontFamily: t.sans,
-                        color: "hsl(var(--destructive) / 0.4)",
+                        color: "hsl(var(--destructive) / var(--a-low))",
                         transition: `color 0.3s ${EASE_OUT_QUART}, gap 0.4s ${EASE_OUT_EXPO}`,
                       }}
                     >
