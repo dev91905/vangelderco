@@ -152,7 +152,7 @@ function CaseFragment({ sector, brief, result, slug, linkUrl, index }: { sector:
       onMouseLeave={() => setHovered(false)}
       className={`mb-16 ${hasLink ? "cursor-pointer" : "cursor-default"}`}
       style={{
-        breakInside: "avoid" as const,
+        
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed
           ? hovered ? "translateX(8px)" : "translateX(0)"
