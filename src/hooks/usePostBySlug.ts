@@ -30,7 +30,7 @@ export function usePostBySlug(slug: string | undefined, enabled: boolean = true)
       if (!slug) throw new Error("No slug");
       const { data, error } = await supabase
         .from("capability_posts")
-        .select("id, title, slug, type, capability, excerpt, content, hero_image_url, content_blocks, stats, is_published, published_at, created_at")
+        .select("id, title, slug, type, capability, excerpt, content, hero_image_url, content_blocks, stats, featured_stat, is_published, published_at, created_at")
         .eq("slug", slug)
         .eq("is_published", true)
         .maybeSingle();
