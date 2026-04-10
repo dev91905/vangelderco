@@ -369,7 +369,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  /* Wheel handler — prevent scroll wheel from crossing frame boundaries */
+  /* Wheel handler — clamp scrolling strictly within current frame */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -378,16 +378,20 @@ const Deck = () => {
       if (!frameEl) return;
       const frameTop = frameEl.offsetTop;
       const frameBottom = frameTop + frameEl.scrollHeight;
+      const viewHeight = el.clientHeight;
       const scrollTop = el.scrollTop;
-      const viewBottom = scrollTop + el.clientHeight;
+      const viewBottom = scrollTop + viewHeight;
 
-      // If scrolling down and we'd leave the current frame, prevent it
+      // Max scroll position that keeps viewport within this frame
+      const maxScroll = frameBottom - viewHeight;
+      const minScroll = frameTop;
+
       if (e.deltaY > 0 && viewBottom >= frameBottom - 2) {
         e.preventDefault();
-      }
-      // If scrolling up and we'd leave the current frame, prevent it
-      if (e.deltaY < 0 && scrollTop <= frameTop + 2) {
+        el.scrollTop = maxScroll;
+      } else if (e.deltaY < 0 && scrollTop <= frameTop + 2) {
         e.preventDefault();
+        el.scrollTop = minScroll;
       }
     };
     el.addEventListener("wheel", handler, { passive: false });
@@ -445,7 +449,7 @@ const Deck = () => {
         width: "100vw",
         overflowX: "hidden",
         overflowY: "auto",
-        scrollSnapType: "y mandatory",
+        scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
         background: "hsl(var(--background))",
