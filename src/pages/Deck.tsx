@@ -752,22 +752,22 @@ const Deck = () => {
               maxWidth: quizRevealed ? "960px" : "none",
             }}
           >
-            {quizRevealed && (
-              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your results</p>
-            )}
-            <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
-              {quizRevealed
-                ? "Here's what your answers tell us."
-                : isFreshStart
-                  ? `How would you approach ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
-                  : `How does your portfolio currently approach ${QUIZ_ROWS[quizStep]?.dimension.toLowerCase() || "strategic communications"}?`
-              }
-            </p>
-            {quizRevealed && (
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
-                The summary is at the top. Scroll for the breakdown and why each one matters.
-              </p>
-            )}
+             {quizRevealed && (
+               <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your results</p>
+             )}
+             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
+               {quizRevealed
+                 ? "Here's what your answers tell us."
+                 : isFreshStart
+                   ? "Which feels more like how you'd operate?"
+                   : "Which feels more like how your portfolio operates?"
+               }
+             </p>
+             {quizRevealed && (
+               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
+                 The summary is at the top. Scroll for the breakdown and why each one matters.
+               </p>
+             )}
           </div>
 
           {/* Quiz questions — one at a time */}
@@ -953,10 +953,10 @@ const Deck = () => {
                   {QUIZ_ROWS.map((row, i) => {
                     const answer = quizAnswers[i];
                     const pickedNextGen = answer?.picked === "nextgen";
-                    const bulletSummary = pickedNextGen
-                      ? `You chose the advanced approach. Your instinct is right — this is how the most effective programs operate.`
-                      : `You chose the conventional approach. This is where most portfolios have a blind spot.`;
-                    const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
+                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                    const lede = pickedNextGen ? row.nextgenLede : row.traditionalLede;
+                    const bullets = pickedNextGen ? row.nextgenBullets : row.traditionalBullets;
+                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
                     const isExpanded = expandedDimension === i;
 
                     return (
@@ -980,22 +980,33 @@ const Deck = () => {
                           }} />
                           <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
                         </div>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.65, marginBottom: isExpanded ? "16px" : "0" }}>
-                          {bulletSummary}
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.35), lineHeight: 1.6, fontStyle: "italic", marginBottom: "12px" }}>
+                          {selectedCopy}
+                        </p>
+                        <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "6px" }}>{explanationLabel}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.7), lineHeight: 1.6, fontWeight: 600, marginBottom: isExpanded ? "0" : "0" }}>
+                          {lede}
                         </p>
 
                         {isExpanded && (
-                          <p style={{
-                            fontFamily: f.sans,
-                            fontSize: "clamp(13px, 1.15vw, 14px)",
-                            color: f.ink(0.42),
-                            lineHeight: 1.7,
+                          <ul style={{
+                            listStyle: "none",
+                            padding: 0,
+                            margin: "14px 0 0 0",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
                             paddingTop: "14px",
                             borderTop: `1px solid ${f.ink(0.06)}`,
                             animation: "fade-up 0.3s ease-out",
                           }}>
-                            {explanationCopy}
-                          </p>
+                            {bullets.map((b, bi) => (
+                              <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                                <span style={{ color: f.ink(0.15), fontSize: "8px", lineHeight: "22px", flexShrink: 0 }}>●</span>
+                                <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.15vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>{b}</span>
+                              </li>
+                            ))}
+                          </ul>
                         )}
 
                         <button
