@@ -484,16 +484,16 @@ const Deck = () => {
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 fontWeight: 500,
-                color: "hsl(var(--primary-foreground))",
-                background: "hsl(var(--destructive) / var(--a-high))",
-                border: "none",
+                color: "hsl(var(--destructive))",
+                background: "hsl(var(--destructive) / var(--a-bg))",
+                border: "1px solid hsl(var(--destructive) / var(--a-border))",
                 padding: "16px 32px",
                 borderRadius: "999px",
-                transition: "transform 180ms ease, background 180ms ease",
+                transition: "transform 180ms ease, background 180ms ease, border-color 180ms ease",
                 cursor: "pointer",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive))"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-high))"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-high))"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))"; e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))"; }}
             >
               Start the walkthrough →
             </button>
