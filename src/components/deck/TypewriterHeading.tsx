@@ -5,6 +5,8 @@ interface TypewriterHeadingProps {
   active: boolean;
   style?: CSSProperties;
   speed?: number;
+  /** Called once when the first character appears */
+  onStart?: () => void;
 }
 
 export default function TypewriterHeading({
@@ -12,6 +14,7 @@ export default function TypewriterHeading({
   active,
   style,
   speed = 45,
+  onStart,
 }: TypewriterHeadingProps) {
   const [count, setCount] = useState(0);
   const started = useRef(false);
@@ -20,6 +23,7 @@ export default function TypewriterHeading({
   useEffect(() => {
     if (active && !started.current) {
       started.current = true;
+      onStart?.();
       let i = 0;
       interval.current = setInterval(() => {
         i++;
@@ -28,7 +32,7 @@ export default function TypewriterHeading({
       }, speed);
     }
     return () => clearInterval(interval.current);
-  }, [active, text, speed]);
+  }, [active, text, speed, onStart]);
 
   const show = started.current;
 

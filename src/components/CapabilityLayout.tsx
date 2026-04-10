@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
 import PostCard from "./PostCard";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
+import TypewriterHeading from "./deck/TypewriterHeading";
 import { t } from "@/lib/theme";
 
 interface CapabilityLayoutProps {
@@ -16,12 +17,17 @@ interface CapabilityLayoutProps {
 const CapabilityLayout = ({ capability, label, title, description }: CapabilityLayoutProps) => {
   const { data: posts, isLoading } = useCapabilityPosts(capability);
   const { playChitter } = useGlitchSFX();
-  const wasLoading = useRef(true);
+  const [typewriterActive, setTypewriterActive] = useState(false);
 
+  // Start typewriter after a short mount delay (matches label fade-up timing)
   useEffect(() => {
-    if (wasLoading.current && !isLoading) playChitter();
-    wasLoading.current = isLoading;
-  }, [isLoading, playChitter]);
+    const timer = setTimeout(() => setTypewriterActive(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleTypewriterStart = useCallback(() => {
+    playChitter();
+  }, [playChitter]);
 
   return (
     <AtmosphericLayout>
@@ -45,9 +51,20 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
             {label}
           </span>
 
-          <h1 className="text-[28px] md:text-[40px] lg:text-[44px] font-bold leading-[1.15] text-center" style={{ fontFamily: t.sans, color: t.ink(0.9), animation: "clip-reveal 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both" }}>
-            {title}
-          </h1>
+          <TypewriterHeading
+            text={title}
+            active={typewriterActive}
+            onStart={handleTypewriterStart}
+            speed={50}
+            style={{
+              fontFamily: t.sans,
+              fontSize: "clamp(28px, 5vw, 44px)",
+              fontWeight: 700,
+              lineHeight: 1.15,
+              textAlign: "center",
+              color: t.ink(0.9),
+            }}
+          />
 
           <p className="text-[13px] md:text-[14px] leading-[1.8] text-center max-w-xl" style={{ fontFamily: t.sans, fontSize: "clamp(17px, 1.9vw, 19px)", color: t.ink(0.55), lineHeight: 1.8, textAlign: "center", animation: "fade-up 0.6s ease-out 0.9s both" }}>
             {description}
