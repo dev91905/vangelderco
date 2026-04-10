@@ -964,7 +964,10 @@ const Deck = () => {
                       e.currentTarget.style.background = "hsl(var(--background))";
                     }}
                   >
-                    Start over
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                      <RotateCcw size={14} />
+                      Start over
+                    </span>
                   </button>
                 </div>
 
