@@ -693,7 +693,7 @@ const Deck = () => {
             }}
           >
             {quizRevealed && (
-              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your strategy read</p>
+              <p style={{ ...label("11px"), color: f.ink(0.32), marginBottom: "10px" }}>Your results</p>
             )}
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
