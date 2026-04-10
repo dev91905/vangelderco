@@ -1,134 +1,62 @@
 
 
-# Quiz Audit: Strategic Analysis + Rewrite Plan
+# Quiz Results Redesign — Split Panel + Simplified Cards
 
-## The Core Problem
+## Layout
 
-The quiz is broken at a conceptual level. Here's the full breakdown.
-
----
-
-## 1. The Scoring Logic Contradicts the Results Copy
-
-**The bug:** Picking "theirs" (the next-gen/correct answer) *lowers* the readiness score by 8 points per pick. Lower score = "more gaps" = "hotter lead."
-
-But the results page *celebrates* picking next-gen: "6 of 6 next-gen instincts" with copy like "You're thinking ahead of the curve."
-
-So someone who aces the quiz gets told they're great — but their backend score says "Critical: full diagnostic needed." If you ever surface this score or use it in sales conversations, it will directly contradict what the user was shown. This is the "conflicting answers" problem you flagged.
-
-**Fix:** Flip the scoring. Picking "theirs" (next-gen) should *raise* readiness, not lower it. Picking "yours" (traditional) should lower it. Someone who picks all traditional answers is the one with gaps.
-
----
-
-## 2. The Quiz Options Are Rigged — Not a Real Assessment
-
-Every "yours" (traditional) option is written with contempt baked in:
-- "...a documentary that nobody sees"
-- "...a 3-second scroll-by counts as a 'view.' No one remembers it"
-- "...Declare success when the grant period ends. Say you need more money... Repeat."
-- "...influencers to post scripted content that reaches audiences who already agree"
-
-No $100M donor is going to pick these. They're written to be obviously wrong. The quiz isn't testing instinct — it's a loaded question with a pre-selected answer. That means:
-- You learn nothing about the prospect's actual gaps
-- The prospect feels patronized, not diagnosed
-- Everyone gets roughly the same score
-
-**Fix:** Rewrite both options as *genuinely defensible* approaches. The traditional option should sound like what a smart, well-intentioned program officer would actually say. Make it a real choice. The "next-gen" option should sound better *if you know what you're looking for* — but not obviously so.
-
----
-
-## 3. The Results Use Shame Language
-
-- "Why this was wrong"
-- "Your portfolio needs work"
-- "You picked the traditional answer" (as a negative badge)
-
-For a $100M+ donor audience, this is a deal-killer. You don't tell the person writing the check that they failed a test. You educate them.
-
-**Fix:** Remove right/wrong framing entirely. Replace with insight framing:
-- "Here's what most portfolios do" vs. "Here's what's working now"
-- "The gap" — a neutral description of the delta
-- No badges that say "wrong" or "traditional" — frame everything as "where the field is vs. where the field is going"
-
----
-
-## 4. The Question Framing Is Confused
-
-Currently there are two modes based on `isFreshStart`:
-- Fresh: "Which approach sounds more effective?"
-- Experienced: "How does your current portfolio work?"
-
-These produce fundamentally different data. One tests judgment, the other tests self-reporting. But they feed into the same scoring engine and results page. The results copy tries to paper over this with conditional text, but the underlying issue remains.
-
-**Fix:** Use one universal framing: **"Which of these two approaches do you think is more effective?"** This works for everyone. Fresh-start people are showing their instincts. Experienced people are revealing their assumptions. Both are diagnostic. Both produce the same type of data: *what does this person believe works?*
-
----
-
-## 5. Full Copy Inventory + Rewrites
-
-### Question header (universal, all users)
-**Current:** "Which approach sounds more effective?" / "How does your current portfolio work?"
-**Proposed:** "Two approaches to [dimension]. Which do you think is more effective?"
-
-### Sub-header
-**Current:** "Two communications approaches to [dimension]. Pick the one you think works better."
-**Proposed:** "Both are used by major funders. Pick the one you'd bet on."
-
-### Quiz options — rewritten to be genuinely competitive
-
-| Dimension | Traditional (rewrite) | Next-Gen (rewrite) |
-|---|---|---|
-| **Research** | Commission message testing, focus groups, and polling before launching. Ground your strategy in data before you spend. | Monitor what's already resonating organically across platforms and communities. Let the market tell you what works. |
-| **Content** | Fund high-quality media — documentaries, explainers, investigative journalism. Invest in credibility and production value. | Fund creator economies and round-the-clock digital content. Prioritize volume, velocity, and constant presence over polish. |
-| **Distribution** | Buy targeted placements on major platforms. Optimize for reach and frequency through paid media. | Invest in owning or shaping the platforms and channels themselves — editorial direction, algorithms, programming. |
-| **Engagement** | Partner with trusted voices and influencers who can extend your message to aligned audiences. | Organize through institutions — faith communities, campuses, labor, veteran networks — that have built-in trust and show up offline. |
-| **Measurement** | Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there. | Track who's new to the table, what policy moved, and what infrastructure outlasts the campaign. Measure power, not exposure. |
-| **Iteration** | Evaluate at the end of the grant cycle. Report results, identify learnings, and apply them to the next proposal. | Cut what's failing mid-cycle. Double down on what's working. Compound gains across years, not grant periods. |
-
-### Results header
-**Current:** "Here's what your answers say."
-**Proposed:** "Here's what your answers tell us."
-
-### Results summary copy (by score band)
-**Current uses "next-gen instincts" and "your portfolio needs work."**
-**Proposed:**
-
-- **5-6 next-gen picks:** "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
-- **3-4 next-gen picks:** "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
-- **0-2 next-gen picks:** "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
-
-### Per-question result card
-**Current:** "Why this was right" / "Why this was wrong"
-**Proposed:** "Why this matters" — same explanation text, neutral framing. Show both options side by side with "You selected" highlighted, and a one-line takeaway underneath.
-
----
-
-## 6. Scoring Fix
+Two-column layout on desktop. Left column is sticky (stays visible while scrolling). Right column scrolls independently with the detailed breakdown.
 
 ```text
-CURRENT: score -= opponentPicks * 8  (picking next-gen = penalized)
-FIXED:   score -= traditionalPicks * 8  (picking traditional = penalized)
+┌─────────────────────────────────────────────────┐
+│  STICKY LEFT (40%)      │  SCROLLABLE RIGHT (60%)│
+│                         │                        │
+│  "Your read"            │  ┌── Research ───────┐ │
+│  4 of 6 emerging        │  │ You selected: ... │ │
+│  approaches identified  │  │ What works: ...   │ │
+│                         │  └──────────────────┘ │
+│  [summary paragraph]    │  ┌── Content ────────┐ │
+│                         │  │ You selected: ... │ │
+│  [Retake quiz]          │  │ What works: ...   │ │
+│                         │  └──────────────────┘ │
+│                         │  ...4 more cards       │
+└─────────────────────────────────────────────────┘
 ```
 
-Also rename the internal values from `"yours"` / `"theirs"` to `"traditional"` / `"nextgen"` for clarity. This cascades through `QuizAnswer`, `deckScoring.ts`, all quiz state, and the results rendering.
+## Simplified Breakdown Cards
 
----
+Each card currently has: question number label, dimension title, "Your selection" badge, "What you selected" box, conditional "Emerging approach" box, and "Why this matters" box — 4-6 elements competing for attention.
 
-## Implementation Plan
+**Simplified to 3 elements max:**
 
-### File 1: `src/lib/deckScoring.ts`
-- Rename `"yours" | "theirs"` to `"traditional" | "nextgen"` in `QuizAnswer`
-- Flip scoring: penalize `"traditional"` picks, not `"nextgen"`
+1. **Dimension title** (e.g. "Research") — bold, prominent
+2. **"You selected"** — their answer in a subtle quote style, one line
+3. **One explanation block** — content depends on whether they picked nextgen or traditional:
+   - **If traditional:** "The shift" — explains what the emerging approach is and why it's gaining traction. No shame, no "wrong." Just: here's what's changing and why.
+   - **If nextgen:** "Why this works" — explains why this approach is effective and how it differs from the default.
 
-### File 2: `src/pages/Deck.tsx`
-- Rewrite all 6 `QUIZ_ROWS` with the balanced copy above
-- Change `"yours"` / `"theirs"` references to `"traditional"` / `"nextgen"` throughout
-- Update question header to universal framing
-- Rewrite results summary copy (all 3 score bands, both fresh/experienced variants → single universal set)
-- Replace "Why this was right/wrong" with "Why this matters"
-- Remove the "You picked the traditional answer" / "You picked the next-gen answer" badge — replace with neutral "Your selection" highlight
-- Remove `isFreshStart` branching in quiz question copy (keep it only where it genuinely changes the experience)
+No badge. No "Question 1" label. No two-column grid inside each card. No nested boxes. Just dimension → your pick → insight.
 
-### File 3: `src/pages/Deck.tsx` (intake summary on CTA slide)
-- Update the quiz result summary line from "Picked opponent's approach X / 6 times" to something like "Identified X / 6 emerging approaches"
+## Explanation Copy Rewrite
+
+Current explanations are neutral hedging ("The most effective programs do both, but the field is shifting toward the latter"). For $100M donors, each explanation needs to land with specificity:
+
+| Dimension | If picked traditional | If picked nextgen |
+|---|---|---|
+| **Research** | "The shift: The most effective programs now monitor what's already resonating across platforms — not what people say in a focus group. Real signals come from organic behavior, not controlled environments." | "Why this works: Organic monitoring catches real signals — what people actually share, repeat, and act on — rather than what they say they'd do in a controlled setting." |
+| **Content** | "The shift: The other side isn't making documentaries. They're funding thousands of creators producing content around the clock. Volume and velocity are beating polish." | "Why this works: Always-on content keeps narratives alive between campaigns. Creator economies produce at a pace and scale that traditional production can't match." |
+| **Distribution** | "The shift: Buying placements rents attention. The most effective operators are buying or shaping the platforms themselves — the algorithms, the editorial direction, the programming." | "Why this works: Owning infrastructure means you influence how attention flows, not just where your ad appears. It's the difference between renting and owning." |
+| **Engagement** | "The shift: Influencer reach stays online and often stays inside existing audiences. Institutional organizing — faith, labor, campuses, veterans — builds constituencies that show up offline and in person." | "Why this works: Institutions carry built-in trust and built-in turnout. They don't just amplify a message — they mobilize people who act on it." |
+| **Measurement** | "The shift: Reach and impressions measure exposure. The programs that move policy measure who's new to the table and what actually changed. Power, not awareness." | "Why this works: Measuring who's new and what policy moved tells you whether you're building power — not just making noise." |
+| **Iteration** | "The shift: Grant-cycle evaluation waits until the money's spent. Mid-cycle iteration kills what's failing in weeks and compounds what's working across years." | "Why this works: Compounding gains across years instead of resetting every grant cycle is how the other side built structural advantages." |
+
+## Technical Changes
+
+### `src/pages/Deck.tsx` — Quiz results section (~lines 790-935)
+
+- Wrap results in `flex-row` with left column `lg:w-[38%] lg:sticky lg:top-0 lg:self-start` and right column `lg:w-[62%]`
+- Left column contains: summary card (score headline, paragraph, retake button)
+- Right column contains: breakdown cards in a simple vertical stack
+- Each card simplified to: dimension title + quoted selection + single explanation paragraph
+- Add `traditionalExplanation` and `nextgenExplanation` fields to QUIZ_ROWS (replacing the single `explanation` field), with the copy from the table above
+- On mobile, left column stacks above right column normally
 
