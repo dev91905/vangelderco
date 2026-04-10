@@ -1,39 +1,28 @@
 
 
-## Merge Claude's content architecture into existing VGC design system
+## Add Network Sectors Section to Homepage
 
-### What changes
+### What this does
+Adds a new section between Field Notes and the "Explore Our Work" contact section. The section communicates: "When you work with Van Gelder Co., you get access to this network" — a visual grid of all the sectors VGC operates across.
 
-The Index page transforms from a centered splash (three nav links + sector pills) into a scrolling single-page that tells the VGC story, using your existing visual language.
+### The section
+- **Header**: Small red label ("The Network") + a short line like "480 members across every sector that moves policy, culture, and capital."
+- **Sector grid**: Styled pills/tags in a wrapped flex layout, scroll-revealed with staggered animation. Each pill is a sector name — clean, minimal, same visual language as the hero sector pills but larger and more prominent.
+- **Expanded sector list** (~16 sectors):
+  - Music · Film & TV · News Media · Digital Creators · Brands & Advertising · Athletes & Sports · Gaming · Faith · Campuses · Veterans & Defense · Labor · Government & Policy · Philanthropy · Energy · Industry Groups · Technologists · National Security · Community Organizations
 
-### Page sections (top to bottom)
+### Visual treatment
+- Same reveal animation pattern as the rest of the homepage (intersection observer fade-up)
+- Pills use the existing border + subtle background styling from the hero sector pills, but slightly larger
+- Optional: a subtle connecting line or "480-member network" stat callout above the grid
+- Consistent with the oxblood accent color for the section label
 
-1. **Hero (viewport 1)** — Keep existing: constellation field, three capability lines as nav links, sector pills, "By Referral Only." No content changes here — this already works as an opening.
-
-2. **Altitude Statement (viewport 2)** — NEW. Scroll-reveal section. Large serif text: positioning thesis ("Everyone else operates at 30,000 feet. We see it from orbit.") plus a short explanatory line. Uses your existing `t.serif` / `t.sans` tokens and `fade-up` animations.
-
-3. **Capabilities Grid (below)** — NEW. Three cards, each with: title, punchy sub-line (red accent), and a short paragraph. Cards use your existing border/background tokens with a left-border accent on hover. These link through to the existing `/cultural-strategy`, `/cross-sector`, `/deep-organizing` subpages.
-
-4. **Field Notes (below)** — NEW. 3-4 anonymized case fragments with sector tags, brief, and result line. Left-border accent, scroll-reveal. Content is hardcoded initially (can be wired to Supabase posts later if desired).
-
-5. **Contact / Close (partial viewport)** — NEW. Email link + "By Referral Only" footer. Minimal.
+### Technical changes
+- **`src/pages/Index.tsx`** — Add a `NETWORK_SECTORS` array with the full list, insert a new `<section>` between Field Notes and Contact sections
+- Also update the hero `SECTORS` array (line 8) to stay in sync or keep it as the abbreviated version (6 highlights) with the new section showing the full set
 
 ### What stays the same
-
-- All subpages (`/cultural-strategy`, `/cross-sector`, `/deep-organizing`, `/post/:slug`) remain unchanged
-- Constellation field, CRT overlay, dark mode toggle — untouched
-- Admin, deck, all backend — untouched
-- Theme tokens, typography, color system — used as-is
-
-### Technical approach
-
-- Modify `src/pages/Index.tsx` only — add scroll sections below the existing hero
-- Create a small `RevealBlock` component (intersection observer, fade-up) or reuse existing `fade-up` keyframe with a hook
-- Hero gets `height: 100vh` and fades opacity on scroll (parallax feel)
-- All new sections use existing `t.*` theme tokens — no new design system pieces
-- Capability cards link to existing routes
-
-### Content (editable later)
-
-- Altitude copy, capability sub-lines, and field notes content will be pulled from Claude's mockup as starting point — you can refine the copy after seeing it in your design system
+- Deck keeps its existing sector references — no changes
+- All other pages untouched
+- Field Notes stays as-is above this new section
 
