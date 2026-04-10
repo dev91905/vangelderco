@@ -546,121 +546,53 @@ const Deck = () => {
             })}
             {/* 6th card — Something else */}
             <div
-              className="flex flex-col justify-center"
               style={{
                 padding: "28px 24px",
-                border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px dashed ${f.ink(0.12)}`,
-                background: customOpen || customSaved ? "hsl(var(--destructive) / var(--a-bg-subtle))" : "transparent",
+                border: customSaved ? `1px solid hsl(var(--destructive) / var(--a-border))` : `1px solid ${f.ink(0.06)}`,
+                background: customSaved ? "hsl(var(--destructive) / var(--a-bg))" : "transparent",
                 borderRadius: "12px",
                 opacity: r2.isActive ? 1 : 0,
                 transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                 filter: r2.isActive ? "blur(0px)" : "blur(4px)",
-                transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.15s ease",
+                transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.15s ease, border 0.15s ease",
               }}
             >
-              {customSaved && !customOpen ? (
-                <div>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
-                    Your challenge ✓
-                  </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.6), lineHeight: 1.6, marginBottom: "12px" }}>
-                    "{customMessage}"
-                  </p>
-                  <button
-                    onClick={() => setCustomOpen(true)}
-                    style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.35), background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: "3px" }}
-                  >
-                    Edit
-                  </button>
-                </div>
-              ) : !customOpen ? (
-                <div
-                  onClick={() => setCustomOpen(true)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
-                    Something else
-                  </p>
-                  <div
-                    style={{
-                      fontFamily: f.sans,
-                      fontSize: "14px",
-                      color: f.ink(0.3),
-                      background: "hsl(var(--card))",
-                      border: `1px solid ${f.ink(0.08)}`,
-                      borderRadius: "8px",
-                      padding: "12px",
-                      minHeight: "40px",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    Tell us what you're dealing with…
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); setCustomOpen(false); } }} className="flex flex-col gap-3">
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85) }}>
-                    Something else
-                  </p>
-                  <textarea
-                    autoFocus
-                    value={customMessage}
-                    onChange={(e) => setCustomMessage(e.target.value)}
-                    placeholder="Tell us what you're dealing with…"
-                    rows={4}
-                    maxLength={500}
-                    style={{
-                      fontFamily: f.sans,
-                      fontSize: "14px",
-                      color: f.ink(0.8),
-                      background: "hsl(var(--card))",
-                      border: `1px solid ${f.ink(0.1)}`,
-                      borderRadius: "8px",
-                      padding: "12px",
-                      resize: "none",
-                      outline: "none",
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))}
-                  />
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="submit"
-                      disabled={!customMessage.trim()}
-                      style={{
-                        fontFamily: f.sans,
-                        fontSize: "12px",
-                        letterSpacing: "0.04em",
-                        fontWeight: 600,
-                        color: "hsl(var(--primary-foreground))",
-                        background: customMessage.trim() ? "hsl(var(--destructive) / var(--a-high))" : f.ink(0.2),
-                        border: "none",
-                        padding: "8px 20px",
-                        borderRadius: "999px",
-                        cursor: customMessage.trim() ? "pointer" : "default",
-                        transition: "background 0.15s ease",
-                      }}
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setCustomOpen(false); if (!customSaved) setCustomMessage(""); }}
-                      style={{
-                        fontFamily: f.sans,
-                        fontSize: "12px",
-                        color: f.ink(0.35),
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: "8px 12px",
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              )}
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "8px" }}>
+                Something else
+              </p>
+              <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); } }}>
+                <textarea
+                  value={customMessage}
+                  onChange={(e) => { setCustomMessage(e.target.value); if (customSaved) setCustomSaved(false); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && customMessage.trim()) { e.preventDefault(); setCustomSaved(true); } }}
+                  placeholder="Tell us what you're dealing with…"
+                  readOnly={customSaved}
+                  onClick={() => { if (customSaved) setCustomSaved(false); }}
+                  rows={2}
+                  maxLength={500}
+                  style={{
+                    fontFamily: f.sans,
+                    fontSize: "clamp(12px, 1.3vw, 14px)",
+                    color: customSaved ? f.ink(0.6) : f.ink(0.8),
+                    background: "transparent",
+                    border: "none",
+                    padding: 0,
+                    resize: "none",
+                    outline: "none",
+                    width: "100%",
+                    lineHeight: 1.6,
+                    cursor: customSaved ? "pointer" : "text",
+                  }}
+                />
+                <p style={{
+                  fontFamily: f.sans,
+                  fontSize: "11px",
+                  color: f.ink(0.25),
+                  marginTop: "8px",
+                }}>
+                  {customSaved ? "Click to edit" : customMessage.trim() ? "Press Enter to submit" : "\u00A0"}
+                </p>
+              </form>
             </div>
           </div>
           {selectedPains.length === 0 && (
