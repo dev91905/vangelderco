@@ -535,7 +535,7 @@ const Index = () => {
             className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase mb-8 text-center"
             style={{ fontFamily: t.sans, color: "hsl(var(--foreground) / var(--a-mid))" }}
           >
-            Communications Diagnostic
+            Strategic Diagnostic
           </span>
         </RevealBlock>
 
@@ -544,7 +544,7 @@ const Index = () => {
             className="text-[26px] md:text-[36px] lg:text-[42px] leading-[1.15] text-center mb-5 max-w-xl"
             style={{ fontFamily: t.serif, color: t.ink(0.85), fontWeight: 400 }}
           >
-            Find out what your opponents already know about you.
+            See where your strategy has gaps — before they become losses.
           </h2>
         </RevealBlock>
 
@@ -553,7 +553,7 @@ const Index = () => {
             className="text-[14px] md:text-[16px] leading-[1.7] text-center max-w-sm mb-12"
             style={{ fontFamily: t.sans, color: t.ink(0.4) }}
           >
-            A short diagnostic that benchmarks your communications strategy against the opposition — and shows you exactly where the gaps are.
+            A five-minute walkthrough that maps your current approach against what's actually working on the other side — and scores your strategic readiness.
           </p>
         </RevealBlock>
 
