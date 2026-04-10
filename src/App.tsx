@@ -32,10 +32,11 @@ const ROUTE_MODE_MAP: Record<string, ConstellationMode> = {
 function AppRoutes() {
   const location = useLocation();
   const mode = ROUTE_MODE_MAP[location.pathname] || "home";
+  const hideConstellation = location.pathname === "/deck" || location.pathname.startsWith("/post/");
 
   return (
     <>
-      <ConstellationField mode={mode} />
+      {!hideConstellation && <ConstellationField mode={mode} />}
       <CRTOverlay />
       <DarkModeToggle />
       <Routes>
