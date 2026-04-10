@@ -454,7 +454,7 @@ const Deck = () => {
           />
           <p
             style={{
-              ...r1.stagger(1, 300),
+              ...r1.stagger(1, 800, "blur-up"),
               ...body(0.4),
               fontFamily: f.serif,
               fontSize: "clamp(18px, 2.8vw, 32px)",
@@ -468,7 +468,7 @@ const Deck = () => {
           </p>
           <div
             style={{
-              ...r1.stagger(2, 600),
+              ...r1.stagger(2, 1200, "blur-up"),
               display: "flex",
               flexWrap: "wrap",
               alignItems: "center",
