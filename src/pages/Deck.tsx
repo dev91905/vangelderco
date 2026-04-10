@@ -712,18 +712,18 @@ const Deck = () => {
                       pointerEvents: isCurrent ? "auto" : "none",
                     }}
                   >
+                    {/* Quiz step counter — minimal "3 of 6" */}
                     <p
                       style={{
                         fontFamily: f.sans,
                         fontSize: "10px",
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.15em",
-                        color: f.ink(0.25),
+                        fontWeight: 500,
+                        letterSpacing: "0.1em",
+                        color: f.ink(0.2),
                         marginBottom: "clamp(16px, 2vw, 28px)",
                       }}
                     >
-                      {row.dimension}
+                      {i + 1} of {QUIZ_ROWS.length}
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: "clamp(16px, 3vw, 32px)" }}>
