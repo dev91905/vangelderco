@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
+import { useFieldNotes } from "@/hooks/useFieldNotes";
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
