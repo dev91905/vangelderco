@@ -2,54 +2,62 @@
 
 ## Problem
 
-Frame 4 (Hallmarks) has two issues:
+The bottom nav (Back / progress / Continue) uses `maxWidth: 1280px` with `justify-between`, placing buttons at the extreme edges. The content also uses `max-w-[1280px]`. Since both share the same max-width, the Continue button sits directly on top of the right column content edge. Making content narrower just makes things look cramped while the buttons follow along.
 
-1. **Content too wide** — the right column (`lg:w-[65%]` of 1400px max) extends under the fixed Continue button and other corner chrome (back button, progress bar, ESC). When hallmark cards expand, content overflows beneath these overlays.
+The top chrome (step label + ESC) spans the full viewport with `padding: 20px 28px` — same issue.
 
-2. **Content vertically clipped** — the expanded hallmark cards push content below the viewport, but the DeckFrame's `minHeight: 100dvh` doesn't grow enough, and the deck's wheel handler prevents normal scrolling within the frame.
-
-This is a systemic issue — it affects any `mode="wide"` frame where content gets close to the edges. The fix should ensure all deck content stays clear of the fixed chrome.
+This is an **architectural** problem: the chrome and the content aren't in a coordinated layout system.
 
 ## Fix
 
-### 1. Add safe padding to DeckFrame for chrome clearance
+### 1. Move the fixed nav buttons inward — inset them from the content edges
 
-Add bottom padding to account for the fixed bottom nav bar (~80px tall including its 28px bottom padding). The current `paddingBottom: clamp(120px, 16vh, 180px)` should already clear it, but the horizontal padding on `wide` mode (`lg:px-28` = 112px) may not be enough on smaller viewports when the Continue button sits at the right edge.
+The nav bar container stays at `maxWidth: 1280px`, but add horizontal padding that matches the DeckFrame's content padding (`lg:px-28` = 112px). This pushes Back/Continue well inside the content boundary:
 
-**In `src/components/deck/DeckFrame.tsx`:**
-- Increase horizontal padding on `wide` mode from `lg:px-28` to `lg:px-32` (128px) to add more clearance from edge chrome.
-
-### 2. Constrain the right column width on Frame 4
-
-**In `src/pages/Deck.tsx` (Frame 4, ~line 1124):**
-- Change the right column from `lg:w-[65%]` to `lg:w-[60%]` and add a `max-width` constraint so cards don't run under the Continue button.
-- The left column stays at `lg:w-[35%]` → adjust to `lg:w-[38%]` for balance.
-
-### 3. Allow Frame 4 to grow vertically when cards expand
-
-The hallmark cards expand to show rationale + "How we help" + assessment buttons. When all three are open, this exceeds the viewport.
-
-**In `src/pages/Deck.tsx`:**
-- The DeckFrame already uses `minHeight: 100dvh` so it can grow. The issue is the deck wheel handler locks scrolling. The hallmarks section needs to work within the snap frame's visible area — the cards already use `maxHeight` transitions so they fit. No scroll change needed here; the content just needs to not overlap the chrome.
-
-### 4. Apply consistent content inset across all wide frames
-
-To prevent any future frame from running under corner chrome, update the `wide` mode padding in DeckFrame to provide more breathing room:
-
-**`src/components/deck/DeckFrame.tsx`:**
+**`src/pages/Deck.tsx` (line 574-575):**
 ```
-wide: "max-w-[1280px] px-8 md:px-20 lg:px-28",
+// Before:
+<div style={{ padding: "0 32px 28px" }}>
+  <div style={{ maxWidth: "1280px", margin: "0 auto", gap: "16px" }}>
+
+// After:
+<div style={{ padding: "0 32px 28px" }}>
+  <div style={{ maxWidth: "1280px", margin: "0 auto", gap: "16px", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
 ```
 
-Reduce `max-w` from 1400px to 1280px. This pulls all wide content inward, creating ~60px more clearance on each side at full width — enough that no card edge touches the Continue or Back buttons.
+This pulls the Back and Continue buttons ~80px inward on large screens, so they sit comfortably inside the content area instead of at its edges.
 
-### Summary of changes
+### 2. Same treatment for top chrome
+
+**`src/pages/Deck.tsx` (line 555):**
+```
+// Before:
+<div style={{ padding: "20px 28px" }}>
+
+// After:  
+<div style={{ padding: "20px 28px" }}>
+  <div style={{ maxWidth: "1280px", margin: "0 auto", paddingLeft: "clamp(0px, 4vw, 80px)", paddingRight: "clamp(0px, 4vw, 80px)" }}>
+```
+
+Wrap the top chrome's flex row in a max-width container with the same inset padding, so step label and ESC align with the nav buttons below.
+
+### 3. Restore Frame 4 column widths to breathe
+
+Now that chrome is inset, the right column has room. Revert to wider proportions:
+
+**`src/pages/Deck.tsx` (line 1115-1124):**
+- Left column: `lg:w-[35%]`
+- Right column: `lg:w-[62%]`
+
+This gives the hallmark cards proper breathing room without overlapping any chrome.
+
+### Summary
 
 | File | Change |
 |------|--------|
-| `src/components/deck/DeckFrame.tsx` | Reduce `wide` max-width from 1400px → 1280px |
-| `src/pages/Deck.tsx` (Frame 4) | Right column `lg:w-[65%]` → `lg:w-[58%]`, left `lg:w-[35%]` → `lg:w-[40%]` |
-| `src/pages/Deck.tsx` (bottom nav) | Update `maxWidth` from 1400px → 1280px to match |
+| `src/pages/Deck.tsx` (bottom nav) | Add `paddingLeft/Right: clamp(0px, 4vw, 80px)` to inner container |
+| `src/pages/Deck.tsx` (top chrome) | Wrap in max-width container with same inset padding |
+| `src/pages/Deck.tsx` (Frame 4) | Restore columns to 35%/62% |
 
-This keeps all content comfortably inside the chrome safe zone without breaking any existing scroll behavior.
+The chrome now coordinates with content — buttons float inside the safe zone instead of at the edges. No more overlap regardless of viewport width.
 
