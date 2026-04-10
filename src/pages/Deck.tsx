@@ -642,6 +642,54 @@ const Deck = () => {
               </form>
             </div>
           </div>
+
+          {/* Domain selection */}
+          <div style={{ marginTop: "8px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 600, color: f.ink(0.6), marginBottom: "4px" }}>
+              Which areas are most relevant?
+            </p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.35), marginBottom: "12px" }}>
+              Optional — select one or more.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {DOMAINS.map((d) => {
+                const isDomainSelected = selectedDomains.includes(d.id);
+                return (
+                  <button
+                    key={d.id}
+                    onClick={() => setSelectedDomains(prev => prev.includes(d.id) ? prev.filter(x => x !== d.id) : [...prev, d.id])}
+                    className="text-left"
+                    style={{
+                      display: "flex", alignItems: "flex-start", gap: "12px",
+                      padding: "18px 16px", borderRadius: "10px",
+                      border: isDomainSelected ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.08)}`,
+                      background: isDomainSelected ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                      cursor: "pointer", transition: "all 0.2s ease",
+                    }}
+                  >
+                    <div style={{
+                      width: "18px", height: "18px", borderRadius: "4px", flexShrink: 0, marginTop: "1px",
+                      border: isDomainSelected ? "none" : `1.5px solid ${f.ink(0.15)}`,
+                      background: isDomainSelected ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.15s ease",
+                    }}>
+                      {isDomainSelected && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "4px" }}>{d.title}</p>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.42), lineHeight: 1.5 }}>{d.tagline}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div style={{ display: "flex", alignItems: "center", gap: "16px", minHeight: "48px" }}>
             {(selectedPains.length > 0 || customSaved) ? (
               <NavRow onBack={() => scrollToFrame(0)} onNext={() => scrollToFrame(2)} />
