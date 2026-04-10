@@ -652,18 +652,14 @@ const Deck = () => {
             )}
             <p style={{ ...heading(quizRevealed ? "clamp(20px, 2.4vw, 30px)" : "clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
               {quizRevealed
-                ? "Here’s what your answers say."
-                : isFreshStart
-                  ? "Which approach sounds more effective?"
-                  : "How does your current portfolio work?"
+                ? "Here's what your answers tell us."
+                : `Two approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}.`
               }
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 16px)", color: f.ink(0.4), marginTop: "10px", lineHeight: 1.6, maxWidth: "760px" }}>
               {quizRevealed
-                ? "The summary is at the top. Scroll for the breakdown and why each answer was right or wrong."
-                : isFreshStart
-                  ? `Two communications approaches to ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"}. Pick the one you think works better.`
-                  : `For ${QUIZ_ROWS[quizStep]?.dimension || "strategic communications"} — which of these is closer to how your portfolio operates today?`
+                ? "The summary is at the top. Scroll for the breakdown and why each one matters."
+                : "Both are used by major funders. Pick the one you'd bet on."
               }
             </p>
           </div>
