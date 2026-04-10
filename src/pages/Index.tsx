@@ -339,6 +339,19 @@ const Index = () => {
         <div className="max-w-4xl mx-auto px-6 md:px-10">
           <RevealBlock>
             <p
+              className="uppercase tracking-[0.25em] mb-10"
+              style={{
+                fontFamily: t.sans,
+                fontSize: "10px",
+                color: t.ink(0.4),
+                letterSpacing: "0.25em",
+              }}
+            >
+              Our Altitude
+            </p>
+          </RevealBlock>
+          <RevealBlock delay={0.15}>
+            <p
              className="italic font-light"
               style={{
                 fontFamily: t.serif,
@@ -350,7 +363,7 @@ const Index = () => {
               You're on the ground doing the work.
             </p>
           </RevealBlock>
-          <RevealBlock delay={0.25}>
+          <RevealBlock delay={0.3}>
             <p
              className="font-semibold mt-4"
               style={{
@@ -371,6 +384,12 @@ const Index = () => {
             >
               Six sectors. One picture. We identify alignment that nobody in any single sector can
               see from where they sit.
+            </p>
+            <p
+              className="mt-4 max-w-2xl"
+              style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.45), lineHeight: 1.8 }}
+            >
+              We're specialists in cultural strategy, media organizing, and philanthropy — working across six sectors to help donors and foundations get strategic communications right.
             </p>
           </RevealBlock>
         </div>
