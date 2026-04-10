@@ -151,6 +151,32 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                 <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
               </div>
               <PasswordField value={props.password} onChange={props.onPasswordChange} />
+
+              {/* Featured on Homepage */}
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Homepage Feature</label>
+                <button onClick={() => props.onFeaturedChange(!props.isFeatured)}
+                  className="w-full flex items-center justify-between px-3 py-2.5 transition-colors rounded-xl" style={{ border: t.border(0.08) }}>
+                  <span className="text-sm" style={{ fontFamily: t.sans, color: props.isFeatured ? t.ink(0.8) : t.ink(0.4) }}>{props.isFeatured ? "Featured" : "Not featured"}</span>
+                  <div className="w-9 h-5 rounded-full relative transition-colors" style={{ background: props.isFeatured ? "hsl(var(--destructive))" : t.ink(0.12) }}>
+                    <div className="absolute top-0.5 w-4 h-4 rounded-full transition-transform" style={{ background: t.cream, left: "2px", transform: props.isFeatured ? "translateX(16px)" : "translateX(0)" }} />
+                  </div>
+                </button>
+              </div>
+              {props.isFeatured && (
+                <>
+                  <div className="space-y-2">
+                    <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Sector Label</label>
+                    <input value={props.sectorLabel || ""} onChange={(e) => props.onSectorLabelChange(e.target.value || null)} placeholder="e.g. ENERGY × LABOR"
+                      className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.7), border: t.border(0.08) }} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Featured Stat</label>
+                    <input value={props.featuredStat || ""} onChange={(e) => props.onFeaturedStatChange(e.target.value || null)} placeholder="e.g. $12M in coordinated capital"
+                      className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.7), border: t.border(0.08) }} />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </>
