@@ -389,7 +389,7 @@ const Index = () => {
               className="mt-4 max-w-2xl"
               style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.45), lineHeight: 1.8 }}
             >
-              We're specialists in cultural strategy, media-based organizing, and philanthropy — working across six sectors to help donors and foundations get strategic communications right.
+              We're specialists in cultural strategy, media-based organizing, and philanthropy — working across six sectors to help donors and their grantees get strategic communications right.
             </p>
           </RevealBlock>
         </div>
