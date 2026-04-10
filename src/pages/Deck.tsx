@@ -797,7 +797,19 @@ const Deck = () => {
                       pointerEvents: isCurrent ? "auto" : "none",
                     }}
                   >
-                    {/* Quiz step counter — minimal "3 of 6" */}
+                    {/* Dimension label — first-class section header */}
+                    <p
+                      style={{
+                        fontFamily: f.sans,
+                        fontSize: "clamp(22px, 2.8vw, 32px)",
+                        fontWeight: 700,
+                        color: f.ink(0.82),
+                        marginBottom: "clamp(6px, 1vw, 10px)",
+                      }}
+                    >
+                      {row.dimension}
+                    </p>
+                    {/* Quiz step counter */}
                     <p
                       style={{
                         fontFamily: f.sans,
