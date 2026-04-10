@@ -376,7 +376,7 @@ const Index = () => {
                 letterSpacing: "0.25em",
               }}
             >
-              The Approach
+              Our Practice
             </p>
           </RevealBlock>
           <RevealBlock delay={0.15}>
