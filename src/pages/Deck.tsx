@@ -908,10 +908,10 @@ const Deck = () => {
           {quizRevealed && (() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
             return (
-            <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
-              <div className="flex flex-col lg:flex-row gap-8" style={{ alignItems: "flex-start" }}>
+            <div style={{ width: "100%", maxWidth: "1100px", height: "100dvh", animation: "fade-up 0.5s ease-out" }}>
+              <div className="flex flex-col lg:flex-row gap-8" style={{ alignItems: "flex-start", height: "100%" }}>
                 {/* ── Sticky left: diagnostic grade ── */}
-                <div className="lg:w-[38%] lg:sticky lg:top-8 lg:self-start flex flex-col gap-6">
+                <div className="lg:w-[38%] lg:self-start flex flex-col gap-6 justify-center" style={{ height: "100%", paddingTop: "40px", paddingBottom: "40px" }}>
                   <div
                     style={{
                       padding: "clamp(28px, 4vw, 40px)",
