@@ -43,12 +43,12 @@ const PAIN_POINTS = [
 
 /* ─── Quiz rows — genuinely competitive A/B ─── */
 const QUIZ_ROWS = [
-  { dimension: "Research", traditional: "Commission message testing, focus groups, and polling before launching. Ground your strategy in data before you spend.", nextgen: "Monitor what's already resonating organically across platforms and communities. Let the market tell you what works.", explanation: "Traditional research tells you what people say they think. Monitoring organic resonance tells you what they actually respond to — in real time, at scale. The most effective programs do both, but the field is shifting toward the latter." },
-  { dimension: "Content", traditional: "Fund high-quality media — documentaries, explainers, investigative journalism. Invest in credibility and production value.", nextgen: "Fund creator economies and round-the-clock digital content. Prioritize volume, velocity, and constant presence over polish.", explanation: "High-production content builds credibility but launches and ends. Creator economies and always-on content shape narratives continuously — 24/7. The most effective portfolios are shifting toward constant presence." },
-  { dimension: "Distribution", traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency through paid media.", nextgen: "Invest in owning or shaping the platforms and channels themselves — editorial direction, algorithms, programming.", explanation: "Paid placements rent attention on someone else's terms. Owning or shaping infrastructure means influencing how attention flows in the first place. One is a media buy. The other is a structural advantage." },
-  { dimension: "Engagement", traditional: "Partner with trusted voices and influencers who can extend your message to aligned audiences.", nextgen: "Organize through institutions — faith communities, campuses, labor, veteran networks — that have built-in trust and show up offline.", explanation: "Influencer partnerships extend reach but often stay within existing audiences. Institutional organizing builds real constituencies through trusted structures that show up when it matters — offline and in person." },
-  { dimension: "Measurement", traditional: "Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there.", nextgen: "Track who's new to the table, what policy moved, and what infrastructure outlasts the campaign. Measure power, not exposure.", explanation: "Reach metrics measure exposure. Power metrics measure what changed. If your measurement can't tell you who's new to your side and what policy moved, you may be tracking the wrong things." },
-  { dimension: "Iteration", traditional: "Evaluate at the end of the grant cycle. Report results, identify learnings, and apply them to the next proposal.", nextgen: "Cut what's failing mid-cycle. Double down on what's working. Compound gains across years, not grant periods.", explanation: "Grant-cycle evaluation is thorough but slow. Mid-cycle iteration lets you kill what isn't working in weeks and compound what is — across years, not proposal timelines." },
+  { dimension: "Research", traditional: "Commission message testing, focus groups, and polling before launching. Ground your strategy in data before you spend.", nextgen: "Monitor what's already resonating organically across platforms and communities. Let the market tell you what works.", traditionalExplanation: "The most effective programs now monitor what's already resonating across platforms — not what people say in a focus group. Real signals come from organic behavior, not controlled environments.", nextgenExplanation: "Organic monitoring catches real signals — what people actually share, repeat, and act on — rather than what they say they'd do in a controlled setting." },
+  { dimension: "Content", traditional: "Fund high-quality media — documentaries, explainers, investigative journalism. Invest in credibility and production value.", nextgen: "Fund creator economies and round-the-clock digital content. Prioritize volume, velocity, and constant presence over polish.", traditionalExplanation: "The other side isn't making documentaries. They're funding thousands of creators producing content around the clock. Volume and velocity are beating polish.", nextgenExplanation: "Always-on content keeps narratives alive between campaigns. Creator economies produce at a pace and scale that traditional production can't match." },
+  { dimension: "Distribution", traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency through paid media.", nextgen: "Invest in owning or shaping the platforms and channels themselves — editorial direction, algorithms, programming.", traditionalExplanation: "Buying placements rents attention. The most effective operators are buying or shaping the platforms themselves — the algorithms, the editorial direction, the programming.", nextgenExplanation: "Owning infrastructure means you influence how attention flows, not just where your ad appears. It's the difference between renting and owning." },
+  { dimension: "Engagement", traditional: "Partner with trusted voices and influencers who can extend your message to aligned audiences.", nextgen: "Organize through institutions — faith communities, campuses, labor, veteran networks — that have built-in trust and show up offline.", traditionalExplanation: "Influencer reach stays online and often stays inside existing audiences. Institutional organizing — faith, labor, campuses, veterans — builds constituencies that show up offline and in person.", nextgenExplanation: "Institutions carry built-in trust and built-in turnout. They don't just amplify a message — they mobilize people who act on it." },
+  { dimension: "Measurement", traditional: "Track reach, impressions, media mentions, and awareness. Build the case that your message is getting out there.", nextgen: "Track who's new to the table, what policy moved, and what infrastructure outlasts the campaign. Measure power, not exposure.", traditionalExplanation: "Reach and impressions measure exposure. The programs that move policy measure who's new to the table and what actually changed. Power, not awareness.", nextgenExplanation: "Measuring who's new and what policy moved tells you whether you're building power — not just making noise." },
+  { dimension: "Iteration", traditional: "Evaluate at the end of the grant cycle. Report results, identify learnings, and apply them to the next proposal.", nextgen: "Cut what's failing mid-cycle. Double down on what's working. Compound gains across years, not grant periods.", traditionalExplanation: "Grant-cycle evaluation waits until the money's spent. Mid-cycle iteration kills what's failing in weeks and compounds what's working across years.", nextgenExplanation: "Compounding gains across years instead of resetting every grant cycle is how the other side built structural advantages." },
 ];
 
 /* ─── Three domains ─── */
@@ -789,148 +789,97 @@ const Deck = () => {
 
           {quizRevealed && (
             <div style={{ width: "100%", maxWidth: "1100px", animation: "fade-up 0.5s ease-out" }}>
-              <div className="flex flex-col gap-6">
-                <div
-                  style={{
-                    padding: "clamp(22px, 3vw, 30px)",
-                    borderRadius: "20px",
-                    background: "hsl(var(--foreground) / var(--a-bg))",
-                    border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                  }}
-                >
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                    <div className="max-w-[720px]">
-                      <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
-                        {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
-                      </p>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
-                        {nextgenPickCount >= 5
-                          ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
-                          : nextgenPickCount >= 3
-                            ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
-                            : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
-                        }
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
-                        setTimeout(() => {
-                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                          setQuizStep(0);
-                          setQuizRevealed(false);
-                        }, 400);
-                      }}
-                      style={{
-                        fontFamily: f.sans,
-                        fontSize: "12px",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                        color: f.ink(0.72),
-                        background: "hsl(var(--background))",
-                        border: `1px solid ${f.ink(0.1)}`,
-                        padding: "12px 18px",
-                        borderRadius: "999px",
-                        cursor: "pointer",
-                        whiteSpace: "nowrap",
-                        alignSelf: "flex-start",
-                        transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = f.ink(0.24);
-                        e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = f.ink(0.1);
-                        e.currentTarget.style.background = "hsl(var(--background))";
-                      }}
-                    >
-                      Retake quiz
-                    </button>
+              <div className="flex flex-col lg:flex-row gap-8">
+                {/* ── Sticky left: summary ── */}
+                <div className="lg:w-[38%] lg:sticky lg:top-8 lg:self-start flex flex-col gap-6">
+                  <div
+                    style={{
+                      padding: "clamp(22px, 3vw, 30px)",
+                      borderRadius: "20px",
+                      background: "hsl(var(--foreground) / var(--a-bg))",
+                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                    }}
+                  >
+                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "12px" }}>Your read</p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "14px" }}>
+                      {nextgenPickCount} of {QUIZ_ROWS.length} emerging approaches identified
+                    </p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.35vw, 17px)", color: f.ink(0.56), lineHeight: 1.7 }}>
+                      {nextgenPickCount >= 5
+                        ? "You're already thinking the way the most effective programs operate. The question is whether your portfolio is executing at this level — or whether the gap is between what you know and what you're funding."
+                        : nextgenPickCount >= 3
+                          ? "You spotted some of the shifts that are reshaping the field. The areas where you picked the traditional approach are exactly where most portfolios have blind spots — and where your opponents are operating differently."
+                          : "The approaches you gravitated toward are what most programs default to. They're not wrong — they're just not what's working anymore. The other side has moved on. This diagnostic will show you exactly where."
+                      }
+                    </p>
                   </div>
+
+                  <button
+                    onClick={() => {
+                      containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                      setTimeout(() => {
+                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                        setQuizStep(0);
+                        setQuizRevealed(false);
+                      }, 400);
+                    }}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "12px",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      color: f.ink(0.72),
+                      background: "hsl(var(--background))",
+                      border: `1px solid ${f.ink(0.1)}`,
+                      padding: "12px 18px",
+                      borderRadius: "999px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      alignSelf: "flex-start",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.24);
+                      e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg-subtle))";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = f.ink(0.1);
+                      e.currentTarget.style.background = "hsl(var(--background))";
+                    }}
+                  >
+                    Retake quiz
+                  </button>
                 </div>
 
-                <div>
-                  <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "14px" }}>Detailed breakdown</p>
-                  <div className="flex flex-col gap-4">
-                    {QUIZ_ROWS.map((row, i) => {
-                      const answer = quizAnswers[i];
-                      const pickedNextGen = answer?.picked === "nextgen";
-                      const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                {/* ── Scrollable right: breakdown cards ── */}
+                <div className="lg:w-[62%] flex flex-col gap-4">
+                  {QUIZ_ROWS.map((row, i) => {
+                    const answer = quizAnswers[i];
+                    const pickedNextGen = answer?.picked === "nextgen";
+                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                    const explanationCopy = pickedNextGen ? row.nextgenExplanation : row.traditionalExplanation;
+                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
 
-                      return (
-                        <div
-                          key={i}
-                          style={{
-                            padding: "clamp(18px, 2vw, 24px)",
-                            borderRadius: "18px",
-                            background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                            border: `1px solid ${pickedNextGen ? "hsl(var(--foreground) / var(--a-border-card))" : f.ink(0.08)}`,
-                          }}
-                        >
-                          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3" style={{ marginBottom: "16px" }}>
-                            <div>
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "6px" }}>Question {i + 1}</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.45vw, 18px)", fontWeight: 700, color: f.ink(0.82) }}>{row.dimension}</p>
-                            </div>
-                            <span
-                              style={{
-                                fontFamily: f.sans,
-                                fontSize: "10px",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                padding: "6px 10px",
-                                borderRadius: "999px",
-                                color: f.ink(0.5),
-                                background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                                border: `1px solid ${f.ink(0.08)}`,
-                                alignSelf: "flex-start",
-                              }}
-                            >
-                              Your selection
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-4 lg:gap-6">
-                            <div
-                              style={{
-                                padding: "16px 18px",
-                                borderRadius: "14px",
-                                background: "hsl(var(--background))",
-                                border: `1px solid ${f.ink(0.08)}`,
-                              }}
-                            >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>What you selected</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{selectedCopy}</p>
-
-                              {!pickedNextGen && (
-                                <>
-                                  <p style={{ ...label("9px"), color: f.ink(0.28), marginTop: "18px", marginBottom: "8px" }}>Emerging approach</p>
-                                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.6), lineHeight: 1.7 }}>{row.nextgen}</p>
-                                </>
-                              )}
-                            </div>
-
-                            <div
-                              style={{
-                                padding: "16px 18px",
-                                borderRadius: "14px",
-                                background: "transparent",
-                                border: `1px solid ${f.ink(0.08)}`,
-                              }}
-                            >
-                              <p style={{ ...label("9px"), color: f.ink(0.28), marginBottom: "8px" }}>Why this matters</p>
-                              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.75 }}>{row.explanation}</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          padding: "clamp(18px, 2vw, 24px)",
+                          borderRadius: "16px",
+                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                          border: `1px solid ${f.ink(0.06)}`,
+                        }}
+                      >
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", fontWeight: 700, color: f.ink(0.82), marginBottom: "10px" }}>{row.dimension}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.4), lineHeight: 1.65, fontStyle: "italic", marginBottom: "14px", paddingLeft: "12px", borderLeft: `2px solid ${f.ink(0.08)}` }}>
+                          {selectedCopy}
+                        </p>
+                        <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "6px" }}>{explanationLabel}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.56), lineHeight: 1.7 }}>{explanationCopy}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
