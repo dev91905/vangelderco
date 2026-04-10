@@ -790,7 +790,7 @@ const Deck = () => {
                               }}>{row.yours}</p>
                             </div>
                             <div>
-                              <p style={{ ...label("9px"), color: f.ink(0.5), fontWeight: 700, marginBottom: "10px" }}>Their side</p>
+                              <p style={{ ...label("9px"), color: "hsl(var(--destructive) / var(--a-mid))", fontWeight: 700, marginBottom: "10px" }}>Their side</p>
                               <p style={{
                                 fontFamily: f.sans,
                                 fontSize: "clamp(16px, 1.6vw, 21px)",
