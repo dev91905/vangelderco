@@ -371,42 +371,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    let wheelTimeout: ReturnType<typeof setTimeout> | null = null;
-    let accumulated = 0;
-    const handler = (e: WheelEvent) => {
-      if (selectedCase !== null) return;
-      // Allow vertical scrolling inside scrollable frames
-      const scrollableFrame = (e.target as HTMLElement)?.closest("[data-scrollable]") as HTMLElement | null;
-      if (scrollableFrame && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        const atTop = scrollableFrame.scrollTop <= 0;
-        const atBottom = scrollableFrame.scrollTop + scrollableFrame.clientHeight >= scrollableFrame.scrollHeight - 2;
-        // If not at boundary, let native scroll happen
-        if (!(atTop && e.deltaY < 0) && !(atBottom && e.deltaY > 0)) return;
-      }
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        accumulated += e.deltaY;
-        if (wheelTimeout) clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(() => {
-          if (Math.abs(accumulated) > 30) {
-            const direction = accumulated > 0 ? 1 : -1;
-            if (direction === 1 && frameInteracted[currentFrame] === false) {
-              // blocked — not interacted
-            } else {
-              const nextFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, currentFrame + direction));
-              if (nextFrame !== currentFrame) scrollToFrame(nextFrame);
-            }
-          }
-          accumulated = 0;
-        }, 80);
-      }
-    };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => { el.removeEventListener("wheel", handler); if (wheelTimeout) clearTimeout(wheelTimeout); };
-  }, [selectedCase, currentFrame, scrollToFrame, frameInteracted]);
+  /* Wheel handler removed — vertical snap scroll is native browser behavior */
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
@@ -457,11 +422,11 @@ const Deck = () => {
       style={{
         height: "100dvh",
         width: "100vw",
-        overflowX: "auto",
-        overflowY: "hidden",
-        scrollSnapType: "x mandatory",
+        overflowX: "hidden",
+        overflowY: "auto",
+        scrollSnapType: "y mandatory",
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         background: "hsl(var(--background))",
       }}
     >
@@ -491,7 +456,7 @@ const Deck = () => {
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             <div className="flex items-center gap-3">
               <span style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.2), letterSpacing: "0.04em" }}>
-                Enter ↵ or →
+                Enter ↵ or ↓
               </span>
               <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
             </div>
@@ -673,7 +638,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
-      <DeckFrame ref={setRef(2)} mode="wide" scrollable={quizRevealed}>
+      <DeckFrame ref={setRef(2)} mode="wide">
         <div
           ref={r3.ref}
           className="flex flex-col"
@@ -870,11 +835,12 @@ const Deck = () => {
 
                     <button
                       onClick={() => {
-                        const frame = frameRefs.current[2];
-                        if (frame) frame.scrollTop = 0;
-                        setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                        setQuizStep(0);
-                        setQuizRevealed(false);
+                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                        setTimeout(() => {
+                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                          setQuizStep(0);
+                          setQuizRevealed(false);
+                        }, 400);
                       }}
                       style={{
                         fontFamily: f.sans,

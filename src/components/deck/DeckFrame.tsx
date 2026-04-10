@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef, useEffect, useRef, useState } from "react";
+import { ReactNode, forwardRef, useEffect, useRef } from "react";
 
 type FrameMode = "narrow" | "wide" | "full";
 type FrameAlign = "center" | "left" | "split";
@@ -9,7 +9,6 @@ interface DeckFrameProps {
   mode?: FrameMode;
   align?: FrameAlign;
   onActive?: (active: boolean) => void;
-  scrollable?: boolean;
 }
 
 const modeStyles: Record<FrameMode, string> = {
@@ -25,7 +24,7 @@ const alignStyles: Record<FrameAlign, string> = {
 };
 
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
-  ({ children, mode = "narrow", align = "center", onActive, scrollable = false }, ref) => {
+  ({ children, mode = "narrow", align = "center", onActive }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
 
     const setRefs = (el: HTMLDivElement | null) => {
@@ -50,19 +49,21 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
     return (
       <section
         ref={setRefs}
-        data-scrollable={scrollable || undefined}
-        className={`relative flex ${scrollable ? "" : alignStyles[align]}`}
+        className={`relative flex ${alignStyles[align]}`}
         style={{
-          height: "100dvh",
-          width: "100vw",
-          minWidth: "100vw",
+          minHeight: "100dvh",
+          width: "100%",
           flexShrink: 0,
           scrollSnapAlign: "start",
-          minHeight: "100dvh",
-          ...(scrollable ? { overflowY: "auto", overflowX: "hidden" } : {}),
         }}
       >
-        <div className={`relative z-10 w-full ${modeStyles[mode]} ${scrollable ? "py-[max(40px,8vh)]" : ""}`} style={scrollable ? { margin: "0 auto" } : {}}>
+        <div
+          className={`relative z-10 w-full ${modeStyles[mode]}`}
+          style={{
+            paddingTop: "clamp(80px, 12vh, 140px)",
+            paddingBottom: "clamp(120px, 16vh, 180px)",
+          }}
+        >
           {children}
         </div>
       </section>

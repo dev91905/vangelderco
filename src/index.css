@@ -164,7 +164,7 @@
     overflow-x: hidden;
   }
 
-  /* Hide native horizontal scrollbar — custom progress bar handles it */
+  /* Hide native scrollbar — custom progress bar handles it */
   .deck-scroll::-webkit-scrollbar {
     display: none;
   }
