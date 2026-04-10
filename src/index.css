@@ -230,3 +230,16 @@
   50% { opacity: 0; }
 }
 
+/* Network pill cycling glow — dark mode only */
+@keyframes pill-glow {
+  0%, 100% {
+    background: hsl(var(--destructive) / var(--a-bg));
+    border-color: hsl(var(--destructive) / var(--a-border));
+    box-shadow: 0 0 0 0 hsl(var(--destructive) / 0);
+  }
+  50% {
+    background: hsl(var(--destructive) / 0.14);
+    border-color: hsl(var(--destructive) / 0.5);
+    box-shadow: 0 0 20px -4px hsl(var(--destructive) / 0.25);
+  }
+}

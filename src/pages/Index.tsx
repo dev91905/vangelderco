@@ -518,23 +518,26 @@ const Index = () => {
             {NETWORK_SECTORS.map((sector, i) => (
               <RevealBlock key={sector} delay={0.25 + i * 0.04}>
                 <span
-                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
+                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default dark:animate-[pill-glow_4s_ease-in-out_infinite]"
                   style={{
                     fontFamily: t.sans,
-                     color: "hsl(var(--destructive) / var(--a-high))",
+                    color: "hsl(var(--destructive) / var(--a-high))",
                     background: "hsl(var(--destructive) / var(--a-bg))",
                     border: "1px solid hsl(var(--destructive) / var(--a-border))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
+                    animationDelay: `${i * 0.35}s`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / 0.12)";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / 0.4)";
                     e.currentTarget.style.color = "hsl(var(--destructive))";
+                    e.currentTarget.style.animationPlayState = "paused";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "hsl(var(--destructive) / var(--a-bg))";
                     e.currentTarget.style.borderColor = "hsl(var(--destructive) / var(--a-border))";
                     e.currentTarget.style.color = "hsl(var(--destructive) / var(--a-high))";
+                    e.currentTarget.style.animationPlayState = "running";
                   }}
                 >
                   {sector}
