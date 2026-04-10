@@ -151,14 +151,14 @@
 }
 
 /* CRT dark-mode effects */
-@keyframes crt-scan-beam {
-  0% { top: -120px; }
-  100% { top: 100vh; }
+@keyframes scan-beam {
+  0% { top: -2px; }
+  100% { top: 100%; }
 }
 
-@keyframes crt-breathe {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+@keyframes breathe {
+  0%, 100% { opacity: 0.12; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.22; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 /* Hero nav link hover effects */
