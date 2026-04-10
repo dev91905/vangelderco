@@ -1,62 +1,52 @@
 
 
-# Quiz Results Redesign — Split Panel + Simplified Cards
+# Quiz Copy Audit — Research & Content Rewrites
 
-## Layout
+## Problems You Identified
 
-Two-column layout on desktop. Left column is sticky (stays visible while scrolling). Right column scrolls independently with the detailed breakdown.
+### 1. Research: False dichotomy between focus groups and organic listening
+The current copy frames it as either/or. In reality, focus groups are still useful for validation — the problem is relying on them *as your primary signal* without also monitoring what's already resonating organically. The deeper issue: most programs test their own messaging against demographic segments, but miss the real psychographic clusters beneath the party labels (collective action, don't-tread-on-me, tough cookie, YOLO). You need organic listening + sentiment analysis to even discover those segments before you can validate with research.
 
-```text
-┌─────────────────────────────────────────────────┐
-│  STICKY LEFT (40%)      │  SCROLLABLE RIGHT (60%)│
-│                         │                        │
-│  "Your read"            │  ┌── Research ───────┐ │
-│  4 of 6 emerging        │  │ You selected: ... │ │
-│  approaches identified  │  │ What works: ...   │ │
-│                         │  └──────────────────┘ │
-│  [summary paragraph]    │  ┌── Content ────────┐ │
-│                         │  │ You selected: ... │ │
-│  [Retake quiz]          │  │ What works: ...   │ │
-│                         │  └──────────────────┘ │
-│                         │  ...4 more cards       │
-└─────────────────────────────────────────────────┘
-```
+### 2. Content: "The other side isn't making documentaries" — false
+They are. The real distinction isn't documentaries vs. creators. It's the *operating model*: high-polish tentpole productions on a campaign cycle vs. always-on volume across investigative journalism AND creators AND everything else. The other side does investigative journalism too — a fuckton of it — plus creators. The gap is velocity and volume, not genre.
 
-## Simplified Breakdown Cards
+### 3. Question framing still says "Two approaches to [dimension]"
+Previous plan to rewrite this to "What's your approach to [dimension]?" wasn't implemented yet. Also still says "Quiz results" and "Question X of 6."
 
-Each card currently has: question number label, dimension title, "Your selection" badge, "What you selected" box, conditional "Emerging approach" box, and "Why this matters" box — 4-6 elements competing for attention.
+## Proposed Rewrites
 
-**Simplified to 3 elements max:**
+### QUIZ_ROWS — Research
+- **Traditional:** "Run focus groups and message testing to validate your strategy before launch. Ground decisions in structured research."
+- **Nextgen:** "Monitor what's already resonating across platforms and communities — sentiment, sharing patterns, organic behavior — then validate with targeted research."
+- **traditionalExplanation (The shift):** "Focus groups are useful for validation, but they can't tell you what you don't know to ask. The most effective programs start by listening — tracking what's already moving through culture, what language people actually use, what resonates across psychographic segments that don't map neatly to party labels. Then they validate with research. The order matters."
+- **nextgenExplanation (Why this works):** "Starting with organic signals means you discover the real audience segments — not just demographics, but the underlying value systems that drive behavior. Focus groups validate. But you have to know what to test first, and that comes from listening at scale."
 
-1. **Dimension title** (e.g. "Research") — bold, prominent
-2. **"You selected"** — their answer in a subtle quote style, one line
-3. **One explanation block** — content depends on whether they picked nextgen or traditional:
-   - **If traditional:** "The shift" — explains what the emerging approach is and why it's gaining traction. No shame, no "wrong." Just: here's what's changing and why.
-   - **If nextgen:** "Why this works" — explains why this approach is effective and how it differs from the default.
+### QUIZ_ROWS — Content
+- **Traditional:** "Invest in high-quality productions — documentaries, long-form journalism, flagship campaigns. Lead with credibility and production value."
+- **Nextgen:** "Fund always-on content across creators, journalists, and digital-first formats. Prioritize volume, velocity, and constant presence alongside quality."
+- **traditionalExplanation (The shift):** "The other side isn't choosing between documentaries and creators — they're doing both, all the time. Investigative journalism, creator content, short-form, long-form, around the clock. The gap isn't genre. It's operating tempo. Campaign-cycle productions leave dead air between tentpoles. Always-on presence compounds."
+- **nextgenExplanation (Why this works):** "Always-on content across formats — investigative journalism, creators, short-form — keeps narratives alive between campaigns. It's not about choosing volume over quality. It's about maintaining presence at a pace that compounds, instead of going dark between flagship productions."
 
-No badge. No "Question 1" label. No two-column grid inside each card. No nested boxes. Just dimension → your pick → insight.
+### Question framing (lines 676-687)
+- Headline: `What's your approach to ${dimension.toLowerCase()}?`
+- Sub-header: "Pick your approach."
+- Results label: "Your strategy read" (not "Quiz results")
+- Remove "Question X of 6" from cards
 
-## Explanation Copy Rewrite
+### Step label (line ~435)
+- Change "Quiz" to "Strategy" in `STEP_LABELS`
 
-Current explanations are neutral hedging ("The most effective programs do both, but the field is shifting toward the latter"). For $100M donors, each explanation needs to land with specificity:
+### Retake button text
+- Change "Retake quiz" to "Retake assessment" or just "Start over"
 
-| Dimension | If picked traditional | If picked nextgen |
-|---|---|---|
-| **Research** | "The shift: The most effective programs now monitor what's already resonating across platforms — not what people say in a focus group. Real signals come from organic behavior, not controlled environments." | "Why this works: Organic monitoring catches real signals — what people actually share, repeat, and act on — rather than what they say they'd do in a controlled setting." |
-| **Content** | "The shift: The other side isn't making documentaries. They're funding thousands of creators producing content around the clock. Volume and velocity are beating polish." | "Why this works: Always-on content keeps narratives alive between campaigns. Creator economies produce at a pace and scale that traditional production can't match." |
-| **Distribution** | "The shift: Buying placements rents attention. The most effective operators are buying or shaping the platforms themselves — the algorithms, the editorial direction, the programming." | "Why this works: Owning infrastructure means you influence how attention flows, not just where your ad appears. It's the difference between renting and owning." |
-| **Engagement** | "The shift: Influencer reach stays online and often stays inside existing audiences. Institutional organizing — faith, labor, campuses, veterans — builds constituencies that show up offline and in person." | "Why this works: Institutions carry built-in trust and built-in turnout. They don't just amplify a message — they mobilize people who act on it." |
-| **Measurement** | "The shift: Reach and impressions measure exposure. The programs that move policy measure who's new to the table and what actually changed. Power, not awareness." | "Why this works: Measuring who's new and what policy moved tells you whether you're building power — not just making noise." |
-| **Iteration** | "The shift: Grant-cycle evaluation waits until the money's spent. Mid-cycle iteration kills what's failing in weeks and compounds what's working across years." | "Why this works: Compounding gains across years instead of resetting every grant cycle is how the other side built structural advantages." |
+## Files Changed
 
-## Technical Changes
-
-### `src/pages/Deck.tsx` — Quiz results section (~lines 790-935)
-
-- Wrap results in `flex-row` with left column `lg:w-[38%] lg:sticky lg:top-0 lg:self-start` and right column `lg:w-[62%]`
-- Left column contains: summary card (score headline, paragraph, retake button)
-- Right column contains: breakdown cards in a simple vertical stack
-- Each card simplified to: dimension title + quoted selection + single explanation paragraph
-- Add `traditionalExplanation` and `nextgenExplanation` fields to QUIZ_ROWS (replacing the single `explanation` field), with the copy from the table above
-- On mobile, left column stacks above right column normally
+**`src/pages/Deck.tsx`** — All changes in this single file:
+- Rewrite Research and Content rows in `QUIZ_ROWS` (lines 46-47) with new options + explanations
+- Update headline from "Two approaches to..." to "What's your approach to..." (line 679)
+- Update sub-header to "Pick your approach." (line 685)
+- Change "Quiz results" label to "Your strategy read" (line 674)
+- Remove "Question X of 6" text from dimension label (line 728)
+- Change step label from "Quiz" to "Strategy" in `STEP_LABELS`
+- Change "Retake quiz" button text to "Start over"
 
