@@ -579,7 +579,7 @@ const Deck = () => {
               Get started →
             </button>
             <span style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em", color: f.ink(0.25) }}>
-              Less than 5 minutes
+              ~5 minutes
             </span>
           </div>
         </div>
