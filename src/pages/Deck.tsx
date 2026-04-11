@@ -580,17 +580,36 @@ const Deck = () => {
             background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)",
           }}
         >
-          <div className="flex items-center pointer-events-auto" style={{ gap: "0" }}>
-            {/* Back button */}
-            <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-start", ...(isMobile ? {} : { width: "140px" }) }}>
-              <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
-            </div>
+          {isMobile ? (
+            <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
+              <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-start" }}>
+                <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+              </div>
 
-            {/* Progress bar — desktop/tablet only */}
-            {!isMobile && (
+              <div style={{ flex: 1 }} />
+
+              <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
+                <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+              </div>
+            </div>
+          ) : (
+            <div
+              className="pointer-events-auto"
+              style={{
+                width: "min(1120px, calc(100vw - 64px))",
+                margin: "0 auto",
+                display: "grid",
+                gridTemplateColumns: "160px minmax(240px, 320px) 160px",
+                alignItems: "center",
+                gap: "24px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+              </div>
+
               <div
                 style={{
-                  flex: 1,
                   height: "3px",
                   borderRadius: "2px",
                   background: f.ink(0.06),
@@ -607,16 +626,12 @@ const Deck = () => {
                   }}
                 />
               </div>
-            )}
 
-            {/* Spacer on mobile to push Continue right */}
-            {isMobile && <div style={{ flex: 1 }} />}
-
-            {/* Continue button */}
-            <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden", ...(isMobile ? {} : { width: "140px" }) }}>
-              <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+              <div style={{ display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
+                <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
 
