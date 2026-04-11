@@ -536,6 +536,34 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ═══ FIELD NOTES ═══ */}
+      <section className="snap-section-scroll relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-16"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+            >
+              Field Notes
+            </div>
+          </RevealBlock>
+
+          <div className="flex flex-col w-full">
+            {(fieldNotes || []).map((note, i) => (
+              <CaseFragment
+                key={note.id}
+                sector={note.sector_label || note.capability}
+                brief={note.excerpt || ""}
+                result={note.featured_stat || ""}
+                slug={note.slug}
+                linkUrl={note.link_url}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ INTAKE CTA ═══ */}
       <section className="snap-section relative z-10 flex items-center justify-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
@@ -668,34 +696,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
-        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
-            >
-              Field Notes
-            </div>
-          </RevealBlock>
-
-          <div className="flex flex-col w-full">
-            {(fieldNotes || []).map((note, i) => (
-              <CaseFragment
-                key={note.id}
-                sector={note.sector_label || note.capability}
-                brief={note.excerpt || ""}
-                result={note.featured_stat || ""}
-                slug={note.slug}
-                linkUrl={note.link_url}
-                index={i}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══ FOOTER ═══ */}
       <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
@@ -713,17 +713,6 @@ const Index = () => {
             Let's Chat
             <span style={{ fontSize: "14px", lineHeight: 1 }}>→</span>
           </Link>
-        </RevealBlock>
-        <RevealBlock delay={0.1}>
-          <div className="w-16 mt-6 mb-6" style={{ height: 1, background: t.ink(0.08) }} />
-        </RevealBlock>
-        <RevealBlock delay={0.15}>
-          <span
-            className="text-[9px] tracking-[0.3em] uppercase block"
-            style={{ fontFamily: t.sans, color: t.ink(0.15) }}
-          >
-            By Referral Only
-          </span>
         </RevealBlock>
       </section>
       </div>
