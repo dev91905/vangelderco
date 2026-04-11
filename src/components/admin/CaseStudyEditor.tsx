@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
 import { useSyncImpactStats } from "@/hooks/useImpactStats";
+import ArticlePicker from "@/components/admin/ArticlePicker";
 
 type CaseStudyRow = {
   id: string;
@@ -428,11 +429,9 @@ const CaseStudyEditor: React.FC = () => {
                   <label style={labelStyle} className="flex items-center gap-1.5">
                     <LinkIcon className="w-3 h-3" /> Link to Full Article (optional)
                   </label>
-                  <input
-                    value={ed.link_url || ""}
-                    onChange={(e) => updateField("link_url", e.target.value || null)}
-                    style={inputStyle}
-                    placeholder="https://… or /post/case-study-slug"
+                  <ArticlePicker
+                    value={ed.link_url || null}
+                    onChange={(url) => updateField("link_url", url)}
                   />
                   <p className="mt-1.5" style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25) }}>
                     If set, a "Read the full report" link appears in the timeline overlay header.
