@@ -262,7 +262,38 @@ const Admin = () => {
         </div>
       </div>
 
-      {/* Collapsible Diagnostic Results section */}
+      {/* Collapsible Deck Case Studies section */}
+      <div className="px-4 md:px-8">
+        <button
+          onClick={() => setCaseStudiesOpen(!caseStudiesOpen)}
+          className="flex items-center gap-2 w-full py-4 transition-colors group"
+          style={{ borderBottom: t.border(0.04) }}
+        >
+          <ChevronDown
+            className="w-4 h-4 transition-transform duration-200"
+            style={{
+              color: t.ink(0.3),
+              transform: caseStudiesOpen ? "rotate(0deg)" : "rotate(-90deg)",
+            }}
+          />
+          <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>
+            Deck Case Studies
+          </span>
+        </button>
+
+        <div
+          style={{
+            maxHeight: caseStudiesOpen ? "9999px" : "0",
+            overflow: "hidden",
+            transition: "max-height 0.3s ease-in-out",
+          }}
+        >
+          <div className="py-4">
+            <CaseStudyEditor />
+          </div>
+        </div>
+      </div>
+
       <div className="px-4 md:px-8">
         <button
           onClick={() => setDiagnosticsOpen(!diagnosticsOpen)}
