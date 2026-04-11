@@ -453,15 +453,29 @@ const Deck = () => {
     if (!el) return;
 
     const handler = (e: WheelEvent) => {
+      const target = e.target as HTMLElement | null;
+      const resultsPanel = target?.closest("[data-results-scroll='true']") as HTMLElement | null;
+
+      if (resultsPanel) {
+        const atTop = resultsPanel.scrollTop <= 0;
+        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
+        const scrollingDown = e.deltaY > 0;
+        const scrollingUp = e.deltaY < 0;
+
+        if ((scrollingDown && atBottom) || (scrollingUp && atTop)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        return;
+      }
+
       const frameEl = frameRefs.current[currentFrame];
       if (!frameEl) return;
-
       const frameTop = frameEl.offsetTop;
       const frameBottom = frameTop + frameEl.scrollHeight;
       const frameTallerThanViewport = frameEl.scrollHeight > el.clientHeight + 2;
 
       if (frameTallerThanViewport) {
-        // Frame is taller than viewport — allow scrolling within frame bounds
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
         const atFrameTop = el.scrollTop <= frameTop;
@@ -469,14 +483,11 @@ const Deck = () => {
         const atFrameBottom = el.scrollTop >= maxScrollTop - 1;
 
         if ((scrollingDown && atFrameBottom) || (scrollingUp && atFrameTop)) {
-          // Hit the edge of the frame — block to prevent sliding to next frame
           e.preventDefault();
         }
-        // Otherwise let it scroll naturally within the frame
         return;
       }
 
-      // Frame fits in viewport — hard-lock
       e.preventDefault();
       const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
       el.scrollTop = Math.min(maxScrollTop, Math.max(frameTop, el.scrollTop));
@@ -906,8 +917,6 @@ const Deck = () => {
                     className="flex flex-col gap-5"
                     style={{
                       alignSelf: "start",
-                      position: "sticky",
-                      top: "clamp(80px, 12vh, 140px)",
                     }}
                   >
                     <div
@@ -971,8 +980,13 @@ const Deck = () => {
 
                   {/* Right column — dimension cards flow naturally, no scroll container */}
                   <div
-                    className="flex flex-col gap-4"
+                    className="flex flex-col gap-4 results-scrollbar lg:pr-3"
+                    data-results-scroll="true"
                     style={{
+                      maxHeight: "clamp(560px, calc(100dvh - 220px), 760px)",
+                      overflowY: "auto",
+                      overscrollBehavior: "contain",
+                      paddingBottom: "20px",
                       paddingLeft: "clamp(0px, 1vw, 16px)",
                     }}
                   >
