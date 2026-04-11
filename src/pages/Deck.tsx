@@ -1414,4 +1414,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
+    </div>
+  );
+};
+
 export default Deck;
