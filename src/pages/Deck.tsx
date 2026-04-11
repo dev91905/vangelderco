@@ -1334,7 +1334,10 @@ const Deck = () => {
 
             {/* Path 2: Starting fresh */}
             <button
-              onClick={() => setEngagementPath(engagementPath === "fresh" ? null : "fresh")}
+              onClick={() => {
+                setEngagementPath("fresh");
+                setTimeout(() => scrollToFrame(currentFrame + 1), 400);
+              }}
               className="text-left transition-all duration-300 w-full"
               style={{
                 padding: "28px 28px",
@@ -1350,75 +1353,9 @@ const Deck = () => {
             >
               <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "6px" }}>Starting fresh</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>
-                No portfolio, a scattered one, or you're early in the process. You need an audit, a plan, and introductions before you can move.
+                No portfolio, a scattered one, or you're early in the process. We'll walk you through it on a call.
               </p>
             </button>
-
-            {/* Expanded: Starting fresh process */}
-            <div style={{
-              display: "grid",
-              gridTemplateRows: engagementPath === "fresh" ? "1fr" : "0fr",
-              transition: "grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-            }}>
-              <div data-results-scroll="true" style={{ overflowY: "auto", maxHeight: "clamp(300px, calc(100dvh - 400px), 500px)", overscrollBehavior: "contain" }}>
-                <div style={{ paddingTop: "8px" }}>
-                  {/* Phase 1 */}
-                  <div style={{ padding: "24px 28px", borderRadius: "12px", border: `1px solid ${f.ink(0.06)}`, marginBottom: "12px" }}>
-                    <div className="flex items-baseline gap-3" style={{ marginBottom: "16px" }}>
-                      <span style={{ ...label("9px"), color: f.ink(0.3) }}>Phase 1</span>
-                      <span style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>Deep audit</span>
-                      <span style={{ ...label("9px"), color: f.ink(0.25) }}>~3 months</span>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {[
-                        "Walk through your portfolio — every grant, every assumption, every gap.",
-                        "Interview you, your team, and your grantees to understand what's working and what isn't.",
-                        "Deliver preliminary findings and a restructured strategy with concrete recommendations.",
-                      ].map((b, i) => (
-                        <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.5), lineHeight: 1.7, paddingLeft: "12px", borderLeft: i === 0 ? "none" : "none" }}>{b}</p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Phase 2 */}
-                  <div style={{ padding: "24px 28px", borderRadius: "12px", border: `1px solid ${f.ink(0.06)}`, marginBottom: "12px" }}>
-                    <div className="flex items-baseline gap-3" style={{ marginBottom: "16px" }}>
-                      <span style={{ ...label("9px"), color: f.ink(0.3) }}>Phase 2</span>
-                      <span style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>Build & connect</span>
-                      <span style={{ ...label("9px"), color: f.ink(0.25) }}>6–8 weeks</span>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {[
-                        "Interview stakeholders and external partners. Start making introductions to fill the gaps we identified.",
-                        "Build an actionable plan — new portfolio, restructured portfolio, or targeted improvements.",
-                        "Deliver a roadmap you can execute on immediately.",
-                      ].map((b, i) => (
-                        <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.5), lineHeight: 1.7 }}>{b}</p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Fork */}
-                  <div style={{ padding: "24px 28px", borderRadius: "12px", background: "hsl(var(--foreground) / var(--a-bg))", border: `1px solid ${f.ink(0.06)}` }}>
-                    <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "16px" }}>Then you choose</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>Take it and run</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.45), lineHeight: 1.7 }}>
-                          You've got the plan. Execute it yourself. Come back for ad hoc support, hourly consulting, or a light retainer whenever you need it.
-                        </p>
-                      </div>
-                      <div>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>Full-service retainer</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.45), lineHeight: 1.7 }}>
-                          We keep managing the portfolio — introductions, evaluation, strategy, execution — until you bring capacity in-house.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </DeckFrame>
