@@ -1106,13 +1106,13 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1.2fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "start", overflow: "hidden" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "start", overflow: "hidden" }}>
           {/* Left column — pinned */}
-          <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
-            <p style={{ ...heading("clamp(28px, 4vw, 48px)"), fontWeight: 700 }}>
+          <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)", alignSelf: "start" }}>
+            <p style={{ ...heading("clamp(22px, 2.8vw, 34px)"), fontWeight: 700 }}>
               Effective programs do three things.
             </p>
-            <p style={{ marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(17px, 2vw, 22px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
+            <p style={{ marginTop: "16px", fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
               Select the ones you want to work on.
             </p>
           </div>
