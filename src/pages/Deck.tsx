@@ -369,6 +369,7 @@ const Deck = () => {
 
   /* ─── Navigation ─── */
   useEffect(() => {
+    if (isMobile) return; // Mobile uses state-driven nav, no scroll listener
     const el = containerRef.current;
     if (!el) return;
 
@@ -387,7 +388,7 @@ const Deck = () => {
     el.addEventListener("scroll", updateCurrentFrame, { passive: true });
     updateCurrentFrame();
     return () => el.removeEventListener("scroll", updateCurrentFrame);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (currentFrame !== lastFrameRef.current) {
@@ -398,8 +399,12 @@ const Deck = () => {
 
   const scrollToFrame = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_FRAMES - 1, index));
-    frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    if (isMobile) {
+      setCurrentFrame(clamped);
+    } else {
+      frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isMobile]);
 
   const resetQuiz = useCallback(() => {
     scrollToFrame(2);
