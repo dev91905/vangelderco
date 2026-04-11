@@ -482,7 +482,7 @@ const Index = () => {
               className="text-[10px] tracking-[0.25em] uppercase mb-16"
               style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
-              Impact
+              Recent Impact
             </div>
           </RevealBlock>
 
