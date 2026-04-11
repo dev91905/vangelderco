@@ -1360,77 +1360,91 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 8: Sectors ═══ */}
+      {/* ═══ FRAME 8: Sectors + Media Experience ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
-        <div ref={r8.ref} className="w-full">
-          <div className="mb-10" style={{ maxWidth: "640px" }}>
-            <h2 style={{ ...r8.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.15, letterSpacing: "-0.02em" }}>
-              We've built the communications you're trying to buy.
-            </h2>
-            <p style={{ ...r8.stagger(1, 200, "blur-up"), fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "16px" }}>
-              Our team is built from careers across these industries — the ones your grantees are trying to reach.
-            </p>
+        <div
+          ref={r8.ref}
+          className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full"
+          style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}
+        >
+          <div>
+            <div style={r8.stagger(0, 0, "blur-up")}>
+              <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
+                We've worked across the sectors your grantees need to reach.
+              </p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
+                Our team comes out of the industries where attention, narrative, and cultural uptake actually move.
+              </p>
+            </div>
+
+            <div style={{ ...r8.stagger(1, 200, "blur-up"), marginTop: "30px" }}>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
+                Have you worked with media professionals before?
+              </p>
+              <div className="flex gap-3">
+                {([
+                  { val: true, lbl: "Yes" },
+                  { val: false, lbl: "No" },
+                ] as const).map((opt) => (
+                  <button
+                    key={String(opt.val)}
+                    onClick={() => setHasMediaExperience(opt.val)}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      padding: "12px 32px",
+                      borderRadius: "999px",
+                      color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
+                      background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                      border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {opt.lbl}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-px" style={{
-            ...r8.stagger(2, 400, "blur-up"),
-            background: f.ink(0.06), borderRadius: "12px", overflow: "hidden",
-          }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { name: "News", desc: "Local and national — how stories get placed and why" },
-              { name: "Music", desc: "Labels, touring, festivals, artist strategy" },
-              { name: "Film & TV", desc: "Production, distribution, cultural impact" },
-              { name: "Digital", desc: "Creator economy, platforms, where opinion forms now" },
-              { name: "PR", desc: "Corporate, entertainment, crisis communications" },
-              { name: "Commercial Media", desc: "Entertainment, studios, media operations" },
-              { name: "Brands & Advertising", desc: "Campaigns, partnerships, cultural positioning" },
-              { name: "Sports", desc: "Leagues, athletes, community engagement" },
-              { name: "Gaming", desc: "Studios, streamers, interactive culture" },
-            ].map((s, i) => (
-              <div key={i} style={{
-                padding: "clamp(16px, 2vw, 28px)", background: "hsl(var(--card))",
-                opacity: r8.isActive ? 1 : 0,
-                transform: r8.isActive ? "translateY(0)" : "translateY(8px)",
-                filter: r8.isActive ? "blur(0px)" : "blur(4px)",
-                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${500 + i * 80}ms`,
-              }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 17px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>{s.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
+              "News",
+              "Music",
+              "Film & TV",
+              "Digital",
+              "Traditional PR",
+              "Commercial Media & Entertainment",
+              "Brands & Advertising",
+              "Sports",
+              "Gaming",
+            ].map((sector, i) => (
+              <div
+                key={sector}
+                style={{
+                  padding: "24px 20px",
+                  minHeight: "110px",
+                  border: `1px solid ${f.ink(0.08)}`,
+                  background: "transparent",
+                  borderRadius: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  opacity: r8.isActive ? 1 : 0,
+                  transform: r8.isActive ? "translateX(0)" : "translateX(20px)",
+                  filter: r8.isActive ? "blur(0px)" : "blur(4px)",
+                  transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms`,
+                }}
+              >
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.7vw, 19px)", fontWeight: 700, color: f.ink(0.8), lineHeight: 1.3 }}>
+                  {sector}
+                </p>
               </div>
             ))}
           </div>
-
-          {/* Media experience question */}
-          <div style={{ ...r8.stagger(3, 800, "blur-up"), marginTop: "40px" }}>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
-              Have you worked with media professionals before?
-            </p>
-            <div className="flex gap-3">
-              {([
-                { val: true, lbl: "Yes" },
-                { val: false, lbl: "No" },
-              ] as const).map((opt) => (
-                <button
-                  key={String(opt.val)}
-                  onClick={() => setHasMediaExperience(opt.val)}
-                  style={{
-                    fontFamily: f.sans, fontSize: "13px", fontWeight: 600,
-                    padding: "12px 32px", borderRadius: "999px",
-                    color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
-                    background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                    border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
-                    cursor: "pointer", transition: "all 0.2s ease",
-                  }}
-                >
-                  {opt.lbl}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </DeckFrame>
-
-      {/* ═══ FRAME 9: CTA — What's Next ═══ */}
       <DeckFrame ref={setRef(8)} mode="wide">
         <div ref={r9.ref}>
           {ctaMode === "thanks" ? (
