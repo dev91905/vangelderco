@@ -112,6 +112,8 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
             letterSpacing: "-0.01em",
           }}
         >
+          <span style={{ color: f.ink(0.3) }}>Case Study</span>
+          <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
           {study.name}
         </h2>
 
