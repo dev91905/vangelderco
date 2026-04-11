@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useBackPath } from "@/hooks/useBackNavigation";
 import { supabase } from "@/integrations/supabase/client";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";

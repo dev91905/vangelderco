@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useBackPath } from "@/hooks/useBackNavigation";
 import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
 import PostCard from "./PostCard";
