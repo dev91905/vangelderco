@@ -8,7 +8,9 @@ export const caseStudyUi = {
   cardSurface: f.ink(0.015),
   cardSurfaceHover: f.ink(0.03),
   cardBorder: `1px solid ${f.ink(0.08)}`,
+  cardBorderColor: f.ink(0.08),
   cardBorderStrong: `1px solid ${f.ink(0.16)}`,
+  cardBorderStrongColor: f.ink(0.16),
   rail: f.ink(0.08),
   railActive: f.ink(0.3),
   node: f.ink(0.16),
@@ -50,5 +52,13 @@ export const caseStudyUi = {
     color: f.ink(0.84),
     lineHeight: 1,
     letterSpacing: "-0.02em",
+  } as CSSProperties,
+  // Outcome badge styles
+  outcomeBadge: {
+    fontFamily: f.sans,
+    fontSize: "11px",
+    fontWeight: 600,
+    color: f.ink(0.45),
+    lineHeight: 1.4,
   } as CSSProperties,
 };

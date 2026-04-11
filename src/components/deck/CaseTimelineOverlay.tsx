@@ -117,58 +117,78 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
         animation: "fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      {/* ── Minimal header: close + title only ── */}
+      {/* ── Header ── */}
       <div className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12">
-        <h2
-          style={{
-            fontFamily: f.sans,
-            fontSize: "clamp(15px, 1.4vw, 18px)",
-            fontWeight: 600,
-            color: f.ink(0.6),
-            letterSpacing: "-0.01em",
-          }}
-        >
-          <span style={{ color: f.ink(0.3) }}>Case Study</span>
-          <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
-          {study.name}
-        </h2>
-
-        {study.link_url && (
-          <a
-            href={study.link_url}
-            target={study.link_url.startsWith("http") ? "_blank" : undefined}
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 transition-all"
+        <div className="flex-1 min-w-0">
+          <h2
             style={{
               fontFamily: f.sans,
-              fontSize: "12px",
-              letterSpacing: "0.04em",
-              color: f.ink(0.3),
-              textDecoration: "none",
-              marginLeft: "auto",
-              marginRight: "16px",
-              flexShrink: 0,
+              fontSize: "clamp(15px, 1.4vw, 18px)",
+              fontWeight: 600,
+              color: f.ink(0.6),
+              letterSpacing: "-0.01em",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
           >
-            Read the full report →
-          </a>
-        )}
+            <span style={{ color: f.ink(0.3) }}>Case Study</span>
+            <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
+            {study.name}
+          </h2>
 
-        <button
-          onClick={onClose}
-          className="flex items-center justify-center rounded-full transition-all duration-200"
-          style={{
-            width: "36px",
-            height: "36px",
-            border: ui.cardBorder,
-            color: f.ink(0.35),
-            background: "transparent",
-          }}
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
+          {/* Issue → Outcome context line */}
+          <p
+            style={{
+              fontFamily: f.sans,
+              fontSize: "clamp(11px, 1vw, 13px)",
+              color: f.ink(0.3),
+              marginTop: "4px",
+              lineHeight: 1.5,
+            }}
+          >
+            {study.issue}
+            {study.outcome && (
+              <>
+                <span style={{ color: f.ink(0.15), margin: "0 6px" }}>→</span>
+                <span style={{ color: f.ink(0.42), fontWeight: 600 }}>{study.outcome}</span>
+              </>
+            )}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+          {study.link_url && (
+            <a
+              href={study.link_url}
+              target={study.link_url.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 transition-all"
+              style={{
+                fontFamily: f.sans,
+                fontSize: "12px",
+                letterSpacing: "0.04em",
+                color: f.ink(0.3),
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+            >
+              Read the full report →
+            </a>
+          )}
+
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center rounded-full transition-all duration-200"
+            style={{
+              width: "36px",
+              height: "36px",
+              border: ui.cardBorder,
+              color: f.ink(0.35),
+              background: "transparent",
+            }}
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       {hasPhases ? (
@@ -188,6 +208,21 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
               background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
             }}
           />
+
+          {/* Phase counter */}
+          <div
+            className="absolute bottom-6 right-8 z-20"
+            style={{
+              fontFamily: f.sans,
+              fontSize: "11px",
+              letterSpacing: "0.08em",
+              fontWeight: 600,
+              color: f.ink(0.2),
+              textTransform: "uppercase",
+            }}
+          >
+            Phase {activePhase + 1} of {totalPhases}
+          </div>
 
           {/* Horizontal scroll container */}
           <div
@@ -211,6 +246,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
               {phases.map((phase, i) => {
                 const isActive = activePhase === i;
                 const isLast = i === totalPhases - 1;
+                const isResults = isLast && totalPhases > 1;
                 // Use impact_stats for this phase, fall back to legacy JSONB stats
                 const phaseStats = statsByPhase.get(phase.title) ?? phase.stats ?? [];
                 const hasStats = phaseStats.length > 0;
@@ -250,7 +286,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                           fontFamily: f.sans,
                           fontSize: "clamp(56px, 6vw, 80px)",
                           fontWeight: 800,
-                          color: f.ink(isActive ? 0.08 : 0.04),
+                          color: f.ink(isActive ? (isResults ? 0.12 : 0.08) : 0.04),
                           lineHeight: 1,
                           letterSpacing: "-0.04em",
                           transition: "color 0.3s ease",
@@ -271,14 +307,17 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                     >
                       <div
                         style={{
-                          width: isActive ? "12px" : "8px",
-                          height: isActive ? "12px" : "8px",
+                          width: isActive ? (isResults ? "14px" : "12px") : "8px",
+                          height: isActive ? (isResults ? "14px" : "12px") : "8px",
                           borderRadius: "999px",
-                          background: isActive ? f.ink(0.5) : f.ink(0.14),
+                          background: isResults
+                            ? (isActive ? f.ink(0.6) : f.ink(0.25))
+                            : (isActive ? f.ink(0.5) : f.ink(0.14)),
                           transition: "all 0.3s ease",
                           flexShrink: 0,
                           position: "relative",
                           zIndex: 2,
+                          boxShadow: isResults && isActive ? `0 0 0 4px ${f.ink(0.08)}` : "none",
                         }}
                       />
                       {!isLast && (
