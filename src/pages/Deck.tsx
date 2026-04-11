@@ -1382,7 +1382,7 @@ const Deck = () => {
               { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
               { name: "Film & TV", desc: "Production, distribution, cultural impact" },
               { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
-              { name: "Sports", desc: "Athletes, leagues, the largest captive audiences" },
+              { name: "Sports & Recreation", desc: "Athletes, leagues, the largest captive audiences" },
               { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
               { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
               { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
