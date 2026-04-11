@@ -201,37 +201,38 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
       const el = document.getElementById("diagnostic-report-capture");
       if (!el) throw new Error("Report element not found");
 
-      // Capture at 2x for crisp text
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#FFFDF9", // match t.cream
-        logging: false,
-      });
+      const sections = el.querySelectorAll("[data-pdf-section]");
+      if (sections.length === 0) throw new Error("No sections found");
 
-      const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfW = pdf.internal.pageSize.getWidth();
       const pdfH = pdf.internal.pageSize.getHeight();
-      const margin = 10;
+      const margin = 12;
       const contentW = pdfW - margin * 2;
-      const imgAspect = canvas.height / canvas.width;
-      const contentH = contentW * imgAspect;
-
-      // Multi-page: slice the image if it's taller than one page
       const pageContentH = pdfH - margin * 2;
-      if (contentH <= pageContentH) {
-        pdf.addImage(imgData, "PNG", margin, margin, contentW, contentH);
-      } else {
-        // How many pages we need
-        const totalPages = Math.ceil(contentH / pageContentH);
-        for (let i = 0; i < totalPages; i++) {
-          if (i > 0) pdf.addPage();
-          // We position the full image, offset upward for each page
-          const yOffset = margin - i * pageContentH;
-          // Clip to page using the page itself as boundary
-          pdf.addImage(imgData, "PNG", margin, yOffset, contentW, contentH);
+      let currentY = margin;
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i] as HTMLElement;
+        const canvas = await html2canvas(section, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#FFFDF9",
+          logging: false,
+        });
+
+        const imgAspect = canvas.height / canvas.width;
+        const imgH = contentW * imgAspect;
+
+        // If this section won't fit on the current page, start a new one
+        if (currentY + imgH > pageContentH + margin && currentY > margin) {
+          pdf.addPage();
+          currentY = margin;
         }
+
+        const imgData = canvas.toDataURL("image/png");
+        pdf.addImage(imgData, "PNG", margin, currentY, contentW, imgH);
+        currentY += imgH + 3; // small gap between sections
       }
 
       pdf.save(
