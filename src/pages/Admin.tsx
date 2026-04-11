@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CaseStudyEditor from "@/components/admin/CaseStudyEditor";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, Link as LinkIcon, Mail, ChevronDown } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
@@ -75,6 +76,7 @@ const Admin = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [articlesOpen, setArticlesOpen] = useState(true);
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(true);
+  const [caseStudiesOpen, setCaseStudiesOpen] = useState(false);
   const { data: settings } = useSiteSettings();
 
   const { data: contacts } = useQuery({
