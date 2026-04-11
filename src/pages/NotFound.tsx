@@ -5,7 +5,7 @@ import { t } from "@/lib/theme";
 const NotFound = () => {
   return (
     <AtmosphericLayout>
-      <div className="flex items-center justify-center h-full w-full">
+      <div className="flex items-center justify-center w-full" style={{ minHeight: "100vh" }}>
         <main className="relative z-20 flex flex-col items-center text-center px-6 gap-6">
           <h1 className="text-[72px] md:text-[120px] font-bold leading-none" style={{ fontFamily: t.sans, color: t.ink(0.08), animation: "fade-up 0.5s ease-out 0.3s both" }}>
             404
