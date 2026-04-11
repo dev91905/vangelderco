@@ -671,7 +671,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 1}>
-        <div ref={r2.ref} className="flex flex-col gap-8">
+        <div ref={r2.ref} className="flex flex-col gap-8 min-h-[70vh] justify-center">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
               Which best describes where you are?
