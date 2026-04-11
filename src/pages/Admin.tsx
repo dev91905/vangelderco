@@ -308,7 +308,7 @@ const Admin = () => {
             }}
           />
           <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>
-            Diagnostic Results
+            Leads
           </span>
           {contacts && contacts.length > 0 && (
             <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ fontFamily: t.sans, color: t.cream, background: t.ink(0.5) }}>
