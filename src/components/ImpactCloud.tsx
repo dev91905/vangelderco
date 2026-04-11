@@ -3,12 +3,11 @@ import { useRef, useState, useEffect } from "react";
 import { t } from "@/lib/theme";
 import { useAggregatedStats, AggregatedStat } from "@/hooks/useAggregatedStats";
 
-const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [hasRevealed, setHasRevealed] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -19,14 +18,13 @@ function useScrollReveal(threshold = 0.15) {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-
   return { ref, hasRevealed };
 }
 
-function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
+function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number; isHero: boolean }) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
-  const delay = index * 0.06;
   const [hovered, setHovered] = useState(false);
+  const delay = index * 0.07;
 
   const href = stat.sourceCapability === "deck"
     ? (stat.sourceSlug || "/diagnostic")
@@ -37,34 +35,34 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
   return (
     <div
       ref={ref}
-      className="snap-start flex-shrink-0"
+      className={isHero ? "col-span-2" : "col-span-1"}
       style={{
         opacity: hasRevealed ? 1 : 0,
-        transform: hasRevealed ? "translateY(0)" : "translateY(12px)",
-        transition: `opacity 0.6s ${EASE_OUT_EXPO} ${delay}s, transform 0.7s ${EASE_OUT_EXPO} ${delay}s`,
+        transform: hasRevealed
+          ? (hovered ? "translateY(-2px)" : "translateY(0)")
+          : "translateY(14px)",
+        transition: `opacity 0.6s ${EASE} ${delay}s, transform 0.5s ${EASE}`,
         willChange: "opacity, transform",
       }}
     >
       <Link
         to={href}
-        className="no-underline block"
+        className="no-underline block h-full"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className="flex flex-col pl-4 pr-6 py-3"
+          className="flex flex-col justify-center h-full pl-4 pr-5 py-4"
           style={{
-            borderLeft: `2px solid ${hovered ? t.ink(0.35) : t.ink(0.12)}`,
-            transform: hovered ? "translateY(-1px)" : "translateY(0)",
-            transition: `border-color 0.3s ${EASE_OUT_EXPO}, transform 0.3s ${EASE_OUT_EXPO}`,
-            minWidth: "140px",
+            borderLeft: `2px solid ${hovered ? t.ink(0.4) : t.ink(0.12)}`,
+            transition: `border-color 0.3s ${EASE}`,
           }}
         >
           <span
             className="font-bold leading-none"
             style={{
               fontFamily: t.sans,
-              fontSize: "clamp(32px, 5vw, 48px)",
+              fontSize: isHero ? "clamp(36px, 6vw, 56px)" : "clamp(24px, 3vw, 32px)",
               color: "hsl(var(--foreground))",
               letterSpacing: "-0.03em",
             }}
@@ -75,7 +73,7 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
             className="mt-1.5"
             style={{
               fontFamily: t.sans,
-              fontSize: "10px",
+              fontSize: isHero ? "11px" : "10px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               color: t.ink(0.35),
@@ -91,34 +89,16 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
 
 export default function ImpactCloud() {
   const { data: stats, isLoading } = useAggregatedStats();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const check = () => {
-      setCanScrollRight(el.scrollWidth - el.scrollLeft - el.clientWidth > 4);
-      setCanScrollLeft(el.scrollLeft > 4);
-    };
-    check();
-    el.addEventListener("scroll", check, { passive: true });
-    const ro = new ResizeObserver(check);
-    ro.observe(el);
-    return () => { el.removeEventListener("scroll", check); ro.disconnect(); };
-  }, [stats]);
 
   if (isLoading) {
     return (
-      <div className="flex gap-8">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="flex-shrink-0" style={{ width: "160px" }}>
-            <div
-              className="rounded animate-pulse"
-              style={{ height: "56px", background: "hsl(var(--foreground) / 0.04)" }}
-            />
-          </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className={`rounded animate-pulse ${i === 0 || i === 3 ? "col-span-2" : "col-span-1"}`}
+            style={{ height: i === 0 || i === 3 ? "88px" : "72px", background: "hsl(var(--foreground) / 0.04)" }}
+          />
         ))}
       </div>
     );
@@ -132,39 +112,19 @@ export default function ImpactCloud() {
     );
   }
 
+  // Positions 0 and 3 are hero cards (span 2 cols)
+  const heroPositions = new Set([0, 3]);
+
   return (
-    <div className="relative">
-      {/* Left fade */}
-      {canScrollLeft && (
-        <div
-          className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, hsl(var(--background)), transparent)" }}
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-x-6 md:gap-y-4">
+      {stats.map((stat, i) => (
+        <StatCard
+          key={`${stat.sourceSlug}-${stat.label}-${i}`}
+          stat={stat}
+          index={i}
+          isHero={heroPositions.has(i)}
         />
-      )}
-
-      {/* Scrollable row */}
-      <div
-        ref={scrollRef}
-        className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide"
-        style={{
-          scrollSnapType: "x mandatory",
-          WebkitOverflowScrolling: "touch",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-        }}
-      >
-        {stats.map((stat, i) => (
-          <StatChip key={`${stat.sourceSlug}-${stat.label}-${i}`} stat={stat} index={i} />
-        ))}
-      </div>
-
-      {/* Right fade */}
-      {canScrollRight && (
-        <div
-          className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, hsl(var(--background)), transparent)" }}
-        />
-      )}
+      ))}
     </div>
   );
 }
