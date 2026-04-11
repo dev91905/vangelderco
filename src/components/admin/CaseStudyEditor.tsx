@@ -59,10 +59,31 @@ const CaseStudyEditor: React.FC = () => {
         .update(rest)
         .eq("id", id);
       if (error) throw error;
+
+      // Sync phase stats to impact_stats table
+      if (study.phases) {
+        for (const phase of study.phases) {
+          const phaseStats = (phase.stats ?? []).map((s, i) => ({
+            label: s.value,
+            description: s.label,
+            case_study_id: id,
+            post_id: null,
+            phase_title: phase.title,
+            visible: true,
+            sort_order: i,
+          }));
+          await syncStats.mutateAsync({
+            caseStudyId: id,
+            phaseTitle: phase.title,
+            stats: phaseStats,
+          });
+        }
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["deck-case-studies-admin"] });
       queryClient.invalidateQueries({ queryKey: ["deck-case-studies"] });
+      queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
       setDirty(false);
     },
   });
