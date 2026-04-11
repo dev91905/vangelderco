@@ -1353,7 +1353,7 @@ const Deck = () => {
             >
               <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "6px" }}>Starting fresh</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>
-                No portfolio, a scattered one, or you're early in the process. We'll walk you through it on a call.
+                No portfolio, a scattered one, or you're early in the process. We offer free consultations to help you get started.
               </p>
             </button>
           </div>
