@@ -103,33 +103,31 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
       <div
         className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12"
       >
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onClose}
-            className="flex items-center justify-center rounded-full transition-all duration-200"
-            style={{
-              width: "36px",
-              height: "36px",
-              border: ui.cardBorder,
-              color: f.ink(0.35),
-              background: "transparent",
-            }}
-          >
-            <X className="h-3.5 w-3.5" />
-          </button>
+        <h2
+          style={{
+            fontFamily: f.sans,
+            fontSize: "clamp(15px, 1.4vw, 18px)",
+            fontWeight: 600,
+            color: f.ink(0.6),
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {study.name}
+        </h2>
 
-          <h2
-            style={{
-              fontFamily: f.sans,
-              fontSize: "clamp(15px, 1.4vw, 18px)",
-              fontWeight: 600,
-              color: f.ink(0.6),
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {study.name}
-          </h2>
-        </div>
+        <button
+          onClick={onClose}
+          className="flex items-center justify-center rounded-full transition-all duration-200"
+          style={{
+            width: "36px",
+            height: "36px",
+            border: ui.cardBorder,
+            color: f.ink(0.35),
+            background: "transparent",
+          }}
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
       </div>
 
       {hasPhases ? (
