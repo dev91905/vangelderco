@@ -9,6 +9,7 @@ export interface AggregatedStat {
   sourceCapability: string;
   sourceType: string;
   sourceCreatedAt: string;
+  sourceId: string;
 }
 
 const MAX_STATS = 6;
@@ -111,7 +112,7 @@ export function useAggregatedStats() {
       }
 
       // Strip internal fields, cap at MAX_STATS
-      return curated.slice(0, MAX_STATS).map(({ sourceId, sortOrder, ...rest }) => rest);
+      return curated.slice(0, MAX_STATS).map(({ sortOrder, ...rest }) => rest);
     },
     staleTime: 1000 * 60 * 5,
   });

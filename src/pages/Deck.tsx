@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import TypewriterHeading from "@/components/deck/TypewriterHeading";
@@ -296,6 +296,22 @@ const Deck = () => {
     },
   });
   const caseStudies = dbCaseStudies && dbCaseStudies.length > 0 ? dbCaseStudies : FALLBACK_CASE_STUDIES;
+
+  /* ─── Deep-link: auto-open case study from ?case=<id> ─── */
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const caseId = searchParams.get("case");
+    if (caseId && caseStudies.length > 0) {
+      const match = caseStudies.find((c) => c.id === caseId);
+      if (match) {
+        setSelectedCase(match);
+        // Clean up the query param
+        searchParams.delete("case");
+        setSearchParams(searchParams, { replace: true });
+      }
+    }
+  }, [searchParams, caseStudies]);
+
   const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
   const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
 
