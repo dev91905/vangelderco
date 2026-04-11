@@ -205,6 +205,42 @@ const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () =>
   </button>
 );
 
+const CompactNavButton = ({ onClick, label, disabled }: { onClick: () => void; label: string; disabled?: boolean }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    style={{
+      fontFamily: f.sans,
+      fontSize: "11px",
+      letterSpacing: "0.05em",
+      textTransform: "uppercase",
+      fontWeight: 600,
+      color: disabled ? f.ink(0.2) : f.ink(0.72),
+      background: disabled ? f.ink(0.03) : "hsl(var(--foreground) / var(--a-bg))",
+      border: `1px solid ${disabled ? f.ink(0.05) : "hsl(var(--foreground) / var(--a-border))"}`,
+      padding: "10px 16px",
+      borderRadius: "999px",
+      cursor: disabled ? "default" : "pointer",
+      transition: "all 180ms ease",
+      opacity: disabled ? 0.5 : 1,
+      minWidth: "84px",
+      textAlign: "center",
+    }}
+    onMouseEnter={(e) => {
+      if (!disabled) {
+        e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))";
+        e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-high))";
+      }
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.background = disabled ? f.ink(0.03) : "hsl(var(--foreground) / var(--a-bg))";
+      e.currentTarget.style.borderColor = disabled ? f.ink(0.05) : "hsl(var(--foreground) / var(--a-border))";
+    }}
+  >
+    {label}
+  </button>
+);
+
 /* ─── Nav row: back + continue together ─── */
 const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: () => void; onNext: () => void; disabled?: boolean; nextLabel?: string; justifyEnd?: boolean }) => (
   <div style={{ display: "flex", alignItems: "center", justifyContent: justifyEnd ? "flex-end" : "flex-start", gap: "4px" }}>
@@ -472,6 +508,8 @@ const Deck = () => {
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
+  const useCompactBottomNav = isMobile && currentFrame >= 8;
+
   /* ─── Per-frame reveal hooks ─── */
   const r1 = useFrameReveal();
   const r2 = useFrameReveal();
@@ -556,23 +594,51 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && (
-        <div className={`fixed bottom-0 left-0 right-0 z-50 pointer-events-none ${currentFrame >= 8 ? "hidden lg:block" : ""}`} style={{ padding: "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)" }}>
-          <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
-            <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
-            {/* Typeform-style thin progress bar */}
-            <div style={{ flex: 1, maxWidth: "280px", height: "3px", borderRadius: "2px", background: f.ink(0.06), overflow: "hidden" }}>
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none"
+          style={{
+            padding: useCompactBottomNav
+              ? "10px 14px calc(14px + env(safe-area-inset-bottom, 0px))"
+              : "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))",
+            background: useCompactBottomNav
+              ? "linear-gradient(to top, hsl(var(--background)) 72%, hsl(var(--background) / 0.94) 88%, transparent 100%)"
+              : "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)",
+          }}
+        >
+          <div className="flex items-center justify-between pointer-events-auto" style={{ gap: useCompactBottomNav ? "10px" : "16px" }}>
+            {useCompactBottomNav ? (
+              <CompactNavButton onClick={() => scrollToFrame(currentFrame - 1)} label="← Back" />
+            ) : (
+              <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+            )}
+
+            <div
+              style={{
+                flex: 1,
+                maxWidth: useCompactBottomNav ? "none" : "280px",
+                height: useCompactBottomNav ? "4px" : "3px",
+                borderRadius: "999px",
+                background: f.ink(0.06),
+                overflow: "hidden",
+              }}
+            >
               <div
                 style={{
                   height: "100%",
                   width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
                   background: "hsl(var(--foreground) / var(--a-mid))",
-                  borderRadius: "2px",
+                  borderRadius: "999px",
                   transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                 }}
               />
             </div>
+
             <div style={{ visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
-              <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+              {useCompactBottomNav ? (
+                <CompactNavButton onClick={() => scrollToFrame(currentFrame + 1)} label="Continue" />
+              ) : (
+                <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+              )}
             </div>
           </div>
         </div>
@@ -1272,7 +1338,7 @@ const Deck = () => {
 
             const renderActionRow = (compact = false) => (
               <div style={{ ...r9.stagger(3, 450, "blur-up"), display: "flex", flexWrap: "wrap", gap: compact ? "8px" : "10px", alignItems: "center" }}>
-                <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
+                {!compact && <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />}
                 <button
                   onClick={resetQuiz}
                   style={{
