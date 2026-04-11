@@ -982,7 +982,7 @@ const Deck = () => {
                 "Top executives across music, film/TV, digital, and news.",
                 "Co-designed around your objectives. Real indicators of power, not vanity metrics.",
                 "Your team learns to evaluate, strategize, and run multi-sector campaigns on its own.",
-                "When the work surfaces a gap, we build the infrastructure that doesn't exist yet.",
+                "Fractional or full-time capacity to help you manage specific initiatives or programs.",
               ][i];
               return (
                 <button
