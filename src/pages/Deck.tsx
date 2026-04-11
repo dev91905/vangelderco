@@ -447,7 +447,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
 
-  /* Wheel handler — never allow mouse wheel to move between frames */
+  /* Wheel handler — lock deck scroll; only internal result panels may scroll */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -457,45 +457,26 @@ const Deck = () => {
       const resultsPanel = target?.closest("[data-results-scroll='true']") as HTMLElement | null;
 
       if (resultsPanel) {
-        const atTop = resultsPanel.scrollTop <= 0;
-        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
+        const canScroll = resultsPanel.scrollHeight > resultsPanel.clientHeight + 1;
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
+        const atTop = resultsPanel.scrollTop <= 0;
+        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
 
-        if ((scrollingDown && atBottom) || (scrollingUp && atTop)) {
+        if (!canScroll || (scrollingDown && atBottom) || (scrollingUp && atTop)) {
           e.preventDefault();
           e.stopPropagation();
         }
         return;
       }
 
-      const frameEl = frameRefs.current[currentFrame];
-      if (!frameEl) return;
-      const frameTop = frameEl.offsetTop;
-      const frameBottom = frameTop + frameEl.scrollHeight;
-      const frameTallerThanViewport = frameEl.scrollHeight > el.clientHeight + 2;
-
-      if (frameTallerThanViewport) {
-        const scrollingDown = e.deltaY > 0;
-        const scrollingUp = e.deltaY < 0;
-        const atFrameTop = el.scrollTop <= frameTop;
-        const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
-        const atFrameBottom = el.scrollTop >= maxScrollTop - 1;
-
-        if ((scrollingDown && atFrameBottom) || (scrollingUp && atFrameTop)) {
-          e.preventDefault();
-        }
-        return;
-      }
-
       e.preventDefault();
-      const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
-      el.scrollTop = Math.min(maxScrollTop, Math.max(frameTop, el.scrollTop));
+      e.stopPropagation();
     };
 
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
-  }, [currentFrame]);
+  }, []);
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
@@ -546,7 +527,7 @@ const Deck = () => {
         height: "100dvh",
         width: "100vw",
         overflowX: "hidden",
-        overflowY: "auto",
+        overflowY: "hidden",
         overscrollBehaviorY: "none",
         scrollSnapType: "none",
         display: "flex",
@@ -760,9 +741,9 @@ const Deck = () => {
           className="flex flex-col"
           style={{
             width: "100%",
-            minHeight: quizRevealed ? "auto" : "100%",
-            justifyContent: quizRevealed ? "flex-start" : "center",
-            paddingBottom: quizRevealed ? "clamp(128px, 18vh, 180px)" : "0",
+            minHeight: "100%",
+            justifyContent: "center",
+            paddingBottom: "0",
           }}
         >
           {/* Header — only shown during quiz, not results */}
@@ -903,7 +884,7 @@ const Deck = () => {
           {quizRevealed && (() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
             return (
-              <div style={{ width: "100%", animation: "fade-up 0.5s ease-out" }}>
+              <div style={{ width: "100%", minHeight: "100%", animation: "fade-up 0.5s ease-out", display: "flex", alignItems: "center" }}>
                 <div
                   className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)]"
                   style={{
