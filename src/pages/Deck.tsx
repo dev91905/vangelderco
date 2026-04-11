@@ -35,7 +35,7 @@ const PAIN_POINTS = [
   { id: "evaluate", short: "Funding comms, no strategy", detail: "Money goes out the door, but nothing seems to click." },
   { id: "access", short: "Limited channels", detail: "Op-eds, paid ads, social on repeat — no real reach into media or culture." },
   { id: "measurement", short: "Not sure what to measure", detail: "We need help communicating about what's working (or not) and why." },
-  { id: "expertise", short: "No expertise in-house", detail: "Nobody on staff has commercial media experience — when things break, we guess." },
+  { id: "expertise", short: "No expertise in-house", detail: "When things break, we don't have direct insight to explain why." },
 ];
 
 /* ─── Quiz rows — 5 dimensions of strategic communications ─── */
