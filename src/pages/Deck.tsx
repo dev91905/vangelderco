@@ -144,18 +144,18 @@ const CAPABILITIES = [
 
 /* ─── Metrics ─── */
 const ALL_METRICS = [
-  "Impressions and reach",
-  "Video views (3-second scroll-bys)",
-  "Media mentions",
+  "Media placements",
+  "Audience reach",
   "Social engagement",
-  "Website traffic",
-  '"Awareness"',
-  "New sectors at the table",
-  "Decision-makers convened",
-  "Coalition growth",
-  "Policy outcomes",
+  "Message recall",
+  "Earned media value",
+  "Grantee output volume",
+  "New people at the table",
+  "Sectors aligned",
+  "Narrative adoption",
+  "Leaders developed",
+  "Policy moved",
   "Capital unlocked",
-  "Infrastructure outlasting the campaign",
 ];
 
 /* ─── Case studies ─── */
@@ -1239,17 +1239,17 @@ const Deck = () => {
         <div ref={r6.ref} className="flex flex-col lg:flex-row gap-16 w-full">
           <div className="lg:w-[40%] flex flex-col justify-center" style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              How do you measure your communications today?
+              What does your portfolio measure?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
-              Check everything your grantees report on today. Be honest — there are no wrong answers.
+              Check what your grantees report on.
             </p>
           </div>
 
           <div className="lg:w-[60%] grid grid-cols-1 md:grid-cols-2 gap-3">
             {ALL_METRICS.map((metric, i) => {
               const isChecked = metricsChecked.includes(metric);
-              const isVanity = i < 6; // first 6 are vanity
+              
               const delay = 400 + i * 60;
               return (
                 <button

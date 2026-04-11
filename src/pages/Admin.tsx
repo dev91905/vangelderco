@@ -312,11 +312,33 @@ const ContactsFeed = () => {
                         <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.5) }}>{c.capabilities_ranked.join(", ")}</p>
                       </div>
                     )}
-                    {c.metrics_checked && c.metrics_checked.length > 0 && (
-                      <div>
-                        <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.5), marginBottom: "2px" }}>Metrics tracked</p>
-                        <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.5) }}>{c.metrics_checked.join(", ")}</p>
-                      </div>
+                    {c.metrics_checked != null && (
+                      (() => {
+                        const ALL_METRICS = [
+                          "Media placements", "Audience reach", "Social engagement", "Message recall",
+                          "Earned media value", "Grantee output volume", "New people at the table",
+                          "Sectors aligned", "Narrative adoption", "Leaders developed", "Policy moved", "Capital unlocked",
+                        ];
+                        const checked = c.metrics_checked || [];
+                        const notMeasuring = ALL_METRICS.filter(m => !checked.includes(m));
+                        const measuring = ALL_METRICS.filter(m => checked.includes(m));
+                        return (
+                          <div className="flex flex-col gap-2">
+                            {notMeasuring.length > 0 && (
+                              <div>
+                                <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 700, color: t.ink(0.7), marginBottom: "2px" }}>Not yet measuring</p>
+                                <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.6), fontWeight: 500 }}>{notMeasuring.join(", ")}</p>
+                              </div>
+                            )}
+                            {measuring.length > 0 && (
+                              <div>
+                                <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.4), marginBottom: "2px" }}>Currently measuring</p>
+                                <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.4) }}>{measuring.join(", ")}</p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()
                     )}
                     {c.engagement_path && (
                       <div>
