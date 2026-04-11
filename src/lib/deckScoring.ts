@@ -49,8 +49,6 @@ export function calculateReadinessScore(input: DeckDiagnosticInput): number {
   const traditionalPicks = input.quizAnswers.filter(a => a.picked === "traditional").length;
   score -= traditionalPicks * 8;
 
-  // All three domains selected: -5
-  if (input.selectedDomains.length >= 3) score -= 5;
 
   // Capabilities: -2 per capability ranked (they need more = worse shape)
   score -= Math.min(input.capabilitiesRanked.length * 2, 12);
