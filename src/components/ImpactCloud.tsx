@@ -52,9 +52,10 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className="flex flex-col justify-center h-full pl-4 pr-5 py-4"
+          className={`flex flex-col justify-center h-full rounded-xl ${isHero ? "px-6 py-5" : "px-5 py-4"}`}
           style={{
-            borderLeft: `2px solid ${hovered ? t.ink(0.4) : t.ink(0.12)}`,
+            background: "transparent",
+            border: `1px solid ${hovered ? t.ink(0.25) : t.ink(0.15)}`,
             transition: `border-color 0.3s ${EASE}`,
           }}
         >
@@ -62,8 +63,8 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
             className="font-bold leading-none"
             style={{
               fontFamily: t.sans,
-              fontSize: isHero ? "clamp(36px, 6vw, 56px)" : "clamp(24px, 3vw, 32px)",
-              color: "hsl(var(--foreground))",
+              fontSize: isHero ? "clamp(36px, 6vw, 56px)" : "clamp(22px, 3vw, 30px)",
+              color: t.ink(0.85),
               letterSpacing: "-0.03em",
             }}
           >
@@ -73,10 +74,10 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
             className="mt-1.5"
             style={{
               fontFamily: t.sans,
-              fontSize: isHero ? "11px" : "10px",
+              fontSize: "10px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: t.ink(0.35),
+              color: t.ink(0.4),
             }}
           >
             {stat.description}
