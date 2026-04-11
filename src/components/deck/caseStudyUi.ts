@@ -9,8 +9,8 @@ export const caseStudyUi = {
   cardSurfaceHover: f.ink(0.035),
   cardBorder: `1px solid ${f.ink(0.08)}`,
   cardBorderStrong: `1px solid ${f.ink(0.14)}`,
-  rail: f.ink(0.1),
-  railActive: f.ink(0.4),
+  rail: f.ink(0.08),
+  railActive: f.ink(0.32),
   node: f.ink(0.14),
   nodeActive: f.ink(0.42),
   title: {
@@ -18,7 +18,7 @@ export const caseStudyUi = {
     fontSize: "clamp(18px, 1.9vw, 24px)",
     fontWeight: 700,
     color: f.ink(0.84),
-    lineHeight: 1.25,
+    lineHeight: 1.24,
     letterSpacing: "-0.02em",
   } as CSSProperties,
   body: {
@@ -43,12 +43,6 @@ export const caseStudyUi = {
     fontWeight: 600,
     color: f.ink(0.22),
   } as CSSProperties,
-  outcome: {
-    fontFamily: f.sans,
-    fontSize: "13px",
-    color: f.ink(0.28),
-    lineHeight: 1.6,
-  } as CSSProperties,
   statValue: {
     fontFamily: f.sans,
     fontSize: "clamp(16px, 1.6vw, 20px)",
@@ -56,11 +50,5 @@ export const caseStudyUi = {
     color: f.ink(0.84),
     letterSpacing: "-0.02em",
     lineHeight: 1,
-  } as CSSProperties,
-  rule: {
-    width: "28px",
-    height: "1px",
-    background: f.ink(0.12),
-    borderRadius: "999px",
   } as CSSProperties,
 };
