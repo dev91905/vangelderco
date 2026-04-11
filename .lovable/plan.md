@@ -1,46 +1,27 @@
 
 
-# Fix: Impact Stat Links → Correct Destinations + Password Protection
+# Fix: Quiz Headline Flash Before Slide 4 Transition
 
 ## Problem
 
-The `StatCard` link builder in `ImpactCloud.tsx` constructs URLs like `/cross-sector/building-power-in-the-permian-basin` — but no such routes exist. The app only has `/post/:slug` for articles. For deck case studies with no `link_url`, it falls back to `/diagnostic`.
+When the user clicks the last quiz answer, there's an 800ms window where the "Which approach do you gravitate toward?" headline is visible alone (no quiz cards beneath it) before the scroll to Slide 4 fires. 
 
-## What needs to happen
+**Root cause**: After the last answer, `quizStep` is set to `QUIZ_ROWS.length` which hides the quiz cards (`quizStep < QUIZ_ROWS.length` fails), but `quizRevealed` stays `false` so the headline remains visible. The headline sits alone for ~800ms until `scrollToFrame(3)` fires.
 
-### 1. Fix link generation in `ImpactCloud.tsx` (line 40-44)
+## Fix
 
-Change the href logic:
+In `handleQuizPick` (line 487-490 of `Deck.tsx`), hide the heading immediately when the last question is answered by also setting `quizRevealed = true` alongside `quizStep = QUIZ_ROWS.length`. Since `quizRevealed` gates the heading visibility (`!quizRevealed`), setting it to `true` at the same time will hide the headline instantly, preventing the flash.
 
-- **For capability_posts** (`sourceCapability !== "deck"`): Always link to `/post/{slug}`. The `PostDetail` page already handles password gating via the `verify-post-password` edge function.
-- **For deck_case_studies** (`sourceCapability === "deck"`): Link to `link_url` if set, otherwise `/diagnostic`.
-
-```text
-Before:  /cross-sector/building-power-in-the-permian-basin  → 404
-After:   /post/building-power-in-the-permian-basin          → PostDetail (with password gate if needed)
+**One-line addition** at line 489:
+```typescript
+setQuizStep(QUIZ_ROWS.length);
+setQuizRevealed(true);  // ← add this line
+setTimeout(() => scrollToFrame(3), 800);
 ```
 
-### 2. Password protection is already wired
-
-The backend is complete:
-- `capability_posts.password` column exists
-- `verify-post-password` edge function handles both post-level and global passwords
-- `PostDetail` page checks `usePostHasPassword` and shows `PasswordGateWrapper`
-- Admin editor (`AdminEditor.tsx`) has password field on the meta bar
-- Admin panel (`Admin.tsx`) has global password management
-
-No backend or admin changes needed — password protection works end-to-end once the links point to `/post/:slug`.
-
-### 3. Include `sourceType` in aggregated stats
-
-Add `sourceType` (from `capability_posts.type`) to `AggregatedStat` so future link logic can distinguish article types if needed. This is a minor data addition in `useAggregatedStats.ts`.
-
-### Summary of file changes
+This is safe because `quizRevealed` is only checked for header/card visibility on Frame 3 — and is already reset to `false` in the "retake" handler.
 
 | File | Change |
 |------|--------|
-| `src/components/ImpactCloud.tsx` | Fix href: posts → `/post/{slug}`, deck → `link_url \|\| /diagnostic` |
-| `src/hooks/useAggregatedStats.ts` | Add `sourceType` field from capability_posts |
-
-One-line fix at the core — the password gate, edge function, and admin panels are already in place.
+| `src/pages/Deck.tsx` | Add `setQuizRevealed(true)` after `setQuizStep(QUIZ_ROWS.length)` on line 489 |
 
