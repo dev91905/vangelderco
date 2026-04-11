@@ -326,3 +326,11 @@
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--foreground) / 0.12) transparent;
 }
+
+/* Mobile deck frame internal scroll */
+.deck-mobile-content::-webkit-scrollbar {
+  display: none;
+}
+.deck-mobile-content {
+  scrollbar-width: none;
+}
