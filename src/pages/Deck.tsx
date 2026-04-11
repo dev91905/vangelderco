@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import TypewriterHeading from "@/components/deck/TypewriterHeading";
