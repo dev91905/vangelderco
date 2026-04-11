@@ -81,7 +81,14 @@ const Work: React.FC = () => {
         style={{ padding: "20px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}
       >
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            const from = (location.state as { from?: string })?.from;
+            if (from) {
+              navigate(from);
+            } else {
+              navigate(-1);
+            }
+          }}
           style={{
             fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em",
             color: f.ink(0.3), background: "none", border: "none", cursor: "pointer",
@@ -90,7 +97,7 @@ const Work: React.FC = () => {
           onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
           onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
         >
-          ← Back
+          ← {(location.state as { returnLabel?: string })?.returnLabel || "Back"}
         </button>
         <button
           onClick={() => navigate("/")}

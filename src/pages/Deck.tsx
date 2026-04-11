@@ -1395,7 +1395,7 @@ const Deck = () => {
                 {/* Link to case studies after form */}
                 <button
                   type="button"
-                  onClick={() => navigate("/work")}
+                  onClick={() => navigate("/work", { state: { from: "/diagnostic", returnLabel: "Back to diagnostic" } })}
                   style={{
                     ...r10.stagger(3, 700, "blur-up"),
                     fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
