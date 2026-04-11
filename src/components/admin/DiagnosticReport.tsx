@@ -378,17 +378,6 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
             Let's discuss how to move your portfolio from where it is to where it needs to be.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <a
-              href={`mailto:${data.contactEmail}`}
-              style={{
-                fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
-                padding: "8px 20px", borderRadius: "999px",
-                background: t.ink(0.88), color: t.cream, textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
-              Get in touch
-            </a>
             {data.bookingLink && (
               <a
                 href={data.bookingLink}
@@ -397,12 +386,24 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
                 style={{
                   fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
                   padding: "8px 20px", borderRadius: "999px",
-                  color: t.ink(0.5), border: `1px solid ${t.ink(0.12)}`,
-                  textDecoration: "none", display: "inline-block",
+                  background: t.ink(0.88), color: t.cream, textDecoration: "none",
+                  display: "inline-block",
                 }}
               >
                 Book a call
               </a>
+            )}
+            <a
+              href={`mailto:${data.contactEmail}`}
+              style={{
+                fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
+                padding: "8px 20px", borderRadius: "999px",
+                color: t.ink(0.5), border: `1px solid ${t.ink(0.12)}`,
+                textDecoration: "none", display: "inline-block",
+              }}
+            >
+              Get in touch
+            </a>
             )}
           </div>
         </div>
