@@ -1,108 +1,106 @@
 
 
-# Case Study Timeline Overlay — Full Redesign
+# Copy Overhaul — Implementing Claude's Final Audit
 
-## What's wrong now
+All changes are text/copy replacements. No structural or layout changes needed — the sections, components, and order are mostly correct already. Here's every change mapped to the document.
 
-The case study popup is a narrow `max-w-2xl` dialog with plain paragraphs stacked vertically. No visual hierarchy, no timeline, no sense of progression. The content is hardcoded as JSX inside `CASE_STUDIES` in `Deck.tsx`. There's no way for an admin to edit or create new case studies without touching code.
+---
 
-## The new experience
+## Changes by File
 
-### 1. Full-screen overlay instead of a dialog
+### 1. `src/pages/Index.tsx`
 
-Replace the `Dialog` with a full-viewport overlay (100vw × 100dvh, z-50) that slides up over the deck. Dark semi-transparent backdrop. Close button top-right. The overlay is widescreen — content lives in a horizontally scrollable timeline that fills the width.
+**Section 2 — Our Practice (line 379)**
+- Change `"We build next-generation strategic communications portfolios."` → `"We build advanced strategic communications portfolios."`
 
-### 2. Interactive horizontal timeline
+**Section 2 — Our Practice (line 392)**
+- Change `"...who want their portfolio to hit harder."` → `"...who want their work to hit harder."`
 
-The overlay contains a **horizontal timeline** the user scrolls through (mouse wheel maps to horizontal scroll, or drag/swipe on mobile). Each phase is a "node" on a continuous line:
+**Section 2 — Body copy (line 401)**
+- Change `"Cultural strategy, media-based organizing, and campaign development, so your grants don't just fund content — they build power."` → `"Cultural strategy, media-based organizing, and campaign development — so your grants don't just fund content. They build power."`
 
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│                                                                     │
-│  ● Issue        ● Blind Spot      ● Brief         ● Research       │
-│  ─────────────────────────────────────────────────────────────────  │
-│                    ● Coalition      ● Pilots        ● Results       │
-│                                                                     │
-│  [phase card]   [phase card]    [phase card]    [phase card]        │
-└─────────────────────────────────────────────────────────────────────┘
-```
+**Section 3 — Capabilities array (lines 27-48)** — Replace all three capability descriptions:
+- Cultural Strategy `sub`: `"We don't just push your message out."` / `detail`: `"We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence."`
+- Cross-Sector `sub`: `"Nothing moves until multiple sectors are pushing on the same thing."` / `detail`: `"We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it."`
+- Deep Organizing `sub`: `"Campaigns create momentum. We make sure it lasts."` / `detail`: `"We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise."`
 
-- A thin horizontal line runs across the viewport with circular nodes at each phase
-- The **active phase** node pulses subtly; others are dormant dots
-- Below each node: a card with the phase title, date range, and description
-- As you scroll horizontally, phases animate in with staggered fade-up — the line "draws" itself progressively
-- Stat chips appear at the final "Results" node with the outcome metrics
-- The connecting line uses a gradient that intensifies as you progress — a visual metaphor for momentum building
+**Section 4 ↔ 6 — Swap Field Notes and Diagnostic CTA positions**
+- Move the Field Notes section (currently lines 631-657) ABOVE the Intake CTA section (currently lines 510-578)
+- This means proof (Field Notes with real numbers) comes before the ask (Diagnostic CTA)
 
-### 3. Data-driven from a structured format
+**Section 5 — Network (lines 580-628)** — Major changes:
+- Cut `NETWORK_SECTORS` from 18 items to 9: `"News", "Music", "Film & TV", "Digital Creators", "Sports", "Podcasts & Streaming", "Advertising & Brands", "Tech & Platforms", "Organized Communities"`
+- Change heading from `"Our Network"` → keep as section label but update body
+- Change body from `"We build with a community of over 400+ practitioners..."` → `"We come from the industries your grantees need to reach."`
+- Add sub-body: `"Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside."`
+- Make it a static 3×3 grid with descriptions (matching the doc's card descriptions), NOT interactive/selectable pills
+- Each card gets a short description per the doc
 
-Replace the hardcoded JSX `content` field in `CASE_STUDIES` with a structured `phases` array:
+**Section 6 — Hero scroll indicator (line ~340-350)**
+- Add a subtle scroll indicator (down arrow or "Scroll" text) below "By Referral Only"
 
-```typescript
-type CasePhase = {
-  title: string;       // "Research" / "Coalition & Cultural Strategy"
-  date?: string;       // "Jan–Mar 2023"
-  description: string; // The narrative text
-  stats?: { value: string; label: string }[];  // Optional metrics for this phase
-};
+**Section 7 — Footer (lines 659-688)**
+- Remove the duplicate `"By Referral Only"` text at the bottom. Keep just "Let's Chat →"
 
-type CaseStudy = {
-  name: string;
-  issue: string;
-  outcome: string;
-  phases: CasePhase[] | null;  // null = "coming soon"
-};
-```
+### 2. `src/pages/CulturalStrategy.tsx` (line 8)
+- Change description to: `"We don't just push your message out. We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence."`
 
-The Clean Energy Workforce case study gets converted from its current paragraph format into ~6 phases (Issue → Blind Spot → Brief → Research → Coalition Strategy → Pilots → Results). Every other case study stays `phases: null` and shows "Coming soon" in the overlay.
+### 3. `src/pages/CrossSector.tsx` (line 8)
+- Change description to: `"Nothing moves until multiple sectors are pushing on the same thing. We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it."`
 
-### 4. Admin-editable via the content manager
+### 4. `src/pages/DeepOrganizing.tsx` (line 8)
+- Change description to: `"Campaigns create momentum. We make sure it lasts. We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise."`
 
-Add a **"Deck Case Studies"** section to the admin panel (or a dedicated editor route) where the admin can:
+### 5. `src/pages/Deck.tsx`
 
-- See all case studies listed
-- Click one to edit its phases inline
-- Each phase is an editable card: title, date, description, optional stats
-- Drag to reorder phases
-- Add/remove phases with + / × buttons
-- Changes save to a new `deck_case_studies` database table
-- The timeline reconstructs itself live as phases are added/removed/reordered
+**Slide 1 — Intro (lines 557-625)**
+- Change heading from `"Let's diagnose your communications."` → `"Find the gaps before your opponents do."`
+- Change body from the current two-part text → `"A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table."`
+- Change button from `"Get started →"` to `"Get Started →"`
+- Change time estimate from `"~5 minutes"` → `"~3 minutes"`
 
-**Database table: `deck_case_studies`**
+**Slide 8 — Sectors (lines 1342-1395)**
+- Update heading: already correct (`"We come from the industries your grantees need to reach."`)
+- Update body: already has `"Select the ones you're interested in."`
+- Add the sub-body line: `"Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside."`
+- Sector cards: Update names and descriptions to match doc exactly:
+  - `"News Media"` → `"News"` with desc `"Local and national — how stories get placed and why"`
+  - `"Music Industry"` → `"Music"` with desc `"Artists, labels, tours, festivals, venues"`
+  - `"Film & TV"` stays, desc `"Production, distribution, cultural impact"`
+  - `"Digital Creators"` stays, desc `"Creator economy — where opinion forms now"`
+  - `"Sports & Recreation"` → `"Sports"` with desc `"Athletes, leagues, the largest captive audiences"`
+  - `"Podcasts & Streaming"` stays, desc `"Long-form audio, gaming, live streaming"` → update to match: `"Long-form audio, gaming, live streaming"` (already matches)
+  - `"Advertising & Brands"` stays, desc `"Commercial partnerships at scale"`
+  - `"Tech Platforms"` → `"Tech & Platforms"` with desc `"The infrastructure that decides what gets seen"`
+  - `"Interest Groups"` → `"Organized Communities"` with desc `"Faith, labor, campuses, veterans, defense"`
+- Also update `ALL_SECTORS_LIST` (line 336) to match the new 9 sector names
 
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid | PK |
-| name | text | Case study name |
-| issue | text | One-line issue description |
-| outcome | text | One-line outcome |
-| sort_order | integer | Display order in marquee |
-| phases | jsonb | Array of `CasePhase` objects |
-| is_published | boolean | Show in deck or not |
-| created_at | timestamptz | Default now() |
+**Slide 9 — CTA (lines 1396-1478)**
+- Heading: already `"Let's talk."` ✓
+- Body: already matches ✓
+- Button: already `"Submit"` ✓
+- Confirmation: already matches ✓
 
-RLS: anon SELECT where `is_published = true`, authenticated full CRUD.
+---
 
-### 5. Visual design details
+## Summary of All Changes
 
-- **Typography**: Inter for all text. Phase titles at 20px/700. Descriptions at 15px/400. Dates in uppercase 11px tracking-wide.
-- **Colors**: Warm palette from design tokens. The timeline line is `ink(0.08)` with nodes at `ink(0.3)`, active node at `ink(0.7)`.
-- **Animation**: Each phase card fades up + slides right as it enters the viewport (IntersectionObserver on horizontal scroll). The connecting line segment draws with a CSS `stroke-dashoffset` animation.
-- **Results node**: Larger card with stat chips matching the published case study format. Subtle background tint to signal completion.
-- **"Coming soon" state**: For cases without phases, the overlay shows the case name, issue, outcome, and a minimal "Full timeline coming soon" message centered in the viewport.
+| # | Change | File |
+|---|--------|------|
+| 1 | "next-generation" → "advanced" | Index.tsx |
+| 2 | "portfolio" → "work" in Our Practice | Index.tsx |
+| 3 | Fix em-dash/period in body copy | Index.tsx |
+| 4 | Replace all 3 capability descriptions | Index.tsx |
+| 5 | Swap Field Notes above Diagnostic CTA | Index.tsx |
+| 6 | Network: 18→9 sectors, new heading/body, static grid with descriptions | Index.tsx |
+| 7 | Add scroll indicator to hero | Index.tsx |
+| 8 | Remove duplicate "By Referral Only" from footer | Index.tsx |
+| 9 | Update Cultural Strategy description | CulturalStrategy.tsx |
+| 10 | Update Cross-Sector description | CrossSector.tsx |
+| 11 | Update Deep Organizing description | DeepOrganizing.tsx |
+| 12 | Deck intro: new heading, body, time estimate | Deck.tsx |
+| 13 | Deck sectors: update card names/descriptions, add sub-body | Deck.tsx |
+| 14 | Update ALL_SECTORS_LIST to match new names | Deck.tsx |
 
-## Files to create/edit
-
-- **`src/components/deck/CaseTimelineOverlay.tsx`** — New component: the full-screen overlay with horizontal scrolling timeline
-- **`src/pages/Deck.tsx`** — Replace `Dialog` lightbox with `CaseTimelineOverlay`, convert `CASE_STUDIES` content to structured phases format, fetch from DB with fallback to hardcoded data
-- **`src/index.css`** — Add timeline drawing animation keyframes
-- **`src/pages/Admin.tsx`** — Add "Deck Case Studies" collapsible section
-- **`src/components/admin/CaseStudyEditor.tsx`** — New component: inline editor for case study phases (add/remove/reorder/edit)
-- **Database migration** — Create `deck_case_studies` table with RLS policies
-
-## What stays the same
-
-- The marquee gallery on slide 10 (just built) — untouched
-- All other deck frames and interactions
-- The published case study pages on the main site (separate system)
+No database changes. No new components. Pure copy update across 5 files.
 
