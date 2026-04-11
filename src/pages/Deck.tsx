@@ -291,7 +291,6 @@ const Deck = () => {
         issue: row.issue,
         outcome: row.outcome,
         phases: row.phases as CaseStudyData["phases"],
-        link_url: row.link_url as string | null,
       })) as CaseStudyData[];
     },
   });
