@@ -602,7 +602,7 @@ const Index = () => {
                 </p>
 
                 <Link
-                  to="/deck"
+                  to="/diagnostic"
                   className="group inline-flex items-center gap-2.5 no-underline rounded-full self-start"
                   style={{
                     fontFamily: t.sans,
@@ -700,7 +700,7 @@ const Index = () => {
       <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
           <Link
-            to="/deck"
+            to="/diagnostic"
             className="inline-flex items-center gap-2 no-underline text-[11px] tracking-[0.18em] uppercase"
             style={{
               fontFamily: t.sans,
