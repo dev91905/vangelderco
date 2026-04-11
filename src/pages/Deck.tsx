@@ -9,12 +9,8 @@ import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
+import { useQuery } from "@tanstack/react-query";
 
 const TOTAL_FRAMES = 11; // removed Frame 10 (The Promise) and Frame 5 (Domains)
 
@@ -158,69 +154,18 @@ const ALL_METRICS = [
   "Capital unlocked",
 ];
 
-/* ─── Case studies ─── */
-const StatChip = ({ value, lbl }: { value: string; lbl: string }) => (
-  <div className="flex flex-col px-4 py-3 rounded-lg" style={{ background: "hsl(var(--foreground))", border: "none" }}>
-    <span style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{value}</span>
-    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px", color: "hsl(var(--primary-foreground) / 0.7)" }}>{lbl}</span>
-  </div>
-);
-
-const CASE_STUDIES: { name: string; issue: string; outcome: string; content: React.ReactNode | null }[] = [
-  {
-    name: "Clean Energy Workforce",
-    issue: "Skilled trades bottleneck threatening federal climate policy",
-    outcome: "40K reached, 4,000 workers registered, model now replicating nationally",
-    content: (
-      <div className="flex flex-col gap-6">
-        <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 26px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.4 }}>
-          Closing the clean energy workforce gap through culture, coalitions, and deep organizing.
-        </p>
-        <div className="flex flex-col gap-4">
-          {[
-            { l: "Issue", text: "After major federal climate legislation, philanthropy focused on consumer adoption — heat pumps, solar, tax credits. Blind spot: not enough skilled workers to install any of it." },
-            { l: "What the donors missed", text: "Workers already in trades loved their jobs — high pay, no student debt, AI-proof, portable. The public didn't know these careers existed." },
-            { l: "What we were asked to do", text: "Increase interest in skilled trades. Get people into jobs. Build a constituency of workers economically benefiting from the policy." },
-          ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
-              <strong style={{ color: f.ink(0.85) }}>{item.l}:</strong> {item.text}
-            </p>
-          ))}
-        </div>
-        <div style={{ width: "40px", height: "1px", background: f.ink(0.1) }} />
-        <div className="flex flex-col gap-4">
-          {[
-            { l: "Phase 1 — Research", text: "Interviewed funders, industry leaders, labor organizers, existing trades workers, the general public, and cultural experts." },
-            { l: "Phase 2 — Coalition & cultural strategy", text: "Key finding: climate was not what motivated workers — pay, debt avoidance, and career stability were." },
-            { l: "Phase 3 — Pilots", text: "Free concerts in four cities. Artists matched to each market via streaming data and voter files." },
-          ].map((item, i) => (
-            <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), lineHeight: 1.7 }}>
-              <strong style={{ color: f.ink(0.85) }}>{item.l}.</strong> {item.text}
-            </p>
-          ))}
-        </div>
-        <div style={{ width: "40px", height: "1px", background: f.ink(0.1) }} />
-        <div className="flex flex-wrap gap-3 mt-2">
-          <StatChip value="40K" lbl="Reached" />
-          <StatChip value="4,000" lbl="Registered" />
-          <StatChip value="10–11%" lbl="Conversion Rate" />
-          <StatChip value="$40–80" lbl="Cost per Lead" />
-        </div>
-        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: f.ink(0.55), marginTop: "4px", lineHeight: 1.7 }}>
-          Pilot data informed local workforce policy. Capital unlocked from community foundations and new donors.
-        </p>
-      </div>
-    ),
-  },
-  { name: "Facial Recognition Ban", issue: "First-ever ban on facial recognition technology", outcome: "Legislation passed — New York State", content: null },
-  { name: "Faithless Electors", issue: "Constitutional vulnerability in the Electoral College", outcome: "Supreme Court decision", content: null },
-  { name: "Iceland Whaling", issue: "Commercial hunting of endangered fin whales", outcome: "185 fin whales saved", content: null },
-  { name: "Ireland Fracking Ban", issue: "Fracking expansion in Ireland", outcome: "National ban passed", content: null },
-  { name: "Gulf of Mexico Lease Sales", issue: "Fossil fuel lease sales in federal waters", outcome: "Lease sales blocked", content: null },
-  { name: "Brazil Indigenous Rights", issue: "Anti-indigenous legislation in the Brazilian legislature", outcome: "Legislation blocked", content: null },
-  { name: "UN Biodiversity Targets", issue: "Weak international biodiversity framework", outcome: "Stronger targets adopted — 2022", content: null },
-  { name: "Clean Energy Executive Action", issue: "Stalled federal clean energy production", outcome: "Executive action secured — national security framing", content: null },
-  { name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", content: null },
+/* ─── Fallback case studies (used when DB is empty) ─── */
+const FALLBACK_CASE_STUDIES: CaseStudyData[] = [
+  { id: "fb-0", name: "Clean Energy Workforce", issue: "Skilled trades bottleneck threatening federal climate policy", outcome: "40K reached, 4,000 workers registered, model now replicating nationally", phases: null },
+  { id: "fb-1", name: "Facial Recognition Ban", issue: "First-ever ban on facial recognition technology", outcome: "Legislation passed — New York State", phases: null },
+  { id: "fb-2", name: "Faithless Electors", issue: "Constitutional vulnerability in the Electoral College", outcome: "Supreme Court decision", phases: null },
+  { id: "fb-3", name: "Iceland Whaling", issue: "Commercial hunting of endangered fin whales", outcome: "185 fin whales saved", phases: null },
+  { id: "fb-4", name: "Ireland Fracking Ban", issue: "Fracking expansion in Ireland", outcome: "National ban passed", phases: null },
+  { id: "fb-5", name: "Gulf of Mexico Lease Sales", issue: "Fossil fuel lease sales in federal waters", outcome: "Lease sales blocked", phases: null },
+  { id: "fb-6", name: "Brazil Indigenous Rights", issue: "Anti-indigenous legislation in the Brazilian legislature", outcome: "Legislation blocked", phases: null },
+  { id: "fb-7", name: "UN Biodiversity Targets", issue: "Weak international biodiversity framework", outcome: "Stronger targets adopted — 2022", phases: null },
+  { id: "fb-8", name: "Clean Energy Executive Action", issue: "Stalled federal clean energy production", outcome: "Executive action secured — national security framing", phases: null },
+  { id: "fb-9", name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", phases: null },
 ];
 
 
