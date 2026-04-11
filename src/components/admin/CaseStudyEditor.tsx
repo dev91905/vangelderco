@@ -612,14 +612,14 @@ const CaseStudyEditor: React.FC = () => {
                                 </div>
 
                                 {/* Date + Description */}
-                                <div className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-3 pl-6">
+                                <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 pl-8">
                                   <div>
                                     <label style={labelStyle}>Date</label>
                                     <input
                                       value={phase.date || ""}
                                       onChange={(e) => updatePhase(pi, "date", e.target.value)}
                                       placeholder="e.g. Jan–Mar 2023"
-                                      style={{ ...inputStyle, fontSize: "12px" }}
+                                      style={{ ...inputStyle, fontSize: "13px" }}
                                     />
                                   </div>
                                   <div>
@@ -627,58 +627,61 @@ const CaseStudyEditor: React.FC = () => {
                                     <textarea
                                       value={phase.description}
                                       onChange={(e) => updatePhase(pi, "description", e.target.value)}
-                                      rows={2}
+                                      rows={3}
                                       style={{ ...inputStyle, resize: "vertical", lineHeight: "1.65" }}
                                     />
                                   </div>
                                 </div>
 
                                 {/* Stats */}
-                                <div className="pl-6">
-                                  <div className="flex items-center gap-2 mb-2">
+                                <div className="pl-8">
+                                  <div className="flex items-center gap-2 mb-3">
                                     <label style={{ ...labelStyle, marginBottom: 0, fontSize: "9px" }}>Stats (optional)</label>
                                     <button
                                       onClick={() => addStat(pi)}
-                                      className="text-[10px] px-2 py-0.5 rounded-full transition-colors"
-                                      style={{ fontFamily: t.sans, color: t.ink(0.35), border: `1px solid ${t.ink(0.08)}` }}
+                                      className="text-[10px] px-2.5 py-1 rounded-full transition-colors"
+                                      style={{ fontFamily: t.sans, fontWeight: 600, color: t.ink(0.35), border: `1px solid ${t.ink(0.08)}` }}
                                       onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.05); }}
                                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                                     >
-                                      + Stat
+                                      + Add stat
                                     </button>
                                   </div>
                                   {phase.stats && phase.stats.length > 0 && (
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2.5">
                                       {phase.stats.map((stat, si) => (
                                         <div
                                           key={si}
-                                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg"
-                                          style={{ background: t.ink(0.04), border: `1px solid ${t.ink(0.06)}` }}
+                                          className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl"
+                                          style={{ background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}
                                         >
                                           <input
                                             value={stat.value}
                                             onChange={(e) => updateStat(pi, si, "value", e.target.value)}
                                             placeholder="40K"
                                             style={{
-                                              fontFamily: t.sans, width: "70px", padding: "2px 6px",
-                                              fontSize: "14px", fontWeight: 700, color: t.ink(0.8),
+                                              fontFamily: t.sans, width: "90px", padding: "4px 8px",
+                                              fontSize: "15px", fontWeight: 700, color: t.ink(0.8),
                                               background: "transparent", border: "none", outline: "none",
                                             }}
                                           />
+                                          <span style={{ color: t.ink(0.1), fontSize: "10px" }}>·</span>
                                           <input
                                             value={stat.label}
                                             onChange={(e) => updateStat(pi, si, "label", e.target.value)}
-                                            placeholder="Label"
+                                            placeholder="Description"
                                             style={{
-                                              fontFamily: t.sans, width: "90px", padding: "2px 6px",
-                                              fontSize: "12px", color: t.ink(0.5),
+                                              fontFamily: t.sans, width: "120px", padding: "4px 8px",
+                                              fontSize: "13px", color: t.ink(0.5),
                                               background: "transparent", border: "none", outline: "none",
                                             }}
                                           />
                                           <button
                                             onClick={() => removeStat(pi, si)}
-                                            className="p-0.5 opacity-30 hover:opacity-100 transition-opacity"
+                                            className="p-1 opacity-25 hover:opacity-100 transition-opacity rounded-md"
                                             style={{ color: t.ink(0.4) }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.04); }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                                           >
                                             <X className="w-3 h-3" />
                                           </button>
