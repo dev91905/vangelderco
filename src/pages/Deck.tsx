@@ -515,7 +515,7 @@ const Deck = () => {
         overflowY: isMobile ? "auto" : "hidden",
         WebkitOverflowScrolling: "touch" as any,
         overscrollBehaviorY: isMobile ? "contain" : "none",
-        scrollSnapType: isMobile ? "y mandatory" : "none",
+        scrollSnapType: isMobile ? "y proximity" : "none",
         display: "flex",
         flexDirection: "column",
         background: "hsl(var(--background))",
