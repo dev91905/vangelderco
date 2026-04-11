@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
@@ -455,47 +456,7 @@ const Deck = () => {
     return () => el.removeEventListener("wheel", handler);
   }, []);
 
-  /* Touch swipe handler — navigate between frames on mobile */
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    let touchStartY = 0;
-    let touchStartX = 0;
-    let isSwiping = false;
-
-    const onTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      // Allow native touch scrolling inside results panels
-      if (target?.closest("[data-results-scroll='true']")) return;
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-      isSwiping = true;
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      const dy = touchStartY - e.changedTouches[0].clientY;
-      const dx = touchStartX - e.changedTouches[0].clientX;
-      // Only trigger on vertical swipes (not horizontal), with a minimum threshold
-      if (Math.abs(dy) < 50 || Math.abs(dx) > Math.abs(dy)) return;
-      if (dy > 0) {
-        // Swipe up → next frame
-        if (frameInteracted[currentFrame] !== false) scrollToFrame(currentFrame + 1);
-      } else {
-        // Swipe down → previous frame
-        scrollToFrame(currentFrame - 1);
-      }
-    };
-
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [currentFrame, frameInteracted, scrollToFrame]);
+  /* Touch swipe handler removed — mobile uses native scroll */
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
