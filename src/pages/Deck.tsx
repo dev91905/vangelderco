@@ -753,7 +753,7 @@ const Deck = () => {
               </form>
             </div>
           </div>
-          <div style={{ minHeight: "48px" }} />
+          
         </div>
       </DeckFrame>
 
