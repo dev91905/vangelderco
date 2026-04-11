@@ -1386,7 +1386,7 @@ const Deck = () => {
               { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
               { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
               { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
-              { name: "Interest Groups", desc: "Faith, labor, campuses, veterans, defense" },
+              { name: "Interest Groups", desc: "Faith, labor, business, youth, defense" },
             ].map((sector, i) => {
               const isSelected = selectedSectors.includes(sector.name);
               return (
