@@ -728,16 +728,17 @@ const CaseStudyEditor: React.FC = () => {
                 <div className="px-6 flex items-center gap-3 pt-2">
                   <button
                     onClick={() => editingStudy && saveMutation.mutate(editingStudy)}
-                    disabled={!dirty || saveMutation.isPending}
+                    disabled={(!dirty && !saveFlash) || saveMutation.isPending}
                     className="flex items-center gap-2 px-6 py-2.5 rounded-full text-sm transition-all disabled:opacity-30"
                     style={{
                       fontFamily: t.sans,
                       color: t.cream,
-                      background: t.ink(1),
+                      background: saveFlash ? "hsl(145 60% 38%)" : t.ink(1),
+                      transition: "background 0.3s ease",
                     }}
                   >
-                    <Save className="w-3.5 h-3.5" />
-                    {saveMutation.isPending ? "Saving…" : "Save Changes"}
+                    {saveFlash ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
+                    {saveMutation.isPending ? "Saving…" : saveFlash ? "Saved" : "Save Changes"}
                   </button>
                   <button
                     onClick={() => {
