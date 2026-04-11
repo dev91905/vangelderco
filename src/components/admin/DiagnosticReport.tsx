@@ -157,7 +157,7 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
   const conventionalDims = dims.filter(d => d.picked === "conventional");
 
   return (
-    <div className="diagnostic-report" style={{ fontFamily: t.sans, maxWidth: "800px", margin: "0 auto" }}>
+    <div id="diagnostic-report-capture" className="diagnostic-report" style={{ fontFamily: t.sans, maxWidth: "800px", margin: "0 auto" }}>
       {/* ═══ PAGE 1: YOUR STRATEGIC POSITION ═══ */}
       <section style={{ marginBottom: "48px", pageBreakAfter: "always" }}>
         {/* Header */}
