@@ -21,6 +21,16 @@ function useScrollReveal(threshold = 0.15) {
   return { ref, hasRevealed };
 }
 
+// Diagonal flow: even indices top-left, odd indices bottom-right
+const PLACEMENTS: Array<{ justify: string; items: string; textAlign: "left" | "right" }> = [
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 0: top-left
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 1: bottom-right
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 2: top-left
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 3: bottom-right
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 4: top-left
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 5: bottom-right
+];
+
 function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number; isHero: boolean }) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const [hovered, setHovered] = useState(false);
