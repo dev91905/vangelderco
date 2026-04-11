@@ -37,8 +37,6 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
       ref={ref}
       className={`${isHero ? "col-span-2" : "col-span-1"} h-full`}
       style={{
-        borderRight: `1px solid ${t.ink(0.08)}`,
-        borderBottom: `1px solid ${t.ink(0.08)}`,
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed
           ? (hovered ? "translateY(-2px)" : "translateY(0)")
@@ -54,9 +52,11 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className={`flex h-full flex-col justify-center ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
+          className={`flex h-full flex-col justify-center rounded-xl ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
           style={{
             background: "transparent",
+            border: `1px solid ${hovered ? t.ink(0.25) : t.ink(0.15)}`,
+            transition: `border-color 0.3s ${EASE}`,
           }}
         >
           <span
@@ -94,16 +94,14 @@ export default function ImpactCloud() {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${t.ink(0.10)}`, minHeight: "420px" }}>
-        <div className="grid grid-cols-2 gap-0 lg:grid-cols-4 lg:grid-rows-2 h-full" style={{ minHeight: "420px" }}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className={`animate-pulse ${heroPositions.has(i) ? "col-span-2" : "col-span-1"}`}
-              style={{ background: "hsl(var(--foreground) / 0.04)", borderRight: `1px solid ${t.ink(0.08)}`, borderBottom: `1px solid ${t.ink(0.08)}` }}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:grid-rows-2" style={{ minHeight: "420px" }}>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className={`animate-pulse rounded-xl ${heroPositions.has(i) ? "col-span-2" : "col-span-1"}`}
+            style={{ background: "hsl(var(--foreground) / 0.04)" }}
+          />
+        ))}
       </div>
     );
   }
@@ -117,23 +115,15 @@ export default function ImpactCloud() {
   }
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden"
-      style={{
-        border: `1px solid ${t.ink(0.10)}`,
-        minHeight: "420px",
-      }}
-    >
-      <div className="grid grid-cols-2 gap-0 lg:grid-cols-4 lg:grid-rows-2 h-full" style={{ minHeight: "420px" }}>
-        {stats.slice(0, 6).map((stat, i) => (
-          <StatCard
-            key={`${stat.sourceSlug}-${stat.label}-${i}`}
-            stat={stat}
-            index={i}
-            isHero={heroPositions.has(i)}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:grid-rows-2" style={{ minHeight: "420px" }}>
+      {stats.slice(0, 6).map((stat, i) => (
+        <StatCard
+          key={`${stat.sourceSlug}-${stat.label}-${i}`}
+          stat={stat}
+          index={i}
+          isHero={heroPositions.has(i)}
+        />
+      ))}
     </div>
   );
 }
