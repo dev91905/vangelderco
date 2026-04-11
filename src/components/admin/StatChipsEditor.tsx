@@ -1,19 +1,41 @@
 import { useRef, useEffect, useState } from "react";
 import { Plus, X, Eye, EyeOff } from "lucide-react";
 import { t } from "@/lib/theme";
+import type { ImpactStat } from "@/hooks/useImpactStats";
 
-interface Stat { label: string; description: string; visible?: boolean; }
-interface StatChipsEditorProps { stats: Stat[]; onChange: (stats: Stat[]) => void; }
+type StatDraft = Omit<ImpactStat, "post_id" | "case_study_id" | "phase_title" | "sort_order"> & { id: string };
+
+interface StatChipsEditorProps {
+  stats: StatDraft[];
+  onChange: (stats: StatDraft[]) => void;
+}
 
 const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const labelRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const update = (i: number, partial: Partial<Stat>) => { const ns = [...stats]; ns[i] = { ...ns[i], ...partial }; onChange(ns); };
-  const addStat = () => { onChange([...stats, { label: "", description: "", visible: true }]); setFocusIndex(stats.length); };
+  const update = (i: number, partial: Partial<StatDraft>) => {
+    const ns = [...stats];
+    ns[i] = { ...ns[i], ...partial };
+    onChange(ns);
+  };
+
+  const addStat = () => {
+    const newStat: StatDraft = {
+      id: crypto.randomUUID(),
+      label: "",
+      description: "",
+      visible: true,
+    };
+    onChange([...stats, newStat]);
+    setFocusIndex(stats.length);
+  };
 
   useEffect(() => {
-    if (focusIndex !== null && labelRefs.current[focusIndex]) { labelRefs.current[focusIndex]?.focus(); setFocusIndex(null); }
+    if (focusIndex !== null && labelRefs.current[focusIndex]) {
+      labelRefs.current[focusIndex]?.focus();
+      setFocusIndex(null);
+    }
   }, [focusIndex, stats.length]);
 
   return (
@@ -26,7 +48,7 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
         {stats.map((stat, i) => {
           const hidden = stat.visible === false;
           return (
-            <div key={i} className="group relative flex flex-col px-4 py-3 min-w-[140px] transition-opacity rounded-xl"
+            <div key={stat.id} className="group relative flex flex-col px-4 py-3 min-w-[140px] transition-opacity rounded-xl"
               style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}`, opacity: hidden ? 0.4 : 1 }}>
               <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => update(i, { visible: !hidden })} className="p-1 rounded transition-colors" style={{ color: t.ink(0.3) }}>

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { t } from "@/lib/theme";
 import { caseStudyUi as ui } from "./caseStudyUi";
+import { useCaseStudyImpactStats } from "@/hooks/useImpactStats";
 
 const f = { sans: t.sans, ink: t.ink };
 
@@ -29,6 +30,22 @@ interface Props {
 const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activePhase, setActivePhase] = useState(0);
+
+  // Fetch stats from impact_stats table
+  const { data: impactStats } = useCaseStudyImpactStats(study?.id);
+
+  // Group stats by phase_title for display
+  const statsByPhase = React.useMemo(() => {
+    const map = new Map<string, { value: string; label: string }[]>();
+    if (!impactStats) return map;
+    for (const stat of impactStats) {
+      if (!stat.visible || !stat.phase_title) continue;
+      const arr = map.get(stat.phase_title) ?? [];
+      arr.push({ value: stat.label, label: stat.description });
+      map.set(stat.phase_title, arr);
+    }
+    return map;
+  }, [impactStats]);
 
   const handleWheel = useCallback((e: WheelEvent) => {
     e.preventDefault();
@@ -101,9 +118,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
       }}
     >
       {/* ── Minimal header: close + title only ── */}
-      <div
-        className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12"
-      >
+      <div className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12">
         <h2
           style={{
             fontFamily: f.sans,
@@ -196,7 +211,9 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
               {phases.map((phase, i) => {
                 const isActive = activePhase === i;
                 const isLast = i === totalPhases - 1;
-                const hasStats = (phase.stats?.length ?? 0) > 0;
+                // Use impact_stats for this phase, fall back to legacy JSONB stats
+                const phaseStats = statsByPhase.get(phase.title) ?? phase.stats ?? [];
+                const hasStats = phaseStats.length > 0;
 
                 return (
                   <div
@@ -252,7 +269,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                         position: "relative",
                       }}
                     >
-                      {/* Node */}
                       <div
                         style={{
                           width: isActive ? "12px" : "8px",
@@ -265,15 +281,12 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                           zIndex: 2,
                         }}
                       />
-                      {/* Connecting line */}
                       {!isLast && (
                         <div
                           className="flex-1"
                           style={{
                             height: "1px",
-                            background: activePhase > i
-                              ? f.ink(0.2)
-                              : f.ink(0.06),
+                            background: activePhase > i ? f.ink(0.2) : f.ink(0.06),
                             transition: "background 0.3s ease",
                           }}
                         />
@@ -318,7 +331,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
 
                       {hasStats && (
                         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
-                          {phase.stats!.map((stat, si) => (
+                          {phaseStats.map((stat, si) => (
                             <div key={si}>
                               <div
                                 style={{
@@ -355,7 +368,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
           </div>
         </div>
       ) : (
-        /* No timeline state */
         <div className="flex flex-1 items-center justify-center px-8">
           <div className="max-w-md text-center">
             <p

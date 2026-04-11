@@ -6,17 +6,18 @@ import ContentBlockRenderer, { ContentBlock } from "@/components/content/Content
 import StatChips from "./StatChips";
 import ExpandableSection from "./ExpandableSection";
 import ContentCarousel from "./ContentCarousel";
+import { usePostImpactStats } from "@/hooks/useImpactStats";
 import { t } from "@/lib/theme";
 
 interface CaseStudyViewProps {
   post: {
+    id: string;
     title: string;
     excerpt: string | null;
     capability: string;
     published_at: string | null;
     hero_image_url: string | null;
     content_blocks: ContentBlock[] | null;
-    stats: { label: string; description: string; visible?: boolean }[] | null;
   };
 }
 
@@ -25,6 +26,11 @@ const capabilityLabel: Record<string, string> = { "cultural-strategy": "Cultural
 
 const CaseStudyView = ({ post }: CaseStudyViewProps) => {
   const [showStats, setShowStats] = useState(true);
+  const { data: impactStats } = usePostImpactStats(post.id);
+
+  const visibleStats = (impactStats ?? [])
+    .filter(s => s.visible)
+    .map(s => ({ label: s.label, description: s.description }));
 
   const renderExtended = (block: ContentBlock, _index: number) => {
     if (block.type === "expandable") return <ExpandableSection title={block.title} blocks={block.blocks} />;
@@ -67,7 +73,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
         </div>
 
         <main className="flex flex-col items-center px-6 pb-20 max-w-[720px] mx-auto gap-8">
-          {post.stats && post.stats.length > 0 && (
+          {visibleStats.length > 0 && (
             <div className="w-full flex flex-col gap-4" style={{ animation: "fade-up 0.5s ease-out 0.5s both" }}>
               <button onClick={() => setShowStats(!showStats)} className="flex items-center gap-2 self-start">
                 <span className="w-3 h-3 flex items-center justify-center rounded-sm" style={{ border: t.border(0.2), background: showStats ? t.ink(0.1) : "transparent", transition: "background 0.15s ease" }}>
@@ -75,7 +81,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
                 </span>
                 <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Key Metrics</span>
               </button>
-              <StatChips stats={post.stats} visible={showStats} />
+              <StatChips stats={visibleStats} visible={showStats} />
             </div>
           )}
 

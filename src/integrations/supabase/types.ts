@@ -200,6 +200,57 @@ export type Database = {
         }
         Relationships: []
       }
+      impact_stats: {
+        Row: {
+          case_study_id: string | null
+          created_at: string
+          description: string
+          id: string
+          label: string
+          phase_title: string | null
+          post_id: string | null
+          sort_order: number
+          visible: boolean
+        }
+        Insert: {
+          case_study_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          label: string
+          phase_title?: string | null
+          post_id?: string | null
+          sort_order?: number
+          visible?: boolean
+        }
+        Update: {
+          case_study_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          label?: string
+          phase_title?: string | null
+          post_id?: string | null
+          sort_order?: number
+          visible?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impact_stats_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "deck_case_studies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "impact_stats_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "capability_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_settings: {
         Row: {
           id: string

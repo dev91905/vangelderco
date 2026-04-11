@@ -1,6 +1,3 @@
-# Memory: index.md
-Updated: 18h ago
-
 # Project Memory
 
 ## Core
@@ -15,4 +12,4 @@ Deck slides must respect the horizontal frame; avoid vertical stacked cards.
 - [Accent opacity](mem://design/accent-opacity) — CSS alpha tokens for accent elements
 - [No serif constraint](mem://constraint/no-serif) — Serif only as accent for specific elements
 - [Horizontal deck layout](mem://constraint/deck-horizontal-frame) — Preserve horizontal frame in deck
-- [Case study UI direction](mem://design/case-study-ui) — Minimal, standardized cards and a clearly ordered left-to-right timeline
+- [Impact stats system](mem://feature/impact-stats) — Normalized stats in impact_stats table, shared between articles and timelines

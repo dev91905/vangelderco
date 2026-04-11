@@ -60,7 +60,6 @@ const PostDetail = () => {
   }
 
   const contentBlocks = post.content_blocks as any[] | null;
-  const stats = post.stats as { label: string; description: string; visible?: boolean }[] | null;
 
   if (post.type === "field-note") {
     return (
@@ -93,7 +92,7 @@ const PostDetail = () => {
   }
 
   return post.type === "case-study" ? (
-    <CaseStudyView post={{ title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks, stats }} />
+    <CaseStudyView post={{ id: post.id, title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks }} />
   ) : (
     <BlogPostView post={{ title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks }} />
   );
