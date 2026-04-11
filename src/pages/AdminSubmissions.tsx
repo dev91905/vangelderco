@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, LogOut, ChevronDown, ChevronUp, Copy, Check, FileText, Loader2 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
-import { getScoreLabel } from "@/lib/deckScoring";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, format } from "date-fns";
+import { toast } from "sonner";
 
-/* ─── Types ─── */
-interface Contact {
+type Contact = {
   id: string;
   first_name: string;
   last_name: string;
@@ -19,44 +18,21 @@ interface Contact {
   selected_domains: string[] | null;
   engagement_path: string | null;
   readiness_score: number | null;
-  quiz_answers: Array<{ dimension: string; picked: string }> | null;
+  quiz_answers: any[] | null;
   metrics_checked: string[] | null;
+  metrics_unchecked: string[] | null;
   capabilities_ranked: string[] | null;
   has_media_experience: boolean | null;
   practice_selections: number[] | null;
+  sectors_not_selected: string[] | null;
+  report_cache: string | null;
+  report_status: string | null;
   created_at: string;
-}
-
-/* ─── Constants for display ─── */
-const PAIN_LABELS: Record<string, string> = {
-  history: "Just getting started",
-  evaluate: "Funding comms, no strategy",
-  access: "Limited channels",
-  measurement: "Not sure what to measure",
-  expertise: "No expertise in-house",
 };
 
-const CAPABILITY_LABELS: Record<string, string> = {
-  audit: "Portfolio Audit",
-  framework: "Strategy Development",
-  access: "Access & Introductions",
-  measurement: "Impact Measurement",
-  training: "Staff Training",
-  program: "Program Management",
-};
-
-const ALL_METRICS = [
-  "Media placements", "Audience reach", "Social engagement", "Message recall",
-  "Earned media value", "Grantee output volume", "New people at the table",
-  "Sectors aligned", "Narrative adoption", "Leaders developed", "Policy moved", "Capital unlocked",
-];
-
-const AdminSubmissions = () => {
-  const navigate = useNavigate();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  const { data: contacts, isLoading } = useQuery({
-    queryKey: ["deck-contacts-admin"],
+const useContacts = () =>
+  useQuery({
+    queryKey: ["deck-contacts-full"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("deck_contacts" as any)
@@ -67,375 +43,380 @@ const AdminSubmissions = () => {
     },
   });
 
-  const selected = contacts?.find((c) => c.id === selectedId) || null;
+const quizScore = (answers: any[] | null) => {
+  if (!answers || answers.length === 0) return "—";
+  const advanced = answers.filter((a: any) => a.picked === "nextgen").length;
+  return `${advanced} of ${answers.length} advanced`;
+};
+
+const StatusPill = ({ status }: { status: string | null }) => {
+  const isSent = status === "sent";
+  return (
+    <span
+      style={{
+        fontFamily: t.sans,
+        fontSize: "10px",
+        fontWeight: 600,
+        letterSpacing: "0.04em",
+        padding: "3px 10px",
+        borderRadius: "999px",
+        color: isSent ? "hsl(142 71% 35%)" : t.ink(0.5),
+        background: isSent ? "hsl(142 71% 45% / 0.1)" : t.ink(0.04),
+        border: `1px solid ${isSent ? "hsl(142 71% 45% / 0.2)" : t.ink(0.08)}`,
+      }}
+    >
+      {isSent ? "Report sent" : "Pending review"}
+    </span>
+  );
+};
+
+/* ═══ LIST VIEW ═══ */
+const SubmissionsList = ({ contacts, onSelect }: { contacts: Contact[]; onSelect: (c: Contact) => void }) => (
+  <div className="flex flex-col">
+    {contacts.length === 0 && (
+      <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.35), padding: "40px 0", textAlign: "center" }}>
+        No submissions yet.
+      </p>
+    )}
+    {contacts.map((c) => (
+      <button
+        key={c.id}
+        onClick={() => onSelect(c)}
+        className="text-left w-full transition-colors"
+        style={{
+          padding: "16px 20px",
+          borderBottom: t.border(0.04),
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          display: "grid",
+          gridTemplateColumns: "1fr auto auto",
+          gap: "16px",
+          alignItems: "center",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.02))}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+      >
+        <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>
+              {c.first_name} {c.last_name}
+            </span>
+            {c.organization && (
+              <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.35) }}>· {c.organization}</span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.4) }}>{c.email}</span>
+            <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25) }}>
+              {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+            </span>
+          </div>
+        </div>
+        <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.ink(0.5), whiteSpace: "nowrap" }}>
+          {quizScore(c.quiz_answers)}
+        </span>
+        <StatusPill status={c.report_status} />
+      </button>
+    ))}
+  </div>
+);
+
+/* ═══ DETAIL VIEW ═══ */
+const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () => void }) => {
+  const qc = useQueryClient();
+  const [report, setReport] = useState<string | null>(contact.report_cache);
+  const [generating, setGenerating] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Generate report on mount if not cached
+  useEffect(() => {
+    if (report) return;
+    generateReport();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const generateReport = async () => {
+    setGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-diagnostic", {
+        body: { contactId: contact.id },
+      });
+      if (error) throw error;
+      const text = data?.report || "Report generation failed.";
+      setReport(text);
+      // Cache it
+      await supabase
+        .from("deck_contacts" as any)
+        .update({ report_cache: text } as any)
+        .eq("id", contact.id);
+    } catch (err: any) {
+      toast.error("Failed to generate report: " + err.message);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const markAsSent = useMutation({
+    mutationFn: async () => {
+      const newStatus = contact.report_status === "sent" ? "pending" : "sent";
+      await supabase
+        .from("deck_contacts" as any)
+        .update({ report_status: newStatus } as any)
+        .eq("id", contact.id);
+      return newStatus;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["deck-contacts-full"] });
+      toast.success("Status updated");
+    },
+  });
+
+  const handleExportPdf = async () => {
+    if (!report) return;
+    setExporting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("export-diagnostic-pdf", {
+        body: {
+          contact: {
+            first_name: contact.first_name,
+            last_name: contact.last_name,
+            organization: contact.organization,
+            email: contact.email,
+            created_at: contact.created_at,
+            quiz_answers: contact.quiz_answers,
+          },
+          report,
+        },
+      });
+      if (error) throw error;
+      // data is base64 PDF
+      const bytes = Uint8Array.from(atob(data.pdf), (c) => c.charCodeAt(0));
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `diagnostic-${contact.first_name}-${contact.last_name}.pdf`.toLowerCase().replace(/\s+/g, "-");
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      toast.error("PDF export failed: " + err.message);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(contact.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Back button */}
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 px-4 py-3 transition-colors"
+        style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.4), background: "none", border: "none", cursor: "pointer", borderBottom: t.border(0.04) }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.7))}
+        onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.4))}
+      >
+        <ChevronLeft className="w-3.5 h-3.5" /> All submissions
+      </button>
+
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] flex-1 overflow-hidden">
+        {/* LEFT: Diagnostic report */}
+        <div className="overflow-y-auto p-6 lg:p-8" style={{ borderRight: t.border(0.04) }}>
+          {generating ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: t.ink(0.1), borderTopColor: t.ink(0.5) }} />
+              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>Generating diagnostic report…</p>
+            </div>
+          ) : report ? (
+            <div
+              className="prose prose-sm max-w-none"
+              style={{
+                fontFamily: t.sans,
+                color: t.ink(0.7),
+                lineHeight: 1.75,
+              }}
+              dangerouslySetInnerHTML={{ __html: markdownToHtml(report) }}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>No report generated yet.</p>
+              <button
+                onClick={generateReport}
+                style={{
+                  fontFamily: t.sans, fontSize: "12px", padding: "8px 20px", borderRadius: "999px",
+                  background: t.ink(1), color: t.cream, border: "none", cursor: "pointer",
+                }}
+              >
+                Generate Report
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT: Contact info & actions */}
+        <div className="p-6 flex flex-col gap-6 overflow-y-auto" style={{ background: t.ink(0.015) }}>
+          <div>
+            <p style={{ fontFamily: t.sans, fontSize: "16px", fontWeight: 700, color: t.ink(0.85) }}>
+              {contact.first_name} {contact.last_name}
+            </p>
+            {contact.organization && (
+              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.45), marginTop: "2px" }}>
+                {contact.organization}
+              </p>
+            )}
+            <a
+              href={`mailto:${contact.email}`}
+              style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.5), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "6px" }}
+            >
+              {contact.email}
+            </a>
+            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.3), marginTop: "8px" }}>
+              {format(new Date(contact.created_at), "MMM d, yyyy 'at' h:mm a")}
+            </p>
+          </div>
+
+          <div style={{ padding: "12px 14px", borderRadius: "10px", background: t.ink(0.03), border: t.border(0.06) }}>
+            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.35), textTransform: "uppercase", marginBottom: "4px" }}>
+              Quiz Score
+            </p>
+            <p style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 700, color: t.ink(0.75) }}>
+              {quizScore(contact.quiz_answers)}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={handleExportPdf}
+              disabled={!report || exporting}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all disabled:opacity-40"
+              style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream, border: "none", cursor: report ? "pointer" : "default" }}
+            >
+              <FileText className="w-4 h-4" />
+              {exporting ? "Exporting…" : "Export as PDF"}
+            </button>
+
+            <button
+              onClick={handleCopyEmail}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all"
+              style={{ fontFamily: t.sans, color: t.ink(0.6), background: "transparent", border: t.border(0.1), cursor: "pointer" }}
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied" : "Copy email"}
+            </button>
+
+            <button
+              onClick={() => markAsSent.mutate()}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all"
+              style={{
+                fontFamily: t.sans,
+                color: contact.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.6),
+                background: contact.report_status === "sent" ? "hsl(142 71% 45% / 0.08)" : "transparent",
+                border: contact.report_status === "sent" ? "1px solid hsl(142 71% 45% / 0.2)" : t.border(0.1),
+                cursor: "pointer",
+              }}
+            >
+              <Mail className="w-4 h-4" />
+              {contact.report_status === "sent" ? "Marked as sent ✓" : "Mark as sent"}
+            </button>
+          </div>
+
+          {/* Regenerate report */}
+          {report && (
+            <button
+              onClick={generateReport}
+              disabled={generating}
+              className="text-xs transition-colors"
+              style={{ fontFamily: t.sans, color: t.ink(0.3), background: "none", border: "none", cursor: "pointer", alignSelf: "center", marginTop: "auto" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.6))}
+              onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.3))}
+            >
+              {generating ? "Regenerating…" : "Regenerate report"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* Simple markdown → HTML converter for the report */
+function markdownToHtml(md: string): string {
+  return md
+    .replace(/^### (.+)$/gm, '<h3 style="font-size:16px;font-weight:700;margin:28px 0 8px;color:hsl(25 15% 15%)">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 style="font-size:19px;font-weight:700;margin:36px 0 12px;color:hsl(25 15% 10%);padding-bottom:8px;border-bottom:1px solid hsl(25 15% 88%)">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 style="font-size:24px;font-weight:700;margin:0 0 16px;color:hsl(25 15% 8%)">$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="font-weight:600;color:hsl(25 15% 20%)">$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^- (.+)$/gm, '<li style="margin:4px 0 4px 16px;padding-left:4px">$1</li>')
+    .replace(/(<li.*<\/li>\n?)+/g, (match) => `<ul style="list-style:disc;padding-left:20px;margin:8px 0">${match}</ul>`)
+    .replace(/\n\n/g, '</p><p style="margin:8px 0">')
+    .replace(/\n/g, "<br>")
+    ;
+}
+
+/* ═══ MAIN PAGE ═══ */
+const AdminSubmissions = () => {
+  const { data: contacts, isLoading } = useContacts();
+  const [selected, setSelected] = useState<Contact | null>(null);
+
+  // Keep selected contact in sync with latest data
+  useEffect(() => {
+    if (selected && contacts) {
+      const updated = contacts.find((c) => c.id === selected.id);
+      if (updated) setSelected(updated);
+    }
+  }, [contacts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: t.border(0.06) }}>
         <div className="flex items-center gap-4">
-          <Link to="/admin" className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] rounded-full transition-colors"
+          <Link
+            to="/admin"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
             style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
             onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
+            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}
+          >
             <ArrowLeft className="w-3 h-3" /> Admin
           </Link>
-          <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Submissions</h1>
-          {contacts && <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.35) }}>{contacts.length} total</span>}
-        </div>
-        <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
-          className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
-          onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-          <LogOut className="w-4 h-4" style={{ color: t.ink(0.3) }} />
-        </button>
-      </div>
-
-      <div className="flex" style={{ minHeight: "calc(100vh - 57px)" }}>
-        {/* Left: List */}
-        <div className="w-full max-w-[420px] overflow-y-auto" style={{ borderRight: t.border(0.06) }}>
-          {isLoading && <p className="p-6" style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.3) }}>Loading…</p>}
-          {contacts?.map((c) => {
-            const score = c.readiness_score;
-            const info = score != null ? getScoreLabel(score) : null;
-            const isActive = c.id === selectedId;
-            const nextgenCount = c.quiz_answers?.filter((a) => a.picked === "nextgen").length ?? 0;
-            return (
-              <button
-                key={c.id}
-                onClick={() => setSelectedId(c.id)}
-                className="w-full text-left px-5 py-4 transition-colors"
-                style={{
-                  borderBottom: t.border(0.04),
-                  background: isActive ? t.ink(0.04) : "transparent",
-                }}
-                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = t.ink(0.02); }}
-                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
-              >
-                <div className="flex items-center gap-2">
-                  <p style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>
-                    {c.first_name} {c.last_name}
-                  </p>
-                  {info && (
-                    <span style={{
-                      fontFamily: t.sans, fontSize: "10px", fontWeight: 700, padding: "1px 7px", borderRadius: "999px", marginLeft: "auto",
-                      color: info.color, background: `${info.color}15`, border: `1px solid ${info.color}30`,
-                    }}>
-                      {score}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 mt-0.5">
-                  {c.organization && <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.4) }}>{c.organization}</span>}
-                  <span style={{ fontFamily: t.sans, fontSize: "10px", color: t.ink(0.25), marginLeft: c.organization ? "0" : "0" }}>
-                    {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
-                  </span>
-                </div>
-                <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35), marginTop: "2px" }}>
-                  {nextgenCount}/5 advanced · {c.metrics_checked?.length ?? 0} metrics · {c.selected_domains?.length ?? 0} sectors
-                </p>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right: Detail */}
-        <div className="flex-1 overflow-y-auto">
-          {!selected ? (
-            <div className="flex items-center justify-center h-full">
-              <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.25) }}>Select a submission to view details</p>
-            </div>
-          ) : (
-            <SubmissionDetail contact={selected} />
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ─── Detail View ─── */
-const SubmissionDetail = ({ contact }: { contact: Contact }) => {
-  const [report, setReport] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [pdfLoading, setPdfLoading] = useState(false);
-
-  const c = contact;
-  const score = c.readiness_score;
-  const info = score != null ? getScoreLabel(score) : null;
-  const nextgenCount = c.quiz_answers?.filter((a) => a.picked === "nextgen").length ?? 0;
-
-  const generateReport = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke("generate-diagnostic", {
-        body: { contactId: c.id },
-      });
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
-      setReport(data.report);
-    } catch (e: any) {
-      setError(e.message || "Failed to generate report");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(c.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
-  const handleExportPdf = async () => {
-    if (!report) return;
-    setPdfLoading(true);
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke("export-diagnostic-pdf", {
-        body: {
-          contactId: c.id,
-          reportMarkdown: report,
-          contactName: `${c.first_name} ${c.last_name}`,
-          organization: c.organization,
-          score: c.readiness_score,
-        },
-      });
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
-
-      // data.pdf is base64
-      const binary = atob(data.pdf);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `VGC-Diagnostic-${c.first_name}-${c.last_name}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e: any) {
-      console.error("PDF export failed:", e);
-      alert("PDF export failed: " + (e.message || "Unknown error"));
-    } finally {
-      setPdfLoading(false);
-    }
-  };
-
-  const metricsChecked = c.metrics_checked || [];
-  const metricsNotChecked = ALL_METRICS.filter((m) => !metricsChecked.includes(m));
-
-  return (
-    <div className="flex flex-col lg:flex-row">
-      {/* Left: Diagnostic Report */}
-      <div className="flex-1 p-6 lg:p-10 max-w-[780px]">
-        <div className="flex items-center gap-3 mb-6">
-          <h2 style={{ fontFamily: t.sans, fontSize: "22px", fontWeight: 700, color: t.ink(0.9) }}>
-            Diagnostic Report
-          </h2>
-          {info && (
-            <span style={{
-              fontFamily: t.sans, fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "999px",
-              color: info.color, background: `${info.color}15`, border: `1px solid ${info.color}30`,
-            }}>
-              {score} · {info.label}
+          <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
+            Submissions
+          </h1>
+          {contacts && (
+            <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.cream, background: t.ink(0.7), padding: "1px 8px", borderRadius: "999px" }}>
+              {contacts.length}
             </span>
           )}
         </div>
-
-        {!report && !loading && (
-          <div className="flex flex-col items-center gap-4 py-16" style={{ border: `1px dashed ${t.ink(0.1)}`, borderRadius: "12px" }}>
-            <FileText className="w-8 h-8" style={{ color: t.ink(0.15) }} />
-            <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.35) }}>
-              Generate a personalized diagnostic using AI
-            </p>
-            <button onClick={generateReport} style={{
-              fontFamily: t.sans, fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em",
-              padding: "10px 24px", borderRadius: "999px", cursor: "pointer",
-              color: t.cream, background: t.ink(0.85), border: "none",
-              transition: "background 0.2s",
-            }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(1))}
-              onMouseLeave={(e) => (e.currentTarget.style.background = t.ink(0.85))}
-            >
-              Generate Report
-            </button>
-          </div>
-        )}
-
-        {loading && (
-          <div className="flex items-center gap-3 py-16 justify-center">
-            <Loader2 className="w-5 h-5 animate-spin" style={{ color: t.ink(0.3) }} />
-            <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.35) }}>Generating diagnostic…</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="py-8 text-center">
-            <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.error() }}>{error}</p>
-            <button onClick={generateReport} style={{
-              fontFamily: t.sans, fontSize: "12px", marginTop: "12px", color: t.ink(0.5), background: "none", border: t.border(0.1), padding: "8px 20px", borderRadius: "999px", cursor: "pointer",
-            }}>Retry</button>
-          </div>
-        )}
-
-        {report && (
-          <div className="prose-report" style={{ fontFamily: t.sans }}>
-            <MarkdownRenderer content={report} />
-          </div>
-        )}
       </div>
 
-      {/* Right: Contact & Actions */}
-      <div className="w-full lg:w-[320px] p-6 lg:p-8 lg:border-l" style={{ borderColor: t.ink(0.06) }}>
-        <div className="sticky top-8">
-          <p style={{ fontFamily: t.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: t.ink(0.3), marginBottom: "16px" }}>Contact</p>
-
-          <p style={{ fontFamily: t.sans, fontSize: "18px", fontWeight: 700, color: t.ink(0.85) }}>
-            {c.first_name} {c.last_name}
-          </p>
-          {c.organization && <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.5), marginTop: "2px" }}>{c.organization}</p>}
-          <a href={`mailto:${c.email}`} style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.5), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "4px" }}>{c.email}</a>
-
-          <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25), marginTop: "8px" }}>
-            Submitted {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
-          </p>
-
-          {/* Quick stats */}
-          <div className="flex flex-col gap-2 mt-6 pt-6" style={{ borderTop: t.border(0.06) }}>
-            <StatRow label="Quiz score" value={`${nextgenCount}/5 advanced`} />
-            <StatRow label="Engagement path" value={c.engagement_path === "fresh" ? "Starting fresh" : c.engagement_path === "experienced" ? "Already active" : "—"} />
-            <StatRow label="Metrics tracked" value={`${metricsChecked.length} of ${ALL_METRICS.length}`} />
-            <StatRow label="Sectors selected" value={`${c.selected_domains?.length ?? 0}`} />
-            <StatRow label="Practices selected" value={`${c.practice_selections?.length ?? 0} of 3`} />
-            {c.capabilities_ranked && c.capabilities_ranked.length > 0 && (
-              <StatRow label="Priority capabilities" value={c.capabilities_ranked.map((id) => CAPABILITY_LABELS[id] || id).join(", ")} />
-            )}
+      {/* Content */}
+      <div style={{ height: "calc(100vh - 57px)", overflow: "hidden" }}>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: t.ink(0.1), borderTopColor: t.ink(0.5) }} />
           </div>
-
-          {/* Actions */}
-          <div className="flex flex-col gap-2 mt-6 pt-6" style={{ borderTop: t.border(0.06) }}>
-            {report && (
-              <button onClick={handleExportPdf} disabled={pdfLoading} style={{
-                fontFamily: t.sans, fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em",
-                padding: "10px 20px", borderRadius: "999px", cursor: "pointer",
-                color: t.cream, background: t.ink(0.85), border: "none",
-                transition: "background 0.2s", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
-              }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(1))}
-                onMouseLeave={(e) => (e.currentTarget.style.background = t.ink(0.85))}
-              >
-                {pdfLoading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Generating…</> : <><FileText className="w-3.5 h-3.5" /> Export as PDF</>}
-              </button>
-            )}
-            <button onClick={handleCopyEmail} style={{
-              fontFamily: t.sans, fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em",
-              padding: "10px 20px", borderRadius: "999px", cursor: "pointer",
-              color: t.ink(0.6), background: "transparent", border: t.border(0.12),
-              transition: "all 0.2s", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.ink(0.25); e.currentTarget.style.color = t.ink(0.8); }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = t.ink(0.12); e.currentTarget.style.color = t.ink(0.6); }}
-            >
-              {copied ? <><Check className="w-3.5 h-3.5" /> Copied</> : <><Copy className="w-3.5 h-3.5" /> Copy email</>}
-            </button>
+        ) : selected ? (
+          <SubmissionDetail
+            contact={selected}
+            onBack={() => setSelected(null)}
+          />
+        ) : (
+          <div className="overflow-y-auto" style={{ height: "100%" }}>
+            <SubmissionsList contacts={contacts || []} onSelect={setSelected} />
           </div>
-        </div>
+        )}
       </div>
     </div>
-  );
-};
-
-/* ─── Stat Row ─── */
-const StatRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex justify-between items-start gap-3">
-    <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.4), flexShrink: 0 }}>{label}</p>
-    <p style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.ink(0.65), textAlign: "right" }}>{value}</p>
-  </div>
-);
-
-/* ─── Minimal Markdown Renderer ─── */
-const MarkdownRenderer = ({ content }: { content: string }) => {
-  const lines = content.split("\n");
-  const elements: JSX.Element[] = [];
-  let listBuffer: string[] = [];
-  let key = 0;
-
-  const flushList = () => {
-    if (listBuffer.length === 0) return;
-    elements.push(
-      <ul key={key++} style={{ paddingLeft: "20px", margin: "8px 0 16px" }}>
-        {listBuffer.map((item, i) => (
-          <li key={i} style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.6), lineHeight: 1.7, marginBottom: "4px" }}>
-            <InlineMarkdown text={item} />
-          </li>
-        ))}
-      </ul>
-    );
-    listBuffer = [];
-  };
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      flushList();
-      continue;
-    }
-
-    // List item
-    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-      listBuffer.push(trimmed.slice(2));
-      continue;
-    }
-
-    flushList();
-
-    // Headings
-    if (trimmed.startsWith("## ")) {
-      elements.push(
-        <h2 key={key++} style={{ fontFamily: t.sans, fontSize: "17px", fontWeight: 700, color: t.ink(0.85), marginTop: "32px", marginBottom: "12px", paddingBottom: "8px", borderBottom: t.border(0.06) }}>
-          {trimmed.slice(3)}
-        </h2>
-      );
-    } else if (trimmed.startsWith("### ")) {
-      elements.push(
-        <h3 key={key++} style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 700, color: t.ink(0.7), marginTop: "20px", marginBottom: "6px" }}>
-          {trimmed.slice(4)}
-        </h3>
-      );
-    } else if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
-      elements.push(
-        <p key={key++} style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 700, color: t.ink(0.7), marginTop: "16px", marginBottom: "4px" }}>
-          {trimmed.slice(2, -2)}
-        </p>
-      );
-    } else {
-      elements.push(
-        <p key={key++} style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.55), lineHeight: 1.75, marginBottom: "10px" }}>
-          <InlineMarkdown text={trimmed} />
-        </p>
-      );
-    }
-  }
-  flushList();
-
-  return <>{elements}</>;
-};
-
-/* Inline bold/italic */
-const InlineMarkdown = ({ text }: { text: string }) => {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return <strong key={i} style={{ fontWeight: 700, color: t.ink(0.7) }}>{part.slice(2, -2)}</strong>;
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
   );
 };
 

@@ -365,10 +365,14 @@ const Deck = () => {
 
   
 
+  const ALL_SECTORS_LIST = ["News Media", "Music Industry", "Film & TV", "Digital Creators", "Sports & Recreation", "Podcasts & Streaming", "Advertising & Brands", "Tech Platforms", "Interest Groups"];
+
   const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
     if (!ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim() || ctaSubmitting) return;
     setCtaSubmitting(true);
+    const metricsUnchecked = ALL_METRICS.filter(m => !metricsChecked.includes(m));
+    const sectorsNotSelected = ALL_SECTORS_LIST.filter(s => !selectedSectors.includes(s));
     await supabase.from("deck_contacts" as any).insert({
       first_name: ctaForm.firstName.trim(),
       last_name: ctaForm.lastName.trim(),
@@ -381,9 +385,11 @@ const Deck = () => {
       readiness_score: diagnosticScore,
       quiz_answers: quizAnswers.filter((a): a is QuizAnswer => a !== null),
       metrics_checked: metricsChecked.length > 0 ? metricsChecked : null,
+      metrics_unchecked: metricsUnchecked.length > 0 ? metricsUnchecked : null,
       capabilities_ranked: capabilitiesRanked.length > 0 ? capabilitiesRanked : null,
       has_media_experience: hasMediaExperience,
       practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
+      sectors_not_selected: sectorsNotSelected.length > 0 ? sectorsNotSelected : null,
     } as any);
     setCtaSubmitting(false);
     setCtaMode("thanks");
@@ -1423,19 +1429,17 @@ const Deck = () => {
         <div ref={r9.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(24px, 3.5vw, 40px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px" }}>Received ✓</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.5), lineHeight: 1.7, maxWidth: "440px", margin: "0 auto" }}>
-                We're reviewing your intake now. A team member will follow up within two business days.
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>Got it.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "420px", margin: "16px auto 0" }}>
+                We're putting together a custom diagnostic based on your answers. Check your inbox.
               </p>
-              {bookingLink && (
-                <a href={bookingLink} target="_blank" rel="noopener noreferrer" style={{
-                  display: "inline-block", marginTop: "24px", fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 600,
-                  color: f.ink(0.6), border: `1px solid ${f.ink(0.15)}`, padding: "12px 28px", borderRadius: "999px", textDecoration: "none", transition: "all 200ms",
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.color = f.ink(0.6); }}
-                >Or book a call now →</a>
-              )}
+              <a href="/" style={{
+                display: "inline-block", marginTop: "32px", fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
+                color: f.ink(0.35), textDecoration: "none", transition: "color 200ms",
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+              >Return to site</a>
             </div>
           ) : (
             <div className="flex flex-col items-center text-center max-w-[460px] mx-auto">
@@ -1541,10 +1545,14 @@ const Deck = () => {
         <div ref={r11.ref} className="flex flex-col items-center text-center gap-6">
           {ctaMode === "thanks" ? (
             <>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 700, color: f.ink(0.85) }}>Thank you.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em" }}>Got it.</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "400px" }}>
-                We're reviewing your intake and will be in touch shortly.
+                We're putting together a custom diagnostic based on your answers. Check your inbox.
               </p>
+              <a href="/" style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500, color: f.ink(0.35), textDecoration: "none", marginTop: "12px" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+              >Return to site</a>
             </>
           ) : (
             <>

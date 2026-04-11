@@ -1,1 +1,0 @@
-ALTER TABLE public.deck_contacts ADD COLUMN practice_selections integer[] DEFAULT NULL;

@@ -18,8 +18,8 @@ import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
 import AdminEditor from "./pages/AdminEditor.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
-import AdminSubmissions from "./pages/AdminSubmissions.tsx";
 import RequireAuth from "./components/admin/RequireAuth.tsx";
+import AdminSubmissions from "./pages/AdminSubmissions.tsx";
 
 const queryClient = new QueryClient();
 
