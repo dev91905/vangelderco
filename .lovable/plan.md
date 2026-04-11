@@ -1,35 +1,36 @@
 
 
-# Fix: Impact Stats → Deep-Link to Case Study Timeline
+# Remove Field Notes
 
-## Problem
+Field notes (`type: "field-note"`) are a post type used in the admin editor, post detail page, and post list. The hook `useFieldNotes.ts` exists but is never actually imported anywhere. The homepage "FIELD NOTES" comment is misleading — that section is actually the Impact Cloud and stays.
 
-The "40K" stat card links to `/diagnostic` because the Clean Energy Workforce case study has `link_url = null` in the database. The current fallback is just `/diagnostic`, which lands on slide 1 — no connection to the actual case study.
+## Changes
 
-## Fix
+### 1. Delete `src/hooks/useFieldNotes.ts`
+Unused file — no imports anywhere.
 
-**1. Add query-param deep-linking to Deck.tsx**
+### 2. `src/pages/AdminEditor.tsx`
+- Remove `"field-note"` from the `TYPE_OPTIONS` array (line 21)
+- Remove all `type === "field-note"` conditional branches (hero image null, content_blocks empty, password null shortcuts in save handler; the field-note-specific editor section)
 
-When `/diagnostic?case=<case-study-id>` is loaded, auto-open the matching case study timeline overlay after the case studies data loads.
+### 3. `src/components/admin/EditorMetaBar.tsx`
+- Remove `"field-note"` from the type selector buttons (line 200)
+- Remove all `isFieldNote` conditional logic (hero image hide, excerpt hide, divider hide, featured fields hide, password hide)
 
-- Read `searchParams.get("case")` from the URL
-- When `caseStudies` data is available and contains a matching ID, call `setSelectedCase(matchedStudy)` via a `useEffect`
+### 4. `src/components/admin/PostListTable.tsx`
+- Remove `"field-note"` from the type label ternary (line 59) — simplify to just "Case Study" vs "Blog"
 
-**2. Update ImpactCloud.tsx link builder**
+### 5. `src/components/PostCard.tsx`
+- Remove `"field-note"` from the type label ternary (line 44)
 
-For deck case studies, link to `/diagnostic?case=<sourceId>` instead of falling back to `/diagnostic`.
+### 6. `src/pages/PostDetail.tsx`
+- Remove the entire `if (post.type === "field-note")` rendering branch (lines ~64-90)
 
-This requires passing `sourceId` through `AggregatedStat` to the component (currently stripped before return).
+### 7. `src/pages/Admin.tsx`
+- Remove `"field-note"` from the type filter tabs (line 105)
 
-**3. Update useAggregatedStats.ts**
+### 8. `src/pages/Index.tsx`
+- Clean up the misleading `/* FIELD_NOTES */` comments (lines 56, 477). The section stays — it's actually Impact Cloud.
 
-Keep `sourceId` in the returned `AggregatedStat` interface instead of stripping it in the final `.map()`.
-
-## Files changed
-
-| File | Change |
-|------|--------|
-| `src/hooks/useAggregatedStats.ts` | Add `sourceId` to `AggregatedStat` interface; stop stripping it |
-| `src/components/ImpactCloud.tsx` | For deck stats, link to `/diagnostic?case=${stat.sourceId}` |
-| `src/pages/Deck.tsx` | Read `?case=` query param; auto-open matching timeline overlay on load |
+No database migration needed — existing field-note posts remain in the table but won't be creatable or visible in the UI.
 
