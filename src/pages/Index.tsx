@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
+import ImpactCloud from "@/components/ImpactCloud";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 
@@ -143,45 +144,7 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
   );
 }
 
-/* ── Proof point row ── */
-const PROOF_POINTS = [
-  { metric: "$12M in coordinated capital", context: "across sectors that didn't know they were aligned." },
-  { metric: "14M organic impressions.", context: "Zero paid media." },
-  { metric: "$8M shifted in defensive capital allocation", context: "from a single intelligence product." },
-  { metric: "18+ months of sustained local networks", context: "still operating after engagement ended." },
-];
-
-function ProofPoint({ metric, context, index }: { metric: string; context: string; index: number }) {
-  const { ref, hasRevealed } = useScrollReveal(0.15);
-
-  return (
-    <div
-      ref={ref}
-      className="py-8"
-      style={{
-        opacity: hasRevealed ? 1 : 0,
-        transform: hasRevealed ? "translateX(0)" : "translateX(-30px)",
-        transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${ox(0.3)}`,
-        paddingLeft: "24px",
-        willChange: "opacity, transform",
-      }}
-    >
-      <span
-        className="text-[18px] md:text-[22px] font-bold"
-        style={{ fontFamily: t.sans, color: "hsl(var(--foreground))", lineHeight: 1.4 }}
-      >
-        {metric}
-      </span>{" "}
-      <span
-        className="text-[15px] md:text-[17px]"
-        style={{ fontFamily: t.sans, color: t.ink(0.42), lineHeight: 1.4 }}
-      >
-        {context}
-      </span>
-    </div>
-  );
-}
+/* ProofPoint removed — replaced by ImpactCloud component */
 
 /* ── Index page ── */
 const Index = () => {
@@ -523,11 +486,7 @@ const Index = () => {
             </div>
           </RevealBlock>
 
-          <div className="flex flex-col w-full">
-            {PROOF_POINTS.map((point, i) => (
-              <ProofPoint key={i} metric={point.metric} context={point.context} index={i} />
-            ))}
-          </div>
+          <ImpactCloud />
         </div>
       </section>
 
