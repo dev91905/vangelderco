@@ -442,7 +442,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll on desktop only; mobile uses native scroll */
+  /* Wheel handler — lock deck scroll on desktop only; mobile is state-driven */
   useEffect(() => {
     if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
@@ -474,7 +474,7 @@ const Deck = () => {
     return () => el.removeEventListener("wheel", handler);
   }, [isMobile]);
 
-  /* Touch swipe handler removed — mobile uses native scroll */
+  /* Touch swipe handler removed — mobile uses state-driven nav */
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
