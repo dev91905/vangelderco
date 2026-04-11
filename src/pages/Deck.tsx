@@ -1083,8 +1083,9 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Hallmarks ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
-          <div className="flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
+          {/* Left column — pinned, no movement */}
+          <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               We've studied hundreds of organizations. The effective ones do three things.
             </p>
@@ -1092,85 +1093,96 @@ const Deck = () => {
               A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
             </p>
           </div>
-          <div className="flex flex-col gap-4" style={{ maxHeight: "clamp(520px, calc(100dvh - 260px), 720px)", overflowY: "auto", overflowX: "hidden", overscrollBehavior: "contain", paddingRight: "clamp(4px, 0.8vw, 12px)" }}>
+          {/* Right column — accordion cards, NO scroll */}
+          <div className="flex flex-col gap-3">
             {[
               { title: "They engage the full culture stack.", rationale: "They don't just push content out — they work behind the scenes so distribution platforms across different sectors are pulling the message up. Music, faith communities, creator economies, campuses, veteran networks. Not just strategic comms.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
               { title: "They coordinate across sectors.", rationale: "Communications becomes the organizing infrastructure — the scaffolding that brings different sectors together around a focal point and gives them the cover and momentum to push for policy together. Without multiple sectors engaged, policy doesn't move.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
               { title: "They organize for growth.", rationale: "It's not about organizing people who already agree. To win, you have to demonstrate that your communications are bringing new people in — people who weren't there before. Only by demonstrating real persuasion can you persuade the people in power.", help: "We run live campaigns that bring in new audiences and build the local leadership infrastructure that turns engagement into lasting power." },
             ].map((h, i) => {
-              const isExpanded = hallmarkSelections[i] !== undefined || expandedHallmarkIdx === i;
+              const isExpanded = expandedHallmarkIdx === i;
               const selection = hallmarkSelections[i];
               return (
                 <button
                   key={i}
-                  onClick={() => setExpandedHallmarkIdx(isExpanded && expandedHallmarkIdx === i ? null : i)}
-                  className="text-left w-full transition-all duration-300"
+                  onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
+                  className="text-left w-full"
                   style={{
-                    padding: "28px 24px",
+                    padding: isExpanded ? "24px 24px 20px" : "20px 24px",
                     background: isExpanded ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
                     border: `1px solid ${isExpanded ? "hsl(var(--foreground) / var(--a-border))" : f.ink(0.06)}`,
                     borderRadius: "12px", cursor: "pointer",
                     opacity: r4.isActive ? 1 : 0,
                     transform: r4.isActive ? "translateX(0) scale(1)" : "translateX(30px) scale(0.97)",
                     filter: r4.isActive ? "blur(0px)" : "blur(5px)",
-                    transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms`,
+                    transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, background 0.25s ease, border-color 0.25s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1)`,
                   }}
                 >
                   <div className="flex items-center gap-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2vw, 28px)", fontWeight: 700, color: f.ink(0.15), minWidth: "32px", flexShrink: 0 }}>{i + 1}</span>
-                    <p className="flex-1" style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.65) }}>{h.title}</p>
-                    {selection && (
+                    <span style={{ fontFamily: f.sans, fontSize: "clamp(18px, 1.8vw, 24px)", fontWeight: 700, color: f.ink(0.15), minWidth: "28px", flexShrink: 0 }}>{i + 1}</span>
+                    <p className="flex-1" style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: isExpanded ? f.ink(0.85) : f.ink(0.65), transition: "color 0.25s ease" }}>{h.title}</p>
+                    {selection && !isExpanded && (
                       <span style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "999px", color: f.ink(0.5), background: "hsl(var(--foreground) / 0.06)", flexShrink: 0 }}>
-                        {selection === "doing" ? "Doing ✓" : "Need help"}
+                        {selection === "doing" ? "✓" : "Need"}
                       </span>
                     )}
-                    <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.3s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }} />
+                    <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }} />
                   </div>
-                  <div style={{ maxHeight: isExpanded ? "500px" : "0", overflow: "hidden", transition: "max-height 0.5s ease, opacity 0.4s ease", opacity: isExpanded ? 1 : 0 }}>
-                    <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.55), marginTop: "16px", marginLeft: "48px", lineHeight: 1.7 }}>{h.rationale}</p>
-                    <div style={{ margin: "16px 0 0 48px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "14px" }}>
-                      <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.5), lineHeight: 1.6 }}>
-                        <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
-                      </p>
-                    </div>
-                    {/* Self-assessment buttons */}
-                    <div className="flex gap-3" style={{ marginTop: "18px", marginLeft: "48px" }} onClick={(e) => e.stopPropagation()}>
-                      {([
-                        { value: "doing" as const, lbl: "We're doing this" },
-                        { value: "need" as const, lbl: "We need this" },
-                      ]).map(opt => {
-                        const isSelected = selection === opt.value;
-                        return (
-                          <button
-                            key={opt.value}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setHallmarkSelections(prev => {
-                                if (prev[i] === opt.value) {
-                                  const next = { ...prev };
-                                  delete next[i];
-                                  return next;
-                                }
-                                return { ...prev, [i]: opt.value };
-                              });
-                            }}
-                            style={{
-                              fontFamily: f.sans,
-                              fontSize: "clamp(11px, 1.1vw, 13px)",
-                              fontWeight: isSelected ? 700 : 500,
-                              padding: "8px 18px",
-                              borderRadius: "8px",
-                              border: `1px solid ${isSelected ? "hsl(var(--foreground) / 0.25)" : f.ink(0.1)}`,
-                              background: isSelected ? "hsl(var(--foreground) / 0.08)" : "transparent",
-                              color: isSelected ? f.ink(0.8) : f.ink(0.35),
-                              cursor: "pointer",
-                              transition: "all 0.2s ease",
-                            }}
-                          >
-                            {opt.lbl}
-                          </button>
-                        );
-                      })}
+
+                  {/* Expanded content — uses grid for smooth height animation */}
+                  <div style={{
+                    display: "grid",
+                    gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}>
+                    <div style={{ overflow: "hidden" }}>
+                      <div style={{ paddingTop: "14px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.55), marginLeft: "44px", lineHeight: 1.7 }}>{h.rationale}</p>
+                        <div style={{ margin: "12px 0 0 44px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "12px" }}>
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.5), lineHeight: 1.6 }}>
+                            <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
+                          </p>
+                        </div>
+                        {/* Self-assessment buttons */}
+                        <div className="flex gap-3" style={{ marginTop: "14px", marginLeft: "44px" }} onClick={(e) => e.stopPropagation()}>
+                          {([
+                            { value: "doing" as const, lbl: "We're doing this" },
+                            { value: "need" as const, lbl: "We need this" },
+                          ]).map(opt => {
+                            const isSelected = selection === opt.value;
+                            return (
+                              <button
+                                key={opt.value}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setHallmarkSelections(prev => {
+                                    if (prev[i] === opt.value) {
+                                      const next = { ...prev };
+                                      delete next[i];
+                                      return next;
+                                    }
+                                    return { ...prev, [i]: opt.value };
+                                  });
+                                }}
+                                style={{
+                                  fontFamily: f.sans,
+                                  fontSize: "clamp(11px, 1.1vw, 13px)",
+                                  fontWeight: isSelected ? 700 : 500,
+                                  padding: "7px 16px",
+                                  borderRadius: "8px",
+                                  border: `1px solid ${isSelected ? "hsl(var(--foreground) / 0.25)" : f.ink(0.1)}`,
+                                  background: isSelected ? "hsl(var(--foreground) / 0.08)" : "transparent",
+                                  color: isSelected ? f.ink(0.8) : f.ink(0.35),
+                                  cursor: "pointer",
+                                  transition: "all 0.2s ease",
+                                }}
+                              >
+                                {opt.lbl}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </button>
