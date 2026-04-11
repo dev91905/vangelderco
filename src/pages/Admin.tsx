@@ -123,12 +123,6 @@ const Admin = () => {
           <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link to="/admin/submissions" className="flex items-center gap-2 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
-            style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
-            <Mail className="w-3 h-3" /> Diagnostic Results
-          </Link>
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
             onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
