@@ -1,36 +1,26 @@
 
 
-# Remove Field Notes
+# Fix: Return to homepage after closing deep-linked case study
 
-Field notes (`type: "field-note"`) are a post type used in the admin editor, post detail page, and post list. The hook `useFieldNotes.ts` exists but is never actually imported anywhere. The homepage "FIELD NOTES" comment is misleading — that section is actually the Impact Cloud and stays.
+## Problem
 
-## Changes
+User clicks a stat chip on the homepage → navigates to `/diagnostic?case=<id>` → case study timeline opens → user closes it → they're now stranded on the diagnostic page instead of back on the homepage.
 
-### 1. Delete `src/hooks/useFieldNotes.ts`
-Unused file — no imports anywhere.
+## Fix
 
-### 2. `src/pages/AdminEditor.tsx`
-- Remove `"field-note"` from the `TYPE_OPTIONS` array (line 21)
-- Remove all `type === "field-note"` conditional branches (hero image null, content_blocks empty, password null shortcuts in save handler; the field-note-specific editor section)
+When the overlay was opened via a deep-link (the `?case=` param), closing it should navigate back to the homepage instead of just closing the overlay.
 
-### 3. `src/components/admin/EditorMetaBar.tsx`
-- Remove `"field-note"` from the type selector buttons (line 200)
-- Remove all `isFieldNote` conditional logic (hero image hide, excerpt hide, divider hide, featured fields hide, password hide)
+### Implementation
 
-### 4. `src/components/admin/PostListTable.tsx`
-- Remove `"field-note"` from the type label ternary (line 59) — simplify to just "Case Study" vs "Blog"
+In `src/pages/Deck.tsx`:
 
-### 5. `src/components/PostCard.tsx`
-- Remove `"field-note"` from the type label ternary (line 44)
+1. Add a `deepLinkedCase` ref (boolean) that gets set to `true` when the `?case=` useEffect opens the overlay
+2. In the `onClose` handler passed to `CaseTimelineOverlay`, check this ref — if true, call `navigate("/")` instead of just `setSelectedCase(null)`
+3. Reset the ref after navigating
 
-### 6. `src/pages/PostDetail.tsx`
-- Remove the entire `if (post.type === "field-note")` rendering branch (lines ~64-90)
+This way, closing the overlay after a normal deck interaction still works as before (stays on diagnostic), but deep-linked opens return you home.
 
-### 7. `src/pages/Admin.tsx`
-- Remove `"field-note"` from the type filter tabs (line 105)
-
-### 8. `src/pages/Index.tsx`
-- Clean up the misleading `/* FIELD_NOTES */` comments (lines 56, 477). The section stays — it's actually Impact Cloud.
-
-No database migration needed — existing field-note posts remain in the table but won't be creatable or visible in the UI.
+| File | Change |
+|------|--------|
+| `src/pages/Deck.tsx` | Add `deepLinkedCase` ref; update close handler to navigate home when deep-linked |
 
