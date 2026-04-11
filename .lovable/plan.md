@@ -1,36 +1,38 @@
 
 
-## Fix: Mobile slide spacing — uniform header clearance across all frames
+## Fix: Persist diagnostic answers while navigating, reset on close or submit
 
 ### Problem
-Frames 4, 6, 7 have `marginTop: "-40px"` on their content grid, which was a desktop centering hack that pulls the title up under the header gradient on mobile. Other frames have inconsistent top spacing — some use `min-h-[60vh] justify-center`, some have no explicit top spacing at all.
+State persistence has gaps:
+1. **`saveDeckState` is only called manually** when navigating to `/work` — answers are NOT auto-saved as the user clicks Continue/Back through slides
+2. **Close (X button / Escape) doesn't clear state** — so if there IS stale saved state, it incorrectly persists after closing
+3. On submit, state is correctly cleared — that's fine
 
-### Root cause
-The `paddingTop: "60px"` in `DeckFrame`'s mobile content area is the only header clearance. But individual slide content divs override this with negative margins or centering tricks meant for desktop.
+### Result
+If a user answers questions, clicks back and forth, then refreshes or navigates away accidentally, their answers are lost. And if they close the diagnostic, stale state from a previous session might resurrect.
 
 ### Changes
 
-**`src/components/deck/DeckFrame.tsx`**
-- Increase mobile `paddingTop` from `60px` to `72px` — gives consistent breathing room below the header gradient on all devices (phone + tablet)
-- This single change establishes a uniform top position for all slide content
+**`src/pages/Deck.tsx`**
 
-**`src/pages/Deck.tsx`** — make the negative margins desktop-only:
-- **Frame 4 (Practices)**: Change `marginTop: "-40px"` → remove on mobile. Use a responsive approach: wrap the negative margin in a class or conditional so it only applies on `lg:` screens
-- **Frame 6 (Metrics)**: Same — remove `marginTop: "-40px"` on mobile
-- **Frame 7 (Working Together)**: Same — remove `marginTop: "-40px"` on mobile
-- **Frame 1 (Hero)**: Remove `min-h-[60vh] justify-center` on mobile — content should start at top, not vertically center
-- **Frame 2 (Self-Diagnosis)**: Remove `min-h-[70vh] justify-center` on mobile — same reason
-- **Frame 3 (Quiz)**: Remove `justifyContent: "center"` on mobile
-- **Frame 5 (Capabilities)**: Already uses `flex-col gap-8` with no centering — fine as-is
-- **Frame 8 (Sectors)**: Already uses `w-full` with no centering — fine as-is
-- **Frame 9 (Results)**: Already uses `align="left"` — fine as-is
-- **Frame 10 (CTA)**: Already simple — fine as-is
+1. **Auto-save on every state change**: Add a `useEffect` that calls `saveDeckState()` whenever any answer state changes. This ensures clicking Continue, Back, or picking answers always persists to `sessionStorage` automatically — no explicit call needed.
 
-Implementation approach: Since `isMobile` is already available as a prop/variable in the Deck component, I'll use it inline to conditionally apply the negative margins and min-height centering only on desktop.
+```typescript
+useEffect(() => {
+  saveDeckState();
+}, [saveDeckState]);
+```
+
+2. **Clear state on Close**: Update the X button's `onClick` and the Escape key handler to clear `sessionStorage.removeItem("deck-state")` before navigating to `/`.
+
+   - X button: `onClick={() => { sessionStorage.removeItem("deck-state"); navigate("/"); }}`
+   - Escape handler: same — `sessionStorage.removeItem("deck-state"); navigate("/");`
+
+3. **Keep existing submit clear**: The `handleCtaSubmit` already calls `sessionStorage.removeItem("deck-state")` — no change needed there.
 
 ### What stays the same
-- Desktop layout completely unchanged — negative margins and vertical centering remain on large screens
-- No changes to button styling, gradients, nav, progress bar, or any content
-- `paddingBottom: "100px"` on mobile unchanged (footer clearance)
-- Tablet gets the same mobile treatment (DeckFrame mobile path triggers at `< 768px` via `useIsMobile`)
+- All existing state variables and their initialization from `restored`
+- The `saveDeckState` function itself (still used by the `/work` navigation)
+- Desktop scroll restoration on mount
+- Submit flow and thank-you state
 
