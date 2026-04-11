@@ -539,7 +539,7 @@ const Deck = () => {
     >
 
       {/* ─── Fixed UI Chrome — Top ─── */}
-      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 32px" }}>
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "20px 32px", background: "linear-gradient(to bottom, hsl(var(--background)) 40%, transparent 100%)" }}>
         <div className="flex items-center justify-between pointer-events-auto">
           <span style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.08em", color: f.ink(0.35) }}>
             {STEP_LABELS[currentFrame] || ""} · {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
