@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { X, Search, Plus } from "lucide-react";
-import { theme as t } from "@/lib/theme";
+import { t } from "@/lib/theme";
 
 type Article = { id: string; title: string; slug: string | null; is_published: boolean };
 
