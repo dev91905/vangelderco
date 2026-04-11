@@ -325,8 +325,8 @@ const Deck = () => {
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
-  const [hallmarkSelections, setHallmarkSelections] = useState<Record<number, boolean>>({});
-  const [expandedHallmarkIdx, setExpandedHallmarkIdx] = useState<number | null>(null);
+  const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
+  const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
 
   /* Booking link from settings */
   const { data: siteSettings } = useSiteSettings();
@@ -338,7 +338,7 @@ const Deck = () => {
     gates[0] = true; // hero — always ok
     gates[1] = selectedPains.length > 0 || customSaved; // pain points
     gates[2] = quizAnswers.every(a => a !== null); // quiz complete
-    gates[3] = true; // hallmarks — always passable, checkbox is optional
+    gates[3] = true; // practices — always passable, checkbox is optional
     gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
@@ -518,7 +518,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Hallmarks", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
 
   return (
     <div
@@ -1081,7 +1081,7 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 4: Hallmarks ═══ */}
+      {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
           {/* Left column — pinned */}
@@ -1103,8 +1103,8 @@ const Deck = () => {
               { title: "They coordinate across sectors.", rationale: "Nothing moves until multiple sectors are pushing on the same thing. The most effective programs leverage cultural engagement to bring policy, industry, labor, grassroots, and other sectors to the table around a shared focal point.", help: "We leverage media and cultural distribution to bring sectors to the table and align them around shared interests." },
               { title: "They organize for growth.", rationale: "It's not about organizing people who already agree. To win, your communications have to bring new people in — people who weren't there before. Only by demonstrating real persuasion can you move the people in power.", help: "We run campaigns that bring in new audiences, deepen engagement, and build leadership infrastructure that wins lasting power." },
             ].map((h, i) => {
-              const isExpanded = expandedHallmarkIdx === i;
-              const isChecked = hallmarkSelections[i] === true;
+              const isExpanded = expandedPracticeIdx === i;
+              const isChecked = practiceSelections[i] === true;
               return (
                 <div
                   key={i}
@@ -1127,7 +1127,7 @@ const Deck = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setHallmarkSelections(prev => ({ ...prev, [i]: !prev[i] }));
+                        setPracticeSelections(prev => ({ ...prev, [i]: !prev[i] }));
                       }}
                       style={{
                         width: "20px", height: "20px", borderRadius: "5px", flexShrink: 0,
@@ -1146,7 +1146,7 @@ const Deck = () => {
                     </button>
                     <button
                       className="flex-1 text-left"
-                      onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
+                      onClick={() => setExpandedPracticeIdx(isExpanded ? null : i)}
                       style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
                     >
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: isExpanded ? f.ink(0.85) : f.ink(0.65), transition: "color 0.25s ease" }}>{h.title}</p>
@@ -1155,7 +1155,7 @@ const Deck = () => {
                       <span style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 600, letterSpacing: "0.08em", color: f.ink(0.35), flexShrink: 0 }}>✓</span>
                     )}
                     <button
-                      onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
+                      onClick={() => setExpandedPracticeIdx(isExpanded ? null : i)}
                       style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", flexShrink: 0 }}
                     >
                       <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)", transform: isExpanded ? "rotate(180deg)" : "rotate(0)" }} />
