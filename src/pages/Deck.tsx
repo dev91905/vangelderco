@@ -389,7 +389,7 @@ const Deck = () => {
     clearDeckState();
     setCtaSubmitting(false);
     setCtaMode("thanks");
-  }, [ctaForm.firstName, ctaForm.lastName, ctaForm.email, ctaForm.organization, ctaSubmitting, metricsChecked, selectedSectors, customSaved, customMessage, selectedPains, engagementPath, diagnosticScore, quizAnswers, capabilitiesRanked, hasMediaExperience, practiceSelections, clearDeckState]);
+  };
 
   
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
