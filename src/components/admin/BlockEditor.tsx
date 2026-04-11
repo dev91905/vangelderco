@@ -206,7 +206,7 @@ const BlockEditor = ({ block, onChange, onDelete, onInsertAfter, onDeleteEmpty, 
           <div className="space-y-3">
             <div className="flex flex-wrap gap-3">
               {(block.stats || []).map((stat: any, idx: number) => (
-                <div key={idx} className="group/stat relative flex flex-col px-4 py-3 min-w-[140px] max-w-[220px] rounded-xl"
+                <div key={idx} className="group/stat relative flex flex-col px-4 py-3 min-w-[140px] rounded-xl"
                   style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}` }}>
                   <button onClick={() => update({ stats: block.stats.filter((_: any, i: number) => i !== idx) })}
                     className="absolute top-1 right-1 p-1 rounded opacity-0 group-hover/stat:opacity-100 transition-opacity" style={{ color: t.ink(0.3) }}>

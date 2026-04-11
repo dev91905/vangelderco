@@ -99,7 +99,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
   return (
     <>
       {/* Published-style article header */}
-      <div className="w-full flex flex-col items-center px-6" style={{ minHeight: isCaseStudy ? "20vh" : (props.heroImageUrl ? undefined : "20vh"), paddingTop: isCaseStudy ? "8vh" : "6vh" }}>
+      <div className="w-full flex flex-col items-center px-6" style={{ paddingTop: "3vh" }}>
 
         {/* Hero image for blog posts */}
         {!isCaseStudy && props.heroImageUrl && (
@@ -123,12 +123,15 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
           </div>
 
           {/* Editable title — styled exactly like published */}
-          <input
+          <textarea
             value={props.title}
             onChange={(e) => props.onTitleChange(e.target.value)}
             placeholder="Untitled"
-            className="w-full bg-transparent outline-none font-bold leading-[1.15] text-center"
+            rows={1}
+            className="w-full bg-transparent outline-none font-bold leading-[1.15] text-center resize-none overflow-hidden"
             style={{ fontFamily: t.sans, color: t.ink(0.9), fontSize: titleSize, lineHeight: 1.15 }}
+            ref={(el) => { if (el) { el.style.height = "0"; el.style.height = el.scrollHeight + "px"; } }}
+            onInput={(e) => { const el = e.currentTarget; el.style.height = "0"; el.style.height = el.scrollHeight + "px"; }}
           />
 
           {/* Editable excerpt — styled exactly like published */}
