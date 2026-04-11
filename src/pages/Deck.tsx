@@ -32,7 +32,7 @@ const label = t.label;
 /* ─── Pain points data ─── */
 const PAIN_POINTS = [
   { id: "history", short: "Just getting started", detail: "No portfolio yet — still figuring out where to begin and what to fund." },
-  { id: "evaluate", short: "Funding comms, no strategy", detail: "Money goes out the door, but nothing connects what we spend to outcomes." },
+  { id: "evaluate", short: "Funding comms, no strategy", detail: "Money goes out the door, but nothing seems to click." },
   { id: "access", short: "Limited channels", detail: "Op-eds, paid ads, social on repeat — no real reach into media or culture." },
   { id: "measurement", short: "Not sure what to measure", detail: "Campaigns are running, but we can't tell what's actually working or why." },
   { id: "expertise", short: "No expertise in-house", detail: "Nobody on staff has commercial media experience — when things break, we guess." },
