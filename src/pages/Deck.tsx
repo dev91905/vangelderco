@@ -1091,10 +1091,10 @@ const Deck = () => {
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
           {/* Left column */}
           <div style={{ ...r4.stagger(0, 0, "blur-up") }}>
-            <p style={{ ...heading("clamp(22px, 2.8vw, 34px)"), fontWeight: 700 }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               Effective programs do three things.
             </p>
-            <p style={{ marginTop: "16px", fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
+            <p style={{ marginTop: "12px", fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), lineHeight: 1.6 }}>
               Select the ones you want to work on.
             </p>
           </div>
@@ -1236,8 +1236,8 @@ const Deck = () => {
 
       {/* ═══ FRAME 6: Metrics Checklist ═══ */}
       <DeckFrame ref={setRef(5)} mode="wide">
-        <div ref={r6.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[40%] flex flex-col justify-center" style={r6.stagger(0, 0, "blur-up")}>
+        <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
+          <div style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               What does your portfolio measure?
             </p>
@@ -1246,7 +1246,7 @@ const Deck = () => {
             </p>
           </div>
 
-          <div className="lg:w-[60%] grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {ALL_METRICS.map((metric, i) => {
               const isChecked = metricsChecked.includes(metric);
               
