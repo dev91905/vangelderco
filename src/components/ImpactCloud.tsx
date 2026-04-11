@@ -31,10 +31,8 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
   const href = stat.sourceSlug ? `${capabilityPath}/${stat.sourceSlug}` : capabilityPath;
 
   return (
-    <Link
-      to={href}
+    <div
       ref={ref}
-      className="group no-underline block"
       style={{
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)",
