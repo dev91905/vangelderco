@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
-import { useFieldNotes } from "@/hooks/useFieldNotes";
+
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
@@ -143,76 +143,51 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
   );
 }
 
-/* ── Case fragment with premium motion ── */
-function CaseFragment({ sector, brief, result, slug, linkUrl, index }: { sector: string; brief: string; result: string; slug?: string | null; linkUrl?: string | null; index: number }) {
+/* ── Proof point row ── */
+const PROOF_POINTS = [
+  { metric: "$12M in coordinated capital", context: "across sectors that didn't know they were aligned." },
+  { metric: "14M organic impressions.", context: "Zero paid media." },
+  { metric: "$8M shifted in defensive capital allocation", context: "from a single intelligence product." },
+  { metric: "18+ months of sustained local networks", context: "still operating after engagement ended." },
+];
+
+function ProofPoint({ metric, context, index }: { metric: string; context: string; index: number }) {
   const { ref, hasRevealed } = useScrollReveal(0.15);
-  const [hovered, setHovered] = useState(false);
 
-  const hasLink = linkUrl || slug;
-
-  const content = (
+  return (
     <div
       ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`mb-16 ${hasLink ? "cursor-pointer" : "cursor-default"}`}
+      className="py-8"
       style={{
-        
         opacity: hasRevealed ? 1 : 0,
-        transform: hasRevealed
-          ? hovered ? "translateX(8px)" : "translateX(0)"
-          : "translateX(-30px)",
+        transform: hasRevealed ? "translateX(0)" : "translateX(-30px)",
         transition: `opacity 0.9s ${EASE_OUT_EXPO} ${index * 0.12}s, transform 1s ${EASE_OUT_EXPO} ${index * 0.12}s`,
-        borderLeft: `2px solid ${hovered ? ox(0.9) : ox(0.3)}`,
+        borderLeft: `2px solid ${ox(0.3)}`,
         paddingLeft: "24px",
         willChange: "opacity, transform",
       }}
     >
-      <div
-        className="text-[10px] tracking-[0.2em] uppercase mb-2"
-        style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+      <span
+        className="text-[18px] md:text-[22px] font-bold"
+        style={{ fontFamily: t.sans, color: "hsl(var(--foreground))", lineHeight: 1.4 }}
       >
-        {sector}
-      </div>
-      <div
-        className="text-lg leading-relaxed mb-2 italic"
-        style={{ fontFamily: t.serif, color: t.ink(0.5) }}
+        {metric}
+      </span>{" "}
+      <span
+        className="text-[15px] md:text-[17px]"
+        style={{ fontFamily: t.sans, color: t.ink(0.42), lineHeight: 1.4 }}
       >
-        {brief}
-      </div>
-      <div
-        className="text-[11px]"
-        style={{
-          fontFamily: t.sans,
-          color: hovered ? "hsl(var(--foreground) / 0.9)" : "hsl(var(--foreground) / var(--a-mid))",
-          transition: `color 0.4s ${EASE_OUT_QUART}`,
-        }}
-      >
-        {result}
-      </div>
+        {context}
+      </span>
     </div>
   );
-
-  // External link
-  if (linkUrl && linkUrl.startsWith("http")) {
-    return <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="block no-underline">{content}</a>;
-  }
-  // Internal link_url (e.g. /post/clean-energy)
-  if (linkUrl) {
-    return <Link to={linkUrl} className="block no-underline">{content}</Link>;
-  }
-  // Fallback to slug
-  if (slug) {
-    return <Link to={`/post/${slug}`} className="block no-underline">{content}</Link>;
-  }
-  return content;
 }
 
 /* ── Index page ── */
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
-  const { data: fieldNotes } = useFieldNotes();
+  
   const [scrollY, setScrollY] = useState(0);
   const [glowIndex, setGlowIndex] = useState(0);
 
@@ -549,16 +524,8 @@ const Index = () => {
           </RevealBlock>
 
           <div className="flex flex-col w-full">
-            {(fieldNotes || []).map((note, i) => (
-              <CaseFragment
-                key={note.id}
-                sector={note.sector_label || note.capability}
-                brief={note.excerpt || ""}
-                result={note.featured_stat || ""}
-                slug={note.slug}
-                linkUrl={note.link_url}
-                index={i}
-              />
+            {PROOF_POINTS.map((point, i) => (
+              <ProofPoint key={i} metric={point.metric} context={point.context} index={i} />
             ))}
           </div>
         </div>
