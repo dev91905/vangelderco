@@ -1,46 +1,46 @@
 
 
-# Fix: Impact Stat Links → Correct Destinations + Password Protection
+# Tighten Homepage Layout — TripleTen-style Density
 
-## Problem
+## The Problem
 
-The `StatCard` link builder in `ImpactCloud.tsx` constructs URLs like `/cross-sector/building-power-in-the-permian-basin` — but no such routes exist. The app only has `/post/:slug` for articles. For deck case studies with no `link_url`, it falls back to `/diagnostic`.
+Your homepage has 7 sections. Four of them (`snap-section`) force full-viewport height (`100dvh`) even when their content only needs ~40-60% of the screen. The other three (`snap-section-scroll`) also have `min-height: 100dvh` plus large vertical padding. This creates the "lots of white space" feel.
 
-## What needs to happen
+## The Approach
 
-### 1. Fix link generation in `ImpactCloud.tsx` (line 40-44)
+Keep every component, color, animation, and visual identity. Only change spacing and section sizing so content flows continuously like a dense editorial scroll.
 
-Change the href logic:
+### 1. Remove full-viewport enforcement from most sections
 
-- **For capability_posts** (`sourceCapability !== "deck"`): Always link to `/post/{slug}`. The `PostDetail` page already handles password gating via the `verify-post-password` edge function.
-- **For deck_case_studies** (`sourceCapability === "deck"`): Link to `link_url` if set, otherwise `/diagnostic`.
+- **Hero**: Keep at `100dvh` — it's the landing moment, should be full-screen
+- **Altitude** ("Our Practice"): Drop from `100dvh` to auto-height with moderate padding (~10vh top, ~8vh bottom)
+- **Capabilities**: Drop `min-height: 100dvh`, use comfortable padding (~8vh top/bottom)
+- **Recent Impact**: Same — auto-height, ~6vh padding
+- **Intake CTA**: Drop from `100dvh` to auto-height with ~8vh padding
+- **Network**: Auto-height, ~6vh padding
+- **Footer**: Drop from `100dvh` to a compact section (~20vh or less)
 
-```text
-Before:  /cross-sector/building-power-in-the-permian-basin  → 404
-After:   /post/building-power-in-the-permian-basin          → PostDetail (with password gate if needed)
-```
+### 2. Replace snap-scroll classes with flow classes
 
-### 2. Password protection is already wired
+Create two new utility classes in `index.css`:
+- `.section-flow`: No min-height, responsive vertical padding (`py-[8vh]` equivalent)
+- `.section-flow-tight`: Even less padding (`py-[5vh]`)
 
-The backend is complete:
-- `capability_posts.password` column exists
-- `verify-post-password` edge function handles both post-level and global passwords
-- `PostDetail` page checks `usePostHasPassword` and shows `PasswordGateWrapper`
-- Admin editor (`AdminEditor.tsx`) has password field on the meta bar
-- Admin panel (`Admin.tsx`) has global password management
+Keep `.snap-section` only for the hero.
 
-No backend or admin changes needed — password protection works end-to-end once the links point to `/post/:slug`.
+### 3. Reduce internal spacing
 
-### 3. Include `sourceType` in aggregated stats
+- Capability cards: reduce `gap-8 md:gap-10` → `gap-5 md:gap-6`
+- Section label margins: `mb-16` → `mb-8`
+- Network grid: `mt-10` → `mt-6`
+- Altitude section: tighten line spacing
 
-Add `sourceType` (from `capability_posts.type`) to `AggregatedStat` so future link logic can distinguish article types if needed. This is a minor data addition in `useAggregatedStats.ts`.
-
-### Summary of file changes
+### 4. Files changed
 
 | File | Change |
 |------|--------|
-| `src/components/ImpactCloud.tsx` | Fix href: posts → `/post/{slug}`, deck → `link_url \|\| /diagnostic` |
-| `src/hooks/useAggregatedStats.ts` | Add `sourceType` field from capability_posts |
+| `src/index.css` | Add `.section-flow` and `.section-flow-tight` classes |
+| `src/pages/Index.tsx` | Swap section classes from snap-section to flow classes, tighten internal gaps |
 
-One-line fix at the core — the password gate, edge function, and admin panels are already in place.
+No component, color, typography, or animation changes. Just density.
 
