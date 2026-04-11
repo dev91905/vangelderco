@@ -115,15 +115,23 @@ export default function ImpactCloud() {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:grid-rows-2 lg:h-[420px]">
-      {stats.slice(0, 6).map((stat, i) => (
-        <StatCard
-          key={`${stat.sourceSlug}-${stat.label}-${i}`}
-          stat={stat}
-          index={i}
-          isHero={heroPositions.has(i)}
-        />
-      ))}
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{
+        border: `1px solid ${t.ink(0.10)}`,
+        minHeight: "420px",
+      }}
+    >
+      <div className="grid grid-cols-2 gap-0 lg:grid-cols-4 lg:grid-rows-2 h-full" style={{ minHeight: "420px" }}>
+        {stats.slice(0, 6).map((stat, i) => (
+          <StatCard
+            key={`${stat.sourceSlug}-${stat.label}-${i}`}
+            stat={stat}
+            index={i}
+            isHero={heroPositions.has(i)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
