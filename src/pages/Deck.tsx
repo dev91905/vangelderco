@@ -289,8 +289,9 @@ const Deck = () => {
     capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
     ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx]);
 
-  // Scroll to restored frame on mount
+  // Scroll to restored frame on mount (desktop only — mobile uses state)
   useEffect(() => {
+    if (isMobile) return;
     if (restored && restored.currentFrame > 0) {
       setTimeout(() => {
         frameRefs.current[restored.currentFrame]?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
