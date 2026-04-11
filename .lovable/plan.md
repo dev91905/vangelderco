@@ -1,18 +1,26 @@
 
 
-# Admin Panel: Collapsible Articles Section + Rename "Submissions"
+# Fix Article Editor — Match Published Article Format
 
-## Changes
+Three concrete problems visible in the editor right now:
 
-### 1. Collapsible "Articles" section in Admin.tsx
-Wrap the filter chips + `PostListTable` in a collapsible accordion-style section with a clickable header labeled **"Articles"** that shows a count (e.g. "Articles (12)") and a chevron. Clicking toggles the list open/closed. Default state: open. Uses the same pattern as a simple `useState` toggle with smooth height animation.
+## Problem 1: Title gets cut off
+The editor uses a single-line `<input>` for the article title. Long titles like "Reframing Climate Through Cultural Infrastructure" get truncated to "Reframing Climate Through Cultural I". The published view wraps correctly because it uses a block-level `<h1>`.
 
-### 2. Rename "Contacts" / "Submissions" to "Diagnostic Results"
-- The nav link in the admin header bar currently says "Submissions" — rename to **"Diagnostic Results"**
-- The `/admin/submissions` page heading (in `AdminSubmissions.tsx`) — rename to **"Diagnostic Results"**
-- Any references to "contacts" or "submissions" in user-facing admin UI copy get updated
+**Fix**: Replace the title `<input>` in `EditorMetaBar.tsx` with an auto-resizing `<textarea>` (same pattern as body text). This lets long titles wrap naturally, matching the published layout.
 
-### Files to edit
-- `src/pages/Admin.tsx` — add collapsible wrapper around articles list, rename "Submissions" link text
-- `src/pages/AdminSubmissions.tsx` — rename page heading and any user-facing labels
+## Problem 2: Key Metrics don't match the public version
+The `StatChipsEditor` constrains each chip to `max-w-[220px]`, which truncates descriptions like "CULTURAL INSTITUTIONS ENGAGI..." and "NARRATIVE INFRASTRUCTURE IN...". The public `StatChips` component has no max-width constraint — chips size to content.
+
+**Fix**: Remove the `max-w-[220px]` constraint from both `StatChipsEditor.tsx` and the stat-grid block in `BlockEditor.tsx`. Let chips size naturally, matching the published `StatChips` component.
+
+## Problem 3: Editor forces scrolling before content is reachable
+The `EditorMetaBar` uses `minHeight: "20vh"` (or `"40vh"` with hero images) plus `paddingTop: "8vh"`, pushing content blocks below the fold. The user has to scroll past a large empty header area before reaching editable content.
+
+**Fix**: Reduce the top padding in `EditorMetaBar.tsx` from `8vh`/`6vh` to `3vh`, and remove `minHeight` on the header wrapper. The header should be compact — just enough space for the meta row, title, excerpt, and date. No forced vertical whitespace that pushes blocks out of view.
+
+## Files to edit
+- `src/components/admin/EditorMetaBar.tsx` — textarea for title, reduce header spacing
+- `src/components/admin/StatChipsEditor.tsx` — remove max-width constraint on chips
+- `src/components/admin/BlockEditor.tsx` — remove max-width constraint on stat-grid chips
 
