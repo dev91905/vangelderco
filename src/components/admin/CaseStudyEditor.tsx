@@ -88,6 +88,8 @@ const CaseStudyEditor: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["deck-case-studies"] });
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
       setDirty(false);
+      setSaveFlash(true);
+      setTimeout(() => setSaveFlash(false), 2000);
     },
   });
 
