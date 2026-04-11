@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { CaseStudyData } from "./CaseTimelineOverlay";
 import { caseStudyUi as ui } from "./caseStudyUi";
 
@@ -9,6 +9,8 @@ interface Props {
   isActive: boolean;
   onSelect: (study: CaseStudyData) => void;
 }
+
+const sidePadding = "clamp(24px, 4vw, 80px)";
 
 const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -35,6 +37,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
     emblaApi.on("select", onEmblaSelect);
     emblaApi.on("reInit", onEmblaSelect);
     onEmblaSelect();
+
     return () => {
       emblaApi.off("select", onEmblaSelect);
       emblaApi.off("reInit", onEmblaSelect);
@@ -49,100 +52,13 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
         transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
       }}
     >
-      <div ref={emblaRef} className="overflow-hidden" style={{ paddingLeft: "clamp(24px, 4vw, 80px)" }}>
-        <div className="flex" style={{ gap: "clamp(16px, 1.5vw, 24px)", paddingTop: "12px", paddingBottom: "12px" }}>
-          {studies.map((cs, i) => {
-            const phaseCount = cs.phases?.length ?? 0;
-            const hasPhases = phaseCount > 0;
-
-            return (
-              <button
-                key={cs.id}
-                onClick={() => onSelect(cs)}
-                className="group flex-shrink-0 text-left"
-                style={{
-                  width: "clamp(320px, 26vw, 400px)",
-                  minHeight: "clamp(220px, 22vh, 280px)",
-                  borderRadius: ui.radius,
-                  padding: 0,
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  border: "none",
-                  background: "transparent",
-                  transition: "transform 0.35s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div
-                  className="flex h-full flex-col justify-between"
-                  style={{
-                    minHeight: "clamp(220px, 22vh, 280px)",
-                    borderRadius: ui.radius,
-                    padding: "28px 28px 24px",
-                    background: ui.cardSurface,
-                    border: ui.cardBorder,
-                    transition: "background 0.25s ease, border-color 0.25s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = ui.cardSurfaceHover;
-                    e.currentTarget.style.borderColor = ui.cardBorderStrong.replace("1px solid ", "");
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = ui.cardSurface;
-                    e.currentTarget.style.borderColor = ui.cardBorder.replace("1px solid ", "");
-                  }}
-                >
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <span style={ui.meta}>{String(i + 1).padStart(2, "0")}</span>
-                      <span style={ui.meta}>
-                        {hasPhases ? `${phaseCount} ${phaseCount === 1 ? "phase" : "phases"}` : "No timeline yet"}
-                      </span>
-                    </div>
-
-                    <h3 style={ui.title}>{cs.name}</h3>
-
-                    <p style={ui.body}>{cs.issue}</p>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-3 pt-6">
-                    <span style={ui.smallMeta}>{hasPhases ? "Open timeline" : "Timeline coming soon"}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" style={{ color: "currentColor", opacity: 0.5 }} />
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-
-          <div className="flex-shrink-0" style={{ width: "clamp(24px, 4vw, 80px)" }} />
-        </div>
-      </div>
-
       <div
-        className="mt-8 flex items-center justify-between"
-        style={{ paddingLeft: "clamp(24px, 4vw, 80px)", paddingRight: "clamp(24px, 4vw, 80px)" }}
+        className="mb-5 flex items-center justify-between"
+        style={{ paddingLeft: sidePadding, paddingRight: sidePadding }}
       >
-        <div className="flex items-center gap-2">
-          {studies.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className="rounded-full transition-all duration-300"
-              style={{
-                width: activeIdx === i ? "24px" : "6px",
-                height: "6px",
-                background: activeIdx === i ? ui.railActive : ui.rail,
-                border: "none",
-                cursor: "pointer",
-              }}
-            />
-          ))}
-        </div>
+        <span style={ui.smallMeta}>
+          {String(activeIdx + 1).padStart(2, "0")} / {String(studies.length).padStart(2, "0")}
+        </span>
 
         <div className="flex items-center gap-2">
           {[
@@ -166,6 +82,86 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
               <Icon className="h-4 w-4" />
             </button>
           ))}
+        </div>
+      </div>
+
+      <div
+        ref={emblaRef}
+        className="overflow-hidden"
+        style={{ paddingLeft: sidePadding, paddingRight: sidePadding }}
+      >
+        <div className="flex" style={{ gap: "clamp(16px, 1.5vw, 24px)", paddingTop: "8px", paddingBottom: "8px" }}>
+          {studies.map((cs, index) => {
+            const phaseCount = cs.phases?.length ?? 0;
+            const hasPhases = phaseCount > 0;
+
+            return (
+              <button
+                key={cs.id}
+                onClick={() => onSelect(cs)}
+                className="flex-shrink-0 text-left"
+                style={{
+                  width: "clamp(320px, 28vw, 420px)",
+                  minHeight: "clamp(210px, 20vh, 250px)",
+                  borderRadius: ui.radius,
+                  padding: 0,
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  border: "none",
+                  background: "transparent",
+                  transition: "transform 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <div
+                  className="h-full"
+                  style={{
+                    minHeight: "clamp(210px, 20vh, 250px)",
+                    borderRadius: ui.radius,
+                    padding: "24px 24px 22px",
+                    background: ui.cardSurface,
+                    border: ui.cardBorder,
+                    transition: "background 0.2s ease, border-color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = ui.cardSurfaceHover;
+                    e.currentTarget.style.borderColor = ui.cardBorderStrong.replace("1px solid ", "");
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = ui.cardSurface;
+                    e.currentTarget.style.borderColor = ui.cardBorder.replace("1px solid ", "");
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <span style={ui.meta}>{String(index + 1).padStart(2, "0")}</span>
+                    <span style={ui.meta}>
+                      {hasPhases ? `${phaseCount} ${phaseCount === 1 ? "phase" : "phases"}` : "No timeline"}
+                    </span>
+                  </div>
+
+                  <h3 style={{ ...ui.title, marginTop: "18px" }}>{cs.name}</h3>
+
+                  <p
+                    style={{
+                      ...ui.body,
+                      marginTop: "12px",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 4,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {cs.issue}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

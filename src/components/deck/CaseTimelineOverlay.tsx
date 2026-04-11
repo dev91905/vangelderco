@@ -105,7 +105,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
       className="fixed inset-0 z-[60] flex flex-col"
       style={{
         background: "hsl(var(--background))",
-        animation: "fade-up 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+        animation: "fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
       <div className="flex flex-shrink-0 items-start justify-between gap-6 px-8 py-6 md:px-14">
@@ -125,14 +125,11 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
           </button>
 
           <div className="flex flex-col gap-2">
-            <div className="flex flex-wrap items-center gap-4">
-              <span style={ui.meta}>Case study</span>
-              {hasPhases && <span style={ui.meta}>{totalPhases} phases</span>}
-            </div>
+            <span style={ui.meta}>Case study</span>
             <h2
               style={{
                 ...ui.title,
-                fontSize: "clamp(20px, 2vw, 28px)",
+                fontSize: "clamp(20px, 2.1vw, 30px)",
               }}
             >
               {study.name}
@@ -141,24 +138,31 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
         </div>
 
         {hasPhases && (
-          <div className="hidden md:flex items-center gap-4">
-            <span style={ui.smallMeta}>
-              {String(activePhase + 1).padStart(2, "0")} / {String(totalPhases).padStart(2, "0")}
-            </span>
-          </div>
+          <span className="hidden md:block" style={ui.smallMeta}>
+            {String(activePhase + 1).padStart(2, "0")} / {String(totalPhases).padStart(2, "0")}
+          </span>
         )}
       </div>
 
       <div className="flex-shrink-0 px-8 pb-6 md:px-14">
-        <p style={{ ...ui.body, maxWidth: "720px" }}>{study.issue}</p>
+        <p style={{ ...ui.body, maxWidth: "760px" }}>{study.issue}</p>
       </div>
 
       {hasPhases ? (
         <div className="relative flex-1 overflow-hidden">
           <div
+            className="pointer-events-none absolute inset-y-0 left-0 z-10"
+            style={{ width: "clamp(24px, 4vw, 80px)", background: "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)" }}
+          />
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 z-10"
+            style={{ width: "clamp(24px, 4vw, 80px)", background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)" }}
+          />
+
+          <div
             ref={scrollRef}
             className="h-full overflow-x-auto overflow-y-hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none", scrollSnapType: "x proximity" }}
           >
             <style>{`[data-phase-scroll]::-webkit-scrollbar { display: none; }`}</style>
             <div
@@ -176,67 +180,26 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                 const isLast = index === totalPhases - 1;
 
                 return (
-                  <div
+                  <section
                     key={index}
                     data-phase-panel
                     className="flex h-full flex-shrink-0 flex-col"
-                    style={{ width: "clamp(320px, 24vw, 380px)" }}
+                    style={{
+                      width: "clamp(320px, 24vw, 380px)",
+                      scrollSnapAlign: "start",
+                    }}
                   >
                     <div
-                      className="flex flex-1 items-end"
-                      style={{ paddingRight: "clamp(24px, 2vw, 32px)", paddingTop: "24px" }}
+                      className="flex items-center gap-4"
+                      style={{ paddingTop: "24px", paddingRight: "clamp(24px, 2vw, 32px)" }}
                     >
-                      <div
-                        style={{
-                          width: "100%",
-                          borderRadius: ui.radius,
-                          border: isActive ? ui.cardBorderStrong : ui.cardBorder,
-                          background: ui.cardSurface,
-                          padding: "24px 24px 22px",
-                          transition: "border-color 0.2s ease",
-                        }}
-                      >
-                        <div className="mb-4 flex items-center justify-between gap-4">
-                          <span style={ui.meta}>{String(index + 1).padStart(2, "0")}</span>
-                          {phase.date ? <span style={ui.meta}>{phase.date}</span> : null}
-                        </div>
-
-                        <h3
-                          style={{
-                            ...ui.title,
-                            fontSize: "clamp(18px, 1.8vw, 22px)",
-                          }}
-                        >
-                          {phase.title}
-                        </h3>
-
-                        <p style={{ ...ui.body, marginTop: "12px" }}>{phase.description}</p>
-
-                        {hasStats && (
-                          <div className="mt-6 flex flex-wrap gap-3">
-                            {phase.stats!.map((stat, statIndex) => (
-                              <div
-                                key={statIndex}
-                                style={{
-                                  minWidth: "120px",
-                                  borderRadius: "14px",
-                                  border: ui.cardBorder,
-                                  background: "transparent",
-                                  padding: "14px 14px 12px",
-                                }}
-                              >
-                                <div style={ui.statValue}>{stat.value}</div>
-                                <div style={{ ...ui.meta, marginTop: "6px" }}>{stat.label}</div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      <span style={ui.meta}>{String(index + 1).padStart(2, "0")}</span>
+                      {phase.date ? <span style={ui.meta}>{phase.date}</span> : null}
                     </div>
 
                     <div
-                      className="flex flex-shrink-0 items-center"
-                      style={{ height: "64px", paddingRight: "clamp(24px, 2vw, 32px)" }}
+                      className="flex items-center"
+                      style={{ height: "42px", paddingRight: "clamp(24px, 2vw, 32px)" }}
                     >
                       <div
                         style={{
@@ -259,7 +222,38 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                         />
                       )}
                     </div>
-                  </div>
+
+                    <div
+                      className="flex-1"
+                      style={{
+                        paddingTop: "14px",
+                        paddingRight: "clamp(24px, 2vw, 32px)",
+                        paddingBottom: "48px",
+                      }}
+                    >
+                      <h3
+                        style={{
+                          ...ui.title,
+                          fontSize: "clamp(18px, 1.8vw, 22px)",
+                        }}
+                      >
+                        {phase.title}
+                      </h3>
+
+                      <p style={{ ...ui.body, marginTop: "12px", maxWidth: "320px" }}>{phase.description}</p>
+
+                      {hasStats && (
+                        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-4">
+                          {phase.stats!.map((stat, statIndex) => (
+                            <div key={statIndex} style={{ minWidth: "120px" }}>
+                              <div style={ui.statValue}>{stat.value}</div>
+                              <div style={{ ...ui.meta, marginTop: "6px" }}>{stat.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </section>
                 );
               })}
             </div>
@@ -269,18 +263,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
             className="pointer-events-none absolute bottom-6 right-8 md:right-14"
             style={{ opacity: scrollProgress < 0.06 ? 0.45 : 0, transition: "opacity 0.2s ease" }}
           >
-            <span
-              style={{
-                fontFamily: f.sans,
-                fontSize: "11px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                fontWeight: 600,
-                color: f.ink(0.22),
-              }}
-            >
-              Scroll
-            </span>
+            <span style={ui.smallMeta}>Scroll</span>
           </div>
         </div>
       ) : (
