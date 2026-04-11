@@ -1447,19 +1447,6 @@ const Deck = () => {
                     onMouseEnter={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground))"; }}
                     onMouseLeave={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-high))"; }}
                   >{ctaSubmitting ? "Sending…" : "Send me my diagnostic"}</button>
-                  {bookingLink && (
-                    <button type="button" onClick={() => { handleCtaSubmit(); window.open(bookingLink, "_blank"); }}
-                      disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
-                      style={{
-                        fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", fontWeight: 600, textTransform: "uppercase" as const,
-                        color: f.ink(0.7), background: "transparent",
-                        border: `1px solid ${f.ink(0.15)}`, padding: "14px 28px", borderRadius: "999px",
-                        cursor: (ctaForm.firstName.trim() && ctaForm.email.trim()) ? "pointer" : "default", transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.color = f.ink(0.7); }}
-                    >Book a call instead</button>
-                  )}
                 </div>
                 {/* Link to case studies after form */}
                 <button
