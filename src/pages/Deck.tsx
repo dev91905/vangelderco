@@ -1362,86 +1362,88 @@ const Deck = () => {
 
       {/* ═══ FRAME 8: Sectors + Media Experience ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
-        <div
-          ref={r8.ref}
-          className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full"
-          style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}
-        >
-          <div>
-            <div style={r8.stagger(0, 0, "blur-up")}>
-              <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-                We come from the industries your grantees need to reach.
-              </p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
-                Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
-              </p>
-            </div>
-
-            <div style={{ ...r8.stagger(1, 200, "blur-up"), marginTop: "30px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
-                Have you worked with media professionals before?
-              </p>
-              <div className="flex gap-3">
-                {([
-                  { val: true, lbl: "Yes" },
-                  { val: false, lbl: "No" },
-                ] as const).map((opt) => (
-                  <button
-                    key={String(opt.val)}
-                    onClick={() => setHasMediaExperience(opt.val)}
-                    style={{
-                      fontFamily: f.sans,
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      padding: "12px 32px",
-                      borderRadius: "999px",
-                      color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
-                      background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                      border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {opt.lbl}
-                  </button>
-                ))}
-              </div>
-            </div>
+        <div ref={r8.ref} className="w-full flex flex-col" style={{ minHeight: "80vh", justifyContent: "center" }}>
+          {/* Header */}
+          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(32px, 5vh, 56px)" }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, maxWidth: "640px" }}>
+              We come from the industries your grantees need to reach.
+            </p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6, maxWidth: "520px" }}>
+              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* 3×3 sector grid — minimal, airy */}
+          <div
+            className="grid grid-cols-3 w-full"
+            style={{
+              ...r8.stagger(1, 300, "blur-up"),
+              maxWidth: "900px",
+            }}
+          >
             {[
-              { name: "News", desc: "Local and national — how stories get placed and why" },
-              { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
-              { name: "Film & TV", desc: "Production, distribution, cultural impact" },
-              { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
-              { name: "Sports", desc: "Athletes, leagues, the largest captive audiences in the country" },
-              { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
-              { name: "Advertising & Brands", desc: "Commercial partnerships that carry messages at scale" },
-              { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
-              { name: "Organized Communities", desc: "Faith, labor, campuses, veterans, industry associations, defense" },
-            ].map((sector, i) => (
-              <div
-                key={sector.name}
-                style={{
-                  padding: "20px 18px",
-                  border: `1px solid ${f.ink(0.08)}`,
-                  background: "transparent",
-                  borderRadius: "12px",
-                  opacity: r8.isActive ? 1 : 0,
-                  transform: r8.isActive ? "translateX(0)" : "translateX(20px)",
-                  filter: r8.isActive ? "blur(0px)" : "blur(4px)",
-                  transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms`,
-                }}
-              >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "5px", lineHeight: 1.3 }}>
-                  {sector.name}
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>
-                  {sector.desc}
-                </p>
-              </div>
-            ))}
+              { name: "News", desc: "How stories get placed and why" },
+              { name: "Music", desc: "Artists, labels, tours, festivals" },
+              { name: "Film & TV", desc: "Production, distribution, impact" },
+              { name: "Digital Creators", desc: "Where opinion forms now" },
+              { name: "Sports", desc: "The largest captive audiences" },
+              { name: "Podcasts & Streaming", desc: "Long-form audio, live streaming" },
+              { name: "Advertising & Brands", desc: "Messages carried at scale" },
+              { name: "Tech & Platforms", desc: "What decides what gets seen" },
+              { name: "Organized Communities", desc: "Faith, labor, campuses, veterans" },
+            ].map((sector, i) => {
+              const row = Math.floor(i / 3);
+              const col = i % 3;
+              return (
+                <div
+                  key={sector.name}
+                  style={{
+                    padding: "clamp(18px, 2.5vw, 32px) clamp(12px, 2vw, 24px)",
+                    borderBottom: row < 2 ? `1px solid ${f.ink(0.06)}` : "none",
+                    borderRight: col < 2 ? `1px solid ${f.ink(0.06)}` : "none",
+                    opacity: r8.isActive ? 1 : 0,
+                    transform: r8.isActive ? "translateY(0)" : "translateY(10px)",
+                    filter: r8.isActive ? "blur(0px)" : "blur(3px)",
+                    transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${400 + i * 70}ms`,
+                  }}
+                >
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), lineHeight: 1.3, marginBottom: "4px" }}>
+                    {sector.name}
+                  </p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 12px)", color: f.ink(0.35), lineHeight: 1.5 }}>
+                    {sector.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Media experience question — spaced below */}
+          <div style={{ ...r8.stagger(2, 800, "blur-up"), marginTop: "clamp(36px, 6vh, 56px)" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
+              Have you worked with media professionals before?
+            </p>
+            <div className="flex gap-3">
+              {([
+                { val: true, lbl: "Yes" },
+                { val: false, lbl: "No" },
+              ] as const).map((opt) => (
+                <button
+                  key={String(opt.val)}
+                  onClick={() => setHasMediaExperience(opt.val)}
+                  style={{
+                    fontFamily: f.sans, fontSize: "13px", fontWeight: 600,
+                    padding: "12px 32px", borderRadius: "999px",
+                    color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
+                    background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                    border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
+                    cursor: "pointer", transition: "all 0.2s ease",
+                  }}
+                >
+                  {opt.lbl}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </DeckFrame>
