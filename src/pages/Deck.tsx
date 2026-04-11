@@ -1395,7 +1395,7 @@ const Deck = () => {
               </p>
 
               <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left w-full" style={{ ...r10.stagger(2, 500, "blur-up"), marginTop: "40px" }}>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
                     <input type="text" required value={ctaForm.firstName} onChange={(e) => setCtaForm(p => ({ ...p, firstName: e.target.value }))}
