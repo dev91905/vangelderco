@@ -37,6 +37,8 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
       ref={ref}
       className={`${isHero ? "col-span-2" : "col-span-1"} h-full`}
       style={{
+        borderRight: `1px solid ${t.ink(0.08)}`,
+        borderBottom: `1px solid ${t.ink(0.08)}`,
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed
           ? (hovered ? "translateY(-2px)" : "translateY(0)")
