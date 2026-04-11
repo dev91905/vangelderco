@@ -1249,7 +1249,7 @@ const Deck = () => {
           <div className="lg:w-[60%] grid grid-cols-1 md:grid-cols-2 gap-3">
             {ALL_METRICS.map((metric, i) => {
               const isChecked = metricsChecked.includes(metric);
-              const isVanity = i < 6; // first 6 are vanity
+              
               const delay = 400 + i * 60;
               return (
                 <button
