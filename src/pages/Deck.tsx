@@ -1112,11 +1112,8 @@ const Deck = () => {
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               The most effective programs do three things.
             </p>
-            <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
-              A campaign can get tens of millions of views and still fail — if it doesn't do these three things.
-            </p>
-            <p style={{ marginTop: "16px", fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.3), lineHeight: 1.5 }}>
-              Check the ones you're already doing.
+            <p style={{ marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
+              Select the ones you want to work on.
             </p>
           </div>
           {/* Right column — accordion cards */}
@@ -1159,7 +1156,7 @@ const Deck = () => {
                         display: "flex", alignItems: "center", justifyContent: "center",
                         cursor: "pointer", transition: "all 0.2s ease",
                       }}
-                      aria-label={`We're doing this: ${h.title}`}
+                      aria-label={`I want to work on this: ${h.title}`}
                     >
                       {isChecked && (
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
