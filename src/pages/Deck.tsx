@@ -1165,10 +1165,7 @@ const Deck = () => {
               We come from the industries your grantees need to reach.
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
-              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
-            </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.3), marginTop: "8px", lineHeight: 1.6 }}>
-              Select the ones you're interested in.
+              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside. Select the ones you're interested in.
             </p>
           </div>
 
