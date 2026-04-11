@@ -40,6 +40,7 @@ const CaseStudyEditor: React.FC = () => {
   const [dirty, setDirty] = useState(false);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [saveFlash, setSaveFlash] = useState(false);
 
   const { data: studies = [], isLoading } = useQuery({
     queryKey: ["deck-case-studies-admin"],
