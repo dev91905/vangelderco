@@ -631,7 +631,7 @@ const Deck = () => {
               Which best describes where you are?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.4vw, 18px)", color: f.ink(0.55), lineHeight: 1.6, ...r2.stagger(1, 200, "blur-up"), flex: "1 1 auto", paddingBottom: "clamp(6px, 0.8vw, 12px)" }}>
-              Pick the one that's closest. This helps us tailor what comes next.
+              Select everything that resonates. This helps us tailor what comes next.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 300, "blur-scale")}>
