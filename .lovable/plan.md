@@ -1,36 +1,52 @@
 
 
-## Fix PDF rendering — eliminate html2canvas alignment issues
+## Replace "Mark as sent" with "Send as email" — mailto with HTML report body
 
-### Root causes
+### What it does
 
-1. **ScoreRing misalignment**: The score number/label uses `position: absolute` but its parent container lacks explicit dimensions and positioning context. `html2canvas` interprets this differently than the browser, so the text floats off-center from the circle.
+Replaces the "Mark as sent" button with "Send as email". Clicking it builds a beautifully formatted HTML version of the diagnostic report, opens the user's default email client via `mailto:` with the contact's email pre-filled, the subject line set, and the report body pasted in. After opening, it auto-marks the contact as "sent".
 
-2. **Pills and buttons use Tailwind `gap` and `flex`**: `html2canvas` has known issues with CSS `gap` property and sometimes with Tailwind utility classes that resolve through CSS custom properties. The pills render with inconsistent spacing.
+### The challenge with mailto
 
-3. **CSS Grid for measurement gaps**: `grid grid-cols-2 gap-4` can render incorrectly in `html2canvas`.
+`mailto:` links only support plain text bodies — no HTML rendering. Email clients strip HTML tags from mailto body params. So we have two options:
 
-4. **Inconsistent use of Tailwind vs inline styles**: Some layout is Tailwind classes, some is inline. `html2canvas` captures computed styles but can miss class-based layouts in edge cases.
+1. **Copy rich HTML to clipboard + open mailto** — The button copies the formatted report HTML to the clipboard (so you can paste it into your email client's compose window) and simultaneously opens a `mailto:` with subject pre-filled and a plain-text fallback body. You paste from clipboard to get the beautiful version.
 
-### The fix
+2. **Plain text only via mailto** — Structure the report as clean plain text with good formatting (headers, bullets, dashes) that looks professional in any email client. No rich formatting.
 
-Convert **all layout-critical styling in DiagnosticReport.tsx to inline styles** so `html2canvas` gets unambiguous computed values. Specifically:
+Option 1 gives you the gorgeous HTML but requires a paste step. Option 2 is zero-friction but plain text only.
 
-**`src/components/admin/DiagnosticReport.tsx`**
+### Recommended approach: Option 1 (clipboard HTML + mailto)
 
-1. **ScoreRing** — Replace the broken absolute positioning with a single `div` using `position: relative` + `display: flex; align-items: center; justify-content: center`. Place the SVG as `position: absolute` inside, and the text as the natural flex content. This guarantees the number is dead-center in the ring regardless of renderer.
+**`src/pages/AdminSubmissions.tsx`**
 
-2. **All `className="flex ..."` containers** — Convert to `style={{ display: "flex", alignItems: "center", gap: "8px" }}` etc. Replace every `className` that controls layout (flex, grid, gap, margin, padding) with the equivalent inline style.
+1. **Add `buildEmailHtml(data: DiagnosticData)` function** — Generates a standalone HTML email string with inline styles (table-based layout for email client compatibility). Includes the score ring as a styled number, dimension assessment as colored bars/text, gap cards, measurement gaps grid, priority practices pills, and CTA buttons. All inline-styled for Gmail/Outlook/Apple Mail compatibility.
 
-3. **All `className="grid grid-cols-2 gap-4"`** — Convert to `style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}`.
+2. **Replace `markAsSent` button handler** — New `handleSendEmail` function that:
+   - Builds the HTML string from `reportData`
+   - Creates a `ClipboardItem` with `text/html` MIME type and copies to clipboard
+   - Opens `mailto:${contact.email}?subject=Your Strategic Diagnostic — Van Gelder & Co&body=(see clipboard)` 
+   - Shows a toast: "Report copied to clipboard — paste into your email"
+   - Auto-marks contact as "sent"
 
-4. **All pill `flex-wrap gap-2`** — Convert to `style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}`.
+3. **Update button UI** — Change label from "Mark as sent" to "Send as email", keep the Mail icon. After sending, show "Sent ✓" state same as before.
 
-5. **CTA buttons container** — Convert to inline flex with explicit gap.
+### The HTML email template
 
-6. **Remove all Tailwind utility classes** from the component — keep only inline styles. This component exists solely for the admin panel and PDF capture, so Tailwind convenience isn't needed; rendering fidelity is.
+The `buildEmailHtml` function will produce a self-contained HTML email with:
+- Table-based layout (not flexbox/grid — email clients don't support those)
+- Inline styles throughout
+- Score displayed as a large styled number with colored label (no SVG ring — email clients butcher SVGs)
+- Dimension results as text rows with colored status indicators
+- Gap cards with orange accent dots
+- Measurement gaps as two-column table (tracked vs missing)
+- Priority practices as inline-block pills
+- CTA section with styled link buttons
+- Professional header with name, org, date
 
-### No other files change
+### Files changed
 
-The export logic in `AdminSubmissions.tsx` stays as-is. This is purely a rendering fidelity fix in the report component.
+- **`src/pages/AdminSubmissions.tsx`** — Add `buildEmailHtml()`, replace mark-as-sent button with send-as-email button, update handler logic
+
+No other files change. No new dependencies.
 
