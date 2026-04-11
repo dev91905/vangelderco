@@ -107,6 +107,12 @@ const Admin = () => {
           <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/admin/submissions" className="flex items-center gap-2 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
+            style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
+            <Mail className="w-3 h-3" /> Submissions
+          </Link>
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
             onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
@@ -156,6 +162,32 @@ const Admin = () => {
               <button
                 onClick={() => {
                   updateSetting.mutate({ key: "booking_link", value: bookingLink || null });
+                }}
+                className="w-full px-4 py-2.5 text-sm transition-all rounded-full"
+                style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream }}
+              >
+                Save
+              </button>
+            </div>
+            {/* Contact Email */}
+            <div className="p-5 space-y-3" style={{ borderTop: t.border(0.06) }}>
+              <label className="text-[11px] uppercase tracking-[0.08em] flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
+                <Mail className="w-3 h-3" /> Contact Email
+              </label>
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="info@vangelderco.com"
+                className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
+                style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.02) }}
+              />
+              <p className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
+                Used in the "Next Steps" section of diagnostic reports.
+              </p>
+              <button
+                onClick={() => {
+                  updateSetting.mutate({ key: "contact_email", value: contactEmail || null });
                   setSettingsOpen(false);
                 }}
                 className="w-full px-4 py-2.5 text-sm transition-all rounded-full"
