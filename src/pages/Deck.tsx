@@ -383,6 +383,7 @@ const Deck = () => {
       metrics_checked: metricsChecked.length > 0 ? metricsChecked : null,
       capabilities_ranked: capabilitiesRanked.length > 0 ? capabilitiesRanked : null,
       has_media_experience: hasMediaExperience,
+      practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
     } as any);
     setCtaSubmitting(false);
     setCtaMode("thanks");

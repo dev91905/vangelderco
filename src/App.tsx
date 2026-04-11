@@ -18,6 +18,7 @@ import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
 import AdminEditor from "./pages/AdminEditor.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
+import AdminSubmissions from "./pages/AdminSubmissions.tsx";
 import RequireAuth from "./components/admin/RequireAuth.tsx";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ function AppRoutes() {
         <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
         <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
         <Route path="/admin/edit/:id" element={<RequireAuth><AdminEditor /></RequireAuth>} />
+        <Route path="/admin/submissions" element={<RequireAuth><AdminSubmissions /></RequireAuth>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

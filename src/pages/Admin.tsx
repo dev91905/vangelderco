@@ -119,6 +119,11 @@ const Admin = () => {
             <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
             {settings?.global_article_password && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: t.ink(1) }} />}
           </button>
+          <Link to="/admin/submissions" className="flex items-center gap-2 px-4 py-2 text-sm transition-colors rounded-full" style={{ fontFamily: t.sans, color: t.ink(0.5), border: t.border(0.1) }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.5); e.currentTarget.style.background = "transparent"; }}>
+            <Mail className="w-3 h-3" /> Submissions
+          </Link>
           <Link to="/admin/new" className="flex items-center gap-2 px-4 py-2 text-sm transition-colors rounded-full" style={{ fontFamily: t.sans, color: t.cream, background: t.ink(1) }}>
             <Plus className="w-3 h-3" /> New Post
           </Link>
