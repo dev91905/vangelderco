@@ -33,7 +33,7 @@ const ROUTE_MODE_MAP: Record<string, ConstellationMode> = {
 function AppRoutes() {
   const location = useLocation();
   const mode = ROUTE_MODE_MAP[location.pathname] || "home";
-  const hideConstellation = location.pathname === "/deck" || location.pathname.startsWith("/post/");
+  const hideConstellation = location.pathname === "/diagnostic" || location.pathname.startsWith("/post/");
 
   return (
     <>
@@ -46,7 +46,7 @@ function AppRoutes() {
         <Route path="/cross-sector" element={<CrossSector />} />
         <Route path="/deep-organizing" element={<DeepOrganizing />} />
         <Route path="/post/:slug" element={<PostDetail />} />
-        <Route path="/deck" element={<Deck />} />
+        <Route path="/diagnostic" element={<Deck />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
         <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />
