@@ -574,13 +574,16 @@ const Deck = () => {
             background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)",
           }}
         >
-          <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
-            <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+          <div className="flex items-center pointer-events-auto" style={{ gap: "0" }}>
+            {/* Back — fixed-width column so progress bar stays centered */}
+            <div style={{ width: "140px", flexShrink: 0, display: "flex", justifyContent: "flex-start" }}>
+              <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
+            </div>
 
+            {/* Progress bar — fills center */}
             <div
               style={{
                 flex: 1,
-                maxWidth: "280px",
                 height: "3px",
                 borderRadius: "2px",
                 background: f.ink(0.06),
@@ -598,7 +601,8 @@ const Deck = () => {
               />
             </div>
 
-            <div style={{ visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
+            {/* Continue — fixed-width column matching Back */}
+            <div style={{ width: "140px", flexShrink: 0, display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
               <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
             </div>
           </div>
