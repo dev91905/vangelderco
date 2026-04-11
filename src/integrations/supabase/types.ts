@@ -90,6 +90,7 @@ export type Database = {
           last_name: string
           metrics_checked: string[] | null
           organization: string | null
+          practice_selections: number[] | null
           quiz_answers: Json | null
           readiness_score: number | null
           selected_domains: string[] | null
@@ -107,6 +108,7 @@ export type Database = {
           last_name: string
           metrics_checked?: string[] | null
           organization?: string | null
+          practice_selections?: number[] | null
           quiz_answers?: Json | null
           readiness_score?: number | null
           selected_domains?: string[] | null
@@ -124,6 +126,7 @@ export type Database = {
           last_name?: string
           metrics_checked?: string[] | null
           organization?: string | null
+          practice_selections?: number[] | null
           quiz_answers?: Json | null
           readiness_score?: number | null
           selected_domains?: string[] | null
