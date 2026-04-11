@@ -60,7 +60,6 @@ const PostDetail = () => {
   }
 
   const contentBlocks = post.content_blocks as any[] | null;
-  const stats = post.stats as { label: string; description: string; visible?: boolean }[] | null;
 
   if (post.type === "field-note") {
     return (
