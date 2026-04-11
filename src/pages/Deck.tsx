@@ -1019,7 +1019,7 @@ const Deck = () => {
               How do you measure your impact?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
-              Check what your grantees report on.
+              Check what matters most to your stakeholders.
             </p>
           </div>
 
