@@ -1,24 +1,36 @@
 
 
-## Fix: Mobile content not starting at top
+## Fix: Mobile slide spacing — uniform header clearance across all frames
 
 ### Problem
-In `DeckFrame.tsx`, the mobile content area uses `justifyContent: "center"` when `align` is `"center"` (the default). This vertically centers content in the viewport shell, creating dead space above the heading on slides like the quiz, capabilities, and metrics. Content should always start near the top on mobile, with the internal scroll area handling overflow.
+Frames 4, 6, 7 have `marginTop: "-40px"` on their content grid, which was a desktop centering hack that pulls the title up under the header gradient on mobile. Other frames have inconsistent top spacing — some use `min-h-[60vh] justify-center`, some have no explicit top spacing at all.
 
-### Desktop title
-The desktop title renders correctly on fresh load. If it disappeared, it was likely a session-restore edge case where `useFrameReveal`'s IntersectionObserver briefly fired during the 100ms before `scrollIntoView`. I'll add a guard so frame 0's TypewriterHeading always activates when `currentFrame === 0`, regardless of IntersectionObserver state.
+### Root cause
+The `paddingTop: "60px"` in `DeckFrame`'s mobile content area is the only header clearance. But individual slide content divs override this with negative margins or centering tricks meant for desktop.
 
 ### Changes
 
 **`src/components/deck/DeckFrame.tsx`**
-- Change mobile `justifyContent` from conditional center/flex-start to always `"flex-start"` — content always starts at the top of the scrollable area on mobile
-- Keep `paddingTop: "60px"` to clear the header gradient
+- Increase mobile `paddingTop` from `60px` to `72px` — gives consistent breathing room below the header gradient on all devices (phone + tablet)
+- This single change establishes a uniform top position for all slide content
 
-**`src/pages/Deck.tsx`**
-- Pass `currentFrame === 0` as a fallback to the TypewriterHeading's `active` prop so it fires even if the IntersectionObserver hasn't reported yet (covers session-restore edge case)
+**`src/pages/Deck.tsx`** — make the negative margins desktop-only:
+- **Frame 4 (Practices)**: Change `marginTop: "-40px"` → remove on mobile. Use a responsive approach: wrap the negative margin in a class or conditional so it only applies on `lg:` screens
+- **Frame 6 (Metrics)**: Same — remove `marginTop: "-40px"` on mobile
+- **Frame 7 (Working Together)**: Same — remove `marginTop: "-40px"` on mobile
+- **Frame 1 (Hero)**: Remove `min-h-[60vh] justify-center` on mobile — content should start at top, not vertically center
+- **Frame 2 (Self-Diagnosis)**: Remove `min-h-[70vh] justify-center` on mobile — same reason
+- **Frame 3 (Quiz)**: Remove `justifyContent: "center"` on mobile
+- **Frame 5 (Capabilities)**: Already uses `flex-col gap-8` with no centering — fine as-is
+- **Frame 8 (Sectors)**: Already uses `w-full` with no centering — fine as-is
+- **Frame 9 (Results)**: Already uses `align="left"` — fine as-is
+- **Frame 10 (CTA)**: Already simple — fine as-is
+
+Implementation approach: Since `isMobile` is already available as a prop/variable in the Deck component, I'll use it inline to conditionally apply the negative margins and min-height centering only on desktop.
 
 ### What stays the same
-- Desktop layout unchanged (still uses `alignStyles` with center/left/split)
-- All existing nav buttons, progress bar, and gradient styling untouched
-- Internal scroll behavior on mobile untouched
+- Desktop layout completely unchanged — negative margins and vertical centering remain on large screens
+- No changes to button styling, gradients, nav, progress bar, or any content
+- `paddingBottom: "100px"` on mobile unchanged (footer clearance)
+- Tablet gets the same mobile treatment (DeckFrame mobile path triggers at `< 768px` via `useIsMobile`)
 
