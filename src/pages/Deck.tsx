@@ -426,8 +426,9 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll; only internal result panels may scroll */
+  /* Wheel handler — lock deck scroll on desktop only; mobile uses native scroll */
   useEffect(() => {
+    if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
     if (!el) return;
 
@@ -455,7 +456,7 @@ const Deck = () => {
 
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
-  }, []);
+  }, [isMobile]);
 
   /* Touch swipe handler removed — mobile uses native scroll */
 
@@ -511,8 +512,9 @@ const Deck = () => {
         height: "100dvh",
         width: "100vw",
         overflowX: "hidden",
-        overflowY: "hidden",
-        overscrollBehaviorY: "none",
+        overflowY: isMobile ? "auto" : "hidden",
+        WebkitOverflowScrolling: "touch" as any,
+        overscrollBehaviorY: isMobile ? "contain" : "none",
         scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
