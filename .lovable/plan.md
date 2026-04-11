@@ -1,26 +1,63 @@
 
 
-# Fix Article Editor — Match Published Article Format
+# Editor Redesign — One Premium Content Creator
 
-Three concrete problems visible in the editor right now:
+## The Problems
 
-## Problem 1: Title gets cut off
-The editor uses a single-line `<input>` for the article title. Long titles like "Reframing Climate Through Cultural Infrastructure" get truncated to "Reframing Climate Through Cultural I". The published view wraps correctly because it uses a block-level `<h1>`.
+1. **Type selector buried in a settings drawer.** You have to click a tiny gear icon, open a side panel, scroll to find a 3-button toggle. The most important decision — what kind of content you're making — is hidden behind two clicks.
 
-**Fix**: Replace the title `<input>` in `EditorMetaBar.tsx` with an auto-resizing `<textarea>` (same pattern as body text). This lets long titles wrap naturally, matching the published layout.
+2. **No visual identity per content type.** Switching between Blog Post, Case Study, and Field Note barely changes anything. The editor looks the same regardless. The published pages look beautiful and distinct — the editor should reflect that.
 
-## Problem 2: Key Metrics don't match the public version
-The `StatChipsEditor` constrains each chip to `max-w-[220px]`, which truncates descriptions like "CULTURAL INSTITUTIONS ENGAGI..." and "NARRATIVE INFRASTRUCTURE IN...". The public `StatChips` component has no max-width constraint — chips size to content.
+3. **Field note is a completely separate code path** (lines 213–261 in AdminEditor.tsx) with its own inline form, while blog/case-study share the same generic meta bar + block canvas. This creates an inconsistent, fragmented experience.
 
-**Fix**: Remove the `max-w-[220px]` constraint from both `StatChipsEditor.tsx` and the stat-grid block in `BlockEditor.tsx`. Let chips size naturally, matching the published `StatChips` component.
+4. **Settings drawer is a junk drawer.** Type, capability, slug, status, hero image, password, featured toggle — all crammed into one panel with no hierarchy.
 
-## Problem 3: Editor forces scrolling before content is reachable
-The `EditorMetaBar` uses `minHeight: "20vh"` (or `"40vh"` with hero images) plus `paddingTop: "8vh"`, pushing content blocks below the fold. The user has to scroll past a large empty header area before reaching editable content.
+## The Redesign
 
-**Fix**: Reduce the top padding in `EditorMetaBar.tsx` from `8vh`/`6vh` to `3vh`, and remove `minHeight` on the header wrapper. The header should be compact — just enough space for the meta row, title, excerpt, and date. No forced vertical whitespace that pushes blocks out of view.
+### Type selection: front and center
+
+When creating a new post, the first thing you see is a clean type selector at the top of the editor — three elegant cards or tabs, not buried in a drawer. Each shows the type name and a one-line description:
+
+- **Blog Post** — Long-form narrative with hero image
+- **Case Study** — Structured analysis with key metrics
+- **Field Note** — Quick signal with impact stat
+
+Clicking one immediately transforms the editor below it. For existing posts, the type shows as a subtle label in the toolbar (not editable inline — change it in settings if needed).
+
+### Editor adapts per type
+
+**Blog Post:** Hero image area at top (click to upload), title, excerpt, date, divider, then content blocks. Matches the published BlogPostView layout exactly.
+
+**Case Study:** No hero image area. Title, excerpt, date, then stat chips editor, divider, then content blocks with expandable/carousel/stat-grid available. Matches CaseStudyView.
+
+**Field Note:** Centered, minimal form — just like the current one but elevated. Title at top (same as other types for consistency), then the elegant slug line / brief / impact stat / link fields. No content blocks, no hero image. Matches the published field note view.
+
+### Settings drawer: reorganized
+
+Split into two sections with clear headers:
+- **Publishing** — Status toggle, date, slug, capability
+- **Promotion** — Featured toggle, slug line, featured stat, hero image, password
+
+Remove the type selector from the drawer entirely (it lives in the editor header now).
+
+### Visual polish
+
+- Subtle background tint change per type: warm ivory (blog), slightly cooler (case study), minimal (field note) — barely perceptible but establishes identity
+- Type indicator in toolbar shows current type with a small icon
+- Smooth transitions when switching types (content blocks fade, fields animate in/out)
+- The whole editor uses the same typography and spacing as the published views
 
 ## Files to edit
-- `src/components/admin/EditorMetaBar.tsx` — textarea for title, reduce header spacing
-- `src/components/admin/StatChipsEditor.tsx` — remove max-width constraint on chips
-- `src/components/admin/BlockEditor.tsx` — remove max-width constraint on stat-grid chips
+
+- **`src/pages/AdminEditor.tsx`** — Add prominent type selector for new posts, reorganize the layout to adapt per type, unify the field-note path with the main editor flow
+- **`src/components/admin/EditorMetaBar.tsx`** — Remove type selector from settings drawer, reorganize drawer into Publishing/Promotion sections, add type-aware visual adaptations
+- No changes to BlockCanvas, BlockEditor, or published views — those are fine
+
+## What stays the same
+
+- Auto-save, ⌘S, ⌘⇧P shortcuts — all untouched
+- Block canvas with drag-and-drop, slash commands — untouched
+- Content block types and their editors — untouched
+- Settings drawer mechanism (slide-in panel) — kept, just reorganized
+- StatChipsEditor placement — stays between meta bar and blocks for case studies
 
