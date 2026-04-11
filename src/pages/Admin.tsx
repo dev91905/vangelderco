@@ -300,12 +300,28 @@ const ContactsFeed = () => {
                         ))}
                       </div>
                     )}
-                    {c.selected_domains && c.selected_domains.length > 0 && (
-                      <div>
-                        <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.5), marginBottom: "2px" }}>Domains</p>
-                        <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.5) }}>{c.selected_domains.join(", ")}</p>
-                      </div>
-                    )}
+                    {(() => {
+                      const ALL_SECTORS = ["News", "Music", "Film & TV", "Digital Creators", "Sports", "Podcasts & Streaming", "Advertising & Brands", "Tech & Platforms", "Organized Communities"];
+                      const selected = c.selected_domains ?? [];
+                      if (selected.length === 0 && !c.selected_domains) return null;
+                      const notSelected = ALL_SECTORS.filter(s => !selected.includes(s));
+                      return (
+                        <div>
+                          {notSelected.length > 0 && (
+                            <div style={{ marginBottom: "6px" }}>
+                              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.5), marginBottom: "2px" }}>Did not select</p>
+                              <p style={{ fontFamily: t.sans, fontSize: "11px", color: "hsl(0 72% 51%)" }}>{notSelected.join(", ")}</p>
+                            </div>
+                          )}
+                          {selected.length > 0 && (
+                            <div>
+                              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.5), marginBottom: "2px" }}>Interested in</p>
+                              <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.5) }}>{selected.join(", ")}</p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
                     {c.capabilities_ranked && c.capabilities_ranked.length > 0 && (
                       <div>
                         <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, color: t.ink(0.5), marginBottom: "2px" }}>Priority capabilities</p>

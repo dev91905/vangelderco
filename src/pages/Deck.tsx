@@ -315,6 +315,9 @@ const Deck = () => {
   /* ─── Metrics checklist (Frame 7) ─── */
   const [metricsChecked, setMetricsChecked] = useState<string[]>([]);
 
+  /* ─── Sector selections (Frame 8) ─── */
+  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
+
   /* ─── Media experience (Frame 9) ─── */
   const [hasMediaExperience, setHasMediaExperience] = useState<boolean | null>(null);
 
@@ -342,7 +345,7 @@ const Deck = () => {
     gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
-    gates[7] = hasMediaExperience !== null; // media experience
+    gates[7] = true; // sectors — always passable, selection is optional
     gates[8] = true; // CTA — always accessible
     gates[9] = true; // case studies
     gates[10] = true; // close
@@ -374,7 +377,7 @@ const Deck = () => {
       custom_challenge: customSaved ? customMessage.trim() || null : null,
       selected_pains: selectedPains.length > 0 ? selectedPains : null,
       engagement_path: engagementPath || null,
-      selected_domains: null,
+      selected_domains: selectedSectors.length > 0 ? selectedSectors : null,
       readiness_score: diagnosticScore,
       quiz_answers: quizAnswers.filter((a): a is QuizAnswer => a !== null),
       metrics_checked: metricsChecked.length > 0 ? metricsChecked : null,
@@ -1360,21 +1363,27 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 8: Sectors + Media Experience ═══ */}
+      {/* ═══ FRAME 8: Sectors ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="w-full">
-          {/* Header — left-aligned */}
-          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(28px, 4vh, 44px)" }}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, maxWidth: "600px" }}>
+          {/* Compact header */}
+          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(16px, 2.5vh, 28px)" }}>
+            <p style={{ ...label("10px"), marginBottom: "10px" }}>Our sectors</p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 1.3, maxWidth: "540px" }}>
               We come from the industries your grantees need to reach.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6, maxWidth: "500px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6, maxWidth: "480px" }}>
               Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
             </p>
           </div>
 
-          {/* 3×3 card grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" style={r8.stagger(1, 300, "blur-up")}>
+          {/* Instruction */}
+          <p style={{ ...r8.stagger(1, 200, "blur-up"), fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", color: f.ink(0.35), marginBottom: "clamp(12px, 2vh, 20px)" }}>
+            Select the ones you're interested in.
+          </p>
+
+          {/* 3×3 selectable card grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {[
               { name: "News", desc: "Local and national — how stories get placed and why" },
               { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
@@ -1385,56 +1394,34 @@ const Deck = () => {
               { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
               { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
               { name: "Organized Communities", desc: "Faith, labor, campuses, veterans, defense" },
-            ].map((sector, i) => (
-              <div
-                key={sector.name}
-                style={{
-                  padding: "clamp(16px, 2vw, 24px)",
-                  border: `1px solid ${f.ink(0.06)}`,
-                  borderRadius: "10px",
-                  background: "transparent",
-                  opacity: r8.isActive ? 1 : 0,
-                  transform: r8.isActive ? "translateY(0) scale(1)" : "translateY(12px) scale(0.97)",
-                  filter: r8.isActive ? "blur(0px)" : "blur(4px)",
-                  transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${350 + i * 70}ms`,
-                }}
-              >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), lineHeight: 1.3, marginBottom: "4px" }}>
-                  {sector.name}
-                </p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.38), lineHeight: 1.5 }}>
-                  {sector.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Media experience question */}
-          <div style={{ ...r8.stagger(2, 900, "blur-up"), marginTop: "clamp(28px, 4vh, 44px)" }}>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.6), marginBottom: "16px" }}>
-              Have you worked with media professionals before?
-            </p>
-            <div className="flex gap-3">
-              {([
-                { val: true, lbl: "Yes" },
-                { val: false, lbl: "No" },
-              ] as const).map((opt) => (
+            ].map((sector, i) => {
+              const isSelected = selectedSectors.includes(sector.name);
+              return (
                 <button
-                  key={String(opt.val)}
-                  onClick={() => setHasMediaExperience(opt.val)}
+                  key={sector.name}
+                  onClick={() => setSelectedSectors(prev => isSelected ? prev.filter(s => s !== sector.name) : [...prev, sector.name])}
+                  className="text-left transition-all duration-200"
                   style={{
-                    fontFamily: f.sans, fontSize: "13px", fontWeight: 600,
-                    padding: "12px 32px", borderRadius: "999px",
-                    color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
-                    background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                    border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
-                    cursor: "pointer", transition: "all 0.2s ease",
+                    padding: "clamp(14px, 1.8vw, 20px)",
+                    border: isSelected ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.06)}`,
+                    background: isSelected ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    opacity: r8.isActive ? 1 : 0,
+                    transform: r8.isActive ? "translateY(0) scale(1)" : "translateY(10px) scale(0.97)",
+                    filter: r8.isActive ? "blur(0px)" : "blur(4px)",
+                    transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, background 0.15s ease, border 0.15s ease`,
                   }}
                 >
-                  {opt.lbl}
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.3vw, 15px)", fontWeight: 700, color: isSelected ? f.ink(0.85) : f.ink(0.7), lineHeight: 1.3, marginBottom: "3px" }}>
+                    {sector.name}
+                  </p>
+                  <p style={{ fontFamily: f.sans, fontSize: "clamp(10px, 1vw, 12px)", color: isSelected ? f.ink(0.5) : f.ink(0.35), lineHeight: 1.5 }}>
+                    {sector.desc}
+                  </p>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </DeckFrame>
