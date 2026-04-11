@@ -17,35 +17,46 @@ export default function TypewriterHeading({
   onStart,
 }: TypewriterHeadingProps) {
   const [count, setCount] = useState(0);
-  const started = useRef(false);
-  const interval = useRef<ReturnType<typeof setInterval>>();
+  const [hasStarted, setHasStarted] = useState(false);
+  const startNotified = useRef(false);
 
   useEffect(() => {
-    if (active && !started.current) {
-      started.current = true;
-      onStart?.();
-      let i = 0;
-      interval.current = setInterval(() => {
-        i++;
-        setCount(i);
-        if (i >= text.length) clearInterval(interval.current);
-      }, speed);
-    }
-    return () => clearInterval(interval.current);
-  }, [active, text, speed, onStart]);
+    setCount(0);
+    setHasStarted(false);
+    startNotified.current = false;
+  }, [text]);
 
-  const show = started.current;
+  useEffect(() => {
+    if (!active) return;
+
+    if (!hasStarted) {
+      setHasStarted(true);
+    }
+
+    if (!startNotified.current) {
+      startNotified.current = true;
+      onStart?.();
+    }
+
+    if (count >= text.length) return;
+
+    const timeout = window.setTimeout(() => {
+      setCount((prev) => Math.min(prev + 1, text.length));
+    }, speed);
+
+    return () => window.clearTimeout(timeout);
+  }, [active, count, hasStarted, onStart, speed, text.length]);
 
   return (
     <h1
       style={{
         ...style,
-        opacity: show ? 1 : 0,
+        opacity: hasStarted ? 1 : 0,
         transition: "opacity 0.3s ease",
       }}
     >
       {text.slice(0, count)}
-      {count < text.length && show && (
+      {count < text.length && hasStarted && (
         <span
           style={{
             display: "inline-block",
