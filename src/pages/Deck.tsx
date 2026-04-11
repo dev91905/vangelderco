@@ -471,7 +471,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
-  const r12 = useFrameReveal();
+  
 
   /* ─── Quiz helpers ─── */
   const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
