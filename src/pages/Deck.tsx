@@ -1106,13 +1106,13 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1.2fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
           {/* Left column — pinned */}
           <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              The most effective programs do three things.
+            <p style={{ ...heading("clamp(28px, 4vw, 48px)"), fontWeight: 700 }}>
+              Effective programs do three things.
             </p>
-            <p style={{ marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
+            <p style={{ marginTop: "24px", fontFamily: f.sans, fontSize: "clamp(17px, 2vw, 22px)", fontWeight: 600, color: f.ink(0.7), lineHeight: 1.5 }}>
               Select the ones you want to work on.
             </p>
           </div>
@@ -1140,38 +1140,9 @@ const Deck = () => {
                     transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, background 0.25s ease, border-color 0.25s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1)`,
                   }}
                 >
-                  {/* Title row — checkbox + title + expand chevron */}
+                  {/* Title row — number + title + checkbox + chevron */}
                   <div className="flex items-center gap-4">
                     <span style={{ fontFamily: f.sans, fontSize: "clamp(18px, 1.8vw, 24px)", fontWeight: 700, color: f.ink(0.15), minWidth: "28px", flexShrink: 0 }}>{i + 1}</span>
-                    {/* Checkbox + label */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setPracticeSelections(prev => ({ ...prev, [i]: !prev[i] }));
-                      }}
-                      style={{
-                        display: "flex", alignItems: "center", gap: "8px",
-                        background: "none", border: "none", cursor: "pointer", padding: 0, flexShrink: 0,
-                      }}
-                      aria-label={`I want to work on this: ${h.title}`}
-                    >
-                      <span style={{
-                        width: "20px", height: "20px", borderRadius: "5px", flexShrink: 0,
-                        border: isChecked ? "none" : `1.5px solid ${f.ink(0.18)}`,
-                        background: isChecked ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        transition: "all 0.2s ease",
-                      }}>
-                        {isChecked && (
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        )}
-                      </span>
-                      <span style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 500, color: isChecked ? f.ink(0.6) : f.ink(0.35), transition: "color 0.2s ease", whiteSpace: "nowrap" }}>
-                        I want to work on this
-                      </span>
-                    </button>
                     <button
                       className="flex-1 text-left"
                       onClick={() => setExpandedPracticeIdx(isExpanded ? null : i)}
@@ -1179,9 +1150,26 @@ const Deck = () => {
                     >
                       <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: isExpanded ? f.ink(0.85) : f.ink(0.65), transition: "color 0.25s ease" }}>{h.title}</p>
                     </button>
-                    {isChecked && !isExpanded && (
-                      <span style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 600, letterSpacing: "0.08em", color: f.ink(0.35), flexShrink: 0 }}>✓</span>
-                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPracticeSelections(prev => ({ ...prev, [i]: !prev[i] }));
+                      }}
+                      style={{
+                        width: "20px", height: "20px", borderRadius: "5px", flexShrink: 0,
+                        border: isChecked ? "none" : `1.5px solid ${f.ink(0.18)}`,
+                        background: isChecked ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer", transition: "all 0.2s ease",
+                      }}
+                      aria-label={`Select: ${h.title}`}
+                    >
+                      {isChecked && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
                     <button
                       onClick={() => setExpandedPracticeIdx(isExpanded ? null : i)}
                       style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", flexShrink: 0 }}
