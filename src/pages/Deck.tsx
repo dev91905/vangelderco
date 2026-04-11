@@ -605,7 +605,7 @@ const Deck = () => {
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <TypewriterHeading
             text="Find the gaps before your opponents do."
-            active={r1.isActive}
+            active={currentFrame === 0 || r1.isActive}
             style={{
               fontFamily: f.sans,
               fontSize: "clamp(36px, 5.5vw, 64px)",
