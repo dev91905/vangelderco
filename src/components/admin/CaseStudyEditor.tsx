@@ -32,6 +32,7 @@ const STARTER_PHASES: CasePhase[] = [
 
 const CaseStudyEditor: React.FC = () => {
   const queryClient = useQueryClient();
+  const syncStats = useSyncImpactStats();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [editingStudy, setEditingStudy] = useState<CaseStudyRow | null>(null);
   const [dirty, setDirty] = useState(false);
