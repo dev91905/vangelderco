@@ -1016,7 +1016,7 @@ const Deck = () => {
         <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
           <div style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              What does your portfolio measure?
+              How do you measure your impact?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
               Check what your grantees report on.
