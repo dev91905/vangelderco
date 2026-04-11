@@ -371,6 +371,22 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ═══ RECENT IMPACT ═══ */}
+      <section className="snap-section-scroll relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-16"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+            >
+              Recent Impact
+            </div>
+          </RevealBlock>
+
+          <ImpactCloud />
+        </div>
+      </section>
+
       {/* ═══ CAPABILITIES ═══ */}
       <section className="snap-section-scroll relative z-10 flex items-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
@@ -471,22 +487,6 @@ const Index = () => {
               </RevealBlock>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
-        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
-            >
-              Recent Impact
-            </div>
-          </RevealBlock>
-
-          <ImpactCloud />
         </div>
       </section>
 
