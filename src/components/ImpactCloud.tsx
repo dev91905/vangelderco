@@ -27,8 +27,12 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const delay = index * 0.08;
 
-  const capabilityPath = `/${stat.sourceCapability.replace(/\s+/g, "-").toLowerCase()}`;
-  const href = stat.sourceSlug ? `${capabilityPath}/${stat.sourceSlug}` : capabilityPath;
+  // deck case studies link via link_url directly or fall back to /diagnostic
+  const href = stat.sourceCapability === "deck"
+    ? (stat.sourceSlug || "/diagnostic")
+    : stat.sourceSlug
+      ? `/${stat.sourceCapability.replace(/\s+/g, "-").toLowerCase()}/${stat.sourceSlug}`
+      : `/${stat.sourceCapability.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
     <div
