@@ -1478,18 +1478,44 @@ const Deck = () => {
 
       {/* ═══ FRAME 10: Case Studies — Carousel Gallery ═══ */}
       <DeckFrame ref={setRef(9)} mode="full">
-        <div ref={r10.ref} className="flex flex-col gap-10 w-full" style={{ overflow: "hidden" }}>
-          <div style={{ ...r10.stagger(0, 0, "blur-up"), paddingLeft: "clamp(24px, 4vw, 80px)", paddingRight: "clamp(24px, 4vw, 80px)" }}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>Selected work.</p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>Tap any case to explore the full timeline.</p>
+        <div
+          ref={r10.ref}
+          className="flex w-full flex-col justify-center"
+          style={{
+            overflow: "hidden",
+            minHeight: "min(72vh, 760px)",
+            gap: "clamp(28px, 4vh, 44px)",
+          }}
+        >
+          <div
+            style={{
+              ...r10.stagger(0, 0, "blur-up"),
+              paddingLeft: "clamp(24px, 4vw, 80px)",
+              paddingRight: "clamp(24px, 4vw, 80px)",
+            }}
+          >
+            <p style={{ ...heading("clamp(28px, 3.8vw, 46px)"), fontWeight: 700 }}>Selected work.</p>
+            <p
+              style={{
+                fontFamily: f.sans,
+                fontSize: "clamp(13px, 1.4vw, 15px)",
+                color: f.ink(0.38),
+                marginTop: "10px",
+                lineHeight: 1.6,
+                maxWidth: "440px",
+              }}
+            >
+              Choose a case to open the timeline.
+            </p>
           </div>
 
-          {/* Carousel */}
-          <CaseCarousel
-            studies={caseStudies}
-            isActive={r10.isActive}
-            onSelect={setSelectedCase}
-          />
+          <div style={{ ...r10.stagger(1, 120, "fade-up") }}>
+            <CaseCarousel
+              studies={caseStudies}
+              isActive={r10.isActive}
+              onSelect={setSelectedCase}
+            />
+          </div>
         </div>
       </DeckFrame>
 
