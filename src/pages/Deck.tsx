@@ -446,33 +446,31 @@ const Deck = () => {
     if (!el) return;
 
     const handler = (e: WheelEvent) => {
-      // Check if wheel is inside the results scroll panel
-      const target = e.target as HTMLElement | null;
-      const resultsPanel = target?.closest("[data-results-scroll='true']") as HTMLElement | null;
+      const frameEl = frameRefs.current[currentFrame];
+      if (!frameEl) return;
 
-      if (resultsPanel) {
-        // Allow scrolling inside the panel only if it can still scroll in that direction
-        const atTop = resultsPanel.scrollTop <= 0;
-        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
+      const frameTop = frameEl.offsetTop;
+      const frameBottom = frameTop + frameEl.scrollHeight;
+      const frameTallerThanViewport = frameEl.scrollHeight > el.clientHeight + 2;
+
+      if (frameTallerThanViewport) {
+        // Frame is taller than viewport — allow scrolling within frame bounds
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
+        const atFrameTop = el.scrollTop <= frameTop;
+        const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
+        const atFrameBottom = el.scrollTop >= maxScrollTop - 1;
 
-        if ((scrollingDown && atBottom) || (scrollingUp && atTop)) {
-          // Panel hit its limit — kill the event so it doesn't chain to the deck
+        if ((scrollingDown && atFrameBottom) || (scrollingUp && atFrameTop)) {
+          // Hit the edge of the frame — block to prevent sliding to next frame
           e.preventDefault();
-          e.stopPropagation();
         }
-        // Otherwise let the panel scroll normally
+        // Otherwise let it scroll naturally within the frame
         return;
       }
 
-      // Everything else: hard-lock the deck to the current frame
+      // Frame fits in viewport — hard-lock
       e.preventDefault();
-
-      const frameEl = frameRefs.current[currentFrame];
-      if (!frameEl) return;
-      const frameTop = frameEl.offsetTop;
-      const frameBottom = frameTop + frameEl.scrollHeight;
       const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
       el.scrollTop = Math.min(maxScrollTop, Math.max(frameTop, el.scrollTop));
     };
@@ -896,10 +894,13 @@ const Deck = () => {
                     gap: "clamp(24px, 3vw, 48px)",
                   }}
                 >
+                  {/* Left column — diagnostic card + start over */}
                   <div
                     className="flex flex-col gap-5"
                     style={{
                       alignSelf: "start",
+                      position: "sticky",
+                      top: "clamp(80px, 12vh, 140px)",
                     }}
                   >
                     <div
@@ -961,15 +962,10 @@ const Deck = () => {
                     </button>
                   </div>
 
+                  {/* Right column — dimension cards flow naturally, no scroll container */}
                   <div
-                    className="flex flex-col gap-4 results-scrollbar"
-                    data-results-scroll="true"
+                    className="flex flex-col gap-4"
                     style={{
-                      maxHeight: "clamp(520px, calc(100dvh - 260px), 720px)",
-                      overflowY: "auto",
-                      overscrollBehavior: "contain",
-                      paddingRight: "clamp(4px, 0.8vw, 12px)",
-                      paddingBottom: "12px",
                       paddingLeft: "clamp(0px, 1vw, 16px)",
                     }}
                   >
@@ -1028,26 +1024,32 @@ const Deck = () => {
                             {lede}
                           </p>
 
-                          {isExpanded && (
-                            <ul style={{
-                              listStyle: "none",
-                              padding: 0,
-                              margin: "20px 0 0 0",
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "12px",
-                              paddingTop: "20px",
-                              borderTop: `1px solid ${f.ink(0.06)}`,
-                              animation: "fade-up 0.3s ease-out",
-                            }}>
-                              {bullets.map((b, bi) => (
-                                <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                                  <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
-                                  <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                          {/* Expandable bullets — grid animation */}
+                          <div style={{
+                            display: "grid",
+                            gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                            transition: "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}>
+                            <div style={{ overflow: "hidden" }}>
+                              <ul style={{
+                                listStyle: "none",
+                                padding: 0,
+                                margin: "20px 0 0 0",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "12px",
+                                paddingTop: "20px",
+                                borderTop: `1px solid ${f.ink(0.06)}`,
+                              }}>
+                                {bullets.map((b, bi) => (
+                                  <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                                    <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
+                                    <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
 
                           <button
                             onClick={() => setExpandedDimension(isExpanded ? null : i)}
