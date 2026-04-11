@@ -390,17 +390,25 @@ const Deck = () => {
 
   /* ─── Navigation ─── */
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    frameRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setCurrentFrame(i); },
-        { threshold: 0.5 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
+    const el = containerRef.current;
+    if (!el) return;
+
+    const updateCurrentFrame = () => {
+      const scrollTop = el.scrollTop;
+      const viewportH = el.clientHeight;
+      const midPoint = scrollTop + viewportH * 0.4; // bias toward top of viewport
+
+      let best = 0;
+      frameRefs.current.forEach((frame, i) => {
+        if (!frame) return;
+        if (frame.offsetTop <= midPoint) best = i;
+      });
+      setCurrentFrame(best);
+    };
+
+    el.addEventListener("scroll", updateCurrentFrame, { passive: true });
+    updateCurrentFrame();
+    return () => el.removeEventListener("scroll", updateCurrentFrame);
   }, []);
 
   useEffect(() => {
