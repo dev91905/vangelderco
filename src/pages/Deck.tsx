@@ -1545,10 +1545,14 @@ const Deck = () => {
         <div ref={r11.ref} className="flex flex-col items-center text-center gap-6">
           {ctaMode === "thanks" ? (
             <>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 700, color: f.ink(0.85) }}>Thank you.</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em" }}>Got it.</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "400px" }}>
-                We're reviewing your intake and will be in touch shortly.
+                We're putting together a custom diagnostic based on your answers. Check your inbox.
               </p>
+              <a href="/" style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500, color: f.ink(0.35), textDecoration: "none", marginTop: "12px" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+              >Return to site</a>
             </>
           ) : (
             <>
