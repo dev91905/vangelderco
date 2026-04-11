@@ -1,80 +1,50 @@
 
 
-# Normalized Stats System
+# Replace Link URL Field with Article Search Picker
 
 ## Problem
-Stats live as JSONB blobs in two places (`capability_posts.stats` and `deck_case_studies.phases[].stats[]`). No shared identity — same stat entered in both places creates duplicates. No way to link or sync them.
+The current "Link to Full Article" field is a raw text input where you manually type a URL or slug. Error-prone, requires remembering slugs, and creates no real relationship between the timeline and the article.
 
-## Solution: `impact_stats` Table
+## Solution
+Replace the text input with a searchable dropdown that queries `capability_posts`. Type to filter, select to link. If the article doesn't exist, press Enter to create a new draft article with that name — zero friction.
 
-One table, one source of truth. Every stat chip lives here. Both articles and timelines reference the same rows.
+## How It Works
 
-```text
-impact_stats
-├── id (uuid, PK)
-├── label ("$12M", "40K", "47")
-├── description ("Coordinated capital", "People reached")
-├── post_id (FK → capability_posts, nullable)
-├── case_study_id (FK → deck_case_studies, nullable)
-├── phase_title (text, nullable — e.g. "Results", "Pilots")
-├── visible (boolean, default true)
-├── sort_order (integer, default 0)
-└── created_at (timestamptz)
-```
+1. **Search input** — As you type, a dropdown appears showing matching `capability_posts` (title, slug, published status). Debounced query, 300ms.
 
-**Key relationships:**
-- A stat with only `post_id` → lives on the article
-- A stat with only `case_study_id` + `phase_title` → lives on a specific timeline phase
-- A stat with BOTH `post_id` AND `case_study_id` → shared between article and timeline (single row, no duplication)
+2. **Select to link** — Click a result to set `link_url` to `/post/{slug}`. The input shows the article title with a chip, not a raw URL.
 
-## How Linking Works
+3. **Create inline** — If no match, the dropdown shows "Create '{query}' as new article" at the bottom. Press Enter or click it to insert a new draft `capability_post` with that title, auto-generate a slug, and immediately link it.
 
-When a `deck_case_study` has a `link_url` that matches a `capability_post.slug`, they're "linked." In the editor:
-- Creating a stat on the article side sets `post_id`
-- Creating a stat on the timeline side sets `case_study_id` + `phase_title`
-- You can "share" a stat to the linked entity — this adds the missing FK to the same row
-- The Impact Cloud aggregator just does `SELECT * FROM impact_stats WHERE visible = true` — one query, no dedup needed
+4. **Clear** — Small X button to unlink.
 
-## Implementation Steps
+## Technical Steps
 
-### 1. Create `impact_stats` table + migration
-- Create table with FKs, RLS policies (public read for visible, authenticated full CRUD)
-- Write a one-time data migration that extracts existing JSONB stats from both tables into the new `impact_stats` rows, setting the correct FKs
+### 1. Create `ArticlePicker` component
+- New file: `src/components/admin/ArticlePicker.tsx`
+- Props: `value` (current slug or null), `onChange` (slug | null)
+- Internal state: search query, open/closed dropdown
+- Query: `SELECT id, title, slug, is_published FROM capability_posts ORDER BY title` filtered client-side (the list is small enough)
+- Shows selected article as a styled chip when linked
+- Dropdown positioned below input, closes on outside click
 
-### 2. Update `useAggregatedStats` hook
-- Replace the dual-query JSONB extraction with a single query: `SELECT * FROM impact_stats WHERE visible = true`
-- Join to `capability_posts` and `deck_case_studies` for source titles/slugs
+### 2. Inline article creation
+- When the user types a name with no match and presses Enter, insert a new `capability_post` with:
+  - `title`: the search query
+  - `slug`: auto-generated from title (kebab-case)
+  - `type`: "case-study"
+  - `capability`: inherit from the current timeline's context or default to "cultural-strategy"
+  - `is_published`: false (draft)
+- After creation, auto-select the new article and link it
 
-### 3. Update article stat editor (`StatChipsEditor`)
-- Read/write from `impact_stats` table instead of the JSONB column
-- When the article is linked to a timeline case study, show which stats are shared vs article-only
-- Allow "pushing" a stat to the linked timeline (adds `case_study_id` + `phase_title`)
+### 3. Update `CaseStudyEditor`
+- Replace the `link_url` text input (lines 427-439) with `<ArticlePicker>`
+- The picker sets `link_url` to `/post/{slug}` to maintain backward compatibility with existing rendering logic
 
-### 4. Update timeline stat editor (`CaseStudyEditor` phase stats)
-- Read/write from `impact_stats` table instead of phases JSONB
-- When linked to an article, show shared stats and allow pulling article stats into a phase
-- New stats created here get `case_study_id` + `phase_title` set
+### 4. Store the `post_id` relationship (optional but recommended)
+- Currently `link_url` is a string. Since we now have a real article reference, we could also store the `post_id` on `deck_case_studies` for a proper FK. But to keep this change minimal, we'll keep using `link_url` as the storage mechanism — the picker just makes it reliable.
 
-### 5. Update display components
-- `StatChips` component on case study pages reads from `impact_stats` by `post_id`
-- Timeline overlay reads phase stats from `impact_stats` by `case_study_id` + `phase_title`
-- `ImpactCloud` on homepage reads all visible stats (already simplified)
-
-### 6. Clean up
-- Remove `stats` JSONB reads from `capability_posts` queries
-- Remove `phases[].stats` parsing from timeline rendering (phases still store title/date/description, just not stats)
-
-## What This Gets You
-
-- **One stat, one row.** No duplication ever.
-- **Shared stats between articles and timelines.** Link once, shows in both places.
-- **Phase-level assignment.** A stat knows which timeline phase it belongs to.
-- **Simpler aggregation.** The homepage Impact Cloud is one SELECT query.
-- **No manual sync.** Edit a stat anywhere, it updates everywhere it appears.
-
-## Technical Details
-
-- RLS: anon can SELECT where `visible = true`, authenticated gets full CRUD
-- The JSONB `stats` columns on both tables become legacy — we migrate data out, then the columns can be ignored (no need to drop them immediately)
-- Realtime can be enabled on `impact_stats` later if live updates matter
+## What Changes
+- `src/components/admin/ArticlePicker.tsx` — new component
+- `src/components/admin/CaseStudyEditor.tsx` — swap text input for ArticlePicker
 
