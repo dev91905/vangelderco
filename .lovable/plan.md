@@ -1,65 +1,41 @@
 
 
-# Overhaul: Diagnostic Report — From Wall of Text to Two-Page Visual Insights Report
+# Separate Case Studies into standalone `/work` page
 
-## What's Wrong Now
+## Summary
+Make the diagnostic 10 slides (ending at CTA), extract the case studies carousel + timeline overlay into a standalone `/work` page, and link to it from the deck's CTA slide.
 
-The current report is a markdown dump: 6 numbered sections of bullet lists, repeated copy from the quiz, and a raw text blob rendered via `dangerouslySetInnerHTML`. It reads like a data export, not a deliverable. For $100M+ donors, this is embarrassing.
+## Changes
 
-## The New Report: Two Sections, Two Pages
+### 1. New page: `src/pages/Work.tsx`
+- Extract the case studies carousel and timeline overlay into a new standalone page
+- Reuses `CaseCarousel`, `CaseTimelineOverlay`, same DB query for `deck_case_studies`, same fallback data
+- Same deep-link support (`?case=<id>` opens overlay directly)
+- Full-screen layout matching the deck aesthetic (same background, typography, theme tokens)
+- "Selected work" heading, subtitle, carousel — identical behavior to current frame 11
+- Back navigation to home or wherever they came from
 
-### Page 1 — "Your Strategic Position"
-A visual scorecard that shows the user where they stand at a glance.
+### 2. Update `src/pages/Deck.tsx`
+- Change `TOTAL_FRAMES` from 11 to 10
+- Remove frame 11 (the case studies `DeckFrame`) and its `CaseTimelineOverlay`
+- Remove `STEP_LABELS` "Cases" entry (array becomes 10 items)
+- Remove the case study DB query, imports for `CaseCarousel`/`CaseTimelineOverlay`, and fallback data from this file
+- On slide 10 (CTA): change "See our work →" button from `scrollToFrame(10)` to `navigate("/work")` — text stays "See our work →"
+- Top-left counter now shows `XX / 10`
+- Bottom nav bar condition already hides on last frame — will now hide on frame index 9 (CTA), which is correct
 
-- **Header bar**: Name, org, date, readiness score as a large circular gauge (0–100) with severity color
-- **5-Dimension Radar/Bar Chart**: Visual comparison showing which of the 5 dimensions (Strategy, Content, Distribution, Engagement, Measurement) they picked advanced vs. conventional — rendered as a horizontal bar chart with "conventional ← → advanced" axis, filled bars colored by pick
-- **AI-Generated Executive Summary** (3-4 sentences): The connective paragraph, but upgraded — the AI now also references competitor/opponent funding patterns and suggests where the gaps create strategic exposure. Prominently placed in a styled callout box
-- **Pain Points**: Compact chips/tags showing what they identified, not bullet paragraphs
+### 3. Update `src/App.tsx`
+- Add route: `<Route path="/work" element={<Work />} />`
+- Add `/work` to `hideConstellation` check (no star field on this page)
 
-### Page 2 — "Where to Move"
-Actionable, concise recommendations tied to their specific gaps.
+### 4. Update `ROUTE_MODE_MAP` if needed
+- `/work` doesn't need a constellation mode since it's hidden
 
-- **Priority Gaps** (only the dimensions where they picked conventional): Each gets a tight card with the dimension name, what they chose, what the shift looks like, and one concrete recommendation. No bullet walls — 2-3 lines max per card
-- **Measurement Gaps**: Visual split — what they track vs. what they're missing — shown as two columns with check/x icons
-- **Selected Practices**: Compact cards for what they want to work on
-- **Next Steps CTA**: Clean contact block
-
-## AI Enhancement
-
-The edge function prompt gets a major upgrade. Instead of one connective paragraph, the AI generates:
-1. **Executive Summary** (3-4 sentences) — connects patterns across dimensions, references how opponents/competitors fund in these areas, identifies the strategic exposure
-2. **Per-gap recommendation** (1 sentence each) — for each conventional pick, a specific actionable insight about what competitors are doing differently
-
-This uses the same Lovable AI gateway, just a richer prompt with structured output via tool calling.
-
-## Visual Design (React Component)
-
-The report renders as a styled React component within AdminSubmissions — not raw markdown. Two distinct page sections with:
-- Clean card layouts with the warm sand/ivory palette
-- The horizontal bar chart for dimensions rendered as pure CSS (no charting library needed)
-- Readiness score as a large styled number with color-coded ring
-- Generous whitespace, Inter typography, tight information density
-- `print` CSS media query so Cmd+P produces clean two-page output
-- The PDF export edge function will also be rewritten to match this layout
-
-## Files Changed
+## Files
 
 | File | Change |
 |------|--------|
-| `supabase/functions/generate-diagnostic/index.ts` | Rewrite to return structured JSON (not markdown). AI generates executive summary + per-gap recommendations. Richer prompt referencing competitor funding patterns |
-| `src/components/admin/DiagnosticReport.tsx` | **New** — Visual two-page report component with scorecard, bar chart, gap cards, measurement split |
-| `src/pages/AdminSubmissions.tsx` | Replace markdown render with `<DiagnosticReport>` component. Pass structured data |
-| `supabase/functions/export-diagnostic-pdf/index.ts` | Rewrite PDF builder to match the new two-page visual layout |
-| `src/lib/deckScoring.ts` | No changes needed — scoring logic stays |
-
-## Data Flow
-
-```text
-AdminSubmissions → invoke("generate-diagnostic") 
-                 → returns { sections: { executive_summary, dimension_results[], gap_recommendations[], ... } }
-                 → <DiagnosticReport data={sections} contact={contact} />
-                 → still cached as JSON string in report_cache column
-```
-
-The `report_cache` column already stores text — we'll store JSON.stringify'd structured data instead. No migration needed.
+| `src/pages/Work.tsx` | **New** — standalone case studies page |
+| `src/pages/Deck.tsx` | Remove frame 11, update TOTAL_FRAMES to 10, navigate to `/work` instead of scrolling |
+| `src/App.tsx` | Add `/work` route, hide constellation on `/work` |
 
