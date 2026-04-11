@@ -401,6 +401,16 @@ const Deck = () => {
     frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  const resetQuiz = useCallback(() => {
+    scrollToFrame(2);
+    window.setTimeout(() => {
+      setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+      setQuizStep(0);
+      setQuizRevealed(false);
+      setExpandedDimension(null);
+    }, 400);
+  }, [scrollToFrame]);
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -546,7 +556,7 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)" }}>
+        <div className={`fixed bottom-0 left-0 right-0 z-50 pointer-events-none ${currentFrame >= 8 ? "hidden lg:block" : ""}`} style={{ padding: "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)" }}>
           <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             {/* Typeform-style thin progress bar */}
@@ -1205,29 +1215,44 @@ const Deck = () => {
         <div ref={r9.ref} style={{ width: "100%" }}>
           {(() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
-            return (
+
+            const renderSummaryCard = (compact = false) => (
               <div
-                className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)]"
                 style={{
-                  width: "100%",
-                  alignItems: "start",
-                  gap: "clamp(24px, 3vw, 48px)",
+                  ...r9.stagger(1, 100, "blur-scale"),
+                  padding: compact ? "20px" : "clamp(24px, 3vw, 36px)",
+                  borderRadius: compact ? "18px" : "20px",
+                  background: "hsl(var(--foreground) / var(--a-bg))",
+                  border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                 }}
               >
-                {/* Left column — diagnostic card + retake + CTA */}
-                <div className="flex flex-col gap-5" style={{ alignSelf: "start" }}>
-                  
-
-                  <div
-                    style={{
-                      ...r9.stagger(1, 100, "blur-scale"),
-                      padding: "clamp(24px, 3vw, 36px)",
-                      borderRadius: "20px",
-                      background: "hsl(var(--foreground) / var(--a-bg))",
-                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-                    }}
-                  >
-                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
+                <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: compact ? "12px" : "16px" }}>Your diagnostic</p>
+                {compact ? (
+                  <>
+                    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "16px" }}>
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(22px, 6vw, 30px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.1, marginBottom: "10px" }}>
+                          {grade.grade}
+                        </p>
+                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.5), lineHeight: 1.6 }}>
+                          {grade.summary}
+                        </p>
+                      </div>
+                      <div style={{ flexShrink: 0, textAlign: "right" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(34px, 11vw, 46px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 0.95 }}>
+                          {diagnosticScore}
+                        </p>
+                        <p style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.3), letterSpacing: "0.04em", textTransform: "uppercase" as const }}>
+                          / 100 readiness
+                        </p>
+                      </div>
+                    </div>
+                    <p style={{ fontFamily: f.sans, fontSize: "12px", color: f.ink(0.38), lineHeight: 1.6, marginTop: "14px" }}>
+                      Full breakdown is visible below — scroll inside the panel to review each dimension.
+                    </p>
+                  </>
+                ) : (
+                  <>
                     <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2.4vw, 28px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
                       {grade.grade}
                     </p>
@@ -1240,129 +1265,195 @@ const Deck = () => {
                       </p>
                       <p style={{ fontFamily: f.sans, fontSize: "12px", color: f.ink(0.3) }}>/ 100 readiness</p>
                     </div>
-                  </div>
+                  </>
+                )}
+              </div>
+            );
 
-                  <p style={{ ...r9.stagger(2, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.35), lineHeight: 1.7 }}>
-                    This is a preview. Your full diagnostic includes a detailed breakdown across every dimension — plus recommendations tailored to your portfolio.
-                  </p>
-
-                  <div style={{ ...r9.stagger(3, 450, "blur-up"), display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
-                    <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
-                    <button
-                      onClick={() => {
-                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
-                        setTimeout(() => {
-                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
-                          setQuizStep(0);
-                          setQuizRevealed(false);
-                          setExpandedDimension(null);
-                        }, 400);
-                      }}
-                      style={{
-                        fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 600,
-                        color: f.ink(0.4), background: "none", border: "none", padding: "12px 8px",
-                        cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px", transition: "color 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.4); }}
-                    >
-                      <RotateCcw size={13} style={{ flexShrink: 0 }} />
-                      Retake quiz
-                    </button>
-                  </div>
-                </div>
-
-                {/* Right column — dimension cards */}
-                <div
-                  className="flex flex-col gap-4 results-scrollbar lg:pr-3 lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
-                  data-results-scroll="true"
+            const renderActionRow = (compact = false) => (
+              <div style={{ ...r9.stagger(3, 450, "blur-up"), display: "flex", flexWrap: "wrap", gap: compact ? "8px" : "10px", alignItems: "center" }}>
+                <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
+                <button
+                  onClick={resetQuiz}
                   style={{
-                    ...r9.stagger(2, 200, "slide-left"),
-                    overflowY: "auto",
-                    overscrollBehavior: "contain",
-                    paddingBottom: "80px",
-                    paddingLeft: "clamp(0px, 1vw, 16px)",
+                    fontFamily: f.sans,
+                    fontSize: "12px",
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase" as const,
+                    fontWeight: 600,
+                    color: f.ink(0.4),
+                    background: "none",
+                    border: "none",
+                    padding: compact ? "10px 6px" : "12px 8px",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    transition: "color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.4); }}
+                >
+                  <RotateCcw size={13} style={{ flexShrink: 0 }} />
+                  Retake quiz
+                </button>
+              </div>
+            );
+
+            const renderResultCards = (compact = false) => QUIZ_ROWS.map((row, i) => {
+              const answer = quizAnswers[i];
+              const pickedNextGen = answer?.picked === "nextgen";
+              const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+              const lede = pickedNextGen ? row.nextgenLede : row.traditionalLede;
+              const bullets = pickedNextGen ? row.nextgenBullets : row.traditionalBullets;
+              const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
+              const isExpanded = expandedDimension === i;
+
+              return (
+                <div
+                  key={i}
+                  style={{
+                    padding: compact ? "18px" : "clamp(24px, 3vw, 36px)",
+                    borderRadius: compact ? "14px" : "16px",
+                    background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                    border: `1px solid ${f.ink(0.06)}`,
                   }}
                 >
-                  {QUIZ_ROWS.map((row, i) => {
-                    const answer = quizAnswers[i];
-                    const pickedNextGen = answer?.picked === "nextgen";
-                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
-                    const lede = pickedNextGen ? row.nextgenLede : row.traditionalLede;
-                    const bullets = pickedNextGen ? row.nextgenBullets : row.traditionalBullets;
-                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
-                    const isExpanded = expandedDimension === i;
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: compact ? "16px" : "20px" }}>
+                    <span style={{
+                      display: "inline-block", width: "8px", height: "8px", borderRadius: "50%",
+                      background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2), flexShrink: 0,
+                    }} />
+                    <p style={{ fontFamily: f.sans, fontSize: compact ? "17px" : "clamp(16px, 1.5vw, 20px)", fontWeight: 700, color: f.ink(0.85), letterSpacing: "-0.01em" }}>{row.dimension}</p>
+                  </div>
 
-                    return (
-                      <div
-                        key={i}
-                        style={{
-                          padding: "clamp(24px, 3vw, 36px)",
-                          borderRadius: "16px",
-                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
-                          border: `1px solid ${f.ink(0.06)}`,
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
-                          <span style={{
-                            display: "inline-block", width: "8px", height: "8px", borderRadius: "50%",
-                            background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2), flexShrink: 0,
-                          }} />
-                          <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.5vw, 20px)", fontWeight: 700, color: f.ink(0.85), letterSpacing: "-0.01em" }}>{row.dimension}</p>
-                        </div>
+                  <p style={{
+                    fontFamily: f.sans,
+                    fontSize: compact ? "13px" : "clamp(13px, 1.15vw, 14px)",
+                    color: f.ink(0.4),
+                    lineHeight: 1.7,
+                    fontStyle: "italic",
+                    paddingLeft: compact ? "16px" : "20px",
+                    borderLeft: `2px solid ${f.ink(0.08)}`,
+                    marginBottom: compact ? "18px" : "24px",
+                  }}>
+                    {selectedCopy}
+                  </p>
 
-                        <p style={{
-                          fontFamily: f.sans, fontSize: "clamp(13px, 1.15vw, 14px)", color: f.ink(0.4), lineHeight: 1.7,
-                          fontStyle: "italic", paddingLeft: "20px", borderLeft: `2px solid ${f.ink(0.08)}`, marginBottom: "24px",
-                        }}>
-                          {selectedCopy}
-                        </p>
+                  <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "8px", textTransform: "uppercase" as const }}>{explanationLabel}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: compact ? "13px" : "clamp(13px, 1.2vw, 15px)", color: f.ink(0.65), lineHeight: 1.7, fontWeight: 500 }}>
+                    {lede}
+                  </p>
 
-                        <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "8px", textTransform: "uppercase" as const }}>{explanationLabel}</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.65), lineHeight: 1.7, fontWeight: 500 }}>
-                          {lede}
-                        </p>
+                  <div style={{
+                    display: "grid",
+                    gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}>
+                    <div style={{ overflow: "hidden" }}>
+                      <ul style={{
+                        listStyle: "none", padding: 0, margin: "20px 0 0 0",
+                        display: "flex", flexDirection: "column", gap: "12px",
+                        paddingTop: "20px", borderTop: `1px solid ${f.ink(0.06)}`,
+                      }}>
+                        {bullets.map((b, bi) => (
+                          <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                            <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
+                            <span style={{ fontFamily: f.sans, fontSize: compact ? "13px" : "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
 
-                        {/* Expandable bullets */}
-                        <div style={{
-                          display: "grid",
-                          gridTemplateRows: isExpanded ? "1fr" : "0fr",
-                          transition: "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-                        }}>
-                          <div style={{ overflow: "hidden" }}>
-                            <ul style={{
-                              listStyle: "none", padding: 0, margin: "20px 0 0 0",
-                              display: "flex", flexDirection: "column", gap: "12px",
-                              paddingTop: "20px", borderTop: `1px solid ${f.ink(0.06)}`,
-                            }}>
-                              {bullets.map((b, bi) => (
-                                <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                                  <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
-                                  <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => setExpandedDimension(isExpanded ? null : i)}
-                          style={{
-                            fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.3),
-                            background: "none", border: "none", padding: "0", marginTop: "20px",
-                            cursor: "pointer", letterSpacing: "0.05em", textTransform: "uppercase" as const,
-                            transition: "color 0.15s ease",
-                          }}
-                          onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
-                          onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
-                        >
-                          {isExpanded ? "Show less" : "Read more"}
-                        </button>
-                      </div>
-                    );
-                  })}
+                  <button
+                    onClick={() => setExpandedDimension(isExpanded ? null : i)}
+                    style={{
+                      fontFamily: f.sans,
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      color: f.ink(0.3),
+                      background: "none",
+                      border: "none",
+                      padding: "0",
+                      marginTop: compact ? "16px" : "20px",
+                      cursor: "pointer",
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase" as const,
+                      transition: "color 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+                  >
+                    {isExpanded ? "Show less" : "Read more"}
+                  </button>
                 </div>
-              </div>
+              );
+            });
+
+            return (
+              <>
+                <div className="flex flex-col gap-4 lg:hidden" style={{ width: "100%", minHeight: "calc(100dvh - 180px)" }}>
+                  {renderSummaryCard(true)}
+                  {renderActionRow(true)}
+                  <div
+                    className="results-scrollbar"
+                    data-results-scroll="true"
+                    style={{
+                      ...r9.stagger(2, 200, "slide-left"),
+                      overflowY: "auto",
+                      minHeight: "clamp(300px, 42dvh, 420px)",
+                      maxHeight: "min(52dvh, 480px)",
+                      overscrollBehaviorY: "auto",
+                      padding: "14px",
+                      borderRadius: "18px",
+                      background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                      border: `1px solid ${f.ink(0.06)}`,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "12px", padding: "2px 2px 14px", marginBottom: "12px", borderBottom: `1px solid ${f.ink(0.06)}` }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "13px", fontWeight: 700, color: f.ink(0.78), letterSpacing: "0.02em" }}>Detailed breakdown</p>
+                      <p style={{ fontFamily: f.sans, fontSize: "11px", color: f.ink(0.32) }}>Scroll for all 5</p>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      {renderResultCards(true)}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="hidden lg:grid lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)]"
+                  style={{
+                    width: "100%",
+                    alignItems: "start",
+                    gap: "clamp(24px, 3vw, 48px)",
+                  }}
+                >
+                  <div className="flex flex-col gap-5" style={{ alignSelf: "start" }}>
+                    {renderSummaryCard(false)}
+
+                    <p style={{ ...r9.stagger(2, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.35), lineHeight: 1.7 }}>
+                      This is a preview. Your full diagnostic includes a detailed breakdown across every dimension — plus recommendations tailored to your portfolio.
+                    </p>
+
+                    {renderActionRow(false)}
+                  </div>
+
+                  <div
+                    className="flex flex-col gap-4 results-scrollbar lg:pr-3 lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
+                    data-results-scroll="true"
+                    style={{
+                      ...r9.stagger(2, 200, "slide-left"),
+                      overflowY: "auto",
+                      overscrollBehavior: "contain",
+                      paddingBottom: "80px",
+                      paddingLeft: "clamp(0px, 1vw, 16px)",
+                    }}
+                  >
+                    {renderResultCards(false)}
+                  </div>
+                </div>
+              </>
             );
           })()}
         </div>
