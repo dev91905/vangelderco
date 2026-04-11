@@ -1,36 +1,49 @@
 
 
-## Fix PDF rendering — eliminate html2canvas alignment issues
+## Fix PDF rendering — replace html2canvas-hostile CSS patterns with bulletproof alternatives
 
-### Root causes
+### Problems identified from the PDF
 
-1. **ScoreRing misalignment**: The score number/label uses `position: absolute` but its parent container lacks explicit dimensions and positioning context. `html2canvas` interprets this differently than the browser, so the text floats off-center from the circle.
+Looking at the actual output:
 
-2. **Pills and buttons use Tailwind `gap` and `flex`**: `html2canvas` has known issues with CSS `gap` property and sometimes with Tailwind utility classes that resolve through CSS custom properties. The pills render with inconsistent spacing.
+1. **`gap` property still broken** — converting Tailwind `gap-2` to inline `gap: "8px"` changes nothing for html2canvas. It's the CSS `gap` property either way, and html2canvas handles it poorly. Pills bunch together or space unevenly.
 
-3. **CSS Grid for measurement gaps**: `grid grid-cols-2 gap-4` can render incorrectly in `html2canvas`.
+2. **Pills use `display: inline-block`** — this doesn't vertically center text within the pill. Need `inline-flex` with `alignItems: center` and explicit `height`/`lineHeight`.
 
-4. **Inconsistent use of Tailwind vs inline styles**: Some layout is Tailwind classes, some is inline. `html2canvas` captures computed styles but can miss class-based layouts in edge cases.
+3. **CSS custom properties not resolving** — `t.ink(0.5)` returns `hsl(var(--ink-h) var(--ink-s) var(--ink-l) / 0.5)`. html2canvas has known issues resolving CSS custom properties. Colors may render incorrectly or fall back to black/transparent.
 
-### The fix
+4. **Lucide React SVG icons** — `<CheckCircle2>`, `<XCircle>`, `<ArrowRight>`, `<TrendingUp>` render as complex React SVG trees. html2canvas can misposition or missize these.
 
-Convert **all layout-critical styling in DiagnosticReport.tsx to inline styles** so `html2canvas` gets unambiguous computed values. Specifically:
+5. **Score ring flex overlay** — despite the fix, the absolute-positioned flex overlay on the SVG ring can still shift in html2canvas.
 
-**`src/components/admin/DiagnosticReport.tsx`**
+### The fix — three systematic changes in `DiagnosticReport.tsx`
 
-1. **ScoreRing** — Replace the broken absolute positioning with a single `div` using `position: relative` + `display: flex; align-items: center; justify-content: center`. Place the SVG as `position: absolute` inside, and the text as the natural flex content. This guarantees the number is dead-center in the ring regardless of renderer.
+**1. Kill all `gap` usage — use `marginRight`/`marginBottom` on children instead**
 
-2. **All `className="flex ..."` containers** — Convert to `style={{ display: "flex", alignItems: "center", gap: "8px" }}` etc. Replace every `className` that controls layout (flex, grid, gap, margin, padding) with the equivalent inline style.
+Every `gap: "8px"` becomes explicit margin on each child element. This is the only spacing method html2canvas reliably handles.
 
-3. **All `className="grid grid-cols-2 gap-4"`** — Convert to `style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}`.
+**2. Hardcode all colors — no CSS custom properties**
 
-4. **All pill `flex-wrap gap-2`** — Convert to `style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}`.
+Replace every `t.ink(alpha)` call with a hardcoded `rgba()` value. The PDF component renders on a warm ivory background, so we use `rgba(28, 25, 23, alpha)` (warm black matching the design tokens). Replace `t.cream`, `t.sans` etc. with literal values. This component is PDF-only — it doesn't need to respond to theme changes.
 
-5. **CTA buttons container** — Convert to inline flex with explicit gap.
+**3. Replace Lucide components with inline SVG paths**
 
-6. **Remove all Tailwind utility classes** from the component — keep only inline styles. This component exists solely for the admin panel and PDF capture, so Tailwind convenience isn't needed; rendering fidelity is.
+Instead of `<CheckCircle2>` etc., use simple `<svg>` elements with hardcoded paths. This eliminates React component rendering issues in html2canvas.
+
+**4. Pills: `inline-flex` with explicit height and centering**
+
+```
+display: "inline-flex",
+alignItems: "center",
+justifyContent: "center",
+height: "28px",
+```
+
+**5. Score ring: hardcoded absolute positioning with px offsets**
+
+Instead of flex centering inside the absolute overlay, position the text with explicit `top`/`left`/`transform: translate(-50%, -50%)` which html2canvas handles more reliably than flexbox.
 
 ### No other files change
 
-The export logic in `AdminSubmissions.tsx` stays as-is. This is purely a rendering fidelity fix in the report component.
+Only `src/components/admin/DiagnosticReport.tsx`. The export logic in AdminSubmissions stays as-is.
 
