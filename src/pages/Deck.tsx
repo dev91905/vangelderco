@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import TypewriterHeading from "@/components/deck/TypewriterHeading";
@@ -9,8 +9,6 @@ import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
-import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
-import { useQuery } from "@tanstack/react-query";
 
 const TOTAL_FRAMES = 10;
 
