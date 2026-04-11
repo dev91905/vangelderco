@@ -1370,10 +1370,10 @@ const Deck = () => {
           <div>
             <div style={r8.stagger(0, 0, "blur-up")}>
               <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-                We've worked across the sectors your grantees need to reach.
+                We come from the industries your grantees need to reach.
               </p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
-                Our team comes out of the industries where attention, narrative, and cultural uptake actually move.
+                Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
               </p>
             </div>
 
