@@ -961,6 +961,9 @@ const Deck = () => {
                         whiteSpace: "nowrap",
                         alignSelf: "flex-start",
                         transition: "all 0.2s ease",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.borderColor = f.ink(0.24);
@@ -971,10 +974,8 @@ const Deck = () => {
                         e.currentTarget.style.background = "hsl(var(--background))";
                       }}
                     >
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                        <RotateCcw size={14} />
-                        Start over
-                      </span>
+                      <RotateCcw size={14} style={{ flexShrink: 0 }} />
+                      Start over
                     </button>
                   </div>
 
