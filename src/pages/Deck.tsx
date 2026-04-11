@@ -373,7 +373,7 @@ const Deck = () => {
     focusDeck();
     const focusTimer = window.setTimeout(focusDeck, 50);
     const handler = (e: KeyboardEvent) => {
-      if (selectedCase !== null) return;
+      // no-op guard removed (selectedCase moved to /work)
       const target = e.target as HTMLElement | null;
       if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.tagName === "SELECT" || target?.isContentEditable) return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "Enter") {
@@ -389,7 +389,7 @@ const Deck = () => {
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
-  }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
+  }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
   /* Wheel handler — lock deck scroll; only internal result panels may scroll */
   useEffect(() => {
