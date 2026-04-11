@@ -1360,66 +1360,72 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 8: Who We Are + Media Experience ═══ */}
+      {/* ═══ FRAME 8: Sectors ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
-        <div ref={r8.ref} className="flex flex-col lg:flex-row gap-16 w-full">
-          <div className="lg:w-[45%] flex flex-col justify-center">
-            <p style={{ ...r8.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.3 }}>
+        <div ref={r8.ref} className="w-full">
+          <div className="mb-10" style={{ maxWidth: "640px" }}>
+            <h2 style={{ ...r8.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: f.ink(0.9), lineHeight: 1.15, letterSpacing: "-0.02em" }}>
               We've built the communications you're trying to buy.
+            </h2>
+            <p style={{ ...r8.stagger(1, 200, "blur-up"), fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "16px" }}>
+              Our team is built from careers across these industries — the ones your grantees are trying to reach.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.55), lineHeight: 1.8, ...r8.stagger(1, 300, "blur-up"), marginTop: "20px", maxWidth: "400px" }}>
-              Our team is built from careers in <strong style={{ color: f.ink(0.8) }}>commercial media and entertainment</strong> — the industries your grantees are trying to reach.
-            </p>
-
-            {/* Media experience question */}
-            <div style={{ ...r8.stagger(2, 600, "blur-up"), marginTop: "32px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 600, color: f.ink(0.7), marginBottom: "16px" }}>
-                Have you worked with media professionals before?
-              </p>
-              <div className="flex gap-3">
-                {([
-                  { val: true, lbl: "Yes" },
-                  { val: false, lbl: "No" },
-                ] as const).map((opt) => (
-                  <button
-                    key={String(opt.val)}
-                    onClick={() => setHasMediaExperience(opt.val)}
-                    style={{
-                      fontFamily: f.sans, fontSize: "13px", fontWeight: 600,
-                      padding: "12px 32px", borderRadius: "999px",
-                      color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
-                      background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                      border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
-                      cursor: "pointer", transition: "all 0.2s ease",
-                    }}
-                  >
-                    {opt.lbl}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
-          <div className="lg:w-[55%] grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-px" style={{
+            ...r8.stagger(2, 400, "blur-up"),
+            background: f.ink(0.06), borderRadius: "12px", overflow: "hidden",
+          }}>
             {[
               { name: "News", desc: "Local and national — how stories get placed and why" },
               { name: "Music", desc: "Labels, touring, festivals, artist strategy" },
               { name: "Film & TV", desc: "Production, distribution, cultural impact" },
-              { name: "Digital", desc: "Advertising, creator economy — where opinion forms now" },
+              { name: "Digital", desc: "Creator economy, platforms, where opinion forms now" },
               { name: "PR", desc: "Corporate, entertainment, crisis communications" },
-              { name: "Philanthropy", desc: "Running organizations, managing portfolios, advising donors" },
+              { name: "Commercial Media", desc: "Entertainment, studios, media operations" },
+              { name: "Brands & Advertising", desc: "Campaigns, partnerships, cultural positioning" },
+              { name: "Sports", desc: "Leagues, athletes, community engagement" },
+              { name: "Gaming", desc: "Studios, streamers, interactive culture" },
             ].map((s, i) => (
-              <div key={i} className="transition-all duration-300" style={{
-                padding: "20px 16px", borderTop: `1px solid ${f.ink(0.06)}`,
+              <div key={i} style={{
+                padding: "clamp(16px, 2vw, 28px)", background: "hsl(var(--card))",
                 opacity: r8.isActive ? 1 : 0,
-                transform: r8.isActive ? "translateY(0) scale(1)" : "translateY(12px) scale(0.96)",
+                transform: r8.isActive ? "translateY(0)" : "translateY(8px)",
                 filter: r8.isActive ? "blur(0px)" : "blur(4px)",
-                transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${500 + i * 100}ms`,
+                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${500 + i * 80}ms`,
               }}>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", fontWeight: 700, color: f.ink(0.7), marginBottom: "6px" }}>{s.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.2vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 17px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>{s.name}</p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>{s.desc}</p>
               </div>
             ))}
+          </div>
+
+          {/* Media experience question */}
+          <div style={{ ...r8.stagger(3, 800, "blur-up"), marginTop: "40px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
+              Have you worked with media professionals before?
+            </p>
+            <div className="flex gap-3">
+              {([
+                { val: true, lbl: "Yes" },
+                { val: false, lbl: "No" },
+              ] as const).map((opt) => (
+                <button
+                  key={String(opt.val)}
+                  onClick={() => setHasMediaExperience(opt.val)}
+                  style={{
+                    fontFamily: f.sans, fontSize: "13px", fontWeight: 600,
+                    padding: "12px 32px", borderRadius: "999px",
+                    color: hasMediaExperience === opt.val ? "hsl(var(--primary-foreground))" : f.ink(0.5),
+                    background: hasMediaExperience === opt.val ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                    border: hasMediaExperience === opt.val ? "none" : `1px solid ${f.ink(0.1)}`,
+                    cursor: "pointer", transition: "all 0.2s ease",
+                  }}
+                >
+                  {opt.lbl}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </DeckFrame>
