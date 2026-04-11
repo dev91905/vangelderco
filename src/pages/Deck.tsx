@@ -602,7 +602,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 0}>
-        <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
+        <div ref={r1.ref} className={`flex flex-col items-start gap-12 ${isMobile ? "" : "min-h-[60vh] justify-center"}`}>
           <TypewriterHeading
             text="Find the gaps before your opponents do."
             active={currentFrame === 0 || r1.isActive}
@@ -671,7 +671,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
       <DeckFrame ref={setRef(1)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 1}>
-        <div ref={r2.ref} className="flex flex-col gap-8 min-h-[70vh] justify-center">
+        <div ref={r2.ref} className={`flex flex-col gap-8 ${isMobile ? "" : "min-h-[70vh] justify-center"}`}>
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
               Which best describes where you are?
@@ -765,7 +765,7 @@ const Deck = () => {
           style={{
             width: "100%",
             minHeight: "100%",
-            justifyContent: "center",
+            justifyContent: isMobile ? "flex-start" : "center",
             paddingBottom: "0",
           }}
         >
@@ -904,7 +904,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 3}>
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           {/* Left column */}
           <div style={{ ...r4.stagger(0, 0, "blur-up") }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
@@ -1052,7 +1052,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 6: Metrics Checklist ═══ */}
       <DeckFrame ref={setRef(5)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 5}>
-        <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
+        <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           <div style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               How do you measure your impact?
@@ -1110,7 +1110,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 7: Working Together ═══ */}
       <DeckFrame ref={setRef(6)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 6}>
-        <div ref={r7.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
+        <div ref={r7.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           {/* Left column — heading */}
           <div style={r7.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
