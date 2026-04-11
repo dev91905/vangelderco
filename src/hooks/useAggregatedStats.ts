@@ -7,6 +7,7 @@ export interface AggregatedStat {
   sourceTitle: string;
   sourceSlug: string | null;
   sourceCapability: string;
+  sourceType: string;
   sourceCreatedAt: string;
 }
 
