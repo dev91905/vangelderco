@@ -379,7 +379,9 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
           </p>
           <div className="flex items-center justify-center gap-3">
             <a
-              href={`mailto:${data.contactEmail}`}
+              href={data.bookingLink || `mailto:${data.contactEmail}`}
+              target={data.bookingLink ? "_blank" : undefined}
+              rel={data.bookingLink ? "noreferrer" : undefined}
               style={{
                 fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
                 padding: "8px 20px", borderRadius: "999px",
