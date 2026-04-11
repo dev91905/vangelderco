@@ -12,10 +12,10 @@ export const useDarkMode = () => useContext(DarkModeContext);
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   const [isDark, setIsDark] = useState(() => {
     try {
-      return localStorage.getItem("vgc-dark") === "1";
-    } catch {
-      return false;
-    }
+      const stored = localStorage.getItem("vgc-dark");
+      if (stored !== null) return stored === "1";
+    } catch {}
+    return true; // default to dark for new visitors
   });
 
   useEffect(() => {
