@@ -272,7 +272,28 @@ const Deck = () => {
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
-  const [selectedCase, setSelectedCase] = useState<number | null>(null);
+  const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
+
+  /* ─── Fetch case studies from DB ─── */
+  const { data: dbCaseStudies } = useQuery({
+    queryKey: ["deck-case-studies"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deck_case_studies")
+        .select("*")
+        .eq("is_published", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return (data || []).map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        issue: row.issue,
+        outcome: row.outcome,
+        phases: row.phases as CaseStudyData["phases"],
+      })) as CaseStudyData[];
+    },
+  });
+  const caseStudies = dbCaseStudies && dbCaseStudies.length > 0 ? dbCaseStudies : FALLBACK_CASE_STUDIES;
   const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
   const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
 
@@ -1489,43 +1510,43 @@ const Deck = () => {
                 transition: "opacity 0.6s ease",
               }}
             >
-              {[...CASE_STUDIES, ...CASE_STUDIES].map((cs, i) => {
-                const realIndex = i % CASE_STUDIES.length;
+              {[...caseStudies, ...caseStudies].map((cs, i) => {
+                const hasPhases = cs.phases && cs.phases.length > 0;
                 return (
                   <button
                     key={i}
-                    onClick={() => setSelectedCase(realIndex)}
+                    onClick={() => setSelectedCase(cs)}
                     className="flex-shrink-0 text-left group"
                     style={{
                       width: "clamp(280px, 22vw, 360px)",
                       padding: "clamp(24px, 2.5vw, 36px) clamp(20px, 2vw, 28px)",
                       borderRadius: "16px",
-                      background: cs.content ? "hsl(var(--foreground))" : "transparent",
-                      border: cs.content ? "none" : `1px solid ${f.ink(0.08)}`,
+                      background: hasPhases ? "hsl(var(--foreground))" : "transparent",
+                      border: hasPhases ? "none" : `1px solid ${f.ink(0.08)}`,
                       cursor: "pointer",
                       transition: "transform 0.3s ease, border-color 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-4px)";
-                      if (!cs.content) e.currentTarget.style.borderColor = f.ink(0.2);
+                      if (!hasPhases) e.currentTarget.style.borderColor = f.ink(0.2);
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = "translateY(0)";
-                      if (!cs.content) e.currentTarget.style.borderColor = f.ink(0.08);
+                      if (!hasPhases) e.currentTarget.style.borderColor = f.ink(0.08);
                     }}
                   >
                     <p style={{
                       fontFamily: f.sans,
                       fontSize: "clamp(15px, 1.6vw, 19px)",
                       fontWeight: 700,
-                      color: cs.content ? "hsl(var(--primary-foreground))" : f.ink(0.7),
+                      color: hasPhases ? "hsl(var(--primary-foreground))" : f.ink(0.7),
                       marginBottom: "10px",
                       lineHeight: 1.3,
                     }}>{cs.name}</p>
                     <p style={{
                       fontFamily: f.sans,
                       fontSize: "clamp(12px, 1.1vw, 14px)",
-                      color: cs.content ? "hsl(var(--primary-foreground) / 0.6)" : f.ink(0.35),
+                      color: hasPhases ? "hsl(var(--primary-foreground) / 0.6)" : f.ink(0.35),
                       lineHeight: 1.6,
                       marginBottom: "14px",
                     }}>{cs.issue}</p>
@@ -1535,7 +1556,7 @@ const Deck = () => {
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       fontWeight: 600,
-                      color: cs.content ? "hsl(var(--primary-foreground) / 0.5)" : f.ink(0.2),
+                      color: hasPhases ? "hsl(var(--primary-foreground) / 0.5)" : f.ink(0.2),
                     }}>{cs.outcome}</p>
                   </button>
                 );
@@ -1579,24 +1600,8 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* Case Study Lightbox */}
-      <Dialog open={selectedCase !== null} onOpenChange={(open) => !open && setSelectedCase(null)}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl" style={{ background: "hsl(var(--background))", border: `1px solid ${f.ink(0.08)}` }}>
-          <DialogHeader>
-            <DialogTitle style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 700, color: f.ink(0.9) }}>
-              {selectedCase !== null ? CASE_STUDIES[selectedCase].name : ""}
-            </DialogTitle>
-          </DialogHeader>
-          {selectedCase !== null && CASE_STUDIES[selectedCase].content ? (
-            CASE_STUDIES[selectedCase].content
-          ) : (
-            <div className="flex flex-col items-center justify-center py-12 gap-4">
-              <p style={{ fontFamily: f.sans, fontSize: "16px", color: f.ink(0.5) }}>Full case study coming soon.</p>
-              <p style={{ ...label("11px") }}>{selectedCase !== null ? CASE_STUDIES[selectedCase].outcome : ""}</p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* Case Study Timeline Overlay */}
+      <CaseTimelineOverlay study={selectedCase} onClose={() => setSelectedCase(null)} />
     </div>
   );
 };
