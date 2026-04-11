@@ -1,63 +1,108 @@
 
 
-# Editor Redesign — One Premium Content Creator
+# Case Study Timeline Overlay — Full Redesign
 
-## The Problems
+## What's wrong now
 
-1. **Type selector buried in a settings drawer.** You have to click a tiny gear icon, open a side panel, scroll to find a 3-button toggle. The most important decision — what kind of content you're making — is hidden behind two clicks.
+The case study popup is a narrow `max-w-2xl` dialog with plain paragraphs stacked vertically. No visual hierarchy, no timeline, no sense of progression. The content is hardcoded as JSX inside `CASE_STUDIES` in `Deck.tsx`. There's no way for an admin to edit or create new case studies without touching code.
 
-2. **No visual identity per content type.** Switching between Blog Post, Case Study, and Field Note barely changes anything. The editor looks the same regardless. The published pages look beautiful and distinct — the editor should reflect that.
+## The new experience
 
-3. **Field note is a completely separate code path** (lines 213–261 in AdminEditor.tsx) with its own inline form, while blog/case-study share the same generic meta bar + block canvas. This creates an inconsistent, fragmented experience.
+### 1. Full-screen overlay instead of a dialog
 
-4. **Settings drawer is a junk drawer.** Type, capability, slug, status, hero image, password, featured toggle — all crammed into one panel with no hierarchy.
+Replace the `Dialog` with a full-viewport overlay (100vw × 100dvh, z-50) that slides up over the deck. Dark semi-transparent backdrop. Close button top-right. The overlay is widescreen — content lives in a horizontally scrollable timeline that fills the width.
 
-## The Redesign
+### 2. Interactive horizontal timeline
 
-### Type selection: front and center
+The overlay contains a **horizontal timeline** the user scrolls through (mouse wheel maps to horizontal scroll, or drag/swipe on mobile). Each phase is a "node" on a continuous line:
 
-When creating a new post, the first thing you see is a clean type selector at the top of the editor — three elegant cards or tabs, not buried in a drawer. Each shows the type name and a one-line description:
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│  ● Issue        ● Blind Spot      ● Brief         ● Research       │
+│  ─────────────────────────────────────────────────────────────────  │
+│                    ● Coalition      ● Pilots        ● Results       │
+│                                                                     │
+│  [phase card]   [phase card]    [phase card]    [phase card]        │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-- **Blog Post** — Long-form narrative with hero image
-- **Case Study** — Structured analysis with key metrics
-- **Field Note** — Quick signal with impact stat
+- A thin horizontal line runs across the viewport with circular nodes at each phase
+- The **active phase** node pulses subtly; others are dormant dots
+- Below each node: a card with the phase title, date range, and description
+- As you scroll horizontally, phases animate in with staggered fade-up — the line "draws" itself progressively
+- Stat chips appear at the final "Results" node with the outcome metrics
+- The connecting line uses a gradient that intensifies as you progress — a visual metaphor for momentum building
 
-Clicking one immediately transforms the editor below it. For existing posts, the type shows as a subtle label in the toolbar (not editable inline — change it in settings if needed).
+### 3. Data-driven from a structured format
 
-### Editor adapts per type
+Replace the hardcoded JSX `content` field in `CASE_STUDIES` with a structured `phases` array:
 
-**Blog Post:** Hero image area at top (click to upload), title, excerpt, date, divider, then content blocks. Matches the published BlogPostView layout exactly.
+```typescript
+type CasePhase = {
+  title: string;       // "Research" / "Coalition & Cultural Strategy"
+  date?: string;       // "Jan–Mar 2023"
+  description: string; // The narrative text
+  stats?: { value: string; label: string }[];  // Optional metrics for this phase
+};
 
-**Case Study:** No hero image area. Title, excerpt, date, then stat chips editor, divider, then content blocks with expandable/carousel/stat-grid available. Matches CaseStudyView.
+type CaseStudy = {
+  name: string;
+  issue: string;
+  outcome: string;
+  phases: CasePhase[] | null;  // null = "coming soon"
+};
+```
 
-**Field Note:** Centered, minimal form — just like the current one but elevated. Title at top (same as other types for consistency), then the elegant slug line / brief / impact stat / link fields. No content blocks, no hero image. Matches the published field note view.
+The Clean Energy Workforce case study gets converted from its current paragraph format into ~6 phases (Issue → Blind Spot → Brief → Research → Coalition Strategy → Pilots → Results). Every other case study stays `phases: null` and shows "Coming soon" in the overlay.
 
-### Settings drawer: reorganized
+### 4. Admin-editable via the content manager
 
-Split into two sections with clear headers:
-- **Publishing** — Status toggle, date, slug, capability
-- **Promotion** — Featured toggle, slug line, featured stat, hero image, password
+Add a **"Deck Case Studies"** section to the admin panel (or a dedicated editor route) where the admin can:
 
-Remove the type selector from the drawer entirely (it lives in the editor header now).
+- See all case studies listed
+- Click one to edit its phases inline
+- Each phase is an editable card: title, date, description, optional stats
+- Drag to reorder phases
+- Add/remove phases with + / × buttons
+- Changes save to a new `deck_case_studies` database table
+- The timeline reconstructs itself live as phases are added/removed/reordered
 
-### Visual polish
+**Database table: `deck_case_studies`**
 
-- Subtle background tint change per type: warm ivory (blog), slightly cooler (case study), minimal (field note) — barely perceptible but establishes identity
-- Type indicator in toolbar shows current type with a small icon
-- Smooth transitions when switching types (content blocks fade, fields animate in/out)
-- The whole editor uses the same typography and spacing as the published views
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid | PK |
+| name | text | Case study name |
+| issue | text | One-line issue description |
+| outcome | text | One-line outcome |
+| sort_order | integer | Display order in marquee |
+| phases | jsonb | Array of `CasePhase` objects |
+| is_published | boolean | Show in deck or not |
+| created_at | timestamptz | Default now() |
 
-## Files to edit
+RLS: anon SELECT where `is_published = true`, authenticated full CRUD.
 
-- **`src/pages/AdminEditor.tsx`** — Add prominent type selector for new posts, reorganize the layout to adapt per type, unify the field-note path with the main editor flow
-- **`src/components/admin/EditorMetaBar.tsx`** — Remove type selector from settings drawer, reorganize drawer into Publishing/Promotion sections, add type-aware visual adaptations
-- No changes to BlockCanvas, BlockEditor, or published views — those are fine
+### 5. Visual design details
+
+- **Typography**: Inter for all text. Phase titles at 20px/700. Descriptions at 15px/400. Dates in uppercase 11px tracking-wide.
+- **Colors**: Warm palette from design tokens. The timeline line is `ink(0.08)` with nodes at `ink(0.3)`, active node at `ink(0.7)`.
+- **Animation**: Each phase card fades up + slides right as it enters the viewport (IntersectionObserver on horizontal scroll). The connecting line segment draws with a CSS `stroke-dashoffset` animation.
+- **Results node**: Larger card with stat chips matching the published case study format. Subtle background tint to signal completion.
+- **"Coming soon" state**: For cases without phases, the overlay shows the case name, issue, outcome, and a minimal "Full timeline coming soon" message centered in the viewport.
+
+## Files to create/edit
+
+- **`src/components/deck/CaseTimelineOverlay.tsx`** — New component: the full-screen overlay with horizontal scrolling timeline
+- **`src/pages/Deck.tsx`** — Replace `Dialog` lightbox with `CaseTimelineOverlay`, convert `CASE_STUDIES` content to structured phases format, fetch from DB with fallback to hardcoded data
+- **`src/index.css`** — Add timeline drawing animation keyframes
+- **`src/pages/Admin.tsx`** — Add "Deck Case Studies" collapsible section
+- **`src/components/admin/CaseStudyEditor.tsx`** — New component: inline editor for case study phases (add/remove/reorder/edit)
+- **Database migration** — Create `deck_case_studies` table with RLS policies
 
 ## What stays the same
 
-- Auto-save, ⌘S, ⌘⇧P shortcuts — all untouched
-- Block canvas with drag-and-drop, slash commands — untouched
-- Content block types and their editors — untouched
-- Settings drawer mechanism (slide-in panel) — kept, just reorganized
-- StatChipsEditor placement — stays between meta bar and blocks for case studies
+- The marquee gallery on slide 10 (just built) — untouched
+- All other deck frames and interactions
+- The published case study pages on the main site (separate system)
 
