@@ -404,7 +404,6 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
             >
               Get in touch
             </a>
-            )}
           </div>
         </div>
       </section>
