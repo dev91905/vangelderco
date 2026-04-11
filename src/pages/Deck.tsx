@@ -1411,33 +1411,37 @@ const Deck = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              "News",
-              "Music",
-              "Film & TV",
-              "Digital",
-              "Traditional PR",
-              "Commercial Media & Entertainment",
-              "Brands & Advertising",
-              "Sports",
-              "Gaming",
+              { name: "News", desc: "Local and national — how stories get placed and why" },
+              { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
+              { name: "Film & TV", desc: "Production, distribution, cultural impact" },
+              { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
+              { name: "Sports", desc: "Athletes, leagues, the largest captive audiences in the country" },
+              { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
+              { name: "Advertising & Brands", desc: "Commercial partnerships that carry messages at scale" },
+              { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
+              { name: "Organized Communities", desc: "Faith, labor, campuses, veterans, industry associations, defense" },
             ].map((sector, i) => (
               <div
-                key={sector}
+                key={sector.name}
                 style={{
-                  padding: "24px 20px",
-                  minHeight: "110px",
+                  padding: "20px 18px",
                   border: `1px solid ${f.ink(0.08)}`,
                   background: "transparent",
                   borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
                   opacity: r8.isActive ? 1 : 0,
                   transform: r8.isActive ? "translateX(0)" : "translateX(20px)",
                   filter: r8.isActive ? "blur(0px)" : "blur(4px)",
                   transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms`,
                 }}
               >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.7vw, 19px)", fontWeight: 700, color: f.ink(0.8), lineHeight: 1.3 }}>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "5px", lineHeight: 1.3 }}>
+                  {sector.name}
+                </p>
+                <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6 }}>
+                  {sector.desc}
+                </p>
+              </div>
+            ))}
                   {sector}
                 </p>
               </div>
