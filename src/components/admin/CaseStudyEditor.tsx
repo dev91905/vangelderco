@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
 import { useSyncImpactStats } from "@/hooks/useImpactStats";
+import ArticlePicker from "@/components/admin/ArticlePicker";
 
 type CaseStudyRow = {
   id: string;
