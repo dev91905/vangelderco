@@ -274,6 +274,7 @@ const Deck = () => {
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
+  const deepLinkedCase = useRef(false);
 
   /* ─── Fetch case studies from DB ─── */
   const { data: dbCaseStudies } = useQuery({
@@ -305,6 +306,7 @@ const Deck = () => {
       const match = caseStudies.find((c) => c.id === caseId);
       if (match) {
         setSelectedCase(match);
+        deepLinkedCase.current = true;
         // Clean up the query param
         searchParams.delete("case");
         setSearchParams(searchParams, { replace: true });
@@ -1526,7 +1528,14 @@ const Deck = () => {
 
 
       {/* Case Study Timeline Overlay */}
-      <CaseTimelineOverlay study={selectedCase} onClose={() => setSelectedCase(null)} />
+      <CaseTimelineOverlay study={selectedCase} onClose={() => {
+        if (deepLinkedCase.current) {
+          deepLinkedCase.current = false;
+          navigate("/");
+        } else {
+          setSelectedCase(null);
+        }
+      }} />
     </div>
   );
 };
