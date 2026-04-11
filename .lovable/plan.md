@@ -1,27 +1,35 @@
 
 
-# Fix: Quiz Headline Flash Before Slide 4 Transition
+# Fix: Impact Stats → Deep-Link to Case Study Timeline
 
 ## Problem
 
-When the user clicks the last quiz answer, there's an 800ms window where the "Which approach do you gravitate toward?" headline is visible alone (no quiz cards beneath it) before the scroll to Slide 4 fires. 
-
-**Root cause**: After the last answer, `quizStep` is set to `QUIZ_ROWS.length` which hides the quiz cards (`quizStep < QUIZ_ROWS.length` fails), but `quizRevealed` stays `false` so the headline remains visible. The headline sits alone for ~800ms until `scrollToFrame(3)` fires.
+The "40K" stat card links to `/diagnostic` because the Clean Energy Workforce case study has `link_url = null` in the database. The current fallback is just `/diagnostic`, which lands on slide 1 — no connection to the actual case study.
 
 ## Fix
 
-In `handleQuizPick` (line 487-490 of `Deck.tsx`), hide the heading immediately when the last question is answered by also setting `quizRevealed = true` alongside `quizStep = QUIZ_ROWS.length`. Since `quizRevealed` gates the heading visibility (`!quizRevealed`), setting it to `true` at the same time will hide the headline instantly, preventing the flash.
+**1. Add query-param deep-linking to Deck.tsx**
 
-**One-line addition** at line 489:
-```typescript
-setQuizStep(QUIZ_ROWS.length);
-setQuizRevealed(true);  // ← add this line
-setTimeout(() => scrollToFrame(3), 800);
-```
+When `/diagnostic?case=<case-study-id>` is loaded, auto-open the matching case study timeline overlay after the case studies data loads.
 
-This is safe because `quizRevealed` is only checked for header/card visibility on Frame 3 — and is already reset to `false` in the "retake" handler.
+- Read `searchParams.get("case")` from the URL
+- When `caseStudies` data is available and contains a matching ID, call `setSelectedCase(matchedStudy)` via a `useEffect`
+
+**2. Update ImpactCloud.tsx link builder**
+
+For deck case studies, link to `/diagnostic?case=<sourceId>` instead of falling back to `/diagnostic`.
+
+This requires passing `sourceId` through `AggregatedStat` to the component (currently stripped before return).
+
+**3. Update useAggregatedStats.ts**
+
+Keep `sourceId` in the returned `AggregatedStat` interface instead of stripping it in the final `.map()`.
+
+## Files changed
 
 | File | Change |
 |------|--------|
-| `src/pages/Deck.tsx` | Add `setQuizRevealed(true)` after `setQuizStep(QUIZ_ROWS.length)` on line 489 |
+| `src/hooks/useAggregatedStats.ts` | Add `sourceId` to `AggregatedStat` interface; stop stripping it |
+| `src/components/ImpactCloud.tsx` | For deck stats, link to `/diagnostic?case=${stat.sourceId}` |
+| `src/pages/Deck.tsx` | Read `?case=` query param; auto-open matching timeline overlay on load |
 
