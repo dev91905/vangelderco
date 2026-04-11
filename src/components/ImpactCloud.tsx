@@ -35,6 +35,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const [hovered, setHovered] = useState(false);
   const delay = index * 0.07;
+  const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
   const href = stat.sourceCapability === "deck"
     ? (stat.sourceSlug || "/diagnostic")
@@ -62,11 +63,14 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className={`flex h-full flex-col justify-center rounded-xl ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
+          className={`flex h-full flex-col rounded-xl ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
           style={{
             background: "transparent",
             border: `1px solid ${hovered ? t.ink(0.25) : t.ink(0.15)}`,
             transition: `border-color 0.3s ${EASE}`,
+            justifyContent: placement.justify,
+            alignItems: placement.items,
+            textAlign: placement.textAlign,
           }}
         >
           <span
