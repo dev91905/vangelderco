@@ -556,13 +556,17 @@ const CaseStudyEditor: React.FC = () => {
                                 />
                               </div>
 
-                              <div className="p-4 space-y-3">
+                              <div className="p-5 space-y-4">
                                 {/* Phase header */}
-                                <div className="flex items-center gap-2">
-                                  <GripVertical
-                                    className="w-4 h-4 flex-shrink-0 cursor-grab active:cursor-grabbing"
-                                    style={{ color: t.ink(0.15) }}
-                                  />
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className="flex flex-col items-center gap-0.5 cursor-grab active:cursor-grabbing py-2 px-1 rounded-lg transition-colors"
+                                    style={{ color: t.ink(0.2) }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = t.ink(0.04); }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.2); e.currentTarget.style.background = "transparent"; }}
+                                  >
+                                    <GripVertical className="w-4 h-4 flex-shrink-0" />
+                                  </div>
                                   <span
                                     style={{
                                       fontFamily: t.sans,
