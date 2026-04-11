@@ -190,7 +190,7 @@ const Admin = () => {
                 type="email"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="info@vangelderco.com"
+                placeholder="hello@vangelder.co"
                 className="w-full px-3 py-2.5 text-sm bg-transparent outline-none rounded-xl"
                 style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.02) }}
               />
