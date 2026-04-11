@@ -1179,8 +1179,8 @@ const Deck = () => {
                   }}>
                     <div style={{ overflow: "hidden" }}>
                       <div style={{ paddingTop: "14px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.55), marginLeft: "64px", lineHeight: 1.7 }}>{h.rationale}</p>
-                        <div style={{ margin: "12px 0 0 64px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "12px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.55), marginLeft: "44px", lineHeight: 1.7 }}>{h.rationale}</p>
+                        <div style={{ margin: "12px 0 0 44px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "12px" }}>
                           <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.5), lineHeight: 1.6 }}>
                             <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
                           </p>
