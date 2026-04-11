@@ -75,9 +75,10 @@ const Admin = () => {
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
   const [bookingLink, setBookingLink] = useState<string>("");
+  const [contactEmail, setContactEmail] = useState<string>("");
   const [pwLoaded, setPwLoaded] = useState(false);
 
-  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setBookingLink(settings.booking_link || ""); setPwLoaded(true); }
+  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setBookingLink(settings.booking_link || ""); setContactEmail(settings.contact_email || ""); setPwLoaded(true); }
 
   const typeChips = [
     { value: "all", label: "All" },
