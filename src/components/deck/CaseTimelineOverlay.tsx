@@ -399,7 +399,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
           </div>
         </div>
       ) : (
-        /* ── Coming soon state ── */}
+        /* Coming soon state */
         <div className="flex-1 flex flex-col items-center justify-center gap-8 px-8">
           <div className="text-center max-w-lg">
             <p style={{
