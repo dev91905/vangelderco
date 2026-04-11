@@ -77,6 +77,39 @@ export type Database = {
         }
         Relationships: []
       }
+      deck_case_studies: {
+        Row: {
+          created_at: string
+          id: string
+          is_published: boolean
+          issue: string
+          name: string
+          outcome: string
+          phases: Json | null
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          issue?: string
+          name: string
+          outcome?: string
+          phases?: Json | null
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          issue?: string
+          name?: string
+          outcome?: string
+          phases?: Json | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
       deck_contacts: {
         Row: {
           capabilities_ranked: string[] | null
