@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft } from "lucide-react";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
@@ -196,18 +198,47 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
     if (!reportData) return;
     setExporting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("export-diagnostic-pdf", {
-        body: { reportData },
+      const el = document.getElementById("diagnostic-report-capture");
+      if (!el) throw new Error("Report element not found");
+
+      // Capture at 2x for crisp text
+      const canvas = await html2canvas(el, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#FFFDF9", // match t.cream
+        logging: false,
       });
-      if (error) throw error;
-      const bytes = Uint8Array.from(atob(data.pdf), (c) => c.charCodeAt(0));
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `diagnostic-${contact.first_name}-${contact.last_name}.pdf`.toLowerCase().replace(/\s+/g, "-");
-      a.click();
-      URL.revokeObjectURL(url);
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const pdfH = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const contentW = pdfW - margin * 2;
+      const imgAspect = canvas.height / canvas.width;
+      const contentH = contentW * imgAspect;
+
+      // Multi-page: slice the image if it's taller than one page
+      const pageContentH = pdfH - margin * 2;
+      if (contentH <= pageContentH) {
+        pdf.addImage(imgData, "PNG", margin, margin, contentW, contentH);
+      } else {
+        // How many pages we need
+        const totalPages = Math.ceil(contentH / pageContentH);
+        for (let i = 0; i < totalPages; i++) {
+          if (i > 0) pdf.addPage();
+          // We position the full image, offset upward for each page
+          const yOffset = margin - i * pageContentH;
+          // Clip to page using the page itself as boundary
+          pdf.addImage(imgData, "PNG", margin, yOffset, contentW, contentH);
+        }
+      }
+
+      pdf.save(
+        `diagnostic-${contact.first_name}-${contact.last_name}.pdf`
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+      );
     } catch (err: any) {
       toast.error("PDF export failed: " + err.message);
     } finally {
