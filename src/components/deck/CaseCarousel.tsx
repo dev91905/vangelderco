@@ -53,7 +53,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
     >
       {/* Carousel viewport */}
       <div ref={emblaRef} className="overflow-hidden" style={{ paddingLeft: "clamp(24px, 4vw, 80px)" }}>
-        <div className="flex" style={{ gap: "clamp(16px, 1.5vw, 24px)" }}>
+        <div className="flex" style={{ gap: "clamp(16px, 1.5vw, 24px)", paddingTop: "12px", paddingBottom: "12px" }}>
           {studies.map((cs, i) => {
             const hasPhases = cs.phases && (cs.phases as unknown[]).length > 0;
             const isHovered = false; // handled via CSS
