@@ -20,7 +20,6 @@ export interface DeckDiagnosticInput {
   selectedPains: string[];
   hasCustomChallenge: boolean;
   quizAnswers: QuizAnswer[];
-  selectedDomains: string[];
   capabilitiesRanked: string[];
   metricsChecked: string[];
   engagementPath: "fresh" | "experienced" | null;
