@@ -13,7 +13,7 @@ import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/de
 import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import { useQuery } from "@tanstack/react-query";
 
-const TOTAL_FRAMES = 12; // added preliminary results slide
+const TOTAL_FRAMES = 11; // removed Close frame
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -317,7 +317,7 @@ const Deck = () => {
     gates[8] = true; // preliminary results — always accessible
     gates[9] = true; // CTA — always accessible
     gates[10] = true; // case studies
-    gates[11] = true; // close
+    
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
@@ -471,7 +471,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
-  const r12 = useFrameReveal();
+  
 
   /* ─── Quiz helpers ─── */
   const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
@@ -496,7 +496,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases"];
 
   return (
     <div
@@ -526,11 +526,15 @@ const Deck = () => {
           <button
             onClick={() => navigate("/")}
             className="transition-colors duration-200"
-            style={{ fontFamily: f.sans, fontSize: "11px", letterSpacing: "0.06em", color: f.ink(0.25), background: "none", border: "none", cursor: "pointer" }}
+            style={{ color: f.ink(0.25), background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 0 }}
             onMouseEnter={(e) => (e.currentTarget.style.color = f.ink(0.6))}
             onMouseLeave={(e) => (e.currentTarget.style.color = f.ink(0.25))}
+            aria-label="Exit diagnostic"
           >
-            ESC to exit
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
       </div>
@@ -1440,6 +1444,20 @@ const Deck = () => {
                     >Book a call instead</button>
                   )}
                 </div>
+                {/* Link to case studies after form */}
+                <button
+                  type="button"
+                  onClick={() => scrollToFrame(10)}
+                  style={{
+                    ...r10.stagger(3, 700, "blur-up"),
+                    fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
+                    color: f.ink(0.35), background: "none", border: "none", cursor: "pointer", marginTop: "16px", transition: "color 200ms",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
+                >
+                  See our work →
+                </button>
               </form>
             </div>
           )}
@@ -1489,39 +1507,6 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 12: Close ═══ */}
-      <DeckFrame ref={setRef(11)}>
-        <div ref={r12.ref} className="flex flex-col items-center text-center gap-6">
-          {ctaMode === "thanks" ? (
-            <>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em" }}>Got it.</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "400px" }}>
-                We're putting together your full diagnostic based on your answers. Check your inbox.
-              </p>
-              <a href="/" style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500, color: f.ink(0.35), textDecoration: "none", marginTop: "12px" }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.35); }}
-              >Return to site</a>
-            </>
-          ) : (
-            <>
-              <p style={{ ...label("10px") }}>← Ready to connect?</p>
-              <button
-                onClick={() => scrollToFrame(9)}
-                style={{
-                  fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
-                  color: "hsl(var(--foreground))", background: "hsl(var(--foreground) / var(--a-bg))",
-                  border: "1px solid hsl(var(--foreground) / var(--a-border))", padding: "14px 28px", borderRadius: "999px", cursor: "pointer", transition: "all 200ms ease",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))"; }}
-              >
-                Send your communications intake →
-              </button>
-            </>
-          )}
-        </div>
-      </DeckFrame>
 
       {/* Case Study Timeline Overlay */}
       <CaseTimelineOverlay study={selectedCase} onClose={() => setSelectedCase(null)} />
