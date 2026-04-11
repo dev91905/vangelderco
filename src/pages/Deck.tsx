@@ -1418,7 +1418,7 @@ const Deck = () => {
           </div>
         </div>
       </DeckFrame>
-      <DeckFrame ref={setRef(8)} mode="wide">
+      <DeckFrame ref={setRef(8)} mode="narrow">
         <div ref={r9.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
@@ -1437,109 +1437,68 @@ const Deck = () => {
               )}
             </div>
           ) : (
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
-              {/* Left column — heading + intake summary */}
-              <div className="flex-1 min-w-0">
-                <h2 style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-                  We've got a picture of your communications. Let's talk.
-                </h2>
-                <p style={{ ...r9.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 18px)", color: f.ink(0.5), lineHeight: 1.7, marginTop: "16px", maxWidth: "480px" }}>
-                  Leave your details and we'll send your diagnostic. Or book a call and walk through it together.
-                </p>
+            <div className="flex flex-col items-center text-center max-w-[460px] mx-auto">
+              <h2 style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+                Let's talk.
+              </h2>
+              <p style={{ ...r9.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "12px", maxWidth: "420px" }}>
+                Leave your details and we'll send your results — or book a call and walk through them together.
+              </p>
 
-                {/* Intake Summary */}
-                {(selectedPains.length > 0 || customSaved || engagementPath || quizRevealed) && (
-                  <div style={{
-                    ...r9.stagger(1, 400, "blur-up"),
-                    marginTop: "28px", padding: "20px 24px", borderRadius: "12px",
-                    background: "hsl(var(--foreground) / var(--a-bg))", border: "1px solid hsl(var(--foreground) / var(--a-border-card))", textAlign: "left",
-                  }}>
-                    <p style={{ ...label("9px"), color: "hsl(var(--foreground) / var(--a-mid))", marginBottom: "12px" }}>Your intake summary</p>
-                    {selectedPains.length > 0 && (
-                      <div style={{ marginBottom: "10px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Challenges</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>{selectedPainDatas.map(p => p.short).join(" · ")}</p>
-                      </div>
-                    )}
-                    {quizRevealed && (
-                      <div style={{ marginBottom: "10px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Quiz result</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>{getQuizGrade(nextgenPickCount, QUIZ_ROWS.length).grade}</p>
-                      </div>
-                    )}
-                    {capabilitiesRanked.length > 0 && (
-                      <div style={{ marginBottom: "10px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Priority capabilities</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>{CAPABILITIES.filter(c => capabilitiesRanked.includes(c.id)).map(c => c.title).join(" · ")}</p>
-                      </div>
-                    )}
-                    {engagementPath && (
-                      <div>
-                        <p style={{ fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.5), marginBottom: "4px" }}>Engagement path</p>
-                        <p style={{ fontFamily: f.sans, fontSize: "13px", color: f.ink(0.7), lineHeight: 1.5 }}>{engagementPath === "fresh" ? "Starting fresh" : "Already up to speed"}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Right column — form */}
-              <div className="w-full lg:w-[400px] flex-shrink-0">
-                <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left" style={r9.stagger(2, 500, "blur-up")}>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
-                      <input type="text" required value={ctaForm.firstName} onChange={(e) => setCtaForm(p => ({ ...p, firstName: e.target.value }))}
-                        style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
-                        onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
-                    </div>
-                    <div>
-                      <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Last name *</label>
-                      <input type="text" required value={ctaForm.lastName} onChange={(e) => setCtaForm(p => ({ ...p, lastName: e.target.value }))}
-                        style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
-                        onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
-                    </div>
-                  </div>
+              <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left w-full" style={{ ...r9.stagger(2, 500, "blur-up"), marginTop: "40px" }}>
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Organization</label>
-                    <input type="text" value={ctaForm.organization} onChange={(e) => setCtaForm(p => ({ ...p, organization: e.target.value }))}
+                    <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
+                    <input type="text" required value={ctaForm.firstName} onChange={(e) => setCtaForm(p => ({ ...p, firstName: e.target.value }))}
                       style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
                       onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
                   </div>
                   <div>
-                    <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Email *</label>
-                    <input type="email" required value={ctaForm.email} onChange={(e) => setCtaForm(p => ({ ...p, email: e.target.value }))}
+                    <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Last name *</label>
+                    <input type="text" required value={ctaForm.lastName} onChange={(e) => setCtaForm(p => ({ ...p, lastName: e.target.value }))}
                       style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
                       onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
                   </div>
-                  <div className="flex flex-col gap-3 mt-2">
-                    <button type="submit" disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
+                </div>
+                <div>
+                  <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Organization</label>
+                  <input type="text" value={ctaForm.organization} onChange={(e) => setCtaForm(p => ({ ...p, organization: e.target.value }))}
+                    style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
+                </div>
+                <div>
+                  <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>Email *</label>
+                  <input type="email" required value={ctaForm.email} onChange={(e) => setCtaForm(p => ({ ...p, email: e.target.value }))}
+                    style={{ width: "100%", fontFamily: f.sans, fontSize: "14px", color: f.ink(0.8), background: "hsl(var(--card))", border: `1px solid ${f.ink(0.1)}`, borderRadius: "8px", padding: "12px", outline: "none" }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = f.ink(0.2))} onBlur={(e) => (e.currentTarget.style.borderColor = f.ink(0.1))} />
+                </div>
+                <div className="flex flex-col gap-3 mt-2">
+                  <button type="submit" disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
+                    style={{
+                      fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", fontWeight: 600, textTransform: "uppercase" as const,
+                      color: "hsl(var(--primary-foreground))",
+                      background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--foreground) / var(--a-high))" : f.ink(0.2),
+                      border: "none", padding: "14px 28px", borderRadius: "999px",
+                      cursor: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "pointer" : "default", transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground))"; }}
+                    onMouseLeave={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-high))"; }}
+                  >{ctaSubmitting ? "Sending…" : "Submit"}</button>
+                  {bookingLink && (
+                    <button type="button" onClick={() => { handleCtaSubmit(); window.open(bookingLink, "_blank"); }}
+                      disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
                       style={{
                         fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", fontWeight: 600, textTransform: "uppercase" as const,
-                        color: "hsl(var(--primary-foreground))",
-                        background: (ctaForm.firstName.trim() && ctaForm.lastName.trim() && ctaForm.email.trim()) ? "hsl(var(--foreground) / var(--a-high))" : f.ink(0.2),
-                        border: "none", padding: "14px 28px", borderRadius: "999px",
+                        color: f.ink(0.7), background: "transparent",
+                        border: `1px solid ${f.ink(0.15)}`, padding: "14px 28px", borderRadius: "999px",
                         cursor: (ctaForm.firstName.trim() && ctaForm.email.trim()) ? "pointer" : "default", transition: "all 0.2s ease",
                       }}
-                      onMouseEnter={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground))"; }}
-                      onMouseLeave={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-high))"; }}
-                    >{ctaSubmitting ? "Sending…" : "Submit & get your diagnostic"}</button>
-                    {bookingLink && (
-                      <button type="button" onClick={() => { handleCtaSubmit(); window.open(bookingLink, "_blank"); }}
-                        disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
-                        style={{
-                          fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", fontWeight: 600, textTransform: "uppercase" as const,
-                          color: f.ink(0.7), background: "transparent",
-                          border: `1px solid ${f.ink(0.15)}`, padding: "14px 28px", borderRadius: "999px",
-                          cursor: (ctaForm.firstName.trim() && ctaForm.email.trim()) ? "pointer" : "default", transition: "all 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
-                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.color = f.ink(0.7); }}
-                      >Book a call instead</button>
-                    )}
-                  </div>
-                </form>
-              </div>
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = f.ink(0.3); e.currentTarget.style.color = f.ink(0.9); }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = f.ink(0.15); e.currentTarget.style.color = f.ink(0.7); }}
+                    >Book a call instead</button>
+                  )}
+                </div>
+              </form>
             </div>
           )}
         </div>
