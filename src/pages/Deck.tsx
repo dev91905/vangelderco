@@ -555,11 +555,9 @@ const Deck = () => {
                 }}
               />
             </div>
-            {currentFrame < TOTAL_FRAMES - 1 ? (
+            <div style={{ visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
               <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
-            ) : (
-              <div style={{ width: "120px" }} />
-            )}
+            </div>
           </div>
         </div>
       )}
