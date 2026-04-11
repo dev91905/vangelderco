@@ -87,7 +87,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
               flexDirection: "column",
               paddingTop: "60px",
               paddingBottom: "100px",
-              justifyContent: align === "center" ? "center" : "flex-start",
+              justifyContent: "flex-start",
               alignItems: align === "left" ? "flex-start" : "center",
             }}
           >
