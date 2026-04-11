@@ -317,7 +317,7 @@ const Deck = () => {
     gates[8] = true; // preliminary results — always accessible
     gates[9] = true; // CTA — always accessible
     gates[10] = true; // case studies
-    gates[11] = true; // close
+    
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
