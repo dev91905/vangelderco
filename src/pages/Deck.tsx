@@ -325,7 +325,7 @@ const Deck = () => {
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
-  const [hallmarkSelections, setHallmarkSelections] = useState<Record<number, "doing" | "need">>({});
+  const [hallmarkSelections, setHallmarkSelections] = useState<Record<number, boolean>>({});
   const [expandedHallmarkIdx, setExpandedHallmarkIdx] = useState<number | null>(null);
 
   /* Booking link from settings */
@@ -338,7 +338,7 @@ const Deck = () => {
     gates[0] = true; // hero — always ok
     gates[1] = selectedPains.length > 0 || customSaved; // pain points
     gates[2] = quizAnswers.every(a => a !== null); // quiz complete
-    gates[3] = Object.keys(hallmarkSelections).length >= 1; // hallmarks — assessed at least one
+    gates[3] = true; // hallmarks — always passable, checkbox is optional
     gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
@@ -347,7 +347,7 @@ const Deck = () => {
     gates[9] = true; // case studies
     gates[10] = true; // close
     return gates;
-  }, [selectedPains, customSaved, quizAnswers, hallmarkSelections, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
+  }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
   /* ─── Scoring ─── */
   const diagnosticScore = useMemo(() => calculateReadinessScore({
@@ -1084,52 +1084,85 @@ const Deck = () => {
       {/* ═══ FRAME 4: Hallmarks ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
-          {/* Left column — pinned, no movement */}
+          {/* Left column — pinned */}
           <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               We've studied hundreds of organizations. The effective ones do three things.
             </p>
             <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
-              A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
+              A campaign can get tens of millions of views and still fail — if it doesn't do these three things.
+            </p>
+            <p style={{ marginTop: "16px", fontFamily: f.sans, fontSize: "clamp(11px, 1.1vw, 13px)", color: f.ink(0.3), lineHeight: 1.5 }}>
+              Check the ones you're already doing.
             </p>
           </div>
-          {/* Right column — accordion cards, NO scroll */}
+          {/* Right column — accordion cards */}
           <div className="flex flex-col gap-3">
             {[
-              { title: "They engage the full culture stack.", rationale: "They don't just push content out — they work behind the scenes so distribution platforms across different sectors are pulling the message up. Music, faith communities, creator economies, campuses, veteran networks. Not just strategic comms.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
-              { title: "They coordinate across sectors.", rationale: "Communications becomes the organizing infrastructure — the scaffolding that brings different sectors together around a focal point and gives them the cover and momentum to push for policy together. Without multiple sectors engaged, policy doesn't move.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
-              { title: "They organize for growth.", rationale: "It's not about organizing people who already agree. To win, you have to demonstrate that your communications are bringing new people in — people who weren't there before. Only by demonstrating real persuasion can you persuade the people in power.", help: "We run live campaigns that bring in new audiences and build the local leadership infrastructure that turns engagement into lasting power." },
+              { title: "They activate every cultural lever.", rationale: "They don't just push content out — they work behind the scenes so platforms across different sectors are pulling the message in. Music, faith communities, creator ecosystems, campuses, legal networks. Not just strategic comms.", help: "We maintain a presence across the cultural ecosystem and recruit partners who carry your message before you launch." },
+              { title: "They coordinate across sectors.", rationale: "Nothing moves until multiple sectors are pushing on the same thing. The most effective programs leverage cultural engagement to bring policy, industry, labor, grassroots, and other sectors to the table around a shared focal point.", help: "We leverage media and cultural distribution to bring sectors to the table and align them around shared interests." },
+              { title: "They organize for growth.", rationale: "It's not about organizing people who already agree. To win, your communications have to bring new people in — people who weren't there before. Only by demonstrating real persuasion can you move the people in power.", help: "We run campaigns that bring in new audiences, deepen engagement, and build leadership infrastructure that wins lasting power." },
             ].map((h, i) => {
               const isExpanded = expandedHallmarkIdx === i;
-              const selection = hallmarkSelections[i];
+              const isChecked = hallmarkSelections[i] === true;
               return (
-                <button
+                <div
                   key={i}
-                  onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
                   className="text-left w-full"
                   style={{
                     padding: isExpanded ? "24px 24px 20px" : "20px 24px",
                     background: isExpanded ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
                     border: `1px solid ${isExpanded ? "hsl(var(--foreground) / var(--a-border))" : f.ink(0.06)}`,
-                    borderRadius: "12px", cursor: "pointer",
+                    borderRadius: "12px",
                     opacity: r4.isActive ? 1 : 0,
                     transform: r4.isActive ? "translateX(0) scale(1)" : "translateX(30px) scale(0.97)",
                     filter: r4.isActive ? "blur(0px)" : "blur(5px)",
                     transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 150}ms, background 0.25s ease, border-color 0.25s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1)`,
                   }}
                 >
+                  {/* Title row — checkbox + title + expand chevron */}
                   <div className="flex items-center gap-4">
                     <span style={{ fontFamily: f.sans, fontSize: "clamp(18px, 1.8vw, 24px)", fontWeight: 700, color: f.ink(0.15), minWidth: "28px", flexShrink: 0 }}>{i + 1}</span>
-                    <p className="flex-1" style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: isExpanded ? f.ink(0.85) : f.ink(0.65), transition: "color 0.25s ease" }}>{h.title}</p>
-                    {selection && !isExpanded && (
-                      <span style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "999px", color: f.ink(0.5), background: "hsl(var(--foreground) / 0.06)", flexShrink: 0 }}>
-                        {selection === "doing" ? "✓" : "Need"}
-                      </span>
+                    {/* Checkbox */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setHallmarkSelections(prev => ({ ...prev, [i]: !prev[i] }));
+                      }}
+                      style={{
+                        width: "20px", height: "20px", borderRadius: "5px", flexShrink: 0,
+                        border: isChecked ? "none" : `1.5px solid ${f.ink(0.18)}`,
+                        background: isChecked ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer", transition: "all 0.2s ease",
+                      }}
+                      aria-label={`We're doing this: ${h.title}`}
+                    >
+                      {isChecked && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--primary-foreground))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                    <button
+                      className="flex-1 text-left"
+                      onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
+                      style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                    >
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 20px)", fontWeight: 700, color: isExpanded ? f.ink(0.85) : f.ink(0.65), transition: "color 0.25s ease" }}>{h.title}</p>
+                    </button>
+                    {isChecked && !isExpanded && (
+                      <span style={{ fontFamily: f.sans, fontSize: "9px", fontWeight: 600, letterSpacing: "0.08em", color: f.ink(0.35), flexShrink: 0 }}>✓</span>
                     )}
-                    <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)", transform: isExpanded ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }} />
+                    <button
+                      onClick={() => setExpandedHallmarkIdx(isExpanded ? null : i)}
+                      style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", flexShrink: 0 }}
+                    >
+                      <ChevronDown size={16} style={{ color: f.ink(0.2), transition: "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)", transform: isExpanded ? "rotate(180deg)" : "rotate(0)" }} />
+                    </button>
                   </div>
 
-                  {/* Expanded content — uses grid for smooth height animation */}
+                  {/* Expanded content */}
                   <div style={{
                     display: "grid",
                     gridTemplateRows: isExpanded ? "1fr" : "0fr",
@@ -1137,55 +1170,16 @@ const Deck = () => {
                   }}>
                     <div style={{ overflow: "hidden" }}>
                       <div style={{ paddingTop: "14px" }}>
-                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.55), marginLeft: "44px", lineHeight: 1.7 }}>{h.rationale}</p>
-                        <div style={{ margin: "12px 0 0 44px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "12px" }}>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.55), marginLeft: "64px", lineHeight: 1.7 }}>{h.rationale}</p>
+                        <div style={{ margin: "12px 0 0 64px", borderTop: `1px solid ${f.ink(0.08)}`, paddingTop: "12px" }}>
                           <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 13px)", color: f.ink(0.5), lineHeight: 1.6 }}>
                             <span style={{ fontWeight: 700 }}>How we help:</span> {h.help}
                           </p>
                         </div>
-                        {/* Self-assessment buttons */}
-                        <div className="flex gap-3" style={{ marginTop: "14px", marginLeft: "44px" }} onClick={(e) => e.stopPropagation()}>
-                          {([
-                            { value: "doing" as const, lbl: "We're doing this" },
-                            { value: "need" as const, lbl: "We need this" },
-                          ]).map(opt => {
-                            const isSelected = selection === opt.value;
-                            return (
-                              <button
-                                key={opt.value}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setHallmarkSelections(prev => {
-                                    if (prev[i] === opt.value) {
-                                      const next = { ...prev };
-                                      delete next[i];
-                                      return next;
-                                    }
-                                    return { ...prev, [i]: opt.value };
-                                  });
-                                }}
-                                style={{
-                                  fontFamily: f.sans,
-                                  fontSize: "clamp(11px, 1.1vw, 13px)",
-                                  fontWeight: isSelected ? 700 : 500,
-                                  padding: "7px 16px",
-                                  borderRadius: "8px",
-                                  border: `1px solid ${isSelected ? "hsl(var(--foreground) / 0.25)" : f.ink(0.1)}`,
-                                  background: isSelected ? "hsl(var(--foreground) / 0.08)" : "transparent",
-                                  color: isSelected ? f.ink(0.8) : f.ink(0.35),
-                                  cursor: "pointer",
-                                  transition: "all 0.2s ease",
-                                }}
-                              >
-                                {opt.lbl}
-                              </button>
-                            );
-                          })}
-                        </div>
                       </div>
                     </div>
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
