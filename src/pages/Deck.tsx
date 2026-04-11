@@ -1294,69 +1294,132 @@ const Deck = () => {
 
       {/* ═══ FRAME 7: Working Together ═══ */}
       <DeckFrame ref={setRef(6)} mode="wide">
-        <div ref={r7.ref} className="flex flex-col gap-8 w-full">
-          <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, ...r7.stagger(0, 0, "blur-up") }}>How do you want to start working on your communications?</p>
-
-          <div className="flex flex-col sm:flex-row gap-4 w-full" style={r7.stagger(1, 300, "blur-scale")}>
-            {([
-              { id: "fresh" as const, title: "Starting fresh", desc: "You need to understand the landscape before you act." },
-              { id: "experienced" as const, title: "Already up to speed", desc: "You know the gaps. You need capacity and connections." },
-            ]).map((path) => {
-              const isSelected = engagementPath === path.id;
-              const isDimmed = engagementPath !== null && !isSelected;
-              return (
-                <button
-                  key={path.id}
-                  onClick={() => setEngagementPath(isSelected ? null : path.id)}
-                  className="flex-1 text-left transition-all duration-300"
-                  style={{
-                    padding: "32px 28px",
-                    border: isSelected ? "none" : `1px solid ${f.ink(0.06)}`,
-                    background: isSelected ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                    borderRadius: "12px", opacity: isDimmed ? 0.4 : 1, cursor: "pointer",
-                  }}
-                >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(17px, 2.2vw, 24px)", fontWeight: 700, color: isSelected ? "hsl(var(--primary-foreground))" : f.ink(0.55), marginBottom: "8px" }}>{path.title}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: isSelected ? "hsl(var(--primary-foreground) / 0.8)" : f.ink(0.4), lineHeight: 1.7 }}>{path.desc}</p>
-                </button>
-              );
-            })}
+        <div ref={r7.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
+          {/* Left column — heading */}
+          <div style={r7.stagger(0, 0, "blur-up")}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
+              How do you want to start?
+            </p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
+              Pick whichever fits. We'll shape the engagement from there.
+            </p>
           </div>
 
-          {engagementPath === "fresh" && (
-            <div className="flex flex-col lg:flex-row gap-4 w-full" style={{ animation: "deck-fade-up 0.6s ease forwards" }}>
-              {[
-                { phase: "Phase 1", title: "Internal Review", time: "4–6 weeks", bullets: ["Go through everything — grantees, systems, assumptions, goals.", "Voice-track what's been funded and where things feel stuck.", "Identify the gap between where you are and where you need to be."], output: "Diagnostic — here's what we're hearing, here's the delta, here's the plan." },
-                { phase: "Phase 2", title: "External Engagement", time: "6–8 weeks", bullets: ["Interview existing grantees. Flag what should concern you.", "Map cultural infrastructure you're not using.", "Introduce partners from sectors you haven't accessed."], output: "Actionable roadmap — restructured strategy, evaluation rubric, introduction list." },
-              ].map((p, pi) => (
-                <div key={pi} className="flex-1" style={{ padding: "28px 24px", background: "hsl(var(--foreground) / var(--a-high))", borderRadius: "12px" }}>
-                  <div className="flex items-baseline gap-3 mb-4">
-                    <span style={{ fontFamily: f.sans, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.6)" }}>{p.phase}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))" }}>{p.title}</span>
-                    <span style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "hsl(var(--primary-foreground) / 0.5)" }}>{p.time}</span>
+          {/* Right column — two paths */}
+          <div className="flex flex-col gap-4">
+            {/* Path 1: Already up to speed */}
+            <button
+              onClick={() => {
+                setEngagementPath("experienced");
+                setTimeout(() => scrollToFrame(currentFrame + 1), 400);
+              }}
+              className="text-left transition-all duration-300 w-full"
+              style={{
+                padding: "28px 28px",
+                border: engagementPath === "experienced" ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.08)}`,
+                background: engagementPath === "experienced" ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                borderRadius: "12px",
+                cursor: "pointer",
+                opacity: r7.isActive ? 1 : 0,
+                transform: r7.isActive ? "translateX(0)" : "translateX(20px)",
+                filter: r7.isActive ? "blur(0px)" : "blur(4px)",
+                transition: "opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 300ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 300ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) 300ms, background 0.2s ease, border 0.2s ease",
+              }}
+            >
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "6px" }}>Already up to speed</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>
+                You have active programs and know the gaps. You need a pro to pressure-test, connect, and execute. Let's get on a call.
+              </p>
+            </button>
+
+            {/* Path 2: Starting fresh */}
+            <button
+              onClick={() => setEngagementPath(engagementPath === "fresh" ? null : "fresh")}
+              className="text-left transition-all duration-300 w-full"
+              style={{
+                padding: "28px 28px",
+                border: engagementPath === "fresh" ? "1px solid hsl(var(--foreground) / var(--a-high))" : `1px solid ${f.ink(0.08)}`,
+                background: engagementPath === "fresh" ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
+                borderRadius: "12px",
+                cursor: "pointer",
+                opacity: r7.isActive ? 1 : 0,
+                transform: r7.isActive ? "translateX(0)" : "translateX(20px)",
+                filter: r7.isActive ? "blur(0px)" : "blur(4px)",
+                transition: "opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 450ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 450ms, filter 0.7s cubic-bezier(0.16, 1, 0.3, 1) 450ms, background 0.2s ease, border 0.2s ease",
+              }}
+            >
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.8vw, 20px)", fontWeight: 700, color: f.ink(0.8), marginBottom: "6px" }}>Starting fresh</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.45), lineHeight: 1.7 }}>
+                No portfolio, a scattered one, or you're early in the process. You need an audit, a plan, and introductions before you can move.
+              </p>
+            </button>
+
+            {/* Expanded: Starting fresh process */}
+            <div style={{
+              display: "grid",
+              gridTemplateRows: engagementPath === "fresh" ? "1fr" : "0fr",
+              transition: "grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}>
+              <div style={{ overflow: "hidden" }}>
+                <div style={{ paddingTop: "8px" }}>
+                  {/* Phase 1 */}
+                  <div style={{ padding: "24px 28px", borderRadius: "12px", border: `1px solid ${f.ink(0.06)}`, marginBottom: "12px" }}>
+                    <div className="flex items-baseline gap-3" style={{ marginBottom: "16px" }}>
+                      <span style={{ ...label("9px"), color: f.ink(0.3) }}>Phase 1</span>
+                      <span style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>Deep audit</span>
+                      <span style={{ ...label("9px"), color: f.ink(0.25) }}>~3 months</span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {[
+                        "Walk through your portfolio — every grant, every assumption, every gap.",
+                        "Interview you, your team, and your grantees to understand what's working and what isn't.",
+                        "Deliver preliminary findings and a restructured strategy with concrete recommendations.",
+                      ].map((b, i) => (
+                        <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.5), lineHeight: 1.7, paddingLeft: "12px", borderLeft: i === 0 ? "none" : "none" }}>{b}</p>
+                      ))}
+                    </div>
                   </div>
-                  {p.bullets.map((b, i) => (
-                    <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.8)", marginBottom: "6px", paddingLeft: "12px", lineHeight: 1.7 }}>{b}</p>
-                  ))}
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: "hsl(var(--primary-foreground) / 0.75)", marginTop: "12px", lineHeight: 1.7 }}>
-                    <strong style={{ color: "hsl(var(--primary-foreground))" }}>Output:</strong> {p.output}
-                  </p>
+
+                  {/* Phase 2 */}
+                  <div style={{ padding: "24px 28px", borderRadius: "12px", border: `1px solid ${f.ink(0.06)}`, marginBottom: "12px" }}>
+                    <div className="flex items-baseline gap-3" style={{ marginBottom: "16px" }}>
+                      <span style={{ ...label("9px"), color: f.ink(0.3) }}>Phase 2</span>
+                      <span style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 18px)", fontWeight: 700, color: f.ink(0.8) }}>Build & connect</span>
+                      <span style={{ ...label("9px"), color: f.ink(0.25) }}>6–8 weeks</span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {[
+                        "Interview stakeholders and external partners. Start making introductions to fill the gaps we identified.",
+                        "Build an actionable plan — new portfolio, restructured portfolio, or targeted improvements.",
+                        "Deliver a roadmap you can execute on immediately.",
+                      ].map((b, i) => (
+                        <p key={i} style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.5), lineHeight: 1.7 }}>{b}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Fork */}
+                  <div style={{ padding: "24px 28px", borderRadius: "12px", background: "hsl(var(--foreground) / var(--a-bg))", border: `1px solid ${f.ink(0.06)}` }}>
+                    <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "16px" }}>Then you choose</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>Take it and run</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.45), lineHeight: 1.7 }}>
+                          You've got the plan. Execute it yourself. Come back for ad hoc support, hourly consulting, or a light retainer whenever you need it.
+                        </p>
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), marginBottom: "6px" }}>Full-service retainer</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.45), lineHeight: 1.7 }}>
+                          We keep managing the portfolio — introductions, evaluation, strategy, execution — until you bring capacity in-house.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
-          )}
-
-          {engagementPath === "experienced" && (
-            <div className="w-full" style={{ animation: "deck-fade-up 0.6s ease forwards", padding: "28px 24px", background: "hsl(var(--foreground) / var(--a-high))", borderRadius: "12px" }}>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 700, color: "hsl(var(--primary-foreground))", marginBottom: "12px" }}>Custom scope, fast start.</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 15px)", color: "hsl(var(--primary-foreground) / 0.8)", lineHeight: 1.7, maxWidth: "600px" }}>We skip the discovery and go straight to what you need — access, introductions, strategy pressure-testing, grantee evaluation, or campaign execution.</p>
-            </div>
-          )}
-
-
-          {!engagementPath && (
-            <p style={{ ...label("9px"), ...r7.stagger(2, 600, "blur-up") }}>↑ Choose a path to continue</p>
-          )}
+          </div>
         </div>
       </DeckFrame>
 
