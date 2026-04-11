@@ -1442,10 +1442,6 @@ const Deck = () => {
                 </p>
               </div>
             ))}
-                  {sector}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </DeckFrame>
