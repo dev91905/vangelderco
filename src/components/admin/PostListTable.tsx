@@ -56,7 +56,7 @@ const PostListTable = ({ filter }: PostListTableProps) => {
                 color: post.type === "case-study" ? t.ink(0.6) : t.ink(0.4),
                 background: post.type === "case-study" ? t.ink(0.06) : t.ink(0.03),
               }}>
-                {post.type === "case-study" ? "Case Study" : post.type === "field-note" ? "Field Note" : "Blog"}
+                {post.type === "case-study" ? "Case Study" : "Blog"}
               </span>
               <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>{post.capability.replace(/-/g, " ")}</span>
               {post.published_at && <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>{format(new Date(post.published_at), "yyyy.MM.dd")}</span>}

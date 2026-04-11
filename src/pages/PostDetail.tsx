@@ -61,36 +61,6 @@ const PostDetail = () => {
 
   const contentBlocks = post.content_blocks as any[] | null;
 
-  if (post.type === "field-note") {
-    return (
-      <AtmosphericLayout>
-        <div className="flex items-center justify-center min-h-dvh">
-          <div className="max-w-xl w-full px-6 py-20 space-y-8">
-            <div className="text-[10px] tracking-[0.2em] uppercase" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
-              Field Note — {post.capability?.replace(/-/g, " ")}
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'DM Sans', sans-serif", color: t.ink(0.9) }}>
-              {post.title}
-            </h1>
-            {post.excerpt && (
-              <p className="text-[15px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif", color: t.ink(0.5), lineHeight: 1.7 }}>
-                {post.excerpt}
-              </p>
-            )}
-            {(post as any).featured_stat && (
-              <div className="pt-4" style={{ borderTop: `1px solid ${t.ink(0.06)}` }}>
-                <span className="text-[10px] tracking-[0.15em] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif", color: t.ink(0.25) }}>Impact</span>
-                <span className="text-[15px]" style={{ fontFamily: "'DM Sans', sans-serif", color: "hsl(var(--foreground))" }}>
-                  {(post as any).featured_stat}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </AtmosphericLayout>
-    );
-  }
-
   return post.type === "case-study" ? (
     <CaseStudyView post={{ id: post.id, title: post.title, excerpt: post.excerpt, capability: post.capability, published_at: post.published_at, hero_image_url: post.hero_image_url, content_blocks: contentBlocks }} />
   ) : (

@@ -53,7 +53,7 @@ const CAPABILITIES = [
   },
 ];
 
-/* FIELD_NOTES now pulled from DB via useFeaturedPosts hook */
+
 
 /* ── Premium easing curves ── */
 const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
@@ -474,7 +474,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ FIELD NOTES ═══ */}
+      {/* ═══ IMPACT ═══ */}
       <section className="section-flow-tight relative z-10 flex items-center">
         <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">

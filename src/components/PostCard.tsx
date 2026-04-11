@@ -41,7 +41,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
       >
         <div className="flex items-baseline justify-between gap-4 mb-3">
           <span className="text-[10px] tracking-[0.12em] uppercase" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
-            {post.type === "case-study" ? "Case Study" : post.type === "field-note" ? "Field Note" : "Blog Post"}
+            {post.type === "case-study" ? "Case Study" : "Blog Post"}
           </span>
           {post.published_at && (
             <span className="text-[10px] tracking-[0.1em]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
