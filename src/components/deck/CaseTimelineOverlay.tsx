@@ -27,13 +27,11 @@ interface Props {
 
 const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activePhase, setActivePhase] = useState(0);
 
   const handleWheel = useCallback((e: WheelEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (scrollRef.current) {
       scrollRef.current.scrollLeft += e.deltaY + e.deltaX;
     }
@@ -43,27 +41,22 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
     const el = scrollRef.current;
     if (!el || !study?.phases?.length) return;
 
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    setScrollProgress(maxScroll > 0 ? el.scrollLeft / maxScroll : 0);
+    const nodes = Array.from(el.querySelectorAll<HTMLElement>("[data-phase]"));
+    if (!nodes.length) return;
 
-    const panels = Array.from(el.querySelectorAll<HTMLElement>("[data-phase-panel]"));
-    if (!panels.length) return;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    let closest = 0;
+    let minDist = Infinity;
 
-    const viewportCenter = el.scrollLeft + el.clientWidth / 2;
-    let nextActive = 0;
-    let minDistance = Number.POSITIVE_INFINITY;
-
-    panels.forEach((panel, index) => {
-      const panelCenter = panel.offsetLeft + panel.offsetWidth / 2;
-      const distance = Math.abs(panelCenter - viewportCenter);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        nextActive = index;
+    nodes.forEach((node, i) => {
+      const dist = Math.abs(node.offsetLeft + node.offsetWidth / 2 - center);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = i;
       }
     });
 
-    setActivePhase(nextActive);
+    setActivePhase(closest);
   }, [study]);
 
   useEffect(() => {
@@ -82,8 +75,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
 
   useEffect(() => {
     if (!study) return;
-
-    setScrollProgress(0);
     setActivePhase(0);
 
     const handler = (e: KeyboardEvent) => {
@@ -108,169 +99,254 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
         animation: "fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      <div className="flex flex-shrink-0 items-start justify-between gap-6 px-8 py-6 md:px-14">
-        <div className="flex items-start gap-4">
+      {/* ── Minimal header: close + title only ── */}
+      <div
+        className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12"
+      >
+        <div className="flex items-center gap-4">
           <button
             onClick={onClose}
             className="flex items-center justify-center rounded-full transition-all duration-200"
             style={{
-              width: "40px",
-              height: "40px",
+              width: "36px",
+              height: "36px",
               border: ui.cardBorder,
-              color: ui.nodeActive,
+              color: f.ink(0.35),
               background: "transparent",
             }}
           >
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5" />
           </button>
 
-          <div className="flex flex-col gap-2">
-            <span style={ui.meta}>Case study</span>
-            <h2
-              style={{
-                ...ui.title,
-                fontSize: "clamp(20px, 2.1vw, 30px)",
-              }}
-            >
-              {study.name}
-            </h2>
-          </div>
+          <h2
+            style={{
+              fontFamily: f.sans,
+              fontSize: "clamp(15px, 1.4vw, 18px)",
+              fontWeight: 600,
+              color: f.ink(0.6),
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {study.name}
+          </h2>
         </div>
-
-        {hasPhases && (
-          <span className="hidden md:block" style={ui.smallMeta}>
-            {String(activePhase + 1).padStart(2, "0")} / {String(totalPhases).padStart(2, "0")}
-          </span>
-        )}
-      </div>
-
-      <div className="flex-shrink-0 px-8 pb-6 md:px-14">
-        <p style={{ ...ui.body, maxWidth: "760px" }}>{study.issue}</p>
       </div>
 
       {hasPhases ? (
         <div className="relative flex-1 overflow-hidden">
+          {/* Edge fades */}
           <div
             className="pointer-events-none absolute inset-y-0 left-0 z-10"
-            style={{ width: "clamp(24px, 4vw, 80px)", background: "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)" }}
+            style={{
+              width: "clamp(40px, 6vw, 100px)",
+              background: "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)",
+            }}
           />
           <div
             className="pointer-events-none absolute inset-y-0 right-0 z-10"
-            style={{ width: "clamp(24px, 4vw, 80px)", background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)" }}
+            style={{
+              width: "clamp(40px, 6vw, 100px)",
+              background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
+            }}
           />
 
+          {/* Horizontal scroll container */}
           <div
             ref={scrollRef}
             className="h-full overflow-x-auto overflow-y-hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none", scrollSnapType: "x proximity" }}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              scrollSnapType: "x proximity",
+            }}
           >
-            <style>{`[data-phase-scroll]::-webkit-scrollbar { display: none; }`}</style>
+            <style>{`.tl-scroll::-webkit-scrollbar { display: none; }`}</style>
             <div
-              data-phase-scroll
-              className="flex h-full"
+              className="tl-scroll flex h-full items-center"
               style={{
                 minWidth: "max-content",
-                paddingLeft: "clamp(40px, 6vw, 120px)",
-                paddingRight: "clamp(100px, 12vw, 220px)",
+                paddingLeft: "clamp(60px, 8vw, 160px)",
+                paddingRight: "clamp(120px, 14vw, 280px)",
               }}
             >
-              {phases.map((phase, index) => {
+              {phases.map((phase, i) => {
+                const isActive = activePhase === i;
+                const isLast = i === totalPhases - 1;
                 const hasStats = (phase.stats?.length ?? 0) > 0;
-                const isActive = activePhase === index;
-                const isLast = index === totalPhases - 1;
 
                 return (
-                  <section
-                    key={index}
-                    data-phase-panel
+                  <div
+                    key={i}
+                    data-phase
                     className="flex h-full flex-shrink-0 flex-col"
                     style={{
-                      width: "clamp(320px, 24vw, 380px)",
-                      scrollSnapAlign: "start",
+                      width: "clamp(300px, 22vw, 360px)",
+                      scrollSnapAlign: "center",
                     }}
                   >
+                    {/* ── Top half: date + phase number ── */}
                     <div
-                      className="flex items-center gap-4"
-                      style={{ paddingTop: "24px", paddingRight: "clamp(24px, 2vw, 32px)" }}
+                      className="flex flex-1 flex-col justify-end"
+                      style={{
+                        paddingRight: "clamp(20px, 2vw, 32px)",
+                        paddingBottom: "28px",
+                      }}
                     >
-                      <span style={ui.meta}>{String(index + 1).padStart(2, "0")}</span>
-                      {phase.date ? <span style={ui.meta}>{phase.date}</span> : null}
+                      {phase.date && (
+                        <span
+                          style={{
+                            ...ui.meta,
+                            marginBottom: "8px",
+                            opacity: isActive ? 1 : 0.5,
+                            transition: "opacity 0.3s ease",
+                          }}
+                        >
+                          {phase.date}
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(56px, 6vw, 80px)",
+                          fontWeight: 800,
+                          color: f.ink(isActive ? 0.08 : 0.04),
+                          lineHeight: 1,
+                          letterSpacing: "-0.04em",
+                          transition: "color 0.3s ease",
+                        }}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
 
+                    {/* ── Rail ── */}
                     <div
-                      className="flex items-center"
-                      style={{ height: "42px", paddingRight: "clamp(24px, 2vw, 32px)" }}
+                      className="flex flex-shrink-0 items-center"
+                      style={{
+                        height: "1px",
+                        paddingRight: "clamp(20px, 2vw, 32px)",
+                        position: "relative",
+                      }}
                     >
+                      {/* Node */}
                       <div
                         style={{
-                          width: isActive ? "10px" : "8px",
-                          height: isActive ? "10px" : "8px",
+                          width: isActive ? "12px" : "8px",
+                          height: isActive ? "12px" : "8px",
                           borderRadius: "999px",
-                          background: isActive ? ui.nodeActive : ui.node,
-                          transition: "all 0.2s ease",
+                          background: isActive ? f.ink(0.5) : f.ink(0.14),
+                          transition: "all 0.3s ease",
                           flexShrink: 0,
+                          position: "relative",
+                          zIndex: 2,
                         }}
                       />
+                      {/* Connecting line */}
                       {!isLast && (
                         <div
                           className="flex-1"
                           style={{
                             height: "1px",
-                            background: activePhase > index ? ui.railActive : ui.rail,
-                            transition: "background 0.2s ease",
+                            background: activePhase > i
+                              ? f.ink(0.2)
+                              : f.ink(0.06),
+                            transition: "background 0.3s ease",
                           }}
                         />
                       )}
                     </div>
 
+                    {/* ── Bottom half: title + description ── */}
                     <div
-                      className="flex-1"
+                      className="flex flex-1 flex-col justify-start"
                       style={{
-                        paddingTop: "14px",
-                        paddingRight: "clamp(24px, 2vw, 32px)",
-                        paddingBottom: "48px",
+                        paddingRight: "clamp(20px, 2vw, 32px)",
+                        paddingTop: "28px",
                       }}
                     >
                       <h3
                         style={{
-                          ...ui.title,
-                          fontSize: "clamp(18px, 1.8vw, 22px)",
+                          fontFamily: f.sans,
+                          fontSize: "clamp(17px, 1.6vw, 21px)",
+                          fontWeight: 700,
+                          color: f.ink(isActive ? 0.84 : 0.5),
+                          lineHeight: 1.25,
+                          letterSpacing: "-0.02em",
+                          transition: "color 0.3s ease",
                         }}
                       >
                         {phase.title}
                       </h3>
 
-                      <p style={{ ...ui.body, marginTop: "12px", maxWidth: "320px" }}>{phase.description}</p>
+                      <p
+                        style={{
+                          fontFamily: f.sans,
+                          fontSize: "clamp(13px, 1.1vw, 15px)",
+                          color: f.ink(isActive ? 0.42 : 0.25),
+                          lineHeight: 1.65,
+                          marginTop: "10px",
+                          maxWidth: "300px",
+                          transition: "color 0.3s ease",
+                        }}
+                      >
+                        {phase.description}
+                      </p>
 
                       {hasStats && (
-                        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-4">
-                          {phase.stats!.map((stat, statIndex) => (
-                            <div key={statIndex} style={{ minWidth: "120px" }}>
-                              <div style={ui.statValue}>{stat.value}</div>
-                              <div style={{ ...ui.meta, marginTop: "6px" }}>{stat.label}</div>
+                        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
+                          {phase.stats!.map((stat, si) => (
+                            <div key={si}>
+                              <div
+                                style={{
+                                  fontFamily: f.sans,
+                                  fontSize: "clamp(18px, 1.8vw, 24px)",
+                                  fontWeight: 700,
+                                  color: f.ink(isActive ? 0.84 : 0.4),
+                                  letterSpacing: "-0.02em",
+                                  lineHeight: 1,
+                                  transition: "color 0.3s ease",
+                                }}
+                              >
+                                {stat.value}
+                              </div>
+                              <div
+                                style={{
+                                  ...ui.meta,
+                                  marginTop: "4px",
+                                  opacity: isActive ? 1 : 0.5,
+                                  transition: "opacity 0.3s ease",
+                                }}
+                              >
+                                {stat.label}
+                              </div>
                             </div>
                           ))}
                         </div>
                       )}
                     </div>
-                  </section>
+                  </div>
                 );
               })}
             </div>
           </div>
-
-          <div
-            className="pointer-events-none absolute bottom-6 right-8 md:right-14"
-            style={{ opacity: scrollProgress < 0.06 ? 0.45 : 0, transition: "opacity 0.2s ease" }}
-          >
-            <span style={ui.smallMeta}>Scroll</span>
-          </div>
         </div>
       ) : (
+        /* No timeline state */
         <div className="flex flex-1 items-center justify-center px-8">
-          <div className="max-w-xl text-center">
-            <p style={{ ...ui.body, fontSize: "clamp(15px, 1.4vw, 17px)" }}>{study.outcome}</p>
-            <p style={{ ...ui.smallMeta, marginTop: "24px" }}>Timeline coming soon</p>
+          <div className="max-w-md text-center">
+            <p
+              style={{
+                fontFamily: f.sans,
+                fontSize: "clamp(14px, 1.3vw, 16px)",
+                color: f.ink(0.38),
+                lineHeight: 1.7,
+              }}
+            >
+              {study.outcome}
+            </p>
+            <p style={{ ...ui.smallMeta, marginTop: "20px" }}>
+              Timeline coming soon
+            </p>
           </div>
         </div>
       )}
