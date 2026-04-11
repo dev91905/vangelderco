@@ -277,7 +277,7 @@ const Admin = () => {
             }}
           />
           <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>
-            Deck Case Studies
+            Case Studies
           </span>
         </button>
 
