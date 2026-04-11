@@ -333,7 +333,7 @@ const Deck = () => {
 
   
 
-  const ALL_SECTORS_LIST = ["News Media", "Music Industry", "Film & TV", "Digital Creators", "Sports & Recreation", "Podcasts & Streaming", "Advertising & Brands", "Tech Platforms", "Interest Groups"];
+  const ALL_SECTORS_LIST = ["News", "Music", "Film & TV", "Digital Creators", "Sports", "Podcasts & Streaming", "Advertising & Brands", "Tech & Platforms", "Organized Communities"];
 
   const handleCtaSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
@@ -558,7 +558,7 @@ const Deck = () => {
       <DeckFrame ref={setRef(0)} mode="wide">
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <TypewriterHeading
-            text="Let's diagnose your communications."
+            text="Find the gaps before your opponents do."
             active={r1.isActive}
             style={{
               fontFamily: f.sans,
@@ -581,8 +581,7 @@ const Deck = () => {
               lineHeight: 1.4,
             }}
           >
-            A five-minute diagnostic that benchmarks your strategic communications against the other side{" "}
-            <em style={{ fontStyle: "italic", color: f.ink(0.65) }}>— and shows you exactly where the gaps are.</em>
+            A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table.
           </p>
           <div
             style={{
@@ -615,10 +614,10 @@ const Deck = () => {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-high))"; e.currentTarget.style.animation = "none"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border))"; }}
             >
-              Get started →
+              Get Started →
             </button>
             <span style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em", color: f.ink(0.25) }}>
-              ~5 minutes
+              ~3 minutes
             </span>
           </div>
         </div>
@@ -1346,6 +1345,9 @@ const Deck = () => {
               We come from the industries your grantees need to reach.
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
+              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
+            </p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.3), marginTop: "8px", lineHeight: 1.6 }}>
               Select the ones you're interested in.
             </p>
           </div>
@@ -1353,15 +1355,15 @@ const Deck = () => {
           {/* 3×3 selectable card grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {[
-              { name: "News Media", desc: "Local and national — how stories get placed and why" },
-              { name: "Music Industry", desc: "Artists, labels, tours, festivals, venues" },
+              { name: "News", desc: "Local and national — how stories get placed and why" },
+              { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
               { name: "Film & TV", desc: "Production, distribution, cultural impact" },
               { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
-              { name: "Sports & Recreation", desc: "Athletes, leagues, the largest captive audiences" },
+              { name: "Sports", desc: "Athletes, leagues, the largest captive audiences" },
               { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
               { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
-              { name: "Tech Platforms", desc: "The infrastructure that decides what gets seen" },
-              { name: "Interest Groups", desc: "Faith, labor, business, youth, defense" },
+              { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
+              { name: "Organized Communities", desc: "Faith, labor, campuses, veterans, defense" },
             ].map((sector, i) => {
               const isSelected = selectedSectors.includes(sector.name);
               return (

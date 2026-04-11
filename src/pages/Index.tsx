@@ -11,10 +11,15 @@ import { t } from "@/lib/theme";
 const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "National Security"];
 
 const NETWORK_SECTORS = [
-  "Music", "Film & TV", "News Media", "Digital Creators", "Brands & Advertising",
-  "Athletes & Sports", "Gaming", "Faith", "Campuses", "Veterans & Defense",
-  "Labor", "Government & Policy", "Philanthropy", "Energy", "Industry Groups",
-  "Technologists", "National Security", "Community Organizations",
+  { name: "News", desc: "Local and national — how stories get placed and why" },
+  { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
+  { name: "Film & TV", desc: "Production, distribution, cultural impact" },
+  { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
+  { name: "Sports", desc: "Athletes, leagues, the largest captive audiences" },
+  { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
+  { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
+  { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
+  { name: "Organized Communities", desc: "Faith, labor, campuses, veterans, defense" },
 ];
 
 const HERO_LINKS = [
@@ -26,23 +31,23 @@ const HERO_LINKS = [
 const CAPABILITIES = [
   {
     title: "Cultural Strategy",
-    sub: "Strategic communications that become cultural moments.",
+    sub: "We don't just push your message out.",
     detail:
-      "Most firms get the message out. We work across music, entertainment, news media, creators, brands, athletes, faith, campuses, and more to make sure it gets taken up.",
+      "We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence.",
     to: "/cultural-strategy",
   },
   {
     title: "Cross-Sector Campaigns",
-    sub: "Nothing moves until every sector is pushing in the same direction.",
+    sub: "Nothing moves until multiple sectors are pushing on the same thing.",
     detail:
-      "We bring industry, labor, philanthropy, culture, policy, and national security to the same table — then build and coordinate large-scale campaigns around shared interests. That's how you win.",
+      "We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it.",
     to: "/cross-sector",
   },
   {
     title: "Deep Organizing",
-    sub: "Build your movement for growth, not just mobilization.",
+    sub: "Campaigns create momentum. We make sure it lasts.",
     detail:
-      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between a movement that grows and one that stalls.",
+      "We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise.",
     to: "/deep-organizing",
   },
 ];
@@ -347,6 +352,30 @@ const Index = () => {
           >
             By Referral Only
           </span>
+
+          {/* Scroll indicator */}
+          <div
+            className="flex flex-col items-center gap-1 mt-8"
+            style={{
+              animation: `fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.5s both`,
+            }}
+          >
+            <span
+              className="text-[9px] tracking-[0.2em] uppercase"
+              style={{ fontFamily: t.sans, color: t.ink(0.15) }}
+            >
+              Scroll
+            </span>
+            <span
+              style={{
+                color: t.ink(0.15),
+                fontSize: "14px",
+                animation: "bounce 2s infinite",
+              }}
+            >
+              ↓
+            </span>
+          </div>
         </main>
       </section>
 
@@ -376,7 +405,7 @@ const Index = () => {
                 color: "hsl(var(--foreground))",
               }}
             >
-              We build next-generation strategic communications portfolios.
+              We build advanced strategic communications portfolios.
             </h2>
           </RevealBlock>
           <RevealBlock delay={0.3}>
@@ -389,7 +418,7 @@ const Index = () => {
                 color: "hsl(var(--foreground))",
               }}
             >
-              For donor advisors and program officers who want their portfolio to hit harder.
+              For donor advisors and program officers who want their work to hit harder.
             </p>
           </RevealBlock>
           <RevealBlock delay={0.5}>
@@ -398,7 +427,7 @@ const Index = () => {
               className="leading-relaxed max-w-md"
               style={{ fontFamily: t.sans, fontSize: "clamp(14px, 1.4vw, 16px)", color: t.ink(0.4), lineHeight: 1.8 }}
             >
-              Cultural strategy, media-based organizing, and campaign development, so your grants don't just fund content — they build power.
+              Cultural strategy, media-based organizing, and campaign development — so your grants don't just fund content. They build power.
             </p>
           </RevealBlock>
         </div>
@@ -507,6 +536,34 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ═══ FIELD NOTES ═══ */}
+      <section className="snap-section-scroll relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-16"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+            >
+              Field Notes
+            </div>
+          </RevealBlock>
+
+          <div className="flex flex-col w-full">
+            {(fieldNotes || []).map((note, i) => (
+              <CaseFragment
+                key={note.id}
+                sector={note.sector_label || note.capability}
+                brief={note.excerpt || ""}
+                result={note.featured_stat || ""}
+                slug={note.slug}
+                linkUrl={note.link_url}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ INTAKE CTA ═══ */}
       <section className="snap-section relative z-10 flex items-center justify-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
@@ -590,67 +647,50 @@ const Index = () => {
           </RevealBlock>
           <RevealBlock delay={0.15}>
             <p
-              className="text-[15px] md:text-[17px] leading-relaxed mb-12 max-w-lg"
+              className="text-[20px] md:text-[24px] font-bold leading-snug mb-3 max-w-lg"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+            >
+              We come from the industries your grantees need to reach.
+            </p>
+            <p
+              className="text-[14px] md:text-[15px] leading-relaxed mb-12 max-w-lg"
               style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.7 }}
             >
-              We build with a community of over 400+ practitioners across every sector that moves policy, culture, and capital.
+              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
             </p>
           </RevealBlock>
           <AnimatedLine width={50} />
-          <div className="flex flex-wrap gap-2.5 md:gap-3 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
             {NETWORK_SECTORS.map((sector, i) => (
-              <RevealBlock key={sector} delay={0.25 + i * 0.04}>
-                <span
-                  className="inline-block text-[11px] md:text-[12px] tracking-[0.1em] uppercase px-4 py-2 rounded-full cursor-default"
+              <RevealBlock key={sector.name} delay={0.25 + i * 0.04}>
+                <div
+                  className="rounded-xl px-5 py-4 cursor-default"
                   style={{
-                    fontFamily: t.sans,
-                    color: "hsl(var(--foreground) / var(--a-high))",
-                    background: "hsl(var(--foreground) / var(--a-bg))",
-                    border: "1px solid hsl(var(--foreground) / var(--a-border))",
+                    background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                    border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
                     transition: `all 0.4s ${EASE_OUT_QUART}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--foreground) / 0.12)";
-                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.4)";
-                    e.currentTarget.style.color = "hsl(var(--foreground))";
+                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.25)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-bg))";
-                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border))";
-                    e.currentTarget.style.color = "hsl(var(--foreground) / var(--a-high))";
+                    e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-border-card))";
                   }}
                 >
-                  {sector}
-                </span>
+                  <p
+                    className="text-[13px] md:text-[14px] font-bold mb-1"
+                    style={{ fontFamily: t.sans, color: t.ink(0.8) }}
+                  >
+                    {sector.name}
+                  </p>
+                  <p
+                    className="text-[11px] md:text-[12px]"
+                    style={{ fontFamily: t.sans, color: t.ink(0.35), lineHeight: 1.5 }}
+                  >
+                    {sector.desc}
+                  </p>
+                </div>
               </RevealBlock>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ FIELD NOTES ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
-        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
-            >
-              Field Notes
-            </div>
-          </RevealBlock>
-
-          <div className="flex flex-col w-full">
-            {(fieldNotes || []).map((note, i) => (
-              <CaseFragment
-                key={note.id}
-                sector={note.sector_label || note.capability}
-                brief={note.excerpt || ""}
-                result={note.featured_stat || ""}
-                slug={note.slug}
-                linkUrl={note.link_url}
-                index={i}
-              />
             ))}
           </div>
         </div>
@@ -673,17 +713,6 @@ const Index = () => {
             Let's Chat
             <span style={{ fontSize: "14px", lineHeight: 1 }}>→</span>
           </Link>
-        </RevealBlock>
-        <RevealBlock delay={0.1}>
-          <div className="w-16 mt-6 mb-6" style={{ height: 1, background: t.ink(0.08) }} />
-        </RevealBlock>
-        <RevealBlock delay={0.15}>
-          <span
-            className="text-[9px] tracking-[0.3em] uppercase block"
-            style={{ fontFamily: t.sans, color: t.ink(0.15) }}
-          >
-            By Referral Only
-          </span>
         </RevealBlock>
       </section>
       </div>
