@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useBackPath } from "@/hooks/useBackNavigation";
 import { format } from "date-fns";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ContentBlockRenderer, { ContentBlock } from "@/components/content/ContentBlockRenderer";
@@ -41,7 +42,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
   return (
     <AtmosphericLayout>
-      <Link to={capabilityRoute[post.capability] || "/"} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+      <Link to={useBackPath(capabilityRoute[post.capability] || "/")} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back
