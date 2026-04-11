@@ -94,14 +94,16 @@ export default function ImpactCloud() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:grid-rows-2 lg:h-[420px]">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            className={`animate-pulse rounded-xl ${heroPositions.has(i) ? "col-span-2" : "col-span-1"} h-24 lg:h-full`}
-            style={{ background: "hsl(var(--foreground) / 0.04)" }}
-          />
-        ))}
+      <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${t.ink(0.10)}`, minHeight: "420px" }}>
+        <div className="grid grid-cols-2 gap-0 lg:grid-cols-4 lg:grid-rows-2 h-full" style={{ minHeight: "420px" }}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className={`animate-pulse ${heroPositions.has(i) ? "col-span-2" : "col-span-1"}`}
+              style={{ background: "hsl(var(--foreground) / 0.04)", borderRight: `1px solid ${t.ink(0.08)}`, borderBottom: `1px solid ${t.ink(0.08)}` }}
+            />
+          ))}
+        </div>
       </div>
     );
   }
