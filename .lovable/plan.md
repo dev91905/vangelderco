@@ -1,22 +1,28 @@
 
 
-## Problem
+## The Problem
 
-By setting `overflowY: "auto"` on mobile without scroll snap, the deck now behaves like one long continuous page. Users can scroll freely between slides with no stopping points — the deck feeling is completely gone.
+`scroll-snap-type: y mandatory` forces the browser to always snap to the nearest snap point. On any slide where content exceeds the viewport height (slide 2's pain cards, slide 9's results, slide 10's form), the snap immediately pulls you back to the top of that frame. You literally cannot scroll within a slide.
 
-## Root Cause
+## The Fix
 
-Line 518 in `Deck.tsx`: `scrollSnapType: "none"` applies universally. Combined with `overflowY: "auto"` on mobile, there's nothing to anchor slides. `DeckFrame.tsx` already has `scrollSnapAlign: "start"` on each frame, but it's ignored because the parent has snap disabled.
-
-## Fix
-
-**Single change in `src/pages/Deck.tsx`** (line 518):
+**One line change in `src/pages/Deck.tsx`** (line 518):
 
 ```
-scrollSnapType: isMobile ? "y mandatory" : "none",
+scrollSnapType: isMobile ? "y proximity" : "none",
 ```
 
-This gives mobile the native finger-scrolling it needs while snapping to each slide, preserving the deck feel. Desktop stays unchanged (keyboard/button navigation with locked scroll).
+`y proximity` snaps to a frame boundary **only when you're near one** — so swiping between slides still feels like a deck, but scrolling within a tall slide works naturally. This is the standard approach for snap containers with variable-height children.
 
-No other files need changes — `DeckFrame` already has the correct `scrollSnapAlign: "start"` set.
+No other files need changes. `DeckFrame` already has `scrollSnapAlign: "start"`.
+
+## Technical Detail
+
+| Snap mode | Between slides | Within tall slides |
+|-----------|---------------|-------------------|
+| `mandatory` | Snaps (good) | Locked — can't scroll (broken) |
+| `proximity` | Snaps when near boundary (good) | Free scroll (good) |
+| `none` | No snap — continuous scroll (bad) | Free scroll (good) |
+
+`proximity` is the correct middle ground.
 
