@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, Link as LinkIcon, Mail } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, Link as LinkIcon, Mail, ChevronDown } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
@@ -71,6 +71,7 @@ const Admin = () => {
   const [typeFilter, setTypeFilter] = useState("all");
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [articlesOpen, setArticlesOpen] = useState(true);
   const { data: settings } = useSiteSettings();
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
@@ -111,7 +112,7 @@ const Admin = () => {
             style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
             onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
             onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
-            <Mail className="w-3 h-3" /> Submissions
+            <Mail className="w-3 h-3" /> Diagnostic Results
           </Link>
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
@@ -200,26 +201,54 @@ const Admin = () => {
         </>
       )}
 
-      <div className="flex flex-wrap items-center gap-2 px-4 md:px-8 py-3" style={{ borderBottom: t.border(0.04) }}>
-        {typeChips.map((c) => (
-          <button key={c.value} onClick={() => setTypeFilter(c.value)} onPointerEnter={() => playHoverGlitch()}
-            className="px-3 py-1 text-[12px] tracking-[0.02em] rounded-full transition-all"
-            style={{ fontFamily: t.sans, color: typeFilter === c.value ? t.cream : t.ink(0.45), background: typeFilter === c.value ? t.ink(1) : "transparent", border: `1px solid ${typeFilter === c.value ? t.ink(1) : t.ink(0.1)}` }}>
-            {c.label}
-          </button>
-        ))}
-        <div className="w-px h-4 mx-1" style={{ background: t.ink(0.08) }} />
-        {capChips.map((c) => (
-          <button key={c.value} onClick={() => setCapFilter(c.value)} onPointerEnter={() => playHoverGlitch()}
-            className="px-3 py-1 text-[12px] tracking-[0.02em] rounded-full transition-all"
-            style={{ fontFamily: t.sans, color: capFilter === c.value ? t.ink(0.8) : t.ink(0.35), background: capFilter === c.value ? t.ink(0.06) : "transparent", border: `1px solid ${capFilter === c.value ? t.ink(0.1) : "transparent"}` }}>
-            {c.label}
-          </button>
-        ))}
-      </div>
+      {/* Collapsible Articles section */}
+      <div className="px-4 md:px-8">
+        <button
+          onClick={() => setArticlesOpen(!articlesOpen)}
+          className="flex items-center gap-2 w-full py-4 transition-colors group"
+          style={{ borderBottom: t.border(0.04) }}
+        >
+          <ChevronDown
+            className="w-4 h-4 transition-transform duration-200"
+            style={{
+              color: t.ink(0.3),
+              transform: articlesOpen ? "rotate(0deg)" : "rotate(-90deg)",
+            }}
+          />
+          <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>
+            Articles
+          </span>
+        </button>
 
-      <div className="px-4 md:px-8 py-2">
-        <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
+        <div
+          style={{
+            maxHeight: articlesOpen ? "9999px" : "0",
+            overflow: "hidden",
+            transition: "max-height 0.3s ease-in-out",
+          }}
+        >
+          <div className="flex flex-wrap items-center gap-2 py-3" style={{ borderBottom: t.border(0.04) }}>
+            {typeChips.map((c) => (
+              <button key={c.value} onClick={() => setTypeFilter(c.value)} onPointerEnter={() => playHoverGlitch()}
+                className="px-3 py-1 text-[12px] tracking-[0.02em] rounded-full transition-all"
+                style={{ fontFamily: t.sans, color: typeFilter === c.value ? t.cream : t.ink(0.45), background: typeFilter === c.value ? t.ink(1) : "transparent", border: `1px solid ${typeFilter === c.value ? t.ink(1) : t.ink(0.1)}` }}>
+                {c.label}
+              </button>
+            ))}
+            <div className="w-px h-4 mx-1" style={{ background: t.ink(0.08) }} />
+            {capChips.map((c) => (
+              <button key={c.value} onClick={() => setCapFilter(c.value)} onPointerEnter={() => playHoverGlitch()}
+                className="px-3 py-1 text-[12px] tracking-[0.02em] rounded-full transition-all"
+                style={{ fontFamily: t.sans, color: capFilter === c.value ? t.ink(0.8) : t.ink(0.35), background: capFilter === c.value ? t.ink(0.06) : "transparent", border: `1px solid ${capFilter === c.value ? t.ink(0.1) : "transparent"}` }}>
+                {c.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="py-2">
+            <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
+          </div>
+        </div>
       </div>
 
     </div>
