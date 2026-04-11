@@ -221,47 +221,84 @@ const Deck = () => {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const lastFrameRef = useRef(0);
+  // Restore state from sessionStorage if returning from /work
+  const savedState = useRef(() => {
+    try {
+      const raw = sessionStorage.getItem("deck-state");
+      if (raw) {
+        sessionStorage.removeItem("deck-state");
+        return JSON.parse(raw);
+      }
+    } catch { /* ignore */ }
+    return null;
+  });
+  const restored = savedState.current();
+
+  const [currentFrame, setCurrentFrame] = useState(restored?.currentFrame ?? 0);
+  const lastFrameRef = useRef(restored?.currentFrame ?? 0);
   const { playHoverGlitch } = useGlitchSFX();
 
   /* ─── Branching state ─── */
-  const [selectedPains, setSelectedPains] = useState<string[]>([]);
-  const [customOpen, setCustomOpen] = useState(false);
-  const [customMessage, setCustomMessage] = useState("");
-  const [customSaved, setCustomSaved] = useState(false);
+  const [selectedPains, setSelectedPains] = useState<string[]>(restored?.selectedPains ?? []);
+  const [customOpen, setCustomOpen] = useState(restored?.customOpen ?? false);
+  const [customMessage, setCustomMessage] = useState(restored?.customMessage ?? "");
+  const [customSaved, setCustomSaved] = useState(restored?.customSaved ?? false);
 
   /* ─── Quiz state (Frame 3) ─── */
-  const [quizAnswers, setQuizAnswers] = useState<(QuizAnswer | null)[]>(Array(QUIZ_ROWS.length).fill(null));
-  const [quizStep, setQuizStep] = useState(0); // 0..5 = questions, 6 = reveal
-  const [quizRevealed, setQuizRevealed] = useState(false);
-  const [expandedDimension, setExpandedDimension] = useState<number | null>(null);
+  const [quizAnswers, setQuizAnswers] = useState<(QuizAnswer | null)[]>(restored?.quizAnswers ?? Array(QUIZ_ROWS.length).fill(null));
+  const [quizStep, setQuizStep] = useState(restored?.quizStep ?? 0);
+  const [quizRevealed, setQuizRevealed] = useState(restored?.quizRevealed ?? false);
+  const [expandedDimension, setExpandedDimension] = useState<number | null>(restored?.expandedDimension ?? null);
 
   // Randomize left/right placement per row (stable across re-renders)
-  const quizOrderRef = useRef(QUIZ_ROWS.map(() => Math.random() > 0.5));
+  const quizOrderRef = useRef(restored?.quizOrder ?? QUIZ_ROWS.map(() => Math.random() > 0.5));
   const quizOrder = quizOrderRef.current;
 
   /* ─── Capabilities ranking (Frame 6) ─── */
-  const [capabilitiesRanked, setCapabilitiesRanked] = useState<string[]>([]);
+  const [capabilitiesRanked, setCapabilitiesRanked] = useState<string[]>(restored?.capabilitiesRanked ?? []);
 
   /* ─── Metrics checklist (Frame 7) ─── */
-  const [metricsChecked, setMetricsChecked] = useState<string[]>([]);
+  const [metricsChecked, setMetricsChecked] = useState<string[]>(restored?.metricsChecked ?? []);
 
   /* ─── Sector selections (Frame 8) ─── */
-  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
+  const [selectedSectors, setSelectedSectors] = useState<string[]>(restored?.selectedSectors ?? []);
 
   /* ─── Media experience (Frame 9) ─── */
-  const [hasMediaExperience, setHasMediaExperience] = useState<boolean | null>(null);
+  const [hasMediaExperience, setHasMediaExperience] = useState<boolean | null>(restored?.hasMediaExperience ?? null);
 
   /* CTA form state */
-  const [ctaMode, setCtaMode] = useState<"thanks" | null>(null);
-  const [ctaForm, setCtaForm] = useState({ firstName: "", lastName: "", organization: "", email: "" });
+  const [ctaMode, setCtaMode] = useState<"thanks" | null>(restored?.ctaMode ?? null);
+  const [ctaForm, setCtaForm] = useState(restored?.ctaForm ?? { firstName: "", lastName: "", organization: "", email: "" });
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
-  const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
+  const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(restored?.engagementPath ?? null);
 
-  const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
-  const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
+  const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>(restored?.practiceSelections ?? {});
+  const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(restored?.expandedPracticeIdx ?? null);
+
+  // Save all state to sessionStorage (called before navigating away)
+  const saveDeckState = useCallback(() => {
+    const state = {
+      currentFrame, selectedPains, customOpen, customMessage, customSaved,
+      quizAnswers, quizStep, quizRevealed, expandedDimension, quizOrder,
+      capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
+      ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx,
+    };
+    sessionStorage.setItem("deck-state", JSON.stringify(state));
+  }, [currentFrame, selectedPains, customOpen, customMessage, customSaved,
+    quizAnswers, quizStep, quizRevealed, expandedDimension, quizOrder,
+    capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
+    ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx]);
+
+  // Scroll to restored frame on mount
+  useEffect(() => {
+    if (restored && restored.currentFrame > 0) {
+      setTimeout(() => {
+        frameRefs.current[restored.currentFrame]?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+      }, 100);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* Booking link from settings */
   const { data: siteSettings } = useSiteSettings();
