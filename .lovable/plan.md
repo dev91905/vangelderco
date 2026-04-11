@@ -1,23 +1,28 @@
 
 
-# Fix Swapped Stat Labels — Data Patch
+# Fix "Field Notes" Label + Redesign Impact Display
 
-## What's Wrong
-The original migration mapped timeline JSONB fields backwards:
-- **Currently:** label = "Reached", description = "40K"
-- **Should be:** label = "40K", description = "Reached"
+## Changes
 
-All 4 affected rows are deck-originated stats (have `case_study_id`, no `post_id`).
+### 1. Rename section label
+Line 485 of `Index.tsx`: change `"Field Notes"` → `"Impact"`.
 
-## Fix
-Run a single UPDATE via the insert tool to swap `label` and `description` on the affected rows:
+### 2. Redesign ImpactCloud — compact horizontal scroll with dramatic numbers
 
-```sql
-UPDATE public.impact_stats
-SET label = description, description = label
-WHERE case_study_id IS NOT NULL
-  AND post_id IS NULL;
-```
+The current flex-wrap layout sprawls vertically. Replace with a single horizontally-scrollable row of tighter, more dramatic stat cards:
 
-No code changes needed — the editor save logic already maps correctly for future entries.
+- **Layout**: `overflow-x: auto` horizontal scroll, no wrapping. One row, edge-to-edge. Fade masks on left/right edges to signal scrollability.
+- **Stat card redesign**:
+  - Number (`label`) rendered at `clamp(32px, 5vw, 48px)`, bold, full foreground — the hero element
+  - Description rendered at `10px`, uppercase tracking, muted — stays small
+  - Source title hidden by default, no hover-reveal (cleaner)
+  - Cards get a subtle left-edge accent line (oxblood, 2px) instead of a full border — lighter, more editorial
+  - Minimum card width ~140px, no max — they size to content
+- **Interaction**: Cards are still links. On hover: accent line brightens, slight lift. No background fill change.
+- **Scroll behavior**: CSS `scroll-snap-type: x mandatory` with `scroll-snap-align: start` on each card. Smooth drag on mobile.
+- **Result**: The entire section fits in ~120px of vertical space instead of 300+. Feels like a Bloomberg terminal ticker — dense, authoritative, scannable.
+
+### Files changed
+- `src/pages/Index.tsx` — rename label
+- `src/components/ImpactCloud.tsx` — full redesign of layout and StatChip
 
