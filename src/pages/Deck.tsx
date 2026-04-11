@@ -540,7 +540,7 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))" }}>
+        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)" }}>
           <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             {/* Typeform-style thin progress bar */}
