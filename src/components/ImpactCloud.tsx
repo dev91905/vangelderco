@@ -52,11 +52,9 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className={`flex h-full flex-col justify-center rounded-xl ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
+          className={`flex h-full flex-col justify-center ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
           style={{
             background: "transparent",
-            border: `1px solid ${hovered ? t.ink(0.25) : t.ink(0.15)}`,
-            transition: `border-color 0.3s ${EASE}`,
           }}
         >
           <span
