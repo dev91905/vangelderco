@@ -159,9 +159,9 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
   return (
     <div id="diagnostic-report-capture" className="diagnostic-report" style={{ fontFamily: t.sans, maxWidth: "800px", margin: "0 auto" }}>
       {/* ═══ PAGE 1: YOUR STRATEGIC POSITION ═══ */}
-      <section style={{ marginBottom: "48px", pageBreakAfter: "always" }}>
-        {/* Header */}
-        <div className="flex items-start justify-between mb-8">
+      <section style={{ marginBottom: "48px" }}>
+        {/* Header + Score */}
+        <div data-pdf-section className="flex items-start justify-between mb-8">
           <div>
             <p style={{
               fontSize: "9px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase",
@@ -186,7 +186,7 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
 
         {/* Executive Summary callout */}
         {data.executiveSummary && (
-          <div style={{
+          <div data-pdf-section style={{
             padding: "18px 22px",
             borderRadius: "12px",
             background: t.ink(0.03),
@@ -206,7 +206,7 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
         )}
 
         {/* Dimension Bar Chart */}
-        <div style={{ marginBottom: "28px" }}>
+        <div data-pdf-section style={{ marginBottom: "28px" }}>
           <div className="flex items-center justify-between mb-3">
             <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3) }}>
               5-Dimension Assessment
@@ -223,91 +223,93 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
           </div>
         </div>
 
-        {/* Pain Points chips */}
-        {data.painPoints.length > 0 && (
-          <div style={{ marginBottom: "20px" }}>
-            <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
-              Self-Identified Challenges
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {data.painPoints.map((p, i) => (
-                <span
-                  key={i}
-                  style={{
-                    fontFamily: t.sans, fontSize: "11px", fontWeight: 500,
-                    padding: "5px 12px", borderRadius: "999px",
-                    color: t.ink(0.55), background: t.ink(0.04),
-                    border: `1px solid ${t.ink(0.06)}`,
-                  }}
-                >
-                  {p}
-                </span>
-              ))}
+        {/* Pain Points + Sectors */}
+        <div data-pdf-section>
+          {data.painPoints.length > 0 && (
+            <div style={{ marginBottom: "20px" }}>
+              <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
+                Self-Identified Challenges
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {data.painPoints.map((p, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontFamily: t.sans, fontSize: "11px", fontWeight: 500,
+                      padding: "5px 12px", borderRadius: "999px",
+                      color: t.ink(0.55), background: t.ink(0.04),
+                      border: `1px solid ${t.ink(0.06)}`,
+                    }}
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Sectors */}
-        {data.sectors.length > 0 && (
-          <div>
-            <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
-              Sectors of Interest
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {data.sectors.map((s, i) => (
-                <span
-                  key={i}
-                  style={{
-                    fontFamily: t.sans, fontSize: "11px", fontWeight: 500,
-                    padding: "5px 12px", borderRadius: "999px",
-                    color: t.ink(0.5), background: "transparent",
-                    border: `1px solid ${t.ink(0.08)}`,
-                  }}
-                >
-                  {s}
-                </span>
-              ))}
+          {data.sectors.length > 0 && (
+            <div>
+              <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
+                Sectors of Interest
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {data.sectors.map((s, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontFamily: t.sans, fontSize: "11px", fontWeight: 500,
+                      padding: "5px 12px", borderRadius: "999px",
+                      color: t.ink(0.5), background: "transparent",
+                      border: `1px solid ${t.ink(0.08)}`,
+                    }}
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       {/* ═══ PAGE 2: WHERE TO MOVE ═══ */}
       <section>
-        <div style={{
-          borderTop: `1px solid ${t.ink(0.08)}`, paddingTop: "32px", marginBottom: "24px",
-        }}>
-          <h2 style={{ fontSize: "18px", fontWeight: 800, color: t.ink(0.85), margin: "0 0 4px" }}>
-            Where to Move
-          </h2>
-          <p style={{ fontSize: "12.5px", color: t.ink(0.4), margin: 0 }}>
-            Actionable recommendations for your {conventionalDims.length} gap{conventionalDims.length !== 1 ? "s" : ""}
-          </p>
+        {/* Where to Move heading + Gap Cards */}
+        <div data-pdf-section>
+          <div style={{
+            borderTop: `1px solid ${t.ink(0.08)}`, paddingTop: "32px", marginBottom: "24px",
+          }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 800, color: t.ink(0.85), margin: "0 0 4px" }}>
+              Where to Move
+            </h2>
+            <p style={{ fontSize: "12.5px", color: t.ink(0.4), margin: 0 }}>
+              Actionable recommendations for your {conventionalDims.length} gap{conventionalDims.length !== 1 ? "s" : ""}
+            </p>
+          </div>
+
+          {conventionalDims.length > 0 && (
+            <div className="flex flex-col gap-3" style={{ marginBottom: "28px" }}>
+              {conventionalDims.map(d => (
+                <GapCard
+                  key={d.dimension}
+                  dimension={d.dimension}
+                  shift={d.shift}
+                  recommendation={d.recommendation}
+                  insight={data.gapInsights[d.dimension]}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Priority Gap Cards */}
-        {conventionalDims.length > 0 && (
-          <div className="flex flex-col gap-3" style={{ marginBottom: "28px" }}>
-            {conventionalDims.map(d => (
-              <GapCard
-                key={d.dimension}
-                dimension={d.dimension}
-                shift={d.shift}
-                recommendation={d.recommendation}
-                insight={data.gapInsights[d.dimension]}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Measurement Split */}
+        {/* Measurement Gaps */}
         {(data.metricsTracked.length > 0 || data.metricsMissing.length > 0) && (
-          <div style={{ marginBottom: "28px" }}>
+          <div data-pdf-section style={{ marginBottom: "28px" }}>
             <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "12px" }}>
               Measurement Gaps
             </span>
             <div className="grid grid-cols-2 gap-4">
-              {/* Tracked */}
               <div style={{ padding: "14px 16px", borderRadius: "10px", background: "hsl(142 71% 45% / 0.04)", border: "1px solid hsl(142 71% 45% / 0.1)" }}>
                 <span style={{ fontSize: "10px", fontWeight: 600, color: "hsl(142 71% 35%)", letterSpacing: "0.06em", textTransform: "uppercase", display: "block", marginBottom: "8px" }}>
                   Currently tracking
@@ -321,7 +323,6 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
                   ))}
                 </div>
               </div>
-              {/* Missing */}
               <div style={{ padding: "14px 16px", borderRadius: "10px", background: "hsl(25 95% 53% / 0.04)", border: "1px solid hsl(25 95% 53% / 0.1)" }}>
                 <span style={{ fontSize: "10px", fontWeight: 600, color: "hsl(25 85% 43%)", letterSpacing: "0.06em", textTransform: "uppercase", display: "block", marginBottom: "8px" }}>
                   Not yet measuring
@@ -339,71 +340,72 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
           </div>
         )}
 
-        {/* Selected Practices */}
-        {data.selectedPractices.length > 0 && (
-          <div style={{ marginBottom: "28px" }}>
-            <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
-              Priority Practices
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {data.selectedPractices.map((p, i) => (
-                <span
-                  key={i}
+        {/* Priority Practices + CTA */}
+        <div data-pdf-section>
+          {data.selectedPractices.length > 0 && (
+            <div style={{ marginBottom: "28px" }}>
+              <span style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: t.ink(0.3), display: "block", marginBottom: "8px" }}>
+                Priority Practices
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {data.selectedPractices.map((p, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      fontFamily: t.sans, fontSize: "11px", fontWeight: 600,
+                      padding: "6px 14px", borderRadius: "999px",
+                      color: t.ink(0.7), background: t.ink(0.04),
+                      border: `1px solid ${t.ink(0.08)}`,
+                    }}
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div style={{
+            padding: "20px 24px",
+            borderRadius: "12px",
+            background: t.ink(0.03),
+            border: `1px solid ${t.ink(0.06)}`,
+            textAlign: "center",
+          }}>
+            <p style={{ fontSize: "14px", fontWeight: 700, color: t.ink(0.75), margin: "0 0 6px" }}>
+              Ready to close the gaps?
+            </p>
+            <p style={{ fontSize: "12.5px", color: t.ink(0.45), margin: "0 0 12px", lineHeight: 1.5 }}>
+              Let's discuss how to move your portfolio from where it is to where it needs to be.
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              {data.bookingLink && (
+                <a
+                  href={data.bookingLink}
+                  target="_blank"
+                  rel="noreferrer"
                   style={{
-                    fontFamily: t.sans, fontSize: "11px", fontWeight: 600,
-                    padding: "6px 14px", borderRadius: "999px",
-                    color: t.ink(0.7), background: t.ink(0.04),
-                    border: `1px solid ${t.ink(0.08)}`,
+                    fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
+                    padding: "8px 20px", borderRadius: "999px",
+                    background: t.ink(0.88), color: t.cream, textDecoration: "none",
+                    display: "inline-block",
                   }}
                 >
-                  {p}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Next Steps CTA */}
-        <div style={{
-          padding: "20px 24px",
-          borderRadius: "12px",
-          background: t.ink(0.03),
-          border: `1px solid ${t.ink(0.06)}`,
-          textAlign: "center",
-        }}>
-          <p style={{ fontSize: "14px", fontWeight: 700, color: t.ink(0.75), margin: "0 0 6px" }}>
-            Ready to close the gaps?
-          </p>
-          <p style={{ fontSize: "12.5px", color: t.ink(0.45), margin: "0 0 12px", lineHeight: 1.5 }}>
-            Let's discuss how to move your portfolio from where it is to where it needs to be.
-          </p>
-          <div className="flex items-center justify-center gap-3">
-            {data.bookingLink && (
+                  Book a call
+                </a>
+              )}
               <a
-                href={data.bookingLink}
-                target="_blank"
-                rel="noreferrer"
+                href={`mailto:${data.contactEmail}`}
                 style={{
                   fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
                   padding: "8px 20px", borderRadius: "999px",
-                  background: t.ink(0.88), color: t.cream, textDecoration: "none",
-                  display: "inline-block",
+                  color: t.ink(0.5), border: `1px solid ${t.ink(0.12)}`,
+                  textDecoration: "none", display: "inline-block",
                 }}
               >
-                Book a call
+                Get in touch
               </a>
-            )}
-            <a
-              href={`mailto:${data.contactEmail}`}
-              style={{
-                fontFamily: t.sans, fontSize: "12px", fontWeight: 600,
-                padding: "8px 20px", borderRadius: "999px",
-                color: t.ink(0.5), border: `1px solid ${t.ink(0.12)}`,
-                textDecoration: "none", display: "inline-block",
-              }}
-            >
-              Get in touch
-            </a>
+            </div>
           </div>
         </div>
       </section>
