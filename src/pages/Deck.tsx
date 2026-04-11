@@ -733,10 +733,7 @@ const Deck = () => {
               }}
             >
                <p style={{ ...heading("clamp(24px, 3.5vw, 44px)"), fontWeight: 700, transition: "font-size 0.4s ease" }}>
-                 {isFreshStart
-                   ? "Which feels more like how you'd operate?"
-                   : "Which feels more like how your portfolio operates?"
-                 }
+                 Which approach do you gravitate toward?
                </p>
             </div>
           )}
