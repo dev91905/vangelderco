@@ -227,7 +227,15 @@ const Deck = () => {
   const restored = useMemo(() => {
     try {
       const raw = sessionStorage.getItem("deck-state");
-      if (raw) return JSON.parse(raw);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      if (parsed?.ctaMode === "thanks") {
+        sessionStorage.removeItem("deck-state");
+        return null;
+      }
+
+      return parsed;
     } catch { /* ignore */ }
     return null;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,6 +243,7 @@ const Deck = () => {
 
   const [currentFrame, setCurrentFrame] = useState(restored?.currentFrame ?? 0);
   const lastFrameRef = useRef(restored?.currentFrame ?? 0);
+  const shouldPersistRef = useRef(true);
   const { playHoverGlitch } = useGlitchSFX();
 
   /* ─── Branching state ─── */
@@ -277,6 +286,8 @@ const Deck = () => {
 
   // Save all state to sessionStorage (called before navigating away)
   const saveDeckState = useCallback(() => {
+    if (!shouldPersistRef.current) return;
+
     const state = {
       currentFrame, selectedPains, customOpen, customMessage, customSaved,
       quizAnswers, quizStep, quizRevealed, expandedDimension, quizOrder,
@@ -293,6 +304,16 @@ const Deck = () => {
   useEffect(() => {
     saveDeckState();
   }, [saveDeckState]);
+
+  const clearDeckState = useCallback(() => {
+    shouldPersistRef.current = false;
+    sessionStorage.removeItem("deck-state");
+  }, []);
+
+  const handleExitDiagnostic = useCallback(() => {
+    clearDeckState();
+    navigate("/");
+  }, [clearDeckState, navigate]);
 
   // Scroll to restored frame on mount (desktop only — mobile uses state)
   useEffect(() => {
@@ -365,10 +386,10 @@ const Deck = () => {
       practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
       sectors_not_selected: sectorsNotSelected.length > 0 ? sectorsNotSelected : null,
     } as any);
-    sessionStorage.removeItem("deck-state");
+    clearDeckState();
     setCtaSubmitting(false);
     setCtaMode("thanks");
-  };
+  }, [ctaForm.firstName, ctaForm.lastName, ctaForm.email, ctaForm.organization, ctaSubmitting, metricsChecked, selectedSectors, customSaved, customMessage, selectedPains, engagementPath, diagnosticScore, quizAnswers, capabilitiesRanked, hasMediaExperience, practiceSelections, clearDeckState]);
 
   
   const selectedPainDatas = PAIN_POINTS.filter((p) => selectedPains.includes(p.id));
@@ -440,12 +461,12 @@ const Deck = () => {
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         e.preventDefault();
         scrollToFrame(currentFrame - 1);
-      } else if (e.key === "Escape") { sessionStorage.removeItem("deck-state"); navigate("/"); }
+      } else if (e.key === "Escape") { handleExitDiagnostic(); }
     };
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
-  }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
+  }, [currentFrame, handleExitDiagnostic, scrollToFrame, frameInteracted]);
 
   /* Wheel handler — lock deck scroll on desktop only; mobile is state-driven */
   useEffect(() => {
@@ -550,7 +571,7 @@ const Deck = () => {
             {STEP_LABELS[currentFrame] || ""} · {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
           </span>
           <button
-            onClick={() => { sessionStorage.removeItem("deck-state"); navigate("/"); }}
+            onClick={handleExitDiagnostic}
             className="transition-colors duration-200"
             style={{ color: f.ink(0.25), background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 0 }}
             onMouseEnter={(e) => (e.currentTarget.style.color = f.ink(0.6))}
