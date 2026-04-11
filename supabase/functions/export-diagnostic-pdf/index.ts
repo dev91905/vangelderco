@@ -5,109 +5,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-/*
- * Minimal PDF builder — generates a professional-quality PDF from the diagnostic report.
- * Uses raw PDF generation with Helvetica (built-in) for maximum compatibility.
- */
-
-// PDF string escaping
 function pdfEsc(s: string): string {
   return s.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
-// Strip markdown formatting for plain text rendering
-function stripMd(s: string): string {
-  return s
-    .replace(/\*\*(.+?)\*\*/g, "$1")
-    .replace(/\*(.+?)\*/g, "$1")
-    .replace(/\[(.+?)\]\(.+?\)/g, "$1")
-    .replace(/^#+\s*/gm, "")
-    .replace(/^- /gm, "• ")
-    .trim();
-}
-
-interface TextBlock {
-  text: string;
-  fontSize: number;
-  fontKey: string; // F1=Helvetica, F2=Helvetica-Bold, F3=Helvetica-Oblique
-  leading: number;
-  spaceBefore: number;
-  indent: number;
-  color?: [number, number, number]; // RGB 0-1
-}
-
-function parseReportToBlocks(report: string): TextBlock[] {
-  const blocks: TextBlock[] = [];
-  const lines = report.split("\n");
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line.trim()) continue;
-
-    // H1 — report title
-    if (line.startsWith("# ") && !line.startsWith("## ")) {
-      blocks.push({ text: line.slice(2), fontSize: 20, fontKey: "F2", leading: 26, spaceBefore: 0, indent: 0 });
-      continue;
-    }
-
-    // H2 — section headers
-    if (line.startsWith("## ")) {
-      blocks.push({ text: line.slice(3), fontSize: 14, fontKey: "F2", leading: 20, spaceBefore: 28, indent: 0, color: [0.15, 0.13, 0.12] });
-      // Add a thin rule after H2
-      blocks.push({ text: "___RULE___", fontSize: 0, fontKey: "F1", leading: 8, spaceBefore: 4, indent: 0 });
-      continue;
-    }
-
-    // H3 — subsection headers
-    if (line.startsWith("### ")) {
-      blocks.push({ text: line.slice(4), fontSize: 11.5, fontKey: "F2", leading: 16, spaceBefore: 18, indent: 0 });
-      continue;
-    }
-
-    // Bullet points
-    if (line.startsWith("- ")) {
-      const content = line.slice(2);
-      // Check for bold prefix like **label:** text
-      const boldMatch = content.match(/^\*\*(.+?)\*\*\s*(.*)$/);
-      if (boldMatch) {
-        blocks.push({ text: `• ${boldMatch[1]} ${boldMatch[2]}`, fontSize: 9.5, fontKey: "F1", leading: 14, spaceBefore: 5, indent: 18 });
-      } else {
-        blocks.push({ text: `• ${stripMd(content)}`, fontSize: 9.5, fontKey: "F1", leading: 14, spaceBefore: 5, indent: 18, color: [0.3, 0.28, 0.26] });
-      }
-      continue;
-    }
-
-    // Italic line (picked option)
-    if (line.startsWith("*") && line.endsWith("*") && !line.startsWith("**")) {
-      blocks.push({ text: line.slice(1, -1), fontSize: 10, fontKey: "F3", leading: 15, spaceBefore: 6, indent: 12, color: [0.35, 0.33, 0.3] });
-      continue;
-    }
-
-    // Bold line
-    if (line.startsWith("**") && line.endsWith("**")) {
-      const inner = line.slice(2, -2);
-      blocks.push({ text: inner, fontSize: 10, fontKey: "F2", leading: 15, spaceBefore: 6, indent: 0 });
-      continue;
-    }
-
-    // Bold prefix line like **label:** text
-    const boldPrefixMatch = line.match(/^\*\*(.+?)\*\*\s*(.*)$/);
-    if (boldPrefixMatch) {
-      blocks.push({ text: `${boldPrefixMatch[1]} ${boldPrefixMatch[2]}`, fontSize: 10, fontKey: "F1", leading: 15, spaceBefore: 8, indent: 0 });
-      continue;
-    }
-
-    // Regular text
-    blocks.push({ text: stripMd(line), fontSize: 10, fontKey: "F1", leading: 15, spaceBefore: 6, indent: 0, color: [0.3, 0.28, 0.26] });
-  }
-
-  return blocks;
-}
-
-// Approximate character width for Helvetica at font size 1
-function charWidth(ch: string, fontKey: string): number {
-  // Simplified — Helvetica average
-  const bold = fontKey === "F2";
+function charWidth(ch: string, bold: boolean): number {
   const avg = bold ? 0.58 : 0.52;
   if (ch === " ") return 0.25;
   if (ch === "•") return 0.35;
@@ -116,20 +18,19 @@ function charWidth(ch: string, fontKey: string): number {
   return avg;
 }
 
-function textWidth(text: string, fontSize: number, fontKey: string): number {
+function textWidth(text: string, fontSize: number, bold: boolean): number {
   let w = 0;
-  for (const ch of text) w += charWidth(ch, fontKey) * fontSize;
+  for (const ch of text) w += charWidth(ch, bold) * fontSize;
   return w;
 }
 
-function wrapText(text: string, maxWidth: number, fontSize: number, fontKey: string): string[] {
+function wrapText(text: string, maxWidth: number, fontSize: number, bold: boolean): string[] {
   const words = text.split(" ");
   const lines: string[] = [];
   let current = "";
-
   for (const word of words) {
     const test = current ? current + " " + word : word;
-    if (textWidth(test, fontSize, fontKey) > maxWidth && current) {
+    if (textWidth(test, fontSize, bold) > maxWidth && current) {
       lines.push(current);
       current = word;
     } else {
@@ -140,79 +41,263 @@ function wrapText(text: string, maxWidth: number, fontSize: number, fontKey: str
   return lines.length > 0 ? lines : [""];
 }
 
-function buildPdf(report: string, contactName: string): Uint8Array {
-  const PAGE_W = 612; // Letter
-  const PAGE_H = 792;
-  const MARGIN_L = 62;
-  const MARGIN_R = 62;
-  const MARGIN_T = 72;
-  const MARGIN_B = 72;
-  const CONTENT_W = PAGE_W - MARGIN_L - MARGIN_R;
+const PAGE_W = 612;
+const PAGE_H = 792;
+const ML = 56;
+const MR = 56;
+const MT = 64;
+const MB = 64;
+const CW = PAGE_W - ML - MR;
 
-  const blocks = parseReportToBlocks(report);
+// Colors
+const INK = "0.15 0.13 0.1";
+const INK_MED = "0.35 0.33 0.3";
+const INK_LIGHT = "0.55 0.52 0.5";
+const ORANGE = "0.85 0.37 0.2";
+const GREEN = "0.27 0.55 0.35";
 
-  // Layout pass — compute pages
-  interface PageContent {
-    streams: string[];
+interface PdfBuilder {
+  pages: string[][];
+  curY: number;
+  pageIdx: number;
+}
+
+function newPage(b: PdfBuilder) {
+  addFooter(b);
+  b.pageIdx++;
+  b.pages.push([]);
+  b.curY = PAGE_H - MT;
+}
+
+function addFooter(b: PdfBuilder) {
+  const footerY = 32;
+  const page = b.pages[b.pageIdx];
+  page.push(`BT /F1 7 Tf 0.5 0.48 0.45 rg ${ML} ${footerY} Td (${pdfEsc("Van Gelder & Company  ·  vangelderco.com  ·  Confidential")}) Tj ET`);
+  page.push(`BT /F1 7 Tf 0.5 0.48 0.45 rg ${PAGE_W - MR - 12} ${footerY} Td (${pdfEsc(`${b.pageIdx + 1}`)}) Tj ET`);
+}
+
+function ensureSpace(b: PdfBuilder, needed: number) {
+  if (b.curY - needed < MB) newPage(b);
+}
+
+function drawText(b: PdfBuilder, text: string, x: number, fontSize: number, font: string, color: string, maxWidth?: number) {
+  const bold = font === "F2";
+  const lines = maxWidth ? wrapText(text, maxWidth, fontSize, bold) : [text];
+  const leading = fontSize * 1.5;
+  for (const line of lines) {
+    ensureSpace(b, leading);
+    b.pages[b.pageIdx].push(`BT /${font} ${fontSize} Tf ${color} rg ${x} ${b.curY} Td (${pdfEsc(line)}) Tj ET`);
+    b.curY -= leading;
   }
-  const pages: PageContent[] = [{ streams: [] }];
-  let curY = PAGE_H - MARGIN_T;
-  let pageIdx = 0;
+}
 
-  // Header on first page
-  const headerText = "VAN GELDER & COMPANY";
-  pages[0].streams.push(`BT /F2 8 Tf 0.45 0.42 0.4 rg ${MARGIN_L} ${PAGE_H - 40} Td (${pdfEsc(headerText)}) Tj ET`);
-  // Thin rule under header
-  pages[0].streams.push(`0.85 0.83 0.8 RG 0.5 w ${MARGIN_L} ${PAGE_H - 48} m ${PAGE_W - MARGIN_R} ${PAGE_H - 48} l S`);
+function drawRule(b: PdfBuilder, color = "0.88 0.86 0.83") {
+  b.pages[b.pageIdx].push(`${color} RG 0.5 w ${ML} ${b.curY} m ${PAGE_W - MR} ${b.curY} l S`);
+  b.curY -= 8;
+}
 
-  const addFooter = (page: PageContent, pageNum: number) => {
-    const footerY = 36;
-    page.streams.push(`BT /F1 7 Tf 0.6 0.58 0.55 rg ${MARGIN_L} ${footerY} Td (${pdfEsc(`Van Gelder & Company  ·  vangelderco.com  ·  Confidential`)}) Tj ET`);
-    page.streams.push(`BT /F1 7 Tf 0.6 0.58 0.55 rg ${PAGE_W - MARGIN_R - 20} ${footerY} Td (${pdfEsc(`${pageNum}`)}) Tj ET`);
-  };
+function drawBar(b: PdfBuilder, label: string, isAdvanced: boolean) {
+  ensureSpace(b, 22);
+  const y = b.curY;
+  const barX = ML + 80;
+  const barW = CW - 150;
+  const barH = 5;
+  const barY = y + 2;
 
-  const newPage = () => {
-    addFooter(pages[pageIdx], pageIdx + 1);
-    pageIdx++;
-    pages.push({ streams: [] });
-    curY = PAGE_H - MARGIN_T;
-  };
+  // Label
+  b.pages[b.pageIdx].push(`BT /F2 9 Tf ${INK_MED} rg ${ML} ${y} Td (${pdfEsc(label)}) Tj ET`);
 
-  for (const block of blocks) {
-    if (block.text === "___RULE___") {
-      // Horizontal rule
-      if (curY < MARGIN_B + 20) newPage();
-      curY -= block.spaceBefore;
-      pages[pageIdx].streams.push(`0.88 0.86 0.83 RG 0.5 w ${MARGIN_L} ${curY} m ${PAGE_W - MARGIN_R} ${curY} l S`);
-      curY -= block.leading;
-      continue;
+  // Background bar
+  b.pages[b.pageIdx].push(`0.93 0.91 0.89 rg ${barX} ${barY} ${barW} ${barH} re f`);
+
+  // Filled portion
+  const fillColor = isAdvanced ? GREEN : ORANGE;
+  const fillX = isAdvanced ? barX + barW / 2 : barX;
+  b.pages[b.pageIdx].push(`${fillColor} rg ${fillX} ${barY} ${barW / 2} ${barH} re f`);
+
+  // Center tick
+  b.pages[b.pageIdx].push(`0.78 0.76 0.73 RG 0.5 w ${barX + barW / 2} ${barY - 2} m ${barX + barW / 2} ${barY + barH + 2} l S`);
+
+  // Status label
+  const statusX = barX + barW + 8;
+  const statusColor = isAdvanced ? GREEN : ORANGE;
+  const statusText = isAdvanced ? "Advanced" : "Conventional";
+  b.pages[b.pageIdx].push(`BT /F2 7.5 Tf ${statusColor} rg ${statusX} ${y} Td (${pdfEsc(statusText)}) Tj ET`);
+
+  b.curY -= 20;
+}
+
+function drawScoreCircle(b: PdfBuilder, score: number, cx: number, cy: number) {
+  // Just render the score as a large number with label — true circles are complex in raw PDF
+  b.pages[b.pageIdx].push(`BT /F2 28 Tf ${INK} rg ${cx - 15} ${cy - 5} Td (${pdfEsc(`${score}`)}) Tj ET`);
+  const label = score <= 25 ? "Critical" : score <= 50 ? "Significant gaps" : score <= 75 ? "Moderate" : "Advanced";
+  const labelColor = score <= 25 ? "0.8 0.2 0.2" : score <= 50 ? ORANGE : score <= 75 ? "0.7 0.6 0.1" : GREEN;
+  b.pages[b.pageIdx].push(`BT /F2 7.5 Tf ${labelColor} rg ${cx - 22} ${cy - 20} Td (${pdfEsc(label)}) Tj ET`);
+}
+
+function buildPdf(data: any): Uint8Array {
+  const b: PdfBuilder = { pages: [[]], curY: PAGE_H - MT, pageIdx: 0 };
+
+  // ═══ PAGE 1: STRATEGIC POSITION ═══
+
+  // Header
+  b.pages[0].push(`BT /F2 7.5 Tf ${INK_LIGHT} rg ${ML} ${PAGE_H - 36} Td (${pdfEsc("VAN GELDER & COMPANY")}) Tj ET`);
+  b.pages[0].push(`0.88 0.86 0.83 RG 0.5 w ${ML} ${PAGE_H - 44} m ${PAGE_W - MR} ${PAGE_H - 44} l S`);
+
+  // Label
+  drawText(b, "STRATEGIC DIAGNOSTIC", ML, 8, "F1", INK_LIGHT);
+  b.curY -= 4;
+
+  // Name + score
+  const nameY = b.curY;
+  drawText(b, `${data.contact.firstName} ${data.contact.lastName}`, ML, 20, "F2", INK);
+  if (data.contact.organization) {
+    drawText(b, data.contact.organization, ML, 11, "F1", INK_MED);
+  }
+  drawText(b, data.contact.date, ML, 9, "F1", INK_LIGHT);
+
+  // Score in top right
+  drawScoreCircle(b, data.readinessScore, PAGE_W - MR - 30, nameY);
+
+  b.curY -= 12;
+
+  // Executive Summary box
+  if (data.executiveSummary) {
+    drawRule(b, "0.9 0.88 0.86");
+    b.curY -= 4;
+    drawText(b, "STRATEGIC ANALYSIS", ML, 8, "F2", INK_LIGHT);
+    b.curY -= 2;
+    drawText(b, data.executiveSummary, ML, 10, "F1", INK_MED, CW);
+    b.curY -= 12;
+  }
+
+  // Dimension bars
+  drawRule(b);
+  drawText(b, "5-DIMENSION ASSESSMENT", ML, 8, "F2", INK_LIGHT);
+  b.curY -= 6;
+
+  // Axis labels
+  const barX = ML + 80;
+  const barW = CW - 150;
+  b.pages[b.pageIdx].push(`BT /F1 6.5 Tf ${INK_LIGHT} rg ${barX} ${b.curY + 2} Td (${pdfEsc("\u2190 Conventional")}) Tj ET`);
+  b.pages[b.pageIdx].push(`BT /F1 6.5 Tf ${INK_LIGHT} rg ${barX + barW - 50} ${b.curY + 2} Td (${pdfEsc("Advanced \u2192")}) Tj ET`);
+  b.curY -= 10;
+
+  for (const dim of data.dimensionResults) {
+    drawBar(b, dim.dimension, dim.picked === "advanced");
+  }
+  b.curY -= 8;
+
+  // Pain points
+  if (data.painPoints && data.painPoints.length > 0) {
+    drawRule(b);
+    drawText(b, "SELF-IDENTIFIED CHALLENGES", ML, 8, "F2", INK_LIGHT);
+    b.curY -= 2;
+    for (const p of data.painPoints) {
+      drawText(b, `•  ${p}`, ML + 4, 9.5, "F1", INK_MED, CW - 8);
+    }
+    b.curY -= 6;
+  }
+
+  // Sectors
+  if (data.sectors && data.sectors.length > 0) {
+    drawText(b, "SECTORS OF INTEREST", ML, 8, "F2", INK_LIGHT);
+    b.curY -= 2;
+    drawText(b, data.sectors.join("  ·  "), ML, 9.5, "F1", INK_MED, CW);
+    b.curY -= 6;
+  }
+
+  // ═══ PAGE 2: WHERE TO MOVE ═══
+  newPage(b);
+
+  // Header
+  b.pages[b.pageIdx].push(`BT /F2 7.5 Tf ${INK_LIGHT} rg ${ML} ${PAGE_H - 36} Td (${pdfEsc("VAN GELDER & COMPANY")}) Tj ET`);
+  b.pages[b.pageIdx].push(`0.88 0.86 0.83 RG 0.5 w ${ML} ${PAGE_H - 44} m ${PAGE_W - MR} ${PAGE_H - 44} l S`);
+
+  drawText(b, "Where to Move", ML, 18, "F2", INK);
+  b.curY -= 2;
+
+  const conventionalDims = (data.dimensionResults || []).filter((d: any) => d.picked === "conventional");
+  drawText(b, `Actionable recommendations for your ${conventionalDims.length} gap${conventionalDims.length !== 1 ? "s" : ""}`, ML, 10, "F1", INK_LIGHT);
+  b.curY -= 12;
+
+  // Gap cards
+  for (const dim of conventionalDims) {
+    ensureSpace(b, 60);
+    // Orange dot + dimension name
+    b.pages[b.pageIdx].push(`${ORANGE} rg ${ML + 2} ${b.curY + 3} 3 3 re f`);
+    drawText(b, dim.dimension, ML + 10, 12, "F2", INK);
+    b.curY -= 2;
+    drawText(b, dim.shift, ML + 10, 9.5, "F1", INK_MED, CW - 14);
+
+    // AI insight
+    const insight = data.gapInsights?.[dim.dimension];
+    if (insight) {
+      b.curY -= 2;
+      b.pages[b.pageIdx].push(`${ORANGE} rg ${ML + 10} ${b.curY + 10} 1.5 -${9.5 * 1.5 * wrapText(insight, CW - 30, 9, false).length + 2} re f`);
+      drawText(b, insight, ML + 18, 9, "F3", INK_MED, CW - 30);
     }
 
-    const wrappedLines = wrapText(block.text, CONTENT_W - block.indent, block.fontSize, block.fontKey);
-    const totalHeight = block.spaceBefore + wrappedLines.length * block.leading;
-
-    if (curY - totalHeight < MARGIN_B) newPage();
-
-    curY -= block.spaceBefore;
-    const [r, g, b] = block.color || [0.12, 0.11, 0.1];
-
-    for (const wLine of wrappedLines) {
-      curY -= block.leading;
-      if (curY < MARGIN_B) {
-        newPage();
-        curY -= block.leading;
-      }
-      const x = MARGIN_L + block.indent;
-      pages[pageIdx].streams.push(
-        `BT /${block.fontKey} ${block.fontSize} Tf ${r} ${g} ${b} rg ${x} ${curY} Td (${pdfEsc(wLine)}) Tj ET`
-      );
-    }
+    b.curY -= 2;
+    drawText(b, `→  ${dim.recommendation}`, ML + 10, 9.5, "F2", INK_MED, CW - 14);
+    b.curY -= 10;
   }
 
-  // Add footer to last page
-  addFooter(pages[pageIdx], pageIdx + 1);
+  // Measurement split
+  if ((data.metricsTracked?.length || 0) + (data.metricsMissing?.length || 0) > 0) {
+    b.curY -= 4;
+    drawRule(b);
+    drawText(b, "MEASUREMENT GAPS", ML, 8, "F2", INK_LIGHT);
+    b.curY -= 4;
 
-  // ═══ Assemble PDF ═══
+    const halfW = CW / 2 - 10;
+
+    // Tracked column
+    const colStartY = b.curY;
+    drawText(b, "CURRENTLY TRACKING", ML, 7.5, "F2", GREEN);
+    b.curY -= 2;
+    for (const m of (data.metricsTracked || [])) {
+      drawText(b, `✓  ${m}`, ML, 9, "F1", INK_MED, halfW);
+    }
+
+    // Missing column
+    const missingStartY = colStartY;
+    b.curY = missingStartY;
+    const rightCol = ML + halfW + 20;
+    drawText(b, "NOT YET MEASURING", rightCol, 7.5, "F2", ORANGE);
+    b.curY -= 2;
+    for (const m of (data.metricsMissing || [])) {
+      drawText(b, `✗  ${m}`, rightCol, 9, "F1", INK_MED, halfW);
+    }
+    b.curY -= 10;
+  }
+
+  // Practices
+  if (data.selectedPractices?.length > 0) {
+    drawRule(b);
+    drawText(b, "PRIORITY PRACTICES", ML, 8, "F2", INK_LIGHT);
+    b.curY -= 2;
+    for (const p of data.selectedPractices) {
+      drawText(b, `•  ${p}`, ML + 4, 9.5, "F1", INK_MED, CW - 8);
+    }
+    b.curY -= 10;
+  }
+
+  // CTA
+  ensureSpace(b, 50);
+  drawRule(b);
+  b.curY -= 4;
+  drawText(b, "Ready to close the gaps?", ML, 13, "F2", INK);
+  b.curY -= 2;
+  drawText(b, `Contact us at ${data.contactEmail}`, ML, 10, "F1", INK_MED);
+  if (data.bookingLink) {
+    drawText(b, `Book a call: ${data.bookingLink}`, ML, 10, "F1", INK_MED);
+  }
+
+  // Final footer
+  addFooter(b);
+
+  // ═══ ASSEMBLE PDF ═══
   const objects: string[] = [];
   let objNum = 0;
   const newObj = (content: string): number => {
@@ -221,22 +306,19 @@ function buildPdf(report: string, contactName: string): Uint8Array {
     return objNum;
   };
 
-  // Catalog, Pages placeholder
   const catalogObj = newObj("<< /Type /Catalog /Pages 2 0 R >>");
-  const pagesObjNum = 2; // reserve
-  objNum++; // skip 2 for pages
+  const pagesObjNum = 2;
+  objNum++;
 
-  // Fonts
   const f1 = newObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
   const f2 = newObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
   const f3 = newObj("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>");
 
   const fontDict = `<< /F1 ${f1} 0 R /F2 ${f2} 0 R /F3 ${f3} 0 R >>`;
 
-  // Page objects
   const pageObjNums: number[] = [];
-  for (const page of pages) {
-    const stream = page.streams.join("\n");
+  for (const page of b.pages) {
+    const stream = page.join("\n");
     const streamBytes = new TextEncoder().encode(stream);
     const streamObj = newObj(`<< /Length ${streamBytes.length} >>\nstream\n${stream}\nendstream`);
     const pageObj = newObj(
@@ -245,12 +327,10 @@ function buildPdf(report: string, contactName: string): Uint8Array {
     pageObjNums.push(pageObj);
   }
 
-  // Now write pages object at position 2
   const pagesContent = `<< /Type /Pages /Kids [${pageObjNums.map(n => `${n} 0 R`).join(" ")}] /Count ${pageObjNums.length} >>`;
   objects[1] = `${pagesObjNum} 0 obj\n${pagesContent}\nendobj`;
 
-  // Build final PDF
-  let pdf = "%PDF-1.4\n%âãÏÓ\n";
+  let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
   const offsets: number[] = [];
 
   for (const obj of objects) {
@@ -274,13 +354,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { contact, report } = await req.json();
-    if (!report) throw new Error("report required");
+    const { reportData } = await req.json();
+    if (!reportData) throw new Error("reportData required");
 
-    const name = `${contact?.first_name || ""} ${contact?.last_name || ""}`.trim() || "Unknown";
-    const pdfBytes = buildPdf(report, name);
-
-    // Return as base64
+    const pdfBytes = buildPdf(reportData);
     const base64 = btoa(String.fromCharCode(...pdfBytes));
 
     return new Response(JSON.stringify({ pdf: base64 }), {
