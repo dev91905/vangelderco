@@ -153,7 +153,8 @@ function GapCard({ dimension, shift, recommendation, insight }: {
 }
 
 export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
-  const conventionalDims = data.dimensionResults.filter(d => d.picked === "conventional");
+  const dims = data.dimensionResults || [];
+  const conventionalDims = dims.filter(d => d.picked === "conventional");
 
   return (
     <div className="diagnostic-report" style={{ fontFamily: t.sans, maxWidth: "800px", margin: "0 auto" }}>
