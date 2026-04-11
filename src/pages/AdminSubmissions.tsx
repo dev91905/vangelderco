@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
 import { formatDistanceToNow, format } from "date-fns";
 import { toast } from "sonner";
+import DiagnosticReport, { type DiagnosticData } from "@/components/admin/DiagnosticReport";
 
 type Contact = {
   id: string;
@@ -122,17 +123,28 @@ const SubmissionsList = ({ contacts, onSelect }: { contacts: Contact[]; onSelect
   </div>
 );
 
+/** Try to parse report_cache as structured JSON, return null if it's old markdown format */
+function parseReportCache(cache: string | null): DiagnosticData | null {
+  if (!cache) return null;
+  try {
+    const parsed = JSON.parse(cache);
+    if (parsed && parsed.contact && parsed.dimensionResults) return parsed as DiagnosticData;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 /* ═══ DETAIL VIEW ═══ */
 const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () => void }) => {
   const qc = useQueryClient();
-  const [report, setReport] = useState<string | null>(contact.report_cache);
+  const [reportData, setReportData] = useState<DiagnosticData | null>(() => parseReportCache(contact.report_cache));
   const [generating, setGenerating] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Generate report on mount if not cached
   useEffect(() => {
-    if (report) return;
+    if (reportData) return;
     generateReport();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -143,12 +155,13 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
         body: { contactId: contact.id },
       });
       if (error) throw error;
-      const text = data?.report || "Report generation failed.";
-      setReport(text);
+      const structured = data?.report;
+      if (!structured) throw new Error("No report returned");
+      setReportData(structured as DiagnosticData);
       // Cache it
       await supabase
         .from("deck_contacts" as any)
-        .update({ report_cache: text } as any)
+        .update({ report_cache: JSON.stringify(structured) } as any)
         .eq("id", contact.id);
     } catch (err: any) {
       toast.error("Failed to generate report: " + err.message);
@@ -173,24 +186,13 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
   });
 
   const handleExportPdf = async () => {
-    if (!report) return;
+    if (!reportData) return;
     setExporting(true);
     try {
       const { data, error } = await supabase.functions.invoke("export-diagnostic-pdf", {
-        body: {
-          contact: {
-            first_name: contact.first_name,
-            last_name: contact.last_name,
-            organization: contact.organization,
-            email: contact.email,
-            created_at: contact.created_at,
-            quiz_answers: contact.quiz_answers,
-          },
-          report,
-        },
+        body: { reportData },
       });
       if (error) throw error;
-      // data is base64 PDF
       const bytes = Uint8Array.from(atob(data.pdf), (c) => c.charCodeAt(0));
       const blob = new Blob([bytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
@@ -214,7 +216,6 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
 
   return (
     <div className="flex flex-col h-full">
-      {/* Back button */}
       <button
         onClick={onBack}
         className="flex items-center gap-2 px-4 py-3 transition-colors"
@@ -225,7 +226,6 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
         <ChevronLeft className="w-3.5 h-3.5" /> All submissions
       </button>
 
-      {/* Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] flex-1 overflow-hidden">
         {/* LEFT: Diagnostic report */}
         <div className="overflow-y-auto p-6 lg:p-8" style={{ borderRight: t.border(0.04) }}>
@@ -234,16 +234,8 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
               <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: t.ink(0.1), borderTopColor: t.ink(0.5) }} />
               <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>Generating diagnostic report…</p>
             </div>
-          ) : report ? (
-            <div
-              className="prose prose-sm max-w-none"
-              style={{
-                fontFamily: t.sans,
-                color: t.ink(0.7),
-                lineHeight: 1.75,
-              }}
-              dangerouslySetInnerHTML={{ __html: markdownToHtml(report) }}
-            />
+          ) : reportData ? (
+            <DiagnosticReport data={reportData} />
           ) : (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>No report generated yet.</p>
@@ -294,9 +286,9 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
           <div className="flex flex-col gap-2">
             <button
               onClick={handleExportPdf}
-              disabled={!report || exporting}
+              disabled={!reportData || exporting}
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all disabled:opacity-40"
-              style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream, border: "none", cursor: report ? "pointer" : "default" }}
+              style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream, border: "none", cursor: reportData ? "pointer" : "default" }}
             >
               <FileText className="w-4 h-4" />
               {exporting ? "Exporting…" : "Export as PDF"}
@@ -327,8 +319,7 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
             </button>
           </div>
 
-          {/* Regenerate report */}
-          {report && (
+          {reportData && (
             <button
               onClick={generateReport}
               disabled={generating}
@@ -346,28 +337,12 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
   );
 };
 
-/* Simple markdown → HTML converter for the report */
-function markdownToHtml(md: string): string {
-  return md
-    .replace(/^### (.+)$/gm, '<h3 style="font-size:16px;font-weight:700;margin:28px 0 8px;color:hsl(25 15% 15%)">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 style="font-size:19px;font-weight:700;margin:36px 0 12px;color:hsl(25 15% 10%);padding-bottom:8px;border-bottom:1px solid hsl(25 15% 88%)">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 style="font-size:24px;font-weight:700;margin:0 0 16px;color:hsl(25 15% 8%)">$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="font-weight:600;color:hsl(25 15% 20%)">$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/^- (.+)$/gm, '<li style="margin:4px 0 4px 16px;padding-left:4px">$1</li>')
-    .replace(/(<li.*<\/li>\n?)+/g, (match) => `<ul style="list-style:disc;padding-left:20px;margin:8px 0">${match}</ul>`)
-    .replace(/\n\n/g, '</p><p style="margin:8px 0">')
-    .replace(/\n/g, "<br>")
-    ;
-}
-
 /* ═══ MAIN PAGE ═══ */
 const AdminSubmissions = () => {
   const { data: contacts, isLoading } = useContacts();
   const [selected, setSelected] = useState<Contact | null>(null);
   const [searchParams] = useSearchParams();
 
-  // Auto-select contact from query param
   useEffect(() => {
     if (contacts && !selected) {
       const id = searchParams.get("id");
@@ -378,7 +353,6 @@ const AdminSubmissions = () => {
     }
   }, [contacts, searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Keep selected contact in sync with latest data
   useEffect(() => {
     if (selected && contacts) {
       const updated = contacts.find((c) => c.id === selected.id);
@@ -388,7 +362,6 @@ const AdminSubmissions = () => {
 
   return (
     <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
-      {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: t.border(0.06) }}>
         <div className="flex items-center gap-4">
           <Link
@@ -411,7 +384,6 @@ const AdminSubmissions = () => {
         </div>
       </div>
 
-      {/* Content */}
       <div style={{ height: "calc(100vh - 57px)", overflow: "hidden" }}>
         {isLoading ? (
           <div className="flex items-center justify-center py-20">

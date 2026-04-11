@@ -7,30 +7,18 @@ const corsHeaders = {
 };
 
 /* ─── Approved copy from the deck ─── */
-const PAIN_POINTS: Record<string, string> = {
-  history: "Just getting started — no portfolio yet, still figuring out where to begin and what to fund.",
-  evaluate: "Funding comms with no strategy — money goes out the door, but nothing connects spending to outcomes.",
-  access: "Limited channels — op-eds, paid ads, social on repeat with no real reach into media or culture.",
-  measurement: "Not sure what to measure — campaigns are running, but can't tell what's actually working or why.",
-  expertise: "No expertise in-house — nobody on staff has commercial media experience.",
+const PAIN_LABELS: Record<string, string> = {
+  history: "No portfolio yet",
+  evaluate: "No strategy connecting spend to outcomes",
+  access: "Limited channels and reach",
+  measurement: "Can't tell what's working",
+  expertise: "No in-house media expertise",
 };
 
 const PRACTICES = [
-  {
-    title: "They activate every cultural lever.",
-    rationale: "They don't just push content out — they work behind the scenes so platforms across different sectors are pulling the message in. Music, faith communities, creator ecosystems, campuses, legal networks. Not just strategic comms.",
-    help: "We maintain a presence across the cultural ecosystem and recruit partners who carry your message before you launch.",
-  },
-  {
-    title: "They coordinate across sectors.",
-    rationale: "Nothing moves until multiple sectors are pushing on the same thing. The most effective programs leverage cultural engagement to bring policy, industry, labor, grassroots, and other sectors to the table around a shared focal point.",
-    help: "We leverage media and cultural distribution to bring sectors to the table and align them around shared interests.",
-  },
-  {
-    title: "They organize for growth.",
-    rationale: "It's not about organizing people who already agree. To win, your communications have to bring new people in — people who weren't there before. Only by demonstrating real persuasion can you move the people in power.",
-    help: "We run campaigns that bring in new audiences, deepen engagement, and build leadership infrastructure that wins lasting power.",
-  },
+  "Activate every cultural lever",
+  "Coordinate across sectors",
+  "Organize for growth",
 ];
 
 const QUIZ_DIMENSIONS = [
@@ -38,105 +26,38 @@ const QUIZ_DIMENSIONS = [
     dimension: "Strategy",
     traditional: "Start with your message. Use research to figure out how to deliver it.",
     nextgen: "Start with what's already moving. Put infrastructure and resources behind it.",
-    traditionalLabel: "The shift",
-    traditionalLede: "That work still matters — but on its own, it misses what's already moving.",
-    traditionalBullets: [
-      "Focus groups test messages you already believe in, with people sorted by demographics — not by the value systems that actually drive behavior.",
-      "If something organic is happening that doesn't fit your framework, you miss it or dismiss it as noise.",
-      "The most effective operators do all of this and find where energy is already forming — then put infrastructure behind it.",
-    ],
-    nextgenLabel: "Why this works",
-    nextgenLede: "You're building on real energy — not manufacturing it.",
-    nextgenBullets: [
-      "When people are already organizing around something they care about, you don't need to convince them to show up. You need to give them structure, resources, and strategy.",
-      "This is how the most effective political networks operate. It's how foreign adversaries exploit domestic divisions — they find the anger, fund it, and shape it.",
-      "The same principle works in reverse when it's used to build power for your side.",
-    ],
+    shift: "Focus groups test messages you already believe in. The most effective operators find where energy is already forming — then put infrastructure behind it.",
+    recommendation: "Map the organic energy in your issue space before designing campaigns. Fund infrastructure behind what's already moving.",
   },
   {
     dimension: "Content",
     traditional: "Lead with credibility — documentaries, op-eds, explainers, paid ads.",
     nextgen: "Fund always-on participatory content and investigative journalism.",
-    traditionalLabel: "The shift",
-    traditionalLede: "Credibility content still has a role — but on its own, it talks at people rather than inviting them in.",
-    traditionalBullets: [
-      "The gap is participatory, investigative content — creator ecosystems and journalism running around the clock.",
-      "Political identity and cultural narrative form in real time. You need to be inside those conversations, not reacting after the fact.",
-      "You need the credibility of prestige formats and the reach of always-on participatory content. Most portfolios only fund the first half.",
-    ],
-    nextgenLabel: "Why this works",
-    nextgenLede: "Participatory content compounds. Prestige content gets filed away.",
-    nextgenBullets: [
-      "Creator ecosystems and investigative journalism running around the clock means you're inside the conversation as identity, conspiracy, and narrative form in real time.",
-      "Audiences don't just consume this content — they spread it, remix it, and build identity around it.",
-      "Prestige content still builds credibility, but participatory content builds community. You need both — the second one is where most portfolios have the gap.",
-    ],
+    shift: "Prestige content gets filed away. Participatory content compounds — audiences spread it, remix it, build identity around it.",
+    recommendation: "Add always-on creator ecosystems and investigative journalism to your portfolio alongside prestige formats.",
   },
   {
     dimension: "Distribution",
     traditional: "Buy targeted placements on major platforms. Optimize for reach and frequency.",
     nextgen: "Own or shape the platforms — the algorithms, editorial, programming.",
-    traditionalLabel: "The shift",
-    traditionalLede: "Buying placements rents attention on someone else's platform, under someone else's rules.",
-    traditionalBullets: [
-      "The algorithm changes, your reach disappears. The platform shifts policy, your content gets deprioritized. You have no control.",
-      "The most effective operators aren't buying ads on platforms — they're buying the platforms.",
-      "When you own the infrastructure, you decide what gets seen — and that doesn't change when someone else rewrites their algorithm.",
-    ],
-    nextgenLabel: "Why this works",
-    nextgenLede: "If you own the platform, you decide what millions of people see.",
-    nextgenBullets: [
-      "You shape the algorithm, the editorial direction, the programming. The most effective operators understood this early and invested accordingly.",
-      "Buying placements is renting someone else's audience. Owning the channel means the rules are yours.",
-      "And they stay yours when someone else's algorithm changes overnight.",
-    ],
+    shift: "Buying placements rents attention under someone else's rules. When the algorithm changes, your reach disappears.",
+    recommendation: "Invest in owned channels and platform-level influence rather than renting attention through ad placements.",
   },
   {
     dimension: "Engagement",
     traditional: "Partner with influencers to amplify your message to online audiences.",
     nextgen: "Organize offline — faith communities, campuses, business and legal networks.",
-    traditionalLabel: "The shift",
-    traditionalLede: "Online amplification has value — but on its own, it stays exactly where the algorithm wants you.",
-    traditionalBullets: [
-      "Influencer partnerships stay online — scripted posts, retweets, celebrity endorsements. That's surface-level.",
-      "The gap is offline. The most effective operators also fund faith communities, campuses, business associations, and legal networks — massive in-person infrastructure.",
-      "You need online reach and offline organizing. Most portfolios only fund the first.",
-    ],
-    nextgenLabel: "Why this works",
-    nextgenLede: "Real-world networks and gathering points carry built-in trust and turnout.",
-    nextgenBullets: [
-      "Faith communities, campuses, music venues, business associations, legal networks — these are massive structures where people already gather, show up, and trust each other.",
-      "When you organize through them, you're building constituencies with collective power that shows up in person.",
-      "Online reach matters too, but offline power is what turns attention into action. The most effective operators invest in both — the offline side is where most portfolios have the gap.",
-    ],
+    shift: "Influencer partnerships stay online and surface-level. Real-world networks carry built-in trust and turnout.",
+    recommendation: "Fund offline organizing infrastructure — faith communities, campuses, legal networks — alongside online reach.",
   },
   {
     dimension: "Measurement",
     traditional: "Track reach, impressions, and awareness. Build the case it's landing.",
     nextgen: "Track who's showing up, what policy moved, what infrastructure formed.",
-    traditionalLabel: "The shift",
-    traditionalLede: 'Most of those "views" are three-second scroll-bys that Meta counts as a view.',
-    traditionalBullets: [
-      "Your audience saw your content while their thumb was in motion, and then it was gone. Nobody's thinking about you after that pass.",
-      "You build a report showing millions of impressions, but impressions don't measure power.",
-      "The programs that move the needle measure something different: Who showed up? Who's new? What policy moved? What infrastructure exists now that didn't before?",
-    ],
-    nextgenLabel: "Why this works",
-    nextgenLede: "Tracking power, not impressions, tells you whether you're actually building something.",
-    nextgenBullets: [
-      "Most programs can show you reach numbers. Very few can show you who they brought into the movement and what changed because of it.",
-      'One report says "10 million impressions." The other says "4,000 new people, two bills advanced, three permanent coalitions."',
-      "One is noise. The other is power.",
-    ],
+    shift: "Most 'views' are three-second scroll-bys. Impressions don't measure power.",
+    recommendation: "Shift measurement to track new constituencies, policy movement, and permanent infrastructure built.",
   },
 ];
-
-function getQuizGradeSummary(nextgenCount: number, total: number): string {
-  const ratio = nextgenCount / total;
-  if (ratio >= 0.8) return "You're already thinking the way the most effective operators think. The question is whether your portfolio is executing at this level — or if there's a gap between instinct and implementation.";
-  if (ratio >= 0.4) return "You've identified some of the shifts that separate effective programs from the rest. The dimensions below show exactly where conventional thinking may be leaving you exposed.";
-  return "The approaches you chose are industry standard — necessary, but no longer sufficient. The operators who are winning do everything you're doing and more. The breakdown shows where.";
-}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -149,7 +70,6 @@ serve(async (req) => {
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const sb = createClient(supabaseUrl, serviceKey);
 
-    // Fetch contact
     const { data: contact, error: cErr } = await sb
       .from("deck_contacts")
       .select("*")
@@ -157,7 +77,6 @@ serve(async (req) => {
       .single();
     if (cErr || !contact) throw new Error("Contact not found");
 
-    // Fetch site settings for email & booking link
     const { data: settings } = await sb.from("site_settings").select("*");
     const settingsMap: Record<string, string> = {};
     settings?.forEach((s: any) => { settingsMap[s.key] = s.value; });
@@ -165,108 +84,57 @@ serve(async (req) => {
     const bookingLink = settingsMap.booking_link || "";
 
     const quizAnswers = (contact.quiz_answers || []) as Array<{ dimension: string; picked: string }>;
-    const nextgenCount = quizAnswers.filter(a => a.picked === "nextgen").length;
-    const dateStr = new Date(contact.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-
-    // ═══ BUILD THE REPORT DETERMINISTICALLY ═══
-    let report = "";
-
-    // Header
-    report += `# Diagnostic Report — ${contact.first_name} ${contact.last_name}\n`;
-    if (contact.organization) report += `**${contact.organization}**\n`;
-    report += `${dateStr}\n\n`;
-
-    // Section 1: Where You Are
-    report += `## 1. Where You Are\n\n`;
     const pains = (contact.selected_pains || []) as string[];
-    if (pains.length > 0) {
-      pains.forEach((p: string) => {
-        const desc = PAIN_POINTS[p];
-        if (desc) report += `- ${desc}\n`;
-        else report += `- ${p}\n`;
-      });
-      report += "\n";
-    }
-    if (contact.custom_challenge) {
-      report += `Additional context: *"${contact.custom_challenge}"*\n\n`;
-    }
-
-    // Section 2: Your Strategic Read
-    report += `## 2. Your Strategic Read\n\n`;
-    report += `**${nextgenCount} of ${quizAnswers.length} advanced approaches identified.**\n\n`;
-    report += `${getQuizGradeSummary(nextgenCount, quizAnswers.length)}\n\n`;
-
-    // Each dimension
-    for (const dim of QUIZ_DIMENSIONS) {
-      const answer = quizAnswers.find(a => a.dimension === dim.dimension);
-      if (!answer) continue;
-      const isAdvanced = answer.picked === "nextgen";
-      const pickedCopy = isAdvanced ? dim.nextgen : dim.traditional;
-      const explanationLabel = isAdvanced ? dim.nextgenLabel : dim.traditionalLabel;
-      const lede = isAdvanced ? dim.nextgenLede : dim.traditionalLede;
-      const bullets = isAdvanced ? dim.nextgenBullets : dim.traditionalBullets;
-
-      report += `### ${dim.dimension}\n\n`;
-      report += `*${pickedCopy}*\n\n`;
-      report += `**${explanationLabel}:** ${lede}\n\n`;
-      bullets.forEach(b => { report += `- ${b}\n`; });
-      report += "\n";
-    }
-
-    // AI-generated connective paragraph — the ONLY part the AI writes
-    report += `### Cross-Dimensional Analysis\n\n`;
-    const connectiveParagraph = await generateConnectiveParagraph(quizAnswers, QUIZ_DIMENSIONS);
-    report += `${connectiveParagraph}\n\n`;
-
-    // Section 3: Practices
-    report += `## 3. What You Want to Work On\n\n`;
     const practiceIdxs = (contact.practice_selections || []) as number[];
-    if (practiceIdxs.length > 0) {
-      practiceIdxs.forEach((idx: number) => {
-        const p = PRACTICES[idx];
-        if (!p) return;
-        report += `### ${p.title}\n\n`;
-        report += `${p.rationale}\n\n`;
-        report += `**How we help:** ${p.help}\n\n`;
-      });
-    } else {
-      report += `*No practices selected — we'll discuss priorities on the call.*\n\n`;
-    }
-
-    // Section 4: Measurement Gaps
-    report += `## 4. What You're Measuring — and What You're Not\n\n`;
-    const unchecked = (contact.metrics_unchecked || []) as string[];
-    const checked = (contact.metrics_checked || []) as string[];
-    if (unchecked.length > 0) {
-      report += `**Not yet measuring** — These are metrics the most effective programs track that your portfolio isn't measuring yet.\n\n`;
-      unchecked.forEach((m: string) => { report += `- ${m}\n`; });
-      report += "\n";
-    }
-    if (checked.length > 0) {
-      report += `**Currently measuring:**\n\n`;
-      checked.forEach((m: string) => { report += `- ${m}\n`; });
-      report += "\n";
-    }
-
-    // Section 5: Sectors of Interest
-    report += `## 5. Sectors of Interest\n\n`;
+    const metricsChecked = (contact.metrics_checked || []) as string[];
+    const metricsUnchecked = (contact.metrics_unchecked || []) as string[];
     const sectors = (contact.selected_domains || []) as string[];
-    if (sectors.length > 0) {
-      sectors.forEach((s: string) => { report += `- ${s}\n`; });
-      report += "\n";
-    } else {
-      report += `*No sectors selected — we'll explore this on the call.*\n\n`;
-    }
 
-    // Section 6: Next Steps
-    report += `## 6. Next Steps\n\n`;
-    report += `- Email us at **${contactEmail}** to set up a time to talk.\n`;
-    if (bookingLink) {
-      report += `- Book a call directly: [Schedule a meeting](${bookingLink})\n`;
-    }
-    report += "\n";
+    // Build dimension results
+    const dimensionResults = QUIZ_DIMENSIONS.map(dim => {
+      const answer = quizAnswers.find(a => a.dimension === dim.dimension);
+      const isAdvanced = answer?.picked === "nextgen";
+      return {
+        dimension: dim.dimension,
+        picked: isAdvanced ? "advanced" as const : "conventional" as const,
+        pickedLabel: isAdvanced ? dim.nextgen : dim.traditional,
+        shift: dim.shift,
+        recommendation: dim.recommendation,
+      };
+    });
 
-    return new Response(JSON.stringify({ report }), {
+    const nextgenCount = dimensionResults.filter(d => d.picked === "advanced").length;
+    const conventionalDims = dimensionResults.filter(d => d.picked === "conventional");
+
+    // Generate AI executive summary + per-gap recommendations
+    const aiOutput = await generateAIInsights(quizAnswers, conventionalDims, pains, metricsUnchecked, QUIZ_DIMENSIONS);
+
+    const structuredReport = {
+      contact: {
+        firstName: contact.first_name,
+        lastName: contact.last_name,
+        organization: contact.organization || null,
+        email: contact.email,
+        date: new Date(contact.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+      },
+      readinessScore: contact.readiness_score ?? 50,
+      quizSummary: {
+        advancedCount: nextgenCount,
+        total: quizAnswers.length,
+      },
+      dimensionResults,
+      painPoints: pains.map(p => PAIN_LABELS[p] || p),
+      metricsTracked: metricsChecked,
+      metricsMissing: metricsUnchecked,
+      selectedPractices: practiceIdxs.map(i => PRACTICES[i]).filter(Boolean),
+      sectors,
+      executiveSummary: aiOutput.executiveSummary,
+      gapInsights: aiOutput.gapInsights,
+      contactEmail,
+      bookingLink,
+    };
+
+    return new Response(JSON.stringify({ report: structuredReport }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
@@ -278,17 +146,28 @@ serve(async (req) => {
   }
 });
 
-async function generateConnectiveParagraph(
+async function generateAIInsights(
   quizAnswers: Array<{ dimension: string; picked: string }>,
-  dimensions: typeof QUIZ_DIMENSIONS
-): Promise<string> {
+  conventionalDims: Array<{ dimension: string; shift: string }>,
+  pains: string[],
+  missingMetrics: string[],
+  allDims: typeof QUIZ_DIMENSIONS,
+): Promise<{ executiveSummary: string; gapInsights: Record<string, string> }> {
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-  if (!LOVABLE_API_KEY) return "Unable to generate analysis — API key not configured.";
+  if (!LOVABLE_API_KEY) {
+    return {
+      executiveSummary: "Analysis unavailable — API key not configured.",
+      gapInsights: {},
+    };
+  }
 
   const picks = quizAnswers.map(a => {
-    const dim = dimensions.find(d => d.dimension === a.dimension);
+    const dim = allDims.find(d => d.dimension === a.dimension);
     return `${a.dimension}: ${a.picked === "nextgen" ? "advanced" : "conventional"} — "${a.picked === "nextgen" ? dim?.nextgen : dim?.traditional}"`;
   }).join("\n");
+
+  const gapList = conventionalDims.map(d => d.dimension).join(", ");
+  const painList = pains.join(", ");
 
   try {
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -302,26 +181,69 @@ async function generateConnectiveParagraph(
         messages: [
           {
             role: "system",
-            content: `You write diagnostic analysis for philanthropic executives. You are direct, concise, and grounded in the data. No flattery, no speculation. Write exactly ONE paragraph, 3-4 sentences max, connecting the patterns across their quiz answers. Note which dimensions are advanced vs conventional and what gap that creates. Use specific dimension names. Do NOT use markdown formatting — just plain text.`,
+            content: `You write strategic diagnostic analysis for philanthropic executives funding $100M+ programs. You are direct, concise, and grounded. No flattery. You understand how conservative and corporate opponents fund media, culture, and policy infrastructure — and you reference this to show where gaps create strategic exposure.`,
           },
           {
             role: "user",
-            content: `Here are the quiz answers for a philanthropic executive:\n\n${picks}\n\nWrite a single short paragraph connecting the patterns across these answers.`,
+            content: `Philanthropic executive diagnostic data:
+
+Quiz answers (5 dimensions — Strategy, Content, Distribution, Engagement, Measurement):
+${picks}
+
+Conventional (gap) dimensions: ${gapList || "none"}
+Self-identified pain points: ${painList || "none"}
+Metrics NOT being tracked: ${missingMetrics.join(", ") || "none"}
+
+Generate structured insights using the tool provided.`,
           },
         ],
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "diagnostic_insights",
+              description: "Return executive summary and per-gap competitive insights.",
+              parameters: {
+                type: "object",
+                properties: {
+                  executive_summary: {
+                    type: "string",
+                    description: "3-4 sentences connecting patterns across dimensions. Reference how opponents/competitors fund in these areas. Identify the strategic exposure created by gaps. Be specific about which dimensions are strong vs exposed. No markdown formatting.",
+                  },
+                  gap_insights: {
+                    type: "object",
+                    description: "One insight per conventional dimension. Key = dimension name, value = 1-2 sentence insight about what competitors are doing differently in this area and the specific exposure it creates.",
+                    additionalProperties: { type: "string" },
+                  },
+                },
+                required: ["executive_summary", "gap_insights"],
+                additionalProperties: false,
+              },
+            },
+          },
+        ],
+        tool_choice: { type: "function", function: { name: "diagnostic_insights" } },
       }),
     });
 
     if (!resp.ok) {
-      const errText = await resp.text();
-      console.error("AI gateway error:", resp.status, errText);
-      return "Cross-dimensional analysis could not be generated at this time.";
+      console.error("AI gateway error:", resp.status, await resp.text());
+      return { executiveSummary: "Cross-dimensional analysis could not be generated at this time.", gapInsights: {} };
     }
 
     const data = await resp.json();
-    return data.choices?.[0]?.message?.content?.trim() || "Cross-dimensional analysis could not be generated.";
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+    if (toolCall?.function?.arguments) {
+      const parsed = JSON.parse(toolCall.function.arguments);
+      return {
+        executiveSummary: parsed.executive_summary || "",
+        gapInsights: parsed.gap_insights || {},
+      };
+    }
+
+    return { executiveSummary: "Analysis could not be generated.", gapInsights: {} };
   } catch (err) {
     console.error("AI call failed:", err);
-    return "Cross-dimensional analysis could not be generated at this time.";
+    return { executiveSummary: "Cross-dimensional analysis could not be generated at this time.", gapInsights: {} };
   }
 }
