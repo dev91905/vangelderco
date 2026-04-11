@@ -540,7 +540,7 @@ const Deck = () => {
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
       {currentFrame > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))" }}>
+        <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)" }}>
           <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             {/* Typeform-style thin progress bar */}
@@ -1195,7 +1195,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 9: Preliminary Results ═══ */}
-      <DeckFrame ref={setRef(8)} mode="wide">
+      <DeckFrame ref={setRef(8)} mode="wide" align="left">
         <div ref={r9.ref} style={{ width: "100%" }}>
           {(() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
@@ -1268,14 +1268,13 @@ const Deck = () => {
 
                 {/* Right column — dimension cards */}
                 <div
-                  className="flex flex-col gap-4 results-scrollbar lg:pr-3"
+                  className="flex flex-col gap-4 results-scrollbar lg:pr-3 max-h-[36vh] lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
                   data-results-scroll="true"
                   style={{
                     ...r9.stagger(2, 200, "slide-left"),
-                    maxHeight: "clamp(560px, calc(100dvh - 220px), 760px)",
                     overflowY: "auto",
                     overscrollBehavior: "contain",
-                    paddingBottom: "20px",
+                    paddingBottom: "80px",
                     paddingLeft: "clamp(0px, 1vw, 16px)",
                   }}
                 >
