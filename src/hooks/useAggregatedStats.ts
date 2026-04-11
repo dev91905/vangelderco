@@ -31,7 +31,7 @@ export function useAggregatedStats() {
 
       const [postsRes, csRes] = await Promise.all([
         postIds.length > 0
-          ? supabase.from("capability_posts").select("id, title, slug, capability, created_at").in("id", postIds)
+          ? supabase.from("capability_posts").select("id, title, slug, capability, type, created_at").in("id", postIds)
           : Promise.resolve({ data: [], error: null }),
         csIds.length > 0
           ? supabase.from("deck_case_studies").select("id, name, link_url, created_at").in("id", csIds)
