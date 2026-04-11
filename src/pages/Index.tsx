@@ -664,7 +664,7 @@ const Index = () => {
             {NETWORK_SECTORS.map((sector, i) => (
               <RevealBlock key={sector.name} delay={0.25 + i * 0.04}>
                 <div
-                  className="rounded-xl px-5 py-4 cursor-default"
+                  className="rounded-xl px-5 py-4 cursor-default h-full"
                   style={{
                     background: "hsl(var(--foreground) / var(--a-bg-subtle))",
                     border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
