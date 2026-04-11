@@ -563,6 +563,12 @@ const Deck = () => {
             </svg>
           </button>
         </div>
+        {/* Mobile progress bar — in header */}
+        {isMobile && currentFrame > 0 && (
+          <div style={{ marginTop: "10px", height: "2px", borderRadius: "1px", background: f.ink(0.06), overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`, background: "hsl(var(--foreground) / var(--a-mid))", borderRadius: "1px", transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)" }} />
+          </div>
+        )}
       </div>
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
@@ -575,34 +581,39 @@ const Deck = () => {
           }}
         >
           <div className="flex items-center pointer-events-auto" style={{ gap: "0" }}>
-            {/* Back — fixed-width column so progress bar stays centered */}
-            <div style={{ width: "140px", flexShrink: 0, display: "flex", justifyContent: "flex-start" }}>
+            {/* Back button */}
+            <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-start", ...(isMobile ? {} : { width: "140px" }) }}>
               <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
             </div>
 
-            {/* Progress bar — fills center */}
-            <div
-              style={{
-                flex: 1,
-                height: "3px",
-                borderRadius: "2px",
-                background: f.ink(0.06),
-                overflow: "hidden",
-              }}
-            >
+            {/* Progress bar — desktop/tablet only */}
+            {!isMobile && (
               <div
                 style={{
-                  height: "100%",
-                  width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
-                  background: "hsl(var(--foreground) / var(--a-mid))",
+                  flex: 1,
+                  height: "3px",
                   borderRadius: "2px",
-                  transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                  background: f.ink(0.06),
+                  overflow: "hidden",
                 }}
-              />
-            </div>
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${((currentFrame + 1) / TOTAL_FRAMES) * 100}%`,
+                    background: "hsl(var(--foreground) / var(--a-mid))",
+                    borderRadius: "2px",
+                    transition: "width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                  }}
+                />
+              </div>
+            )}
 
-            {/* Continue — fixed-width column matching Back */}
-            <div style={{ width: "140px", flexShrink: 0, display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
+            {/* Spacer on mobile to push Continue right */}
+            {isMobile && <div style={{ flex: 1 }} />}
+
+            {/* Continue button */}
+            <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden", ...(isMobile ? {} : { width: "140px" }) }}>
               <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
             </div>
           </div>
