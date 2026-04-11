@@ -1195,7 +1195,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 9: Preliminary Results ═══ */}
-      <DeckFrame ref={setRef(8)} mode="wide">
+      <DeckFrame ref={setRef(8)} mode="wide" align="left">
         <div ref={r9.ref} style={{ width: "100%" }}>
           {(() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
