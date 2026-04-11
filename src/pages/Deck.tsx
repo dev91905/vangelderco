@@ -1216,7 +1216,7 @@ const Deck = () => {
               >
                 {/* Left column — diagnostic card + retake + CTA */}
                 <div className="flex flex-col gap-5" style={{ alignSelf: "start" }}>
-                  <p style={{ ...r9.stagger(0, 0, "blur-up"), ...label("10px"), color: f.ink(0.3) }}>Preliminary results</p>
+                  
 
                   <div
                     style={{
