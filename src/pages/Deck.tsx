@@ -274,6 +274,7 @@ const Deck = () => {
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
   const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
+  const deepLinkedCase = useRef(false);
 
   /* ─── Fetch case studies from DB ─── */
   const { data: dbCaseStudies } = useQuery({
