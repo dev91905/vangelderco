@@ -963,7 +963,7 @@ const Deck = () => {
         <div ref={r5.ref} className="flex flex-col gap-8">
           <div>
             <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up") }}>
-              Which capabilities matter most to you right now?
+              What support do you need most right now?
             </p>
             <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "8px", ...r5.stagger(1, 200, "blur-up") }}>
               Select at least two. This helps us prioritize what to discuss.
