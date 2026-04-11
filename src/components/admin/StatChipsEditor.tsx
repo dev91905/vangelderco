@@ -26,7 +26,7 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
         {stats.map((stat, i) => {
           const hidden = stat.visible === false;
           return (
-            <div key={i} className="group relative flex flex-col px-4 py-3 min-w-[140px] max-w-[220px] transition-opacity rounded-xl"
+            <div key={i} className="group relative flex flex-col px-4 py-3 min-w-[140px] transition-opacity rounded-xl"
               style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}`, opacity: hidden ? 0.4 : 1 }}>
               <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => update(i, { visible: !hidden })} className="p-1 rounded transition-colors" style={{ color: t.ink(0.3) }}>
