@@ -8,6 +8,7 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
+import CaseCarousel from "@/components/deck/CaseCarousel";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
 import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import { useQuery } from "@tanstack/react-query";
