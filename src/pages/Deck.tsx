@@ -1509,33 +1509,93 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 10: Case Studies ═══ */}
-      <DeckFrame ref={setRef(9)} mode="wide">
-        <div ref={r10.ref} className="flex flex-col gap-8 w-full">
-          <div style={r10.stagger(0, 0, "blur-up")}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>Selected communications work.</p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>Click any case to read the full story.</p>
+      {/* ═══ FRAME 10: Case Studies — Infinite Scroll Gallery ═══ */}
+      <DeckFrame ref={setRef(9)} mode="full">
+        <div ref={r10.ref} className="flex flex-col gap-10 w-full" style={{ overflow: "hidden" }}>
+          <div style={{ ...r10.stagger(0, 0, "blur-up"), paddingLeft: "clamp(24px, 4vw, 80px)" }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>Selected work.</p>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6 }}>Tap any case to read more.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" style={r10.stagger(1, 300, "blur-scale")}>
-            {CASE_STUDIES.map((cs, i) => (
-              <button key={i} onClick={() => setSelectedCase(i)} className="text-left transition-all duration-300"
-                style={{
-                  padding: "20px 16px",
-                  background: cs.content ? "hsl(var(--foreground) / var(--a-high))" : "transparent",
-                  border: cs.content ? "none" : `1px solid ${f.ink(0.06)}`,
-                  borderRadius: "10px", cursor: "pointer",
-                  opacity: r10.isActive ? 1 : 0,
-                  transform: r10.isActive ? "translateY(0) scale(1)" : "translateY(12px) scale(0.95)",
-                  filter: r10.isActive ? "blur(0px)" : "blur(5px)",
-                  transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 60}ms`,
-                }}
-                onMouseEnter={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.15); } else { e.currentTarget.style.transform = "translateY(-2px)"; } }}
-                onMouseLeave={(e) => { if (!cs.content) { e.currentTarget.style.borderColor = f.ink(0.06); } else { e.currentTarget.style.transform = "translateY(0)"; } }}
-              >
-                <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 15px)", fontWeight: 700, color: cs.content ? "hsl(var(--primary-foreground))" : f.ink(0.5), marginBottom: "6px" }}>{cs.name}</p>
-                <p style={{ fontFamily: f.sans, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", lineHeight: "1.4", color: cs.content ? "hsl(var(--primary-foreground) / 0.7)" : f.ink(0.25) }}>{cs.outcome}</p>
-              </button>
-            ))}
+
+          {/* Marquee track — duplicated for seamless loop */}
+          <div
+            style={{
+              width: "100%",
+              overflow: "hidden",
+              maskImage: "linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%)",
+            }}
+            onMouseEnter={() => {
+              const el = document.querySelector("[data-marquee-track]") as HTMLElement;
+              if (el) el.style.animationPlayState = "paused";
+            }}
+            onMouseLeave={() => {
+              const el = document.querySelector("[data-marquee-track]") as HTMLElement;
+              if (el) el.style.animationPlayState = "running";
+            }}
+          >
+            <div
+              data-marquee-track
+              className="flex gap-5"
+              style={{
+                width: "max-content",
+                animation: r10.isActive ? "marquee-scroll 45s linear infinite" : "none",
+                opacity: r10.isActive ? 1 : 0,
+                transition: "opacity 0.6s ease",
+              }}
+            >
+              {[...CASE_STUDIES, ...CASE_STUDIES].map((cs, i) => {
+                const realIndex = i % CASE_STUDIES.length;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedCase(realIndex)}
+                    className="flex-shrink-0 text-left group"
+                    style={{
+                      width: "clamp(280px, 22vw, 360px)",
+                      padding: "clamp(24px, 2.5vw, 36px) clamp(20px, 2vw, 28px)",
+                      borderRadius: "16px",
+                      background: cs.content ? "hsl(var(--foreground))" : "transparent",
+                      border: cs.content ? "none" : `1px solid ${f.ink(0.08)}`,
+                      cursor: "pointer",
+                      transition: "transform 0.3s ease, border-color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      if (!cs.content) e.currentTarget.style.borderColor = f.ink(0.2);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      if (!cs.content) e.currentTarget.style.borderColor = f.ink(0.08);
+                    }}
+                  >
+                    <p style={{
+                      fontFamily: f.sans,
+                      fontSize: "clamp(15px, 1.6vw, 19px)",
+                      fontWeight: 700,
+                      color: cs.content ? "hsl(var(--primary-foreground))" : f.ink(0.7),
+                      marginBottom: "10px",
+                      lineHeight: 1.3,
+                    }}>{cs.name}</p>
+                    <p style={{
+                      fontFamily: f.sans,
+                      fontSize: "clamp(12px, 1.1vw, 14px)",
+                      color: cs.content ? "hsl(var(--primary-foreground) / 0.6)" : f.ink(0.35),
+                      lineHeight: 1.6,
+                      marginBottom: "14px",
+                    }}>{cs.issue}</p>
+                    <p style={{
+                      fontFamily: f.sans,
+                      fontSize: "10px",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      color: cs.content ? "hsl(var(--primary-foreground) / 0.5)" : f.ink(0.2),
+                    }}>{cs.outcome}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </DeckFrame>
