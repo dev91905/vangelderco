@@ -487,6 +487,7 @@ const Deck = () => {
       } else {
         // Last question answered — auto-advance to next frame
         setQuizStep(QUIZ_ROWS.length);
+        setQuizRevealed(true);
         setTimeout(() => scrollToFrame(3), 800);
       }
     }, 400);
