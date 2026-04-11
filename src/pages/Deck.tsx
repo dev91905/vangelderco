@@ -527,13 +527,13 @@ const Deck = () => {
         height: "100dvh",
         width: "100vw",
         overflowX: "hidden",
-        overflowY: isMobile ? "auto" : "hidden",
-        WebkitOverflowScrolling: "touch" as any,
-        overscrollBehaviorY: isMobile ? "contain" : "none",
-        scrollSnapType: isMobile ? "y proximity" : "none",
+        overflowY: isMobile ? "hidden" : "hidden",
+        overscrollBehaviorY: "none",
+        scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
         background: "hsl(var(--background))",
+        position: "relative",
       }}
     >
 
