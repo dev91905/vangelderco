@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
-import { useFieldNotes } from "@/hooks/useFieldNotes";
+
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
@@ -187,7 +187,7 @@ function ProofPoint({ metric, context, index }: { metric: string; context: strin
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
-  const { data: fieldNotes } = useFieldNotes();
+  
   const [scrollY, setScrollY] = useState(0);
   const [glowIndex, setGlowIndex] = useState(0);
 
