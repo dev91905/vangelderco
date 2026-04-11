@@ -1107,9 +1107,9 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "start", overflow: "hidden" }}>
-          {/* Left column — pinned, vertically centered */}
-          <div style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh" }}>
+          {/* Left column */}
+          <div style={{ ...r4.stagger(0, 0, "blur-up") }}>
             <p style={{ ...heading("clamp(22px, 2.8vw, 34px)"), fontWeight: 700 }}>
               Effective programs do three things.
             </p>
@@ -1118,7 +1118,7 @@ const Deck = () => {
             </p>
           </div>
           {/* Right column — accordion cards */}
-          <div className="flex flex-col gap-3" style={{ justifyContent: "center", minHeight: "100vh" }}>
+          <div className="flex flex-col gap-3">
             {[
               { title: "They activate every cultural lever.", rationale: "They don't just push content out — they work behind the scenes so platforms across different sectors are pulling the message in. Music, faith communities, creator ecosystems, campuses, legal networks. Not just strategic comms.", help: "We maintain a presence across the cultural ecosystem and recruit partners who carry your message before you launch." },
               { title: "They coordinate across sectors.", rationale: "Nothing moves until multiple sectors are pushing on the same thing. The most effective programs leverage cultural engagement to bring policy, industry, labor, grassroots, and other sectors to the table around a shared focal point.", help: "We leverage media and cultural distribution to bring sectors to the table and align them around shared interests." },
