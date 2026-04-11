@@ -1219,12 +1219,12 @@ const Deck = () => {
             {CAPABILITIES.map((cap, i) => {
               const isSelected = capabilitiesRanked.includes(cap.id);
               const desc = [
-                "Deep dive into your grantees, past investments, and institutional record.",
-                "Customized decision-making frameworks for evaluating and directing grants.",
-                "Cultural operatives across music, film/TV, digital, news. A 480-member network.",
+                "A deep dive into your grantees, past investments, and institutional track record.",
+                "Decision-making frameworks custom-built for how your organization evaluates grants.",
+                "Cultural operatives across music, film/TV, digital, and news. A 480-member network.",
                 "Co-designed around your objectives. Real indicators of power, not vanity metrics.",
-                "Your team learns to evaluate, strategize, and run multi-sector campaigns independently.",
-                "When the work surfaces a gap, we help build the infrastructure that doesn't exist yet.",
+                "Your team learns to evaluate, strategize, and run multi-sector campaigns on its own.",
+                "When the work surfaces a gap, we build the infrastructure that doesn't exist yet.",
               ][i];
               return (
                 <button
