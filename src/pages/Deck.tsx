@@ -1110,7 +1110,7 @@ const Deck = () => {
           {/* Left column — pinned */}
           <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
-              We've studied hundreds of organizations. The effective ones do three things.
+              The most effective programs do three things.
             </p>
             <p style={{ marginTop: "20px", fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.4), lineHeight: 1.7 }}>
               A campaign can get tens of millions of views and still fail — if it doesn't do these three things.
