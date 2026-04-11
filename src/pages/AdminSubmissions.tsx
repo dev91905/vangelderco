@@ -389,7 +389,7 @@ const AdminSubmissions = () => {
             <ArrowLeft className="w-3 h-3" /> Admin
           </Link>
           <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
-            Submissions
+            Diagnostic Results
           </h1>
           {contacts && (
             <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.cream, background: t.ink(0.7), padding: "1px 8px", borderRadius: "999px" }}>
