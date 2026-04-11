@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCreatePost, useUpdatePost, useDeletePost, PostFormData } from "@/hooks/usePostMutations";
+import { usePostImpactStats, useSyncImpactStats, ImpactStat } from "@/hooks/useImpactStats";
 import EditorMetaBar from "@/components/admin/EditorMetaBar";
 import BlockCanvas from "@/components/admin/BlockCanvas";
 import StatChipsEditor from "@/components/admin/StatChipsEditor";
@@ -20,6 +21,8 @@ const TYPE_OPTIONS = [
   { value: "field-note", label: "Field Note", desc: "Quick signal with impact stat", icon: Zap },
 ] as const;
 
+type StatDraft = Omit<ImpactStat, "post_id" | "case_study_id" | "phase_title" | "sort_order"> & { id: string };
+
 const AdminEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,6 +30,7 @@ const AdminEditor = () => {
   const createPost = useCreatePost();
   const updatePost = useUpdatePost();
   const deletePost = useDeletePost();
+  const syncStats = useSyncImpactStats();
 
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
@@ -37,7 +41,7 @@ const AdminEditor = () => {
   const [isPublished, setIsPublished] = useState(false);
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [contentBlocks, setContentBlocks] = useState<any[]>([]);
-  const [stats, setStats] = useState<any[]>([]);
+  const [stats, setStats] = useState<StatDraft[]>([]);
   const [password, setPassword] = useState<string | null>(null);
   const [isFeatured, setIsFeatured] = useState(false);
   const [sectorLabel, setSectorLabel] = useState<string | null>(null);
@@ -48,6 +52,7 @@ const AdminEditor = () => {
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasLoadedRef = useRef(false);
+  const statsLoadedRef = useRef(false);
 
   const { data: post, isLoading } = useQuery({
     queryKey: ["admin-post", id],
@@ -59,6 +64,9 @@ const AdminEditor = () => {
     },
     enabled: !!id,
   });
+
+  // Load impact stats for this post
+  const { data: impactStats } = usePostImpactStats(id);
 
   useEffect(() => {
     if (post && !hasLoadedRef.current) {
@@ -72,7 +80,6 @@ const AdminEditor = () => {
       setIsPublished(post.is_published);
       setPublishedAt(post.published_at);
       setContentBlocks(Array.isArray(post.content_blocks) ? post.content_blocks as any[] : []);
-      setStats(Array.isArray(post.stats) ? post.stats as any[] : []);
       setPassword((post as any).password || null);
       setIsFeatured((post as any).is_featured || false);
       setSectorLabel((post as any).sector_label || null);
@@ -82,12 +89,25 @@ const AdminEditor = () => {
     }
   }, [post]);
 
+  // Load impact stats into local state
+  useEffect(() => {
+    if (impactStats && !statsLoadedRef.current) {
+      statsLoadedRef.current = true;
+      setStats(impactStats.map(s => ({
+        id: s.id,
+        label: s.label,
+        description: s.description,
+        visible: s.visible,
+      })));
+    }
+  }, [impactStats]);
+
   const formData = useCallback((): PostFormData => ({
     title, slug, type: type || "blog-post", capability,
     excerpt: excerpt || null, content: null,
     hero_image_url: type === "field-note" ? null : heroImageUrl,
     content_blocks: type === "field-note" ? [] : contentBlocks,
-    stats: type === "case-study" ? stats : null,
+    stats: null, // Stats now live in impact_stats table
     password: type === "field-note" ? null : (password || null),
     is_published: isPublished,
     published_at: publishedAt,
@@ -95,7 +115,7 @@ const AdminEditor = () => {
     sector_label: sectorLabel || null,
     featured_stat: featuredStat || null,
     link_url: linkUrl || null,
-  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, stats, password, isPublished, publishedAt, isFeatured, sectorLabel, featuredStat, linkUrl]);
+  }), [title, excerpt, slug, type, capability, heroImageUrl, contentBlocks, password, isPublished, publishedAt, isFeatured, sectorLabel, featuredStat, linkUrl]);
 
   const handleSave = useCallback(async () => {
     if (!title.trim()) { toast.error("Title is required"); return; }
@@ -104,16 +124,31 @@ const AdminEditor = () => {
     setSaveStatus("saving");
     if (isNew) {
       createPost.mutate(formData(), {
-        onSuccess: (data) => { setDirty(false); setSaveStatus("saved"); navigate(`/admin/edit/${data.id}`, { replace: true }); },
+        onSuccess: (data) => {
+          // Sync stats with the new post ID
+          if (type === "case-study" && stats.length > 0) {
+            syncStats.mutate({ postId: data.id, stats: stats.map((s, i) => ({ ...s, post_id: data.id, case_study_id: null, phase_title: null, sort_order: i })) });
+          }
+          setDirty(false);
+          setSaveStatus("saved");
+          navigate(`/admin/edit/${data.id}`, { replace: true });
+        },
         onError: () => { setDirty(false); setSaveStatus("idle"); },
       });
     } else {
       updatePost.mutate({ id: id!, data: formData() }, {
-        onSuccess: () => { setDirty(false); setSaveStatus("saved"); },
+        onSuccess: () => {
+          // Sync stats
+          if (type === "case-study") {
+            syncStats.mutate({ postId: id!, stats: stats.map((s, i) => ({ ...s, post_id: id!, case_study_id: null, phase_title: null, sort_order: i })) });
+          }
+          setDirty(false);
+          setSaveStatus("saved");
+        },
         onError: () => { setDirty(false); setSaveStatus("idle"); },
       });
     }
-  }, [isNew, id, formData, createPost, updatePost, navigate, title, slug, type]);
+  }, [isNew, id, formData, createPost, updatePost, navigate, title, slug, type, stats, syncStats]);
 
   useEffect(() => {
     if (!dirty || isNew) return;
@@ -159,55 +194,34 @@ const AdminEditor = () => {
     );
   }
 
-  // Type selector for new posts — shown before anything else
+  // Type selector for new posts
   if (isNew && !type) {
     return (
       <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(var(--background))", colorScheme: "light" }}>
-        {/* Minimal toolbar */}
         <div className="flex items-center px-4 md:px-6 py-2 sticky top-0 z-40" style={{ borderBottom: `1px solid ${t.ink(0.06)}` }}>
           <button onClick={() => navigate("/admin")} className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
             <ArrowLeft className="w-4 h-4" style={{ color: t.ink(0.4) }} />
           </button>
         </div>
-
-        {/* Type chooser */}
         <div className="flex-1 flex items-center justify-center px-6">
           <div className="w-full max-w-[640px]">
             <div className="text-center mb-12">
-              <h1 className="text-[28px] font-semibold mb-3" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
-                New Content
-              </h1>
-              <p className="text-[15px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
-                What are you creating?
-              </p>
+              <h1 className="text-[28px] font-semibold mb-3" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>New Content</h1>
+              <p className="text-[15px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>What are you creating?</p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {TYPE_OPTIONS.map(({ value, label, desc, icon: Icon }) => (
                 <button
                   key={value}
                   onClick={() => setType(value)}
                   className="group text-left p-6 rounded-2xl transition-all duration-200"
-                  style={{
-                    border: `1px solid ${t.ink(0.08)}`,
-                    background: "transparent",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = t.ink(0.2);
-                    e.currentTarget.style.background = t.ink(0.02);
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = t.ink(0.08);
-                    e.currentTarget.style.background = "transparent";
-                  }}
+                  style={{ border: `1px solid ${t.ink(0.08)}`, background: "transparent" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.ink(0.2); e.currentTarget.style.background = t.ink(0.02); }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = t.ink(0.08); e.currentTarget.style.background = "transparent"; }}
                 >
                   <Icon className="w-5 h-5 mb-4" style={{ color: t.ink(0.3) }} />
-                  <div className="text-[15px] font-medium mb-1.5" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>
-                    {label}
-                  </div>
-                  <div className="text-[13px] leading-relaxed" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
-                    {desc}
-                  </div>
+                  <div className="text-[15px] font-medium mb-1.5" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>{label}</div>
+                  <div className="text-[13px] leading-relaxed" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{desc}</div>
                 </button>
               ))}
             </div>
@@ -227,24 +241,16 @@ const AdminEditor = () => {
       <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(var(--background) / 0.9)", borderBottom: `1px solid ${t.ink(0.06)}` }}>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => {
-              if (dirty) { setShowLeaveDialog(true); return; }
-              navigate("/admin");
-            }}
+            onClick={() => { if (dirty) { setShowLeaveDialog(true); return; } navigate("/admin"); }}
             className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl"
           >
             <ArrowLeft className="w-4 h-4" style={{ color: t.ink(0.4) }} />
           </button>
-          {/* Type indicator */}
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: t.ink(0.03) }}>
             <TypeIcon className="w-3 h-3" style={{ color: t.ink(0.3) }} />
-            <span className="text-[11px] font-medium" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
-              {typeInfo?.label}
-            </span>
+            <span className="text-[11px] font-medium" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>{typeInfo?.label}</span>
           </div>
-          <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>
-            {title || "Untitled"}
-          </span>
+          <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{title || "Untitled"}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[12px] mr-2" style={{ fontFamily: t.sans, color: saveStatus === "saving" ? t.ink(0.5) : saveStatus === "saved" ? "hsl(150 40% 40% / 0.7)" : dirty ? t.ink(0.4) : t.ink(0.15) }}>
@@ -287,7 +293,6 @@ const AdminEditor = () => {
         {currentType === "field-note" && (
           <div className="px-6 md:px-8 pt-10 pb-16 max-w-[560px] mx-auto">
             <div className="space-y-10">
-              {/* Slug line */}
               <div className="group">
                 <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Slug Line</label>
                 <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)}
@@ -295,16 +300,13 @@ const AdminEditor = () => {
                   className="w-full bg-transparent outline-none pb-3"
                   style={{ fontFamily: t.sans, color: t.ink(0.75), fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase", borderBottom: `1px solid ${t.ink(0.08)}` }} />
               </div>
-              {/* Brief */}
               <div className="group">
                 <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Brief</label>
                 <textarea value={excerpt} onChange={(e) => markDirty(setExcerpt)(e.target.value)}
-                  placeholder="What happened. What was accomplished."
-                  rows={3}
+                  placeholder="What happened. What was accomplished." rows={3}
                   className="w-full bg-transparent outline-none resize-none pb-3"
                   style={{ fontFamily: t.sans, color: t.ink(0.7), fontSize: "15px", lineHeight: "1.75", borderBottom: `1px solid ${t.ink(0.08)}` }} />
               </div>
-              {/* Impact stat */}
               <div className="group">
                 <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Impact Stat</label>
                 <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)}
@@ -312,7 +314,6 @@ const AdminEditor = () => {
                   className="w-full bg-transparent outline-none pb-3"
                   style={{ fontFamily: t.sans, color: t.ink(0.7), fontSize: "15px", borderBottom: `1px solid ${t.ink(0.08)}` }} />
               </div>
-              {/* Link */}
               <div className="group">
                 <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
                   Link <span style={{ color: t.ink(0.15), textTransform: "none", letterSpacing: "0", fontSize: "10px" }}>optional</span>
