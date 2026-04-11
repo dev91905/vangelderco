@@ -979,7 +979,7 @@ const Deck = () => {
               const desc = [
                 "A deep dive into your grantees, past investments, and institutional track record.",
                 "Portfolio strategy custom-built for how your organization evaluates impact.",
-                "Cultural operatives across music, film/TV, digital, and news. A 480-member network.",
+                "Top executives across music, film/TV, digital, and news.",
                 "Co-designed around your objectives. Real indicators of power, not vanity metrics.",
                 "Your team learns to evaluate, strategize, and run multi-sector campaigns on its own.",
                 "When the work surfaces a gap, we build the infrastructure that doesn't exist yet.",
