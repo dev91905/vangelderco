@@ -227,7 +227,6 @@ const Admin = () => {
 };
 
 export default Admin;
-  const [open, setOpen] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"date" | "score">("score");
   const { data: contacts, isLoading } = useQuery({
