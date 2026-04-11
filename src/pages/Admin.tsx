@@ -74,7 +74,20 @@ const Admin = () => {
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [articlesOpen, setArticlesOpen] = useState(true);
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(true);
   const { data: settings } = useSiteSettings();
+
+  const { data: contacts } = useQuery({
+    queryKey: ["deck-contacts-full"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deck_contacts" as any)
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+  });
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
   const [bookingLink, setBookingLink] = useState<string>("");
