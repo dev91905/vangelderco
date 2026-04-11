@@ -6,6 +6,23 @@ import type { CaseStudyData } from "./CaseTimelineOverlay";
 
 const f = { sans: t.sans, ink: t.ink };
 
+/* ── Shared design tokens for card ↔ timeline cohesion ── */
+const TOKEN = {
+  radius: "16px",
+  tagBg: f.ink(0.04),
+  tagBorder: `1px solid ${f.ink(0.06)}`,
+  tagFont: {
+    fontFamily: f.sans,
+    fontSize: "10px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+    fontWeight: 600,
+    color: f.ink(0.3),
+  },
+  cardBorder: f.ink(0.06),
+  cardBorderHover: f.ink(0.12),
+};
+
 interface Props {
   studies: CaseStudyData[];
   isActive: boolean;
@@ -56,7 +73,6 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
         <div className="flex" style={{ gap: "clamp(16px, 1.5vw, 24px)", paddingTop: "12px", paddingBottom: "12px" }}>
           {studies.map((cs, i) => {
             const hasPhases = cs.phases && (cs.phases as unknown[]).length > 0;
-            const isHovered = false; // handled via CSS
 
             return (
               <button
@@ -66,7 +82,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                 style={{
                   width: "clamp(320px, 26vw, 420px)",
                   minHeight: "clamp(240px, 22vh, 320px)",
-                  borderRadius: "20px",
+                  borderRadius: TOKEN.radius,
                   padding: "0",
                   overflow: "hidden",
                   cursor: "pointer",
@@ -86,42 +102,43 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                   className="flex flex-col justify-between h-full relative"
                   style={{
                     padding: "clamp(28px, 3vw, 40px) clamp(24px, 2.5vw, 36px)",
-                    borderRadius: "20px",
+                    borderRadius: TOKEN.radius,
                     minHeight: "clamp(240px, 22vh, 320px)",
-                    background: hasPhases
-                      ? `linear-gradient(145deg, ${f.ink(0.06)}, ${f.ink(0.02)})`
-                      : "transparent",
-                    border: `1px solid ${f.ink(hasPhases ? 0.06 : 0.06)}`,
+                    background: f.ink(0.02),
+                    border: `1px solid ${TOKEN.cardBorder}`,
                     transition: "border-color 0.4s ease, background 0.4s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = f.ink(0.15);
+                    e.currentTarget.style.borderColor = TOKEN.cardBorderHover;
+                    e.currentTarget.style.background = f.ink(0.04);
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = f.ink(0.06);
+                    e.currentTarget.style.borderColor = TOKEN.cardBorder;
+                    e.currentTarget.style.background = f.ink(0.02);
                   }}
                 >
                   {/* Top section */}
                   <div className="flex flex-col gap-3">
-                    {/* Issue tag */}
+                    {/* Phase count tag — matches timeline tag style */}
                     <div
-                      className="inline-flex self-start px-3 py-1 rounded-full"
+                      className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full"
                       style={{
-                        background: f.ink(0.04),
-                        border: `1px solid ${f.ink(0.06)}`,
+                        background: TOKEN.tagBg,
+                        border: TOKEN.tagBorder,
                       }}
                     >
-                      <span
-                        style={{
-                          fontFamily: f.sans,
-                          fontSize: "10px",
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          fontWeight: 600,
-                          color: f.ink(0.35),
-                        }}
-                      >
-                        {hasPhases ? "Full Timeline" : "Coming Soon"}
+                      {hasPhases && (
+                        <div style={{
+                          width: "4px",
+                          height: "4px",
+                          borderRadius: "50%",
+                          background: f.ink(0.25),
+                        }} />
+                      )}
+                      <span style={TOKEN.tagFont}>
+                        {hasPhases
+                          ? `${(cs.phases as unknown[]).length} Phases`
+                          : "Coming Soon"}
                       </span>
                     </div>
 
@@ -139,6 +156,14 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                     >
                       {cs.name}
                     </h3>
+
+                    {/* Accent line — same as timeline */}
+                    <div style={{
+                      width: "24px",
+                      height: "2px",
+                      background: f.ink(0.1),
+                      borderRadius: "1px",
+                    }} />
 
                     {/* Issue description */}
                     <p
@@ -159,7 +184,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                       style={{
                         fontFamily: f.sans,
                         fontSize: "clamp(11px, 1vw, 13px)",
-                        color: f.ink(0.3),
+                        color: f.ink(0.25),
                         lineHeight: 1.6,
                         flex: 1,
                       }}
@@ -172,7 +197,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                         width: "36px",
                         height: "36px",
                         border: `1px solid ${f.ink(0.08)}`,
-                        color: f.ink(0.25),
+                        color: f.ink(0.2),
                         transition: "all 0.4s ease",
                       }}
                     >
@@ -207,7 +232,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
               style={{
                 width: activeIdx === i ? "24px" : "6px",
                 height: "6px",
-                background: f.ink(activeIdx === i ? 0.5 : 0.12),
+                background: f.ink(activeIdx === i ? 0.4 : 0.1),
                 border: "none",
                 cursor: "pointer",
               }}
@@ -217,56 +242,37 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
 
         {/* Arrows */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => emblaApi?.scrollPrev()}
-            disabled={!canPrev}
-            className="flex items-center justify-center rounded-full transition-all duration-300"
-            style={{
-              width: "40px",
-              height: "40px",
-              border: `1px solid ${f.ink(canPrev ? 0.1 : 0.04)}`,
-              color: f.ink(canPrev ? 0.5 : 0.12),
-              background: "transparent",
-              cursor: canPrev ? "pointer" : "default",
-            }}
-            onMouseEnter={(e) => {
-              if (canPrev) {
-                e.currentTarget.style.background = f.ink(0.04);
-                e.currentTarget.style.borderColor = f.ink(0.2);
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.borderColor = f.ink(canPrev ? 0.1 : 0.04);
-            }}
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => emblaApi?.scrollNext()}
-            disabled={!canNext}
-            className="flex items-center justify-center rounded-full transition-all duration-300"
-            style={{
-              width: "40px",
-              height: "40px",
-              border: `1px solid ${f.ink(canNext ? 0.1 : 0.04)}`,
-              color: f.ink(canNext ? 0.5 : 0.12),
-              background: "transparent",
-              cursor: canNext ? "pointer" : "default",
-            }}
-            onMouseEnter={(e) => {
-              if (canNext) {
-                e.currentTarget.style.background = f.ink(0.04);
-                e.currentTarget.style.borderColor = f.ink(0.2);
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.borderColor = f.ink(canNext ? 0.1 : 0.04);
-            }}
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          {[
+            { dir: "prev", can: canPrev, action: () => emblaApi?.scrollPrev(), Icon: ChevronLeft },
+            { dir: "next", can: canNext, action: () => emblaApi?.scrollNext(), Icon: ChevronRight },
+          ].map(({ dir, can, action, Icon }) => (
+            <button
+              key={dir}
+              onClick={action}
+              disabled={!can}
+              className="flex items-center justify-center rounded-full transition-all duration-300"
+              style={{
+                width: "40px",
+                height: "40px",
+                border: `1px solid ${f.ink(can ? 0.08 : 0.04)}`,
+                color: f.ink(can ? 0.4 : 0.1),
+                background: "transparent",
+                cursor: can ? "pointer" : "default",
+              }}
+              onMouseEnter={(e) => {
+                if (can) {
+                  e.currentTarget.style.background = f.ink(0.04);
+                  e.currentTarget.style.borderColor = f.ink(0.15);
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = f.ink(can ? 0.08 : 0.04);
+              }}
+            >
+              <Icon className="w-4 h-4" />
+            </button>
+          ))}
         </div>
       </div>
     </div>

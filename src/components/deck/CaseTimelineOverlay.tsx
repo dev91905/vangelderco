@@ -4,6 +4,21 @@ import { t } from "@/lib/theme";
 
 const f = { sans: t.sans, ink: t.ink, cream: t.cream };
 
+/* ── Shared design tokens (mirroring CaseCarousel) ── */
+const TOKEN = {
+  radius: "16px",
+  tagBg: f.ink(0.04),
+  tagBorder: `1px solid ${f.ink(0.06)}`,
+  tagFont: {
+    fontFamily: f.sans,
+    fontSize: "10px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+    fontWeight: 600,
+    color: f.ink(0.3),
+  } as React.CSSProperties,
+};
+
 export type CasePhase = {
   title: string;
   date?: string;
@@ -30,7 +45,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activePhase, setActivePhase] = useState(0);
 
-  // Reset state when study changes
   useEffect(() => {
     if (study) {
       setVisiblePhases(new Set());
@@ -46,7 +60,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
     }
   }, [study]);
 
-  // Map vertical scroll to horizontal scroll + track progress
   const handleWheel = useCallback((e: WheelEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -80,7 +93,6 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
     };
   }, [handleWheel, handleScroll, study]);
 
-  // Escape key
   useEffect(() => {
     if (!study) return;
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -103,7 +115,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
     >
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between px-8 md:px-14 py-6 flex-shrink-0">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5">
           <button
             onClick={onClose}
             className="flex items-center justify-center rounded-full transition-all duration-300"
@@ -111,88 +123,98 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
               width: "40px",
               height: "40px",
               border: `1px solid ${f.ink(0.08)}`,
-              color: f.ink(0.35),
+              color: f.ink(0.3),
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = f.ink(0.05);
-              e.currentTarget.style.color = f.ink(0.7);
+              e.currentTarget.style.background = f.ink(0.04);
+              e.currentTarget.style.borderColor = f.ink(0.15);
+              e.currentTarget.style.color = f.ink(0.6);
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = f.ink(0.35);
+              e.currentTarget.style.borderColor = f.ink(0.08);
+              e.currentTarget.style.color = f.ink(0.3);
             }}
           >
             <X className="w-4 h-4" />
           </button>
-          <div>
-            <p style={{
-              fontFamily: f.sans,
-              fontSize: "10px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              fontWeight: 600,
-              color: f.ink(0.25),
-              marginBottom: "4px",
-            }}>
-              Case Study
-            </p>
+          <div className="flex items-center gap-4">
+            {/* Tag — same pill as carousel cards */}
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full"
+              style={{ background: TOKEN.tagBg, border: TOKEN.tagBorder }}
+            >
+              <div style={{
+                width: "4px",
+                height: "4px",
+                borderRadius: "50%",
+                background: f.ink(0.25),
+              }} />
+              <span style={TOKEN.tagFont}>Case Study</span>
+            </div>
             <h2 style={{
               fontFamily: f.sans,
-              fontSize: "clamp(18px, 2vw, 26px)",
+              fontSize: "clamp(18px, 2vw, 24px)",
               fontWeight: 700,
               color: f.ink(0.85),
-              letterSpacing: "-0.025em",
+              letterSpacing: "-0.02em",
             }}>
               {study.name}
             </h2>
           </div>
         </div>
 
-        {/* Phase counter */}
+        {/* Phase counter + progress — mirrors carousel dots rhythm */}
         {hasPhases && (
           <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              {study.phases!.map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width: activePhase === i ? "24px" : "6px",
+                    height: "6px",
+                    background: f.ink(activePhase === i ? 0.4 : 0.1),
+                  }}
+                />
+              ))}
+            </div>
             <span style={{
               fontFamily: f.sans,
               fontSize: "11px",
-              color: f.ink(0.25),
+              color: f.ink(0.2),
               letterSpacing: "0.06em",
-              textTransform: "uppercase",
               fontWeight: 500,
             }}>
               {String(activePhase + 1).padStart(2, "0")} / {String(totalPhases).padStart(2, "0")}
             </span>
-            {/* Mini progress bar */}
-            <div style={{
-              width: "80px",
-              height: "2px",
-              background: f.ink(0.06),
-              borderRadius: "1px",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                width: `${scrollProgress * 100}%`,
-                height: "100%",
-                background: f.ink(0.35),
-                borderRadius: "1px",
-                transition: "width 0.15s ease-out",
-              }} />
-            </div>
           </div>
         )}
       </div>
 
       {/* ── Issue bar ── */}
       {hasPhases && (
-        <div className="px-8 md:px-14 pb-6 flex-shrink-0">
-          <p style={{
-            fontFamily: f.sans,
-            fontSize: "clamp(13px, 1.3vw, 16px)",
-            color: f.ink(0.35),
-            lineHeight: 1.6,
-            maxWidth: "600px",
-          }}>
-            {study.issue}
-          </p>
+        <div className="px-8 md:px-14 pb-5 flex-shrink-0">
+          <div className="flex items-start gap-4">
+            <div style={{
+              width: "24px",
+              height: "2px",
+              background: f.ink(0.1),
+              borderRadius: "1px",
+              marginTop: "10px",
+              flexShrink: 0,
+            }} />
+            <p style={{
+              fontFamily: f.sans,
+              fontSize: "clamp(13px, 1.3vw, 15px)",
+              color: f.ink(0.35),
+              lineHeight: 1.7,
+              maxWidth: "600px",
+            }}>
+              {study.issue}
+            </p>
+          </div>
         </div>
       )}
 
@@ -242,12 +264,12 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                     <div className="flex-1 flex flex-col justify-center" style={{
                       paddingRight: "clamp(32px, 3vw, 60px)",
                     }}>
-                      {/* Phase number + date */}
-                      <div className="flex items-baseline gap-3 mb-4">
+                      {/* Phase number + date — same tag pill style */}
+                      <div className="flex items-center gap-3 mb-4">
                         <span style={{
                           fontFamily: f.sans,
-                          fontSize: "clamp(48px, 5vw, 72px)",
-                          fontWeight: 200,
+                          fontSize: "clamp(36px, 4vw, 56px)",
+                          fontWeight: 700,
                           color: f.ink(0.06),
                           lineHeight: 1,
                           letterSpacing: "-0.04em",
@@ -255,54 +277,50 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         {phase.date && (
-                          <span style={{
-                            fontFamily: f.sans,
-                            fontSize: "11px",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            fontWeight: 600,
-                            color: f.ink(0.25),
-                          }}>
-                            {phase.date}
-                          </span>
+                          <div
+                            className="inline-flex items-center px-3 py-1 rounded-full"
+                            style={{ background: TOKEN.tagBg, border: TOKEN.tagBorder }}
+                          >
+                            <span style={TOKEN.tagFont}>{phase.date}</span>
+                          </div>
                         )}
                       </div>
 
-                      {/* Title */}
+                      {/* Title — same size/weight as card titles */}
                       <h3 style={{
                         fontFamily: f.sans,
-                        fontSize: "clamp(20px, 2.2vw, 28px)",
+                        fontSize: "clamp(18px, 2vw, 24px)",
                         fontWeight: 700,
                         color: f.ink(0.85),
-                        lineHeight: 1.2,
+                        lineHeight: 1.25,
                         letterSpacing: "-0.02em",
                         marginBottom: "12px",
                       }}>
                         {phase.title}
                       </h3>
 
-                      {/* Accent line */}
+                      {/* Accent line — same as card */}
                       <div style={{
-                        width: "32px",
+                        width: "24px",
                         height: "2px",
-                        background: f.ink(isLast ? 0.35 : 0.1),
+                        background: f.ink(isLast ? 0.3 : 0.1),
                         borderRadius: "1px",
-                        marginBottom: "16px",
+                        marginBottom: "14px",
                         transition: "background 0.6s ease",
                       }} />
 
-                      {/* Description */}
+                      {/* Description — same body style as card issue text */}
                       <p style={{
                         fontFamily: f.sans,
-                        fontSize: "clamp(13px, 1.3vw, 15px)",
-                        color: f.ink(0.45),
-                        lineHeight: 1.85,
+                        fontSize: "clamp(13px, 1.2vw, 15px)",
+                        color: f.ink(0.4),
+                        lineHeight: 1.7,
                         maxWidth: "380px",
                       }}>
                         {phase.description}
                       </p>
 
-                      {/* Stats — final phase results */}
+                      {/* Stats — using same card-like containers */}
                       {hasStats && (
                         <div className="flex flex-wrap gap-3 mt-6">
                           {phase.stats!.map((stat, si) => (
@@ -310,30 +328,25 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
                               key={si}
                               className="flex flex-col"
                               style={{
-                                padding: "16px 20px",
-                                borderRadius: "12px",
-                                background: f.ink(0.03),
-                                border: `1px solid ${f.ink(0.05)}`,
+                                padding: "14px 18px",
+                                borderRadius: TOKEN.radius,
+                                background: f.ink(0.02),
+                                border: `1px solid ${f.ink(0.06)}`,
                               }}
                             >
                               <span style={{
                                 fontFamily: f.sans,
-                                fontSize: "clamp(20px, 2.2vw, 28px)",
+                                fontSize: "clamp(18px, 2vw, 24px)",
                                 fontWeight: 700,
-                                color: f.ink(0.8),
+                                color: f.ink(0.85),
                                 letterSpacing: "-0.02em",
                                 lineHeight: 1,
                               }}>
                                 {stat.value}
                               </span>
                               <span style={{
-                                fontFamily: f.sans,
-                                fontSize: "10px",
-                                letterSpacing: "0.1em",
-                                textTransform: "uppercase",
-                                fontWeight: 500,
+                                ...TOKEN.tagFont,
                                 marginTop: "6px",
-                                color: f.ink(0.3),
                               }}>
                                 {stat.label}
                               </span>
@@ -345,30 +358,28 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
 
                     {/* ── Bottom timeline track ── */}
                     <div className="flex-shrink-0 flex items-center" style={{ height: "60px", paddingRight: "clamp(32px, 3vw, 60px)" }}>
-                      {/* Node */}
                       <div className="relative flex-shrink-0" style={{
                         width: isLast ? "12px" : isFirst ? "10px" : "6px",
                         height: isLast ? "12px" : isFirst ? "10px" : "6px",
                         borderRadius: "50%",
                         background: isVisible
-                          ? isLast ? f.ink(0.6) : isFirst ? f.ink(0.4) : f.ink(0.2)
+                          ? isLast ? f.ink(0.5) : isFirst ? f.ink(0.35) : f.ink(0.15)
                           : f.ink(0.06),
                         transition: "all 0.8s ease",
-                        boxShadow: isLast && isVisible ? `0 0 24px ${f.ink(0.15)}` : "none",
+                        boxShadow: isLast && isVisible ? `0 0 20px ${f.ink(0.12)}` : "none",
                       }}>
                         {isLast && isVisible && (
                           <div className="absolute rounded-full" style={{
                             inset: "-4px",
-                            border: `1px solid ${f.ink(0.1)}`,
+                            border: `1px solid ${f.ink(0.08)}`,
                             borderRadius: "50%",
                           }} />
                         )}
                       </div>
-                      {/* Connecting line */}
                       {!isLast && (
                         <div className="flex-1" style={{
                           height: "1px",
-                          background: `linear-gradient(to right, ${f.ink(isVisible ? 0.12 : 0.04)}, ${f.ink(visiblePhases.has(i + 1) ? 0.12 : 0.03)})`,
+                          background: `linear-gradient(to right, ${f.ink(isVisible ? 0.1 : 0.04)}, ${f.ink(visiblePhases.has(i + 1) ? 0.1 : 0.03)})`,
                           transition: "background 1s ease",
                         }} />
                       )}
@@ -379,65 +390,55 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
             </div>
           </div>
 
-          {/* Scroll hint — bottom right */}
+          {/* Scroll hint */}
           <div className="absolute bottom-6 right-8 md:right-14 flex items-center gap-2" style={{
-            opacity: scrollProgress < 0.1 ? 0.6 : 0,
+            opacity: scrollProgress < 0.1 ? 0.5 : 0,
             transition: "opacity 0.5s ease",
             pointerEvents: "none",
           }}>
             <p style={{
               fontFamily: f.sans,
               fontSize: "11px",
-              color: f.ink(0.25),
-              letterSpacing: "0.04em",
+              color: f.ink(0.2),
+              letterSpacing: "0.06em",
             }}>
               Scroll to explore
             </p>
-            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" style={{ color: f.ink(0.2) }}>
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" style={{ color: f.ink(0.15) }}>
               <path d="M1 6h16M13 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>
       ) : (
-        /* Coming soon state */
         <div className="flex-1 flex flex-col items-center justify-center gap-8 px-8">
           <div className="text-center max-w-lg">
             <p style={{
               fontFamily: f.sans,
-              fontSize: "clamp(15px, 1.6vw, 20px)",
+              fontSize: "clamp(15px, 1.6vw, 18px)",
               color: f.ink(0.4),
               lineHeight: 1.7,
               marginBottom: "24px",
             }}>
               {study.issue}
             </p>
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full" style={{
-              background: f.ink(0.03),
-              border: `1px solid ${f.ink(0.06)}`,
-            }}>
+            <div
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full"
+              style={{ background: TOKEN.tagBg, border: TOKEN.tagBorder }}
+            >
               <div style={{
-                width: "5px",
-                height: "5px",
+                width: "4px",
+                height: "4px",
                 borderRadius: "50%",
-                background: f.ink(0.2),
+                background: f.ink(0.25),
               }} />
-              <p style={{
-                fontFamily: f.sans,
-                fontSize: "12px",
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                fontWeight: 600,
-                color: f.ink(0.3),
-              }}>
-                {study.outcome}
-              </p>
+              <span style={TOKEN.tagFont}>{study.outcome}</span>
             </div>
             <p style={{
               fontFamily: f.sans,
               fontSize: "13px",
-              color: f.ink(0.2),
+              color: f.ink(0.18),
               marginTop: "40px",
-              letterSpacing: "0.02em",
+              letterSpacing: "0.04em",
             }}>
               Full timeline coming soon.
             </p>
