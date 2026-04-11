@@ -153,7 +153,8 @@ function GapCard({ dimension, shift, recommendation, insight }: {
 }
 
 export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
-  const conventionalDims = data.dimensionResults.filter(d => d.picked === "conventional");
+  const dims = data.dimensionResults || [];
+  const conventionalDims = dims.filter(d => d.picked === "conventional");
 
   return (
     <div className="diagnostic-report" style={{ fontFamily: t.sans, maxWidth: "800px", margin: "0 auto" }}>
@@ -216,7 +217,7 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            {data.dimensionResults.map(d => (
+            {dims.map(d => (
               <DimensionBar key={d.dimension} dimension={d.dimension} picked={d.picked} />
             ))}
           </div>
