@@ -221,18 +221,15 @@ const Deck = () => {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
-  // Restore state from sessionStorage if returning from /work
-  const savedState = useRef(() => {
+  // Restore state from sessionStorage — keep it durable until submit
+  const restored = useMemo(() => {
     try {
       const raw = sessionStorage.getItem("deck-state");
-      if (raw) {
-        sessionStorage.removeItem("deck-state");
-        return JSON.parse(raw);
-      }
+      if (raw) return JSON.parse(raw);
     } catch { /* ignore */ }
     return null;
-  });
-  const restored = savedState.current();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [currentFrame, setCurrentFrame] = useState(restored?.currentFrame ?? 0);
   const lastFrameRef = useRef(restored?.currentFrame ?? 0);
@@ -360,6 +357,7 @@ const Deck = () => {
       practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
       sectors_not_selected: sectorsNotSelected.length > 0 ? sectorsNotSelected : null,
     } as any);
+    sessionStorage.removeItem("deck-state");
     setCtaSubmitting(false);
     setCtaMode("thanks");
   };
@@ -541,7 +539,7 @@ const Deck = () => {
       </div>
 
       {/* ─── Fixed UI Chrome — Bottom Nav (frames 1–10, not hero or close) ─── */}
-      {currentFrame > 0 && currentFrame < TOTAL_FRAMES - 1 && (
+      {currentFrame > 0 && (
         <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none" style={{ padding: "0 32px 28px" }}>
           <div className="flex items-center justify-between pointer-events-auto" style={{ gap: "16px" }}>
             <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
@@ -1432,7 +1430,7 @@ const Deck = () => {
                 {/* Link to case studies after form */}
                 <button
                   type="button"
-                  onClick={() => { saveDeckState(); navigate("/work", { state: { from: "/diagnostic", returnLabel: "Back to diagnostic" } }); }}
+                  onClick={() => { saveDeckState(); navigate("/work", { state: { from: "/diagnostic" } }); }}
                   style={{
                     ...r10.stagger(3, 700, "blur-up"),
                     fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
