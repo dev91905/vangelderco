@@ -18,6 +18,7 @@ export type CaseStudyData = {
   issue: string;
   outcome: string;
   phases: CasePhase[] | null;
+  link_url?: string | null;
 };
 
 interface Props {
@@ -116,6 +117,29 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
           <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
           {study.name}
         </h2>
+
+        {study.link_url && (
+          <a
+            href={study.link_url}
+            target={study.link_url.startsWith("http") ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 transition-all"
+            style={{
+              fontFamily: f.sans,
+              fontSize: "12px",
+              letterSpacing: "0.04em",
+              color: f.ink(0.3),
+              textDecoration: "none",
+              marginLeft: "auto",
+              marginRight: "16px",
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+          >
+            Read the full report →
+          </a>
+        )}
 
         <button
           onClick={onClose}
