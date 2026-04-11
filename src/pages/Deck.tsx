@@ -315,6 +315,9 @@ const Deck = () => {
   /* ─── Metrics checklist (Frame 7) ─── */
   const [metricsChecked, setMetricsChecked] = useState<string[]>([]);
 
+  /* ─── Sector selections (Frame 8) ─── */
+  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
+
   /* ─── Media experience (Frame 9) ─── */
   const [hasMediaExperience, setHasMediaExperience] = useState<boolean | null>(null);
 
@@ -342,7 +345,7 @@ const Deck = () => {
     gates[4] = capabilitiesRanked.length >= 2; // capabilities — pick at least 2
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
-    gates[7] = hasMediaExperience !== null; // media experience
+    gates[7] = true; // sectors — always passable, selection is optional
     gates[8] = true; // CTA — always accessible
     gates[9] = true; // case studies
     gates[10] = true; // close
@@ -374,7 +377,7 @@ const Deck = () => {
       custom_challenge: customSaved ? customMessage.trim() || null : null,
       selected_pains: selectedPains.length > 0 ? selectedPains : null,
       engagement_path: engagementPath || null,
-      selected_domains: null,
+      selected_domains: selectedSectors.length > 0 ? selectedSectors : null,
       readiness_score: diagnosticScore,
       quiz_answers: quizAnswers.filter((a): a is QuizAnswer => a !== null),
       metrics_checked: metricsChecked.length > 0 ? metricsChecked : null,
