@@ -318,7 +318,7 @@ const Index = () => {
       </section>
 
       {/* ═══ ALTITUDE ═══ */}
-      <section className="snap-section flex items-center justify-center relative z-10">
+      <section className="section-flow flex items-center justify-center relative z-10">
         <div className="max-w-4xl mx-auto px-6 md:px-10">
           <RevealBlock>
             <p
@@ -371,35 +371,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ RECENT IMPACT ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
-        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
-          <RevealBlock direction="left">
-            <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-16"
-              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
-            >
-              Recent Impact
-            </div>
-          </RevealBlock>
-
-          <ImpactCloud />
-        </div>
-      </section>
-
       {/* ═══ CAPABILITIES ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
+      <section className="section-flow relative z-10 flex items-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
           <RevealBlock direction="left">
             <div
-              className="text-[10px] tracking-[0.25em] uppercase mb-16"
+              className="text-[10px] tracking-[0.25em] uppercase mb-8"
               style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
             >
               Core Capabilities
             </div>
           </RevealBlock>
 
-          <div className="grid gap-8 md:gap-10">
+          <div className="grid gap-5 md:gap-6">
             {CAPABILITIES.map((cap, i) => (
               <RevealBlock key={cap.title} delay={0.1 + i * 0.18} direction="up">
                 <Link
@@ -490,8 +474,24 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ═══ FIELD NOTES ═══ */}
+      <section className="section-flow-tight relative z-10 flex items-center">
+        <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
+          <RevealBlock direction="left">
+            <div
+              className="text-[10px] tracking-[0.25em] uppercase mb-8"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+            >
+              Recent Impact
+            </div>
+          </RevealBlock>
+
+          <ImpactCloud />
+        </div>
+      </section>
+
       {/* ═══ INTAKE CTA ═══ */}
-      <section className="snap-section relative z-10 flex items-center justify-center">
+      <section className="section-flow relative z-10 flex items-center justify-center">
         <div className="w-full px-6 md:px-10 max-w-4xl mx-auto">
           <RevealBlock>
             <div
@@ -561,7 +561,7 @@ const Index = () => {
       </section>
 
       {/* ═══ NETWORK ═══ */}
-      <section className="snap-section-scroll relative z-10 flex items-center">
+      <section className="section-flow-tight relative z-10 flex items-center">
         <div className="px-6 md:px-10 max-w-4xl mx-auto w-full">
           <RevealBlock direction="left">
             <div
@@ -586,7 +586,7 @@ const Index = () => {
             </p>
           </RevealBlock>
           <AnimatedLine width={50} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
             {NETWORK_SECTORS.map((sector, i) => (
               <RevealBlock key={sector.name} delay={0.25 + i * 0.04}>
                 <div
@@ -623,7 +623,7 @@ const Index = () => {
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <section className="snap-section relative z-10 flex flex-col items-center justify-center px-6">
+      <section className="section-flow-tight relative z-10 flex flex-col items-center justify-center px-6">
         <RevealBlock>
           <Link
             to="/diagnostic"

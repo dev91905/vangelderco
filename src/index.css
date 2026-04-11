@@ -251,6 +251,22 @@
   padding-bottom: 8vh;
 }
 
+/* Dense flow sections — no viewport enforcement */
+.section-flow {
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  padding-top: 8vh;
+  padding-bottom: 8vh;
+}
+.section-flow-tight {
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+}
+
 
 /* Hero nav link hover effects */
 .hero-nav-link {
