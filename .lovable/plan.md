@@ -1,57 +1,51 @@
 
-Fix the regression by making the diagnostic state durable for the full tab session and by separating “return to the diagnostic” from browser history.
 
-What went wrong
-- The deck only saves state once before leaving for `/work`, then immediately deletes it on restore (`sessionStorage.removeItem("deck-state")` in `src/pages/Deck.tsx:227-230`). That makes the restore one-time instead of session-persistent.
-- Slide 10 has no bottom nav because the nav is hidden on the last frame (`currentFrame < TOTAL_FRAMES - 1`), so once you reach the CTA frame there is no visible Back button.
-- `/work` currently uses router state plus a `returnLabel: "Back to diagnostic"` override, which is why the label changed.
-- `/work` falls back to `navigate(-1)` when no `from` exists, which is exactly the browser-history behavior you said not to use.
+## Mobile/Tablet Responsive Audit — Issues Found & Fix Plan
 
-Implementation plan
-1. Make diagnostic progress persist for the entire tab session
-- Keep the deck state in `sessionStorage` until one of two events:
-  - the user successfully submits the diagnostic
-  - the tab/session ends naturally
-- Stop deleting `deck-state` during initial restore.
-- Add a small hydration guard so the saved state is loaded once on mount without creating weird re-init behavior.
+### Issues Identified
 
-2. Restore the ability to go back from slide 10
-- Show the fixed bottom nav on the CTA slide too, or add an equivalent explicit Back action there.
-- Keep the CTA slide editable like every other step, so users can go back to results and earlier answers.
-- Ensure `scrollToFrame(currentFrame - 1)` works from frame 9 back to frame 8.
+**1. Diagnostic Slide 2 — Bottom nav overlaps card content on mobile (375px)**
+The fixed bottom nav bar (with Continue button) sits on top of the last pain-point cards. The `DeckFrame` has `paddingBottom: clamp(120px, 16vh, 180px)` but on short mobile screens, the cards extend below the fold and the fixed nav covers them. The extra spacer `<div style={{ minHeight: "48px" }} />` on slide 2 isn't enough.
 
-3. Remove the “Back to diagnostic” special label
-- Stop passing `returnLabel` from `/diagnostic` to `/work`.
-- Revert the `/work` top-left control text to just `← Back` consistently.
+**2. Work page carousel — cards too wide for mobile**
+`CaseCarousel` card width is `clamp(320px, 28vw, 420px)`. On a 375px screen with `clamp(24px, 4vw, 80px)` padding on each side, the card is 320px but the container is ~327px. Cards are nearly full-width with no peek of the next card, making it unclear the carousel is swipeable.
 
-4. Make `/work` back behavior explicit and not history-based
-- Replace the current logic in `src/pages/Work.tsx`:
-  - no `navigate(-1)`
-  - no generic browser-history fallback
-- Use explicit routing rules instead:
-  - if `location.state?.from === "/diagnostic"` and a saved deck session exists, navigate to `/diagnostic`
-  - otherwise navigate to `/`
-- Apply the same rule when closing a deep-linked case overlay that originated from the diagnostic flow.
+**3. Diagnostic bottom nav padding too tight on mobile**
+Bottom nav uses `padding: "0 32px 28px"`. On small phones, 32px side padding is fine, but `28px` bottom doesn't account for iOS safe area (home indicator). Should use `env(safe-area-inset-bottom)`.
 
-5. Only reset after successful submit
-- On successful CTA submission in `handleCtaSubmit`, explicitly clear the persisted deck session state.
-- Do not clear it when opening `/work`, returning from `/work`, or moving between slides.
-- This preserves responses until submit or tab close, exactly as requested.
+**4. Results slide (Frame 9) — dimension cards column stacks poorly on mobile**
+The results grid is `grid-cols-1 lg:grid-cols-[...]`. On mobile, the right column (dimension cards) gets a `maxHeight: clamp(560px, calc(100dvh - 220px), 760px)` scroll container. On a 375×812 screen, the left diagnostic card + description takes up most of the viewport, pushing the scrollable dimension cards below the fold with a cramped scroll area.
 
-Files to update
-- `src/pages/Deck.tsx`
-  - stop deleting saved state on mount
-  - keep session state durable
-  - restore a Back path from slide 10
-  - clear saved state only after successful submit
-  - remove `returnLabel` from `/work` navigation
-- `src/pages/Work.tsx`
-  - change Back button logic to explicit route-based navigation
-  - remove browser-history fallback
-  - restore generic “Back” label
+**5. DeckFrame padding on mobile could be tighter**
+`DeckFrame` narrow mode has `px-8 md:px-16` (32px on mobile). Combined with the fixed nav's 32px padding, it's consistent but leaves limited content width on small screens. The wide mode `px-8 md:px-20 lg:px-28` is fine.
 
-Expected outcome
-- Users can reach slide 10 and still go back to results or earlier slides.
-- Going to `/work` from the diagnostic no longer destroys progress.
-- Returning from `/work` sends them back into `/diagnostic` only when there is an active saved diagnostic session.
-- `/work` no longer depends on browser history and no longer says “Back to Diagnostic.”
+**6. CaseTimelineOverlay — horizontal scroll phases not obvious on mobile**
+The overlay uses wheel-to-horizontal-scroll, which doesn't work on touch devices. Need to verify touch scrolling works and add a swipe hint for mobile.
+
+### Plan
+
+**File: `src/components/deck/DeckFrame.tsx`**
+- Reduce mobile padding from `px-8` to `px-5` for both narrow and wide modes
+- This gives more breathing room for content on 375px screens
+
+**File: `src/pages/Deck.tsx`**
+- Bottom nav: add `paddingBottom: calc(28px + env(safe-area-inset-bottom, 0px))` for iOS safe area
+- Reduce bottom nav side padding from 32px to `clamp(16px, 4vw, 32px)` on mobile
+- Frame 9 (Results): on mobile, reduce the max-height of the dimension cards scroll area and add more padding below the left column so users can scroll to the cards
+- Frame 2 (Pain points): increase the bottom spacer to account for the fixed nav height
+
+**File: `src/components/deck/CaseCarousel.tsx`**
+- Change card width from `clamp(320px, 28vw, 420px)` to `clamp(280px, 75vw, 420px)` so on mobile the card is ~280px, leaving a visible peek of the next card
+- This makes it clear the carousel is swipeable
+
+**File: `src/pages/Work.tsx`**
+- Reduce top bar padding from `20px 32px` to `20px clamp(16px, 4vw, 32px)` to match mobile spacing
+
+**File: `src/components/deck/CaseTimelineOverlay.tsx`**
+- Ensure the horizontal scroll container has `overflow-x: auto` and `-webkit-overflow-scrolling: touch` for mobile swipe support
+- Already uses horizontal scroll, just verify touch works (likely fine with native scroll)
+
+### Summary of Changes
+- 5 files touched
+- All changes are CSS/spacing adjustments — no logic changes
+- Fixes: bottom nav overlap, carousel card width, iOS safe area, results slide mobile layout, consistent mobile padding
