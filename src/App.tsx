@@ -35,12 +35,13 @@ function AppRoutes() {
   const location = useLocation();
   const mode = ROUTE_MODE_MAP[location.pathname] || "home";
   const hideConstellation = location.pathname === "/diagnostic" || location.pathname.startsWith("/post/") || location.pathname === "/work";
+  const hideDarkToggle = location.pathname === "/diagnostic" || location.pathname === "/work";
 
   return (
     <>
       {!hideConstellation && <ConstellationField mode={mode} />}
       <CRTOverlay />
-      <DarkModeToggle />
+      {!hideDarkToggle && <DarkModeToggle />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/cultural-strategy" element={<CulturalStrategy />} />
