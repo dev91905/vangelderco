@@ -395,13 +395,12 @@ const Deck = () => {
 
     const updateCurrentFrame = () => {
       const scrollTop = el.scrollTop;
-      const viewportH = el.clientHeight;
-      const midPoint = scrollTop + viewportH * 0.4; // bias toward top of viewport
+      const topAnchor = scrollTop + 24;
 
       let best = 0;
       frameRefs.current.forEach((frame, i) => {
         if (!frame) return;
-        if (frame.offsetTop <= midPoint) best = i;
+        if (frame.offsetTop <= topAnchor) best = i;
       });
       setCurrentFrame(best);
     };
