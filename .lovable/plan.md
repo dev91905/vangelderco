@@ -1,21 +1,25 @@
 
 
-## Problem
+## Remove Slide 5 (Domains)
 
-The left column has `justifyContent: "center"` on a `height: 100dvh` flex column. This vertically centers the *group* of elements (title, subtitle, diagnostic card, start-over button), but because the group is tall, the diagnostic card gets shoved to the bottom of the viewport and the top has a huge empty gap. It looks broken.
+### What changes
 
-## Fix
+**`src/pages/Deck.tsx`** — one file, multiple edits:
 
-**`src/pages/Deck.tsx` (line 915):**
+1. **Delete the DOMAINS constant** (lines ~134–139) and associated state (`selectedDomains`, `activeDomain`, `activeDomainData`)
+2. **Delete Frame 5 JSX** (lines 1195–1279) — the entire `DeckFrame ref={setRef(4)}` block
+3. **Remove `r5` reveal hook** (line 502) — shift r6→r5, r7→r6, r8→r7, etc. through r12→r11
+4. **Renumber `setRef()` indices** — all frames after the deleted one shift down by 1 (Frame 6 becomes `setRef(4)`, Frame 7 becomes `setRef(5)`, etc.)
+5. **Update interaction gates** — remove gate 4 (domains), shift gates 5–11 down to 4–10
+6. **Update STEP_LABELS** — remove "Domains" from the array
+7. **Update scoring input** — remove `selectedDomains` from the `useMemo` that builds the scoring object
 
-Remove `justifyContent: "center"` and replace with `justifyContent: "flex-start"` plus a `paddingTop` of `clamp(80px, 14vh, 160px)`. This anchors content from the top with breathing room, keeping the diagnostic card and start-over button visible in the natural reading flow — no wasted vertical space above the heading.
+**`src/lib/deckScoring.ts`**:
 
-| Line | Before | After |
-|------|--------|-------|
-| 915 | `justifyContent: "center"` | `justifyContent: "flex-start"` |
-| 912 | `paddingTop: "clamp(40px, 6vh, 72px)"` | `paddingTop: "clamp(80px, 14vh, 160px)"` |
+8. **Remove `selectedDomains`** from the input type and the scoring logic (the "all three domains = -5" rule)
 
-Same `paddingTop` update on the right column (line 995) so both columns start at the same vertical position.
+**Database submission** (if applicable): Remove `selected_domains` from the CTA submit payload.
 
-One file changed. Two lines each in left and right columns.
+### Net result
+12-frame deck becomes 11-frame. All numbering, refs, gates, labels, and scoring stay consistent. No domain selection anywhere.
 
