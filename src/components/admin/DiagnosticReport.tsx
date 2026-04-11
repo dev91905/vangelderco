@@ -217,7 +217,7 @@ export default function DiagnosticReport({ data }: { data: DiagnosticData }) {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            {data.dimensionResults.map(d => (
+            {dims.map(d => (
               <DimensionBar key={d.dimension} dimension={d.dimension} picked={d.picked} />
             ))}
           </div>
