@@ -1379,7 +1379,7 @@ const Deck = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {[
               { name: "News Media", desc: "Local and national — how stories get placed and why" },
-              { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
+              { name: "Music Industry", desc: "Artists, labels, tours, festivals, venues" },
               { name: "Film & TV", desc: "Production, distribution, cultural impact" },
               { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
               { name: "Sports & Recreation", desc: "Athletes, leagues, the largest captive audiences" },
