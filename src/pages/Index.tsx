@@ -502,6 +502,17 @@ const Index = () => {
                 minHeight: "420px",
               }}
             >
+              {/* Soft gradient vignette to ease harsh contrast at edges */}
+              <div
+                className="pointer-events-none absolute inset-0 z-0 rounded-2xl"
+                style={{
+                  background: `
+                    radial-gradient(ellipse 120% 80% at 50% 100%, hsl(var(--background) / 0.08) 0%, transparent 60%),
+                    linear-gradient(to top, hsl(var(--background) / 0.06) 0%, transparent 30%),
+                    linear-gradient(to bottom, hsl(var(--background) / 0.04) 0%, transparent 20%)
+                  `,
+                }}
+              />
 
               {/* Content */}
               <div className="relative z-10 p-10 md:p-14 lg:p-16 flex flex-col justify-center min-h-[420px]">
