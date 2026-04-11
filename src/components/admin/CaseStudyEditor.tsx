@@ -483,14 +483,15 @@ const CaseStudyEditor: React.FC = () => {
 
                   {(!ed.phases || ed.phases.length === 0) ? (
                     <div
-                      className="text-center py-12 rounded-2xl"
+                      className="flex flex-col items-center text-center py-14 rounded-2xl"
                       style={{ border: `2px dashed ${t.ink(0.06)}`, background: t.ink(0.01) }}
                     >
-                      <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.3) }}>
-                        No phases yet
+                      <LayoutList className="w-8 h-8 mb-3" style={{ color: t.ink(0.12) }} />
+                      <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.35), fontWeight: 600 }}>
+                        No timeline phases yet
                       </p>
-                      <p className="mt-1" style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.2) }}>
-                        Click "Load Suggested Template" to start with 6 standard phases, or add your own.
+                      <p className="mt-1.5 max-w-[280px]" style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.22), lineHeight: 1.5 }}>
+                        Load the suggested template to start with 6 standard phases, or add your own one by one.
                       </p>
                     </div>
                   ) : (
