@@ -88,7 +88,7 @@ const Work: React.FC = () => {
     >
       {/* Top bar */}
       <div
-        style={{ padding: "20px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}
+        style={{ padding: "20px clamp(16px, 4vw, 32px)", display: "flex", alignItems: "center", justifyContent: "space-between" }}
       >
         <button
           onClick={handleBack}

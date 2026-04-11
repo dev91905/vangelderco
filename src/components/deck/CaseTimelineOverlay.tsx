@@ -232,6 +232,7 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               scrollSnapType: "x proximity",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             <style>{`.tl-scroll::-webkit-scrollbar { display: none; }`}</style>
