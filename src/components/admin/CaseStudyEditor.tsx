@@ -5,6 +5,7 @@ import { t } from "@/lib/theme";
 import {
   Plus, X, GripVertical, ChevronDown, ChevronRight,
   Save, Trash2, Eye, EyeOff, ExternalLink, Link as LinkIcon,
+  Check, LayoutList,
 } from "lucide-react";
 import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
 import { useSyncImpactStats } from "@/hooks/useImpactStats";
