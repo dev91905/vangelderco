@@ -1,29 +1,42 @@
 
 
-# Restore Stat Chip Containers + True Bento Grid
+# Fix: Fill All 6 Bento Slots
 
-## What's wrong now
-The current ImpactCloud cards are just text with a left border line — no containers, no rounded corners, no visual boundaries. It doesn't read as a dashboard or a bento grid. It's just floating text.
+## Root cause
+The curation logic enforces "one stat per source." There are only 4 sources (3 articles + 1 case study), so it returns 4 stats — not the 6 the grid expects.
 
-## What to build
-Restore the original StatChips visual style (rounded-xl containers with `1px solid` borders) and apply it to the existing 6-slot bento grid layout.
+## Fix in `src/hooks/useAggregatedStats.ts`
 
-### Layout (unchanged from current grid logic)
-- 3-column grid on desktop, 2-column on mobile
-- Positions 0 and 3 are **hero cards** — span 2 columns, taller, bigger numbers
-- Positions 1, 2, 4, 5 are **standard cards** — span 1 column, roughly the same height as the diagnostic box
+Change the algorithm to:
+1. **Round 1**: Pick the best stat (lowest `sort_order`) from each source — gives 4 stats
+2. **Round 2**: If under 6, pick the next-best stat from each source (round-robin by recency), until we hit 6 or run out
+3. Never duplicate a stat
 
-### Visual change: bring back chip containers
-Each card gets the StatChips treatment:
-- `rounded-xl` border radius
-- `1px solid` border at `t.ink(0.15)`, brightening to `t.ink(0.25)` on hover
-- Transparent background
-- `px-5 py-4` padding (slightly more generous for the hero cards: `px-6 py-5`)
-- Number: bold, `color: t.ink(0.85)` — hero size `clamp(36px, 6vw, 56px)`, standard size `clamp(22px, 3vw, 30px)`
-- Description: `10px` uppercase tracked, `color: t.ink(0.4)`
+This guarantees the grid fills to 6 whenever the data supports it (we have 16 rows — plenty).
 
-### Files changed
-- `src/components/ImpactCloud.tsx` — replace the left-border-only card style with rounded bordered containers
+### Concrete logic
+```
+// After building bestPerSource map (round 1):
+const used = new Set(curated.map(s => s.label + s.sourceId));
+const remaining = all
+  .filter(s => !used.has(s.label + s.sourceId))
+  .sort((a, b) => a.sortOrder - b.sortOrder);
 
-Curation logic in `useAggregatedStats.ts` stays exactly as-is. No other files change.
+// Round 2: fill remaining slots, round-robin across sources
+while (curated.length < MAX_STATS && remaining.length > 0) {
+  const sourcesUsedCount = new Map<string, number>();
+  for (const s of curated) {
+    sourcesUsedCount.set(s.sourceId, (sourcesUsedCount.get(s.sourceId) || 0) + 1);
+  }
+  // Pick from the source with fewest picks so far
+  remaining.sort((a, b) => {
+    const aCount = sourcesUsedCount.get(a.sourceId) || 0;
+    const bCount = sourcesUsedCount.get(b.sourceId) || 0;
+    return aCount - bCount || a.sortOrder - b.sortOrder;
+  });
+  curated.push(remaining.shift()!);
+}
+```
+
+No other files change. The ImpactCloud grid already handles 6 items with the hero/standard layout.
 
