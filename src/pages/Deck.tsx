@@ -596,20 +596,20 @@ const Deck = () => {
             <div
               className="pointer-events-auto"
               style={{
-                width: "min(1120px, calc(100vw - 64px))",
-                margin: "0 auto",
-                display: "grid",
-                gridTemplateColumns: "160px minmax(240px, 320px) 160px",
+                display: "flex",
                 alignItems: "center",
                 gap: "24px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "flex-start" }}>
+              <div style={{ flexShrink: 0 }}>
                 <BackButton onClick={() => scrollToFrame(currentFrame - 1)} />
               </div>
 
               <div
                 style={{
+                  flex: 1,
+                  maxWidth: "360px",
+                  margin: "0 auto",
                   height: "3px",
                   borderRadius: "2px",
                   background: f.ink(0.06),
@@ -627,7 +627,7 @@ const Deck = () => {
                 />
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
+              <div style={{ flexShrink: 0, visibility: currentFrame < TOTAL_FRAMES - 1 ? "visible" : "hidden" }}>
                 <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
               </div>
             </div>
