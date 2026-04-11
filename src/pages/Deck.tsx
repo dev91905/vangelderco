@@ -1193,58 +1193,171 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 9: Preliminary Results ═══ */}
-      <DeckFrame ref={setRef(8)} mode="narrow">
-        <div ref={r9.ref} className="flex flex-col items-center text-center max-w-[520px] mx-auto">
-          <p style={{ ...r9.stagger(0, 0, "blur-up"), ...label("10px"), color: f.ink(0.3), marginBottom: "20px" }}>Preliminary results</p>
-          <p style={{ ...r9.stagger(1, 100, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-            Here's what we see so far.
-          </p>
-          <p style={{ ...r9.stagger(2, 250, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "16px", maxWidth: "440px" }}>
-            Based on your answers, here's a snapshot of where your portfolio stands. The full diagnostic goes deeper.
-          </p>
+      <DeckFrame ref={setRef(8)} mode="wide">
+        <div ref={r9.ref} style={{ width: "100%" }}>
+          {(() => {
+            const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
+            return (
+              <div
+                className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)]"
+                style={{
+                  width: "100%",
+                  alignItems: "start",
+                  gap: "clamp(24px, 3vw, 48px)",
+                }}
+              >
+                {/* Left column — diagnostic card + retake + CTA */}
+                <div className="flex flex-col gap-5" style={{ alignSelf: "start" }}>
+                  <p style={{ ...r9.stagger(0, 0, "blur-up"), ...label("10px"), color: f.ink(0.3) }}>Preliminary results</p>
 
-          {/* Score + grade cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full" style={{ ...r9.stagger(3, 400, "blur-scale"), marginTop: "36px" }}>
-            {/* Readiness score */}
-            <div style={{
-              padding: "clamp(20px, 2.5vw, 28px)",
-              borderRadius: "16px",
-              background: "hsl(var(--foreground) / var(--a-bg))",
-              border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-              textAlign: "left",
-            }}>
-              <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "12px" }}>Readiness score</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(36px, 5vw, 52px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1 }}>
-                {diagnosticScore}
-              </p>
-              <p style={{ fontFamily: f.sans, fontSize: "12px", color: f.ink(0.3), marginTop: "6px" }}>out of 100</p>
-            </div>
+                  <div
+                    style={{
+                      ...r9.stagger(1, 100, "blur-scale"),
+                      padding: "clamp(24px, 3vw, 36px)",
+                      borderRadius: "20px",
+                      background: "hsl(var(--foreground) / var(--a-bg))",
+                      border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+                    }}
+                  >
+                    <p style={{ ...label("10px"), color: f.ink(0.3), marginBottom: "16px" }}>Your diagnostic</p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(20px, 2.4vw, 28px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1.15, marginBottom: "16px" }}>
+                      {grade.grade}
+                    </p>
+                    <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.5), lineHeight: 1.7 }}>
+                      {grade.summary}
+                    </p>
+                    <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: `1px solid ${f.ink(0.06)}`, display: "flex", alignItems: "baseline", gap: "12px" }}>
+                      <p style={{ fontFamily: f.sans, fontSize: "clamp(36px, 5vw, 48px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 1 }}>
+                        {diagnosticScore}
+                      </p>
+                      <p style={{ fontFamily: f.sans, fontSize: "12px", color: f.ink(0.3) }}>/ 100 readiness</p>
+                    </div>
+                  </div>
 
-            {/* Quiz grade */}
-            <div style={{
-              padding: "clamp(20px, 2.5vw, 28px)",
-              borderRadius: "16px",
-              background: "hsl(var(--foreground) / var(--a-bg))",
-              border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
-              textAlign: "left",
-            }}>
-              <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "12px" }}>Strategic approach</p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 1.2 }}>
-                {getQuizGrade(nextgenPickCount, QUIZ_ROWS.length).grade}
-              </p>
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6, marginTop: "8px" }}>
-                {nextgenPickCount} of {QUIZ_ROWS.length} next-gen picks
-              </p>
-            </div>
-          </div>
+                  <p style={{ ...r9.stagger(2, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.35), lineHeight: 1.7 }}>
+                    This is a preview. Your full diagnostic includes a detailed breakdown across every dimension — plus recommendations tailored to your portfolio.
+                  </p>
 
-          <p style={{ ...r9.stagger(4, 600, "blur-up"), fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.35), lineHeight: 1.7, marginTop: "28px", maxWidth: "400px" }}>
-            Your full diagnostic includes a detailed breakdown across every dimension — plus recommendations tailored to your portfolio.
-          </p>
+                  <div style={{ ...r9.stagger(3, 450, "blur-up"), display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+                    <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
+                    <button
+                      onClick={() => {
+                        containerRef.current?.scrollTo({ top: frameRefs.current[2]?.offsetTop || 0, behavior: "smooth" });
+                        setTimeout(() => {
+                          setQuizAnswers(Array(QUIZ_ROWS.length).fill(null));
+                          setQuizStep(0);
+                          setQuizRevealed(false);
+                          setExpandedDimension(null);
+                        }, 400);
+                      }}
+                      style={{
+                        fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 600,
+                        color: f.ink(0.4), background: "none", border: "none", padding: "12px 8px",
+                        cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px", transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.4); }}
+                    >
+                      <RotateCcw size={13} style={{ flexShrink: 0 }} />
+                      Retake quiz
+                    </button>
+                  </div>
+                </div>
 
-          <div style={{ ...r9.stagger(5, 750, "blur-up"), marginTop: "28px" }}>
-            <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
-          </div>
+                {/* Right column — dimension cards */}
+                <div
+                  className="flex flex-col gap-4 results-scrollbar lg:pr-3"
+                  data-results-scroll="true"
+                  style={{
+                    ...r9.stagger(2, 200, "slide-left"),
+                    maxHeight: "clamp(560px, calc(100dvh - 220px), 760px)",
+                    overflowY: "auto",
+                    overscrollBehavior: "contain",
+                    paddingBottom: "20px",
+                    paddingLeft: "clamp(0px, 1vw, 16px)",
+                  }}
+                >
+                  {QUIZ_ROWS.map((row, i) => {
+                    const answer = quizAnswers[i];
+                    const pickedNextGen = answer?.picked === "nextgen";
+                    const selectedCopy = pickedNextGen ? row.nextgen : row.traditional;
+                    const lede = pickedNextGen ? row.nextgenLede : row.traditionalLede;
+                    const bullets = pickedNextGen ? row.nextgenBullets : row.traditionalBullets;
+                    const explanationLabel = pickedNextGen ? "Why this works" : "The shift";
+                    const isExpanded = expandedDimension === i;
+
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          padding: "clamp(24px, 3vw, 36px)",
+                          borderRadius: "16px",
+                          background: "hsl(var(--foreground) / var(--a-bg-subtle))",
+                          border: `1px solid ${f.ink(0.06)}`,
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+                          <span style={{
+                            display: "inline-block", width: "8px", height: "8px", borderRadius: "50%",
+                            background: pickedNextGen ? "hsl(142 50% 50%)" : f.ink(0.2), flexShrink: 0,
+                          }} />
+                          <p style={{ fontFamily: f.sans, fontSize: "clamp(16px, 1.5vw, 20px)", fontWeight: 700, color: f.ink(0.85), letterSpacing: "-0.01em" }}>{row.dimension}</p>
+                        </div>
+
+                        <p style={{
+                          fontFamily: f.sans, fontSize: "clamp(13px, 1.15vw, 14px)", color: f.ink(0.4), lineHeight: 1.7,
+                          fontStyle: "italic", paddingLeft: "20px", borderLeft: `2px solid ${f.ink(0.08)}`, marginBottom: "24px",
+                        }}>
+                          {selectedCopy}
+                        </p>
+
+                        <p style={{ ...label("9px"), color: f.ink(0.25), marginBottom: "8px", textTransform: "uppercase" as const }}>{explanationLabel}</p>
+                        <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.2vw, 15px)", color: f.ink(0.65), lineHeight: 1.7, fontWeight: 500 }}>
+                          {lede}
+                        </p>
+
+                        {/* Expandable bullets */}
+                        <div style={{
+                          display: "grid",
+                          gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                          transition: "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                        }}>
+                          <div style={{ overflow: "hidden" }}>
+                            <ul style={{
+                              listStyle: "none", padding: 0, margin: "20px 0 0 0",
+                              display: "flex", flexDirection: "column", gap: "12px",
+                              paddingTop: "20px", borderTop: `1px solid ${f.ink(0.06)}`,
+                            }}>
+                              {bullets.map((b, bi) => (
+                                <li key={bi} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                                  <span style={{ color: f.ink(0.12), fontSize: "6px", lineHeight: "24px", flexShrink: 0 }}>●</span>
+                                  <span style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.1vw, 14px)", color: f.ink(0.42), lineHeight: 1.75 }}>{b}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => setExpandedDimension(isExpanded ? null : i)}
+                          style={{
+                            fontFamily: f.sans, fontSize: "11px", fontWeight: 600, color: f.ink(0.3),
+                            background: "none", border: "none", padding: "0", marginTop: "20px",
+                            cursor: "pointer", letterSpacing: "0.05em", textTransform: "uppercase" as const,
+                            transition: "color 0.15s ease",
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
+                        >
+                          {isExpanded ? "Show less" : "Read more"}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </DeckFrame>
 
