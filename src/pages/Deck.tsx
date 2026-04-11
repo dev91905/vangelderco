@@ -261,43 +261,6 @@ const Deck = () => {
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
-  const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
-  const deepLinkedCase = useRef(false);
-
-  /* ─── Fetch case studies from DB ─── */
-  const { data: dbCaseStudies } = useQuery({
-    queryKey: ["deck-case-studies"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deck_case_studies")
-        .select("*")
-        .eq("is_published", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return (data || []).map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        issue: row.issue,
-        outcome: row.outcome,
-        phases: row.phases as CaseStudyData["phases"],
-        link_url: row.link_url || null,
-      })) as CaseStudyData[];
-    },
-  });
-  const caseStudies = dbCaseStudies && dbCaseStudies.length > 0 ? dbCaseStudies : FALLBACK_CASE_STUDIES;
-
-  /* ─── Deep-link: auto-open case study from ?case=<id> ─── */
-  const [searchParams, setSearchParams] = useSearchParams();
-  useEffect(() => {
-    const caseId = searchParams.get("case");
-    if (caseId && caseStudies.length > 0) {
-      const match = caseStudies.find((c) => c.id === caseId);
-      if (match) {
-        setSelectedCase(match);
-        deepLinkedCase.current = true;
-        // Clean up the query param
-        searchParams.delete("case");
-        setSearchParams(searchParams, { replace: true });
       }
     }
   }, [searchParams, caseStudies]);
@@ -1437,7 +1400,7 @@ const Deck = () => {
                 {/* Link to case studies after form */}
                 <button
                   type="button"
-                  onClick={() => scrollToFrame(10)}
+                  onClick={() => navigate("/work")}
                   style={{
                     ...r10.stagger(3, 700, "blur-up"),
                     fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
