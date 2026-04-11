@@ -1095,7 +1095,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Hallmarks ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.4fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
           <div className="flex flex-col justify-center" style={r4.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               We've studied hundreds of organizations. The effective ones do three things.
@@ -1104,7 +1104,7 @@ const Deck = () => {
               A campaign that gets 73 million views but doesn't do these three things is a failed campaign — and a waste of your money.
             </p>
           </div>
-          <div className="flex flex-col gap-4" style={{ maxHeight: "clamp(520px, calc(100dvh - 260px), 720px)", overflowY: "auto", overscrollBehavior: "contain", paddingRight: "clamp(4px, 0.8vw, 12px)" }}>
+          <div className="flex flex-col gap-4" style={{ maxHeight: "clamp(520px, calc(100dvh - 260px), 720px)", overflowY: "auto", overflowX: "hidden", overscrollBehavior: "contain", paddingRight: "clamp(4px, 0.8vw, 12px)" }}>
             {[
               { title: "They engage the full culture stack.", rationale: "They don't just push content out — they work behind the scenes so distribution platforms across different sectors are pulling the message up. Music, faith communities, creator economies, campuses, veteran networks. Not just strategic comms.", help: "We map every cultural sector relevant to your issues and connect you to partners already embedded in those spaces." },
               { title: "They coordinate across sectors.", rationale: "Communications becomes the organizing infrastructure — the scaffolding that brings different sectors together around a focal point and gives them the cover and momentum to push for policy together. Without multiple sectors engaged, policy doesn't move.", help: "We design integrated strategies where comms, policy, industry, labor, grassroots, and culture all reinforce each other." },
