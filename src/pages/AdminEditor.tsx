@@ -7,7 +7,7 @@ import { usePostImpactStats, useSyncImpactStats, ImpactStat } from "@/hooks/useI
 import EditorMetaBar from "@/components/admin/EditorMetaBar";
 import BlockCanvas from "@/components/admin/BlockCanvas";
 import StatChipsEditor from "@/components/admin/StatChipsEditor";
-import { ArrowLeft, Trash2, ExternalLink, FileText, BarChart3, Zap } from "lucide-react";
+import { ArrowLeft, Trash2, ExternalLink, FileText, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { t } from "@/lib/theme";
 import {
@@ -18,7 +18,6 @@ import {
 const TYPE_OPTIONS = [
   { value: "blog-post", label: "Blog Post", desc: "Long-form narrative with hero image", icon: FileText },
   { value: "case-study", label: "Case Study", desc: "Structured analysis with key metrics", icon: BarChart3 },
-  { value: "field-note", label: "Field Note", desc: "Quick signal with impact stat", icon: Zap },
 ] as const;
 
 type StatDraft = Omit<ImpactStat, "post_id" | "case_study_id" | "phase_title" | "sort_order"> & { id: string };
@@ -105,10 +104,10 @@ const AdminEditor = () => {
   const formData = useCallback((): PostFormData => ({
     title, slug, type: type || "blog-post", capability,
     excerpt: excerpt || null, content: null,
-    hero_image_url: type === "field-note" ? null : heroImageUrl,
-    content_blocks: type === "field-note" ? [] : contentBlocks,
+    hero_image_url: heroImageUrl,
+    content_blocks: contentBlocks,
     stats: null, // Stats now live in impact_stats table
-    password: type === "field-note" ? null : (password || null),
+    password: password || null,
     is_published: isPublished,
     published_at: publishedAt,
     is_featured: isFeatured,
@@ -290,48 +289,9 @@ const AdminEditor = () => {
           </div>
         )}
 
-        {currentType === "field-note" && (
-          <div className="px-6 md:px-8 pt-10 pb-16 max-w-[560px] mx-auto">
-            <div className="space-y-10">
-              <div className="group">
-                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Slug Line</label>
-                <input value={sectorLabel || ""} onChange={(e) => markDirty(setSectorLabel)(e.target.value || null)}
-                  placeholder="INTELLIGENCE · CULTURE · ORGANIZING"
-                  className="w-full bg-transparent outline-none pb-3"
-                  style={{ fontFamily: t.sans, color: t.ink(0.75), fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase", borderBottom: `1px solid ${t.ink(0.08)}` }} />
-              </div>
-              <div className="group">
-                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Brief</label>
-                <textarea value={excerpt} onChange={(e) => markDirty(setExcerpt)(e.target.value)}
-                  placeholder="What happened. What was accomplished." rows={3}
-                  className="w-full bg-transparent outline-none resize-none pb-3"
-                  style={{ fontFamily: t.sans, color: t.ink(0.7), fontSize: "15px", lineHeight: "1.75", borderBottom: `1px solid ${t.ink(0.08)}` }} />
-              </div>
-              <div className="group">
-                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Impact Stat</label>
-                <input value={featuredStat || ""} onChange={(e) => markDirty(setFeaturedStat)(e.target.value || null)}
-                  placeholder="$12M mobilized across 3 foundations"
-                  className="w-full bg-transparent outline-none pb-3"
-                  style={{ fontFamily: t.sans, color: t.ink(0.7), fontSize: "15px", borderBottom: `1px solid ${t.ink(0.08)}` }} />
-              </div>
-              <div className="group">
-                <label className="text-[10px] uppercase tracking-[0.12em] mb-3 block" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
-                  Link <span style={{ color: t.ink(0.15), textTransform: "none", letterSpacing: "0", fontSize: "10px" }}>optional</span>
-                </label>
-                <input value={linkUrl || ""} onChange={(e) => markDirty(setLinkUrl)(e.target.value || null)}
-                  placeholder="/post/clean-energy or https://nytimes.com/..."
-                  className="w-full bg-transparent outline-none pb-3"
-                  style={{ fontFamily: t.sans, color: t.ink(0.5), fontSize: "14px", borderBottom: `1px solid ${t.ink(0.08)}` }} />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {currentType !== "field-note" && (
-          <div className="px-4 md:px-8 py-6 max-w-[680px] mx-auto">
-            <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={currentType === "case-study"} />
-          </div>
-        )}
+        <div className="px-4 md:px-8 py-6 max-w-[680px] mx-auto">
+          <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={currentType === "case-study"} />
+        </div>
 
         <div className="flex items-center justify-center gap-4 text-[11px] py-8 mt-12" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>
           <span>⌘S save</span>

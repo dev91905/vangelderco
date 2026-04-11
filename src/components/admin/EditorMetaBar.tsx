@@ -85,7 +85,6 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
   }, [props.title, slugManual]);
 
   const isCaseStudy = props.type === "case-study";
-  const isFieldNote = props.type === "field-note";
   const titleSize = isCaseStudy ? "clamp(28px, 4vw, 40px)" : "clamp(32px, 4vw, 44px)";
   const maxWidth = isCaseStudy ? "720px" : "680px";
 
@@ -95,7 +94,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
       <div className="w-full flex flex-col items-center px-6" style={{ paddingTop: "3vh" }}>
 
         {/* Hero image for blog posts */}
-        {!isCaseStudy && !isFieldNote && props.heroImageUrl && (
+        {!isCaseStudy && props.heroImageUrl && (
           <div className="w-full relative mb-8 -mx-6" style={{ height: "40vh", marginTop: "-6vh" }}>
             <img src={props.heroImageUrl} alt={props.title} className="w-full h-full object-cover" />
             <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, hsl(var(--background)) 100%)` }} />
@@ -125,8 +124,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
           />
 
           {/* Editable excerpt */}
-          {!isFieldNote && (
-            <textarea
+          <textarea
               value={props.excerpt}
               onChange={(e) => props.onExcerptChange(e.target.value)}
               placeholder="Short description shown below the title"
@@ -134,7 +132,6 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
               className="w-full bg-transparent outline-none resize-none text-center mt-4 max-w-2xl"
               style={{ fontFamily: t.sans, color: t.ink(0.55), fontSize: "clamp(17px, 1.9vw, 19px)", lineHeight: 1.7 }}
             />
-          )}
 
           {/* Date */}
           {props.publishedAt && (
@@ -145,9 +142,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
         </div>
 
         {/* Divider */}
-        {!isFieldNote && (
-          <div className="w-12 mt-8 mb-2" style={{ height: "1px", background: t.ink(0.1) }} />
-        )}
+        <div className="w-12 mt-8 mb-2" style={{ height: "1px", background: t.ink(0.1) }} />
       </div>
 
       {/* Settings Drawer — reorganized into Publishing + Promotion */}
@@ -197,10 +192,10 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   <div className="space-y-2">
                     <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Type</label>
                     <div className="flex gap-1 rounded-xl overflow-hidden" style={{ border: t.border(0.08) }}>
-                      {["blog-post", "case-study", "field-note"].map((tp) => (
+                      {["blog-post", "case-study"].map((tp) => (
                         <button key={tp} onClick={() => props.onTypeChange(tp)} className="flex-1 px-3 py-2.5 text-[12px] transition-colors"
                           style={{ fontFamily: t.sans, background: props.type === tp ? t.ink(1) : "transparent", color: props.type === tp ? t.cream : t.ink(0.4) }}>
-                          {tp === "blog-post" ? "Blog" : tp === "case-study" ? "Study" : "Note"}
+                          {tp === "blog-post" ? "Blog" : "Study"}
                         </button>
                       ))}
                     </div>
@@ -242,7 +237,7 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                     </button>
                   </div>
 
-                  {props.isFeatured && !isFieldNote && (
+                  {props.isFeatured && (
                     <>
                       <div className="space-y-2">
                         <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Slug Line</label>
@@ -258,17 +253,13 @@ const EditorMetaBar = (props: EditorMetaBarProps) => {
                   )}
 
                   {/* Hero Image */}
-                  {!isFieldNote && (
-                    <div className="space-y-2">
-                      <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Hero Image</label>
-                      <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
-                    </div>
-                  )}
+                  <div className="space-y-2">
+                    <label className="text-[11px] uppercase tracking-[0.06em]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Hero Image</label>
+                    <ImageUploader value={props.heroImageUrl} onChange={props.onHeroImageChange} label="" />
+                  </div>
 
                   {/* Password */}
-                  {!isFieldNote && (
-                    <PasswordField value={props.password} onChange={props.onPasswordChange} />
-                  )}
+                  <PasswordField value={props.password} onChange={props.onPasswordChange} />
                 </div>
               </div>
             </div>

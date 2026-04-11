@@ -102,7 +102,7 @@ const Admin = () => {
     { value: "all", label: "All" },
     { value: "blog-post", label: "Blog Posts" },
     { value: "case-study", label: "Case Studies" },
-    { value: "field-note", label: "Field Notes" },
+    
   ];
 
   const capChips = [
