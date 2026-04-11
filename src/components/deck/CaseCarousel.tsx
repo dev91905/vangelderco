@@ -106,7 +106,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
                 onMouseLeave={() => setHoveredIdx(null)}
                 className="flex-shrink-0 text-left"
                 style={{
-                  width: "clamp(320px, 28vw, 420px)",
+                  width: "clamp(280px, 75vw, 420px)",
                   minHeight: "clamp(220px, 22vh, 270px)",
                   borderRadius: ui.radius,
                   padding: 0,
