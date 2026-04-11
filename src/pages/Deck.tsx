@@ -13,7 +13,7 @@ import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/de
 import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import { useQuery } from "@tanstack/react-query";
 
-const TOTAL_FRAMES = 11; // removed Frame 10 (The Promise) and Frame 5 (Domains)
+const TOTAL_FRAMES = 12; // added preliminary results slide
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -314,9 +314,10 @@ const Deck = () => {
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
     gates[7] = true; // sectors — always passable, selection is optional
-    gates[8] = true; // CTA — always accessible
-    gates[9] = true; // case studies
-    gates[10] = true; // close
+    gates[8] = true; // preliminary results — always accessible
+    gates[9] = true; // CTA — always accessible
+    gates[10] = true; // case studies
+    gates[11] = true; // close
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
@@ -470,6 +471,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
+  const r12 = useFrameReveal();
 
   /* ─── Quiz helpers ─── */
   const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
@@ -493,7 +495,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases", "Close"];
 
   return (
     <div
