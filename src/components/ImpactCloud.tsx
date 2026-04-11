@@ -40,8 +40,8 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
   const href = stat.sourceCapability === "deck"
     ? (stat.sourceSlug || "/diagnostic")
     : stat.sourceSlug
-      ? `/${stat.sourceCapability.replace(/\s+/g, "-").toLowerCase()}/${stat.sourceSlug}`
-      : `/${stat.sourceCapability.replace(/\s+/g, "-").toLowerCase()}`;
+      ? `/post/${stat.sourceSlug}`
+      : "#";
 
   return (
     <div

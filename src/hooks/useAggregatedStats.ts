@@ -7,6 +7,7 @@ export interface AggregatedStat {
   sourceTitle: string;
   sourceSlug: string | null;
   sourceCapability: string;
+  sourceType: string;
   sourceCreatedAt: string;
 }
 
@@ -30,7 +31,7 @@ export function useAggregatedStats() {
 
       const [postsRes, csRes] = await Promise.all([
         postIds.length > 0
-          ? supabase.from("capability_posts").select("id, title, slug, capability, created_at").in("id", postIds)
+          ? supabase.from("capability_posts").select("id, title, slug, capability, type, created_at").in("id", postIds)
           : Promise.resolve({ data: [], error: null }),
         csIds.length > 0
           ? supabase.from("deck_case_studies").select("id, name, link_url, created_at").in("id", csIds)
@@ -55,6 +56,7 @@ export function useAggregatedStats() {
             sourceTitle: post.title,
             sourceSlug: post.slug,
             sourceCapability: post.capability,
+            sourceType: post.type,
             sourceCreatedAt: post.created_at,
             sourceId: post.id,
             sortOrder: stat.sort_order,
@@ -66,6 +68,7 @@ export function useAggregatedStats() {
             sourceTitle: cs.name,
             sourceSlug: cs.link_url,
             sourceCapability: "deck",
+            sourceType: "case_study",
             sourceCreatedAt: cs.created_at,
             sourceId: cs.id,
             sortOrder: stat.sort_order,
