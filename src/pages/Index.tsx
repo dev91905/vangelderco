@@ -31,23 +31,23 @@ const HERO_LINKS = [
 const CAPABILITIES = [
   {
     title: "Cultural Strategy",
-    sub: "We don't just push your message out.",
+    sub: "Strategic communications that become cultural moments.",
     detail:
-      "We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence.",
+      "Most firms get the message out. We work across music, entertainment, news media, creators, brands, athletes, faith, campuses, and more to make sure it gets taken up.",
     to: "/cultural-strategy",
   },
   {
     title: "Cross-Sector Campaigns",
-    sub: "Nothing moves until multiple sectors are pushing on the same thing.",
+    sub: "Nothing moves until every sector is pushing in the same direction.",
     detail:
-      "We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it.",
+      "We bring industry, labor, philanthropy, culture, policy, and national security to the same table — then build and coordinate large-scale campaigns around shared interests. That's how you win.",
     to: "/cross-sector",
   },
   {
     title: "Deep Organizing",
-    sub: "Campaigns create momentum. We make sure it lasts.",
+    sub: "Build your movement for growth, not just mobilization.",
     detail:
-      "We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise.",
+      "Bringing in people who aren't already at the table — people who may disagree — and sustaining their participation over time. That's the difference between a movement that grows and one that stalls.",
     to: "/deep-organizing",
   },
 ];
