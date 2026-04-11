@@ -1,42 +1,46 @@
 
 
-# Fix: Fill All 6 Bento Slots
+# Fix: Impact Stat Links → Correct Destinations + Password Protection
 
-## Root cause
-The curation logic enforces "one stat per source." There are only 4 sources (3 articles + 1 case study), so it returns 4 stats — not the 6 the grid expects.
+## Problem
 
-## Fix in `src/hooks/useAggregatedStats.ts`
+The `StatCard` link builder in `ImpactCloud.tsx` constructs URLs like `/cross-sector/building-power-in-the-permian-basin` — but no such routes exist. The app only has `/post/:slug` for articles. For deck case studies with no `link_url`, it falls back to `/diagnostic`.
 
-Change the algorithm to:
-1. **Round 1**: Pick the best stat (lowest `sort_order`) from each source — gives 4 stats
-2. **Round 2**: If under 6, pick the next-best stat from each source (round-robin by recency), until we hit 6 or run out
-3. Never duplicate a stat
+## What needs to happen
 
-This guarantees the grid fills to 6 whenever the data supports it (we have 16 rows — plenty).
+### 1. Fix link generation in `ImpactCloud.tsx` (line 40-44)
 
-### Concrete logic
-```
-// After building bestPerSource map (round 1):
-const used = new Set(curated.map(s => s.label + s.sourceId));
-const remaining = all
-  .filter(s => !used.has(s.label + s.sourceId))
-  .sort((a, b) => a.sortOrder - b.sortOrder);
+Change the href logic:
 
-// Round 2: fill remaining slots, round-robin across sources
-while (curated.length < MAX_STATS && remaining.length > 0) {
-  const sourcesUsedCount = new Map<string, number>();
-  for (const s of curated) {
-    sourcesUsedCount.set(s.sourceId, (sourcesUsedCount.get(s.sourceId) || 0) + 1);
-  }
-  // Pick from the source with fewest picks so far
-  remaining.sort((a, b) => {
-    const aCount = sourcesUsedCount.get(a.sourceId) || 0;
-    const bCount = sourcesUsedCount.get(b.sourceId) || 0;
-    return aCount - bCount || a.sortOrder - b.sortOrder;
-  });
-  curated.push(remaining.shift()!);
-}
+- **For capability_posts** (`sourceCapability !== "deck"`): Always link to `/post/{slug}`. The `PostDetail` page already handles password gating via the `verify-post-password` edge function.
+- **For deck_case_studies** (`sourceCapability === "deck"`): Link to `link_url` if set, otherwise `/diagnostic`.
+
+```text
+Before:  /cross-sector/building-power-in-the-permian-basin  → 404
+After:   /post/building-power-in-the-permian-basin          → PostDetail (with password gate if needed)
 ```
 
-No other files change. The ImpactCloud grid already handles 6 items with the hero/standard layout.
+### 2. Password protection is already wired
+
+The backend is complete:
+- `capability_posts.password` column exists
+- `verify-post-password` edge function handles both post-level and global passwords
+- `PostDetail` page checks `usePostHasPassword` and shows `PasswordGateWrapper`
+- Admin editor (`AdminEditor.tsx`) has password field on the meta bar
+- Admin panel (`Admin.tsx`) has global password management
+
+No backend or admin changes needed — password protection works end-to-end once the links point to `/post/:slug`.
+
+### 3. Include `sourceType` in aggregated stats
+
+Add `sourceType` (from `capability_posts.type`) to `AggregatedStat` so future link logic can distinguish article types if needed. This is a minor data addition in `useAggregatedStats.ts`.
+
+### Summary of file changes
+
+| File | Change |
+|------|--------|
+| `src/components/ImpactCloud.tsx` | Fix href: posts → `/post/{slug}`, deck → `link_url \|\| /diagnostic` |
+| `src/hooks/useAggregatedStats.ts` | Add `sourceType` field from capability_posts |
+
+One-line fix at the core — the password gate, edge function, and admin panels are already in place.
 
