@@ -29,9 +29,10 @@ const capabilityLabel: Record<string, string> = {
 };
 
 const BlogPostView = ({ post }: BlogPostViewProps) => {
+  const backPath = useBackPath(capabilityRoute[post.capability] || "/");
   return (
     <AtmosphericLayout>
-      <Link to={useBackPath(capabilityRoute[post.capability] || "/")} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+      <Link to={backPath} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back

@@ -28,7 +28,7 @@ const capabilityLabel: Record<string, string> = { "cultural-strategy": "Cultural
 const CaseStudyView = ({ post }: CaseStudyViewProps) => {
   const [showStats, setShowStats] = useState(true);
   const { data: impactStats } = usePostImpactStats(post.id);
-
+  const backPath = useBackPath(capabilityRoute[post.capability] || "/");
   const visibleStats = (impactStats ?? [])
     .filter(s => s.visible)
     .map(s => ({ label: s.label, description: s.description }));
@@ -42,7 +42,7 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
   return (
     <AtmosphericLayout>
-      <Link to={useBackPath(capabilityRoute[post.capability] || "/")} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+      <Link to={backPath} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back
