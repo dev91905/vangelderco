@@ -261,9 +261,6 @@ const Deck = () => {
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
-      }
-    }
-  }, [searchParams, caseStudies]);
 
   const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
   const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
@@ -1416,62 +1413,5 @@ const Deck = () => {
           )}
         </div>
       </DeckFrame>
-
-      {/* ═══ FRAME 11: Case Studies — Carousel Gallery ═══ */}
-      <DeckFrame ref={setRef(10)} mode="full">
-        <div
-          ref={r11.ref}
-          className="flex w-full flex-col justify-center"
-          style={{
-            overflow: "hidden",
-            minHeight: "min(72vh, 760px)",
-            gap: "clamp(28px, 4vh, 44px)",
-          }}
-        >
-          <div
-            style={{
-              ...r11.stagger(0, 0, "blur-up"),
-              paddingLeft: "clamp(24px, 4vw, 80px)",
-              paddingRight: "clamp(24px, 4vw, 80px)",
-            }}
-          >
-            <p style={{ ...heading("clamp(28px, 3.8vw, 46px)"), fontWeight: 700 }}>Selected work.</p>
-            <p
-              style={{
-                fontFamily: f.sans,
-                fontSize: "clamp(13px, 1.4vw, 15px)",
-                color: f.ink(0.38),
-                marginTop: "10px",
-                lineHeight: 1.6,
-                maxWidth: "440px",
-              }}
-            >
-              Cross-sector programs, real outcomes.
-            </p>
-          </div>
-
-          <div style={{ ...r11.stagger(1, 120, "fade-up") }}>
-            <CaseCarousel
-              studies={caseStudies}
-              isActive={r11.isActive}
-              onSelect={setSelectedCase}
-            />
-          </div>
-        </div>
-      </DeckFrame>
-
-
-      {/* Case Study Timeline Overlay */}
-      <CaseTimelineOverlay study={selectedCase} onClose={() => {
-        if (deepLinkedCase.current) {
-          deepLinkedCase.current = false;
-          navigate((location.state as { from?: string })?.from || "/");
-        } else {
-          setSelectedCase(null);
-        }
-      }} />
-    </div>
-  );
-};
 
 export default Deck;
