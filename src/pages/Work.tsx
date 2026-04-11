@@ -28,6 +28,7 @@ const Work: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
   const deepLinkedCase = useRef(false);
+  const cameFromDiagnostic = (location.state as { from?: string })?.from === "/diagnostic";
 
   const { data: dbCaseStudies } = useQuery({
     queryKey: ["deck-case-studies"],
@@ -64,6 +65,15 @@ const Work: React.FC = () => {
     }
   }, [searchParams, caseStudies]);
 
+  const handleBack = () => {
+    const hasDeckSession = !!sessionStorage.getItem("deck-state");
+    if (cameFromDiagnostic && hasDeckSession) {
+      navigate("/diagnostic");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div
       style={{
@@ -81,14 +91,7 @@ const Work: React.FC = () => {
         style={{ padding: "20px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}
       >
         <button
-          onClick={() => {
-            const from = (location.state as { from?: string })?.from;
-            if (from) {
-              navigate(from);
-            } else {
-              navigate(-1);
-            }
-          }}
+          onClick={handleBack}
           style={{
             fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.04em",
             color: f.ink(0.3), background: "none", border: "none", cursor: "pointer",
@@ -97,7 +100,7 @@ const Work: React.FC = () => {
           onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.6); }}
           onMouseLeave={(e) => { e.currentTarget.style.color = f.ink(0.3); }}
         >
-          ← {(location.state as { returnLabel?: string })?.returnLabel || "Back"}
+          ← Back
         </button>
         <button
           onClick={() => navigate("/")}
@@ -145,7 +148,7 @@ const Work: React.FC = () => {
         onClose={() => {
           if (deepLinkedCase.current) {
             deepLinkedCase.current = false;
-            navigate((location.state as { from?: string })?.from || "/");
+            handleBack();
           } else {
             setSelectedCase(null);
           }
