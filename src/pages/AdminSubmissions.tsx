@@ -4,6 +4,7 @@ import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft } from "lucide-reac
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
+import { getScoreLabel } from "@/lib/deckScoring";
 import { formatDistanceToNow, format } from "date-fns";
 import { toast } from "sonner";
 import DiagnosticReport, { type DiagnosticData } from "@/components/admin/DiagnosticReport";
@@ -44,10 +45,16 @@ const useContacts = () =>
     },
   });
 
-const quizScore = (answers: any[] | null) => {
-  if (!answers || answers.length === 0) return "—";
-  const advanced = answers.filter((a: any) => a.picked === "nextgen").length;
-  return `${advanced} of ${answers.length} advanced`;
+const readinessLabel = (score: number | null) => {
+  if (score === null || score === undefined) return { label: "—", hint: "", color: t.ink(0.4) };
+  const info = getScoreLabel(score);
+  const hints: Record<string, string> = {
+    critical: "Full diagnostic needed",
+    significant: "Strong engagement candidate",
+    moderate: "Targeted support needed",
+    advanced: "Light-touch advisory only",
+  };
+  return { label: info.label, hint: hints[info.severity], color: info.color };
 };
 
 const StatusPill = ({ status }: { status: string | null }) => {
@@ -114,8 +121,8 @@ const SubmissionsList = ({ contacts, onSelect }: { contacts: Contact[]; onSelect
             </span>
           </div>
         </div>
-        <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.ink(0.5), whiteSpace: "nowrap" }}>
-          {quizScore(c.quiz_answers)}
+        <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: readinessLabel(c.readiness_score).color, whiteSpace: "nowrap" }}>
+          {readinessLabel(c.readiness_score).label}
         </span>
         <StatusPill status={c.report_status} />
       </button>
@@ -276,10 +283,13 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
 
           <div style={{ padding: "12px 14px", borderRadius: "10px", background: t.ink(0.03), border: t.border(0.06) }}>
             <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.35), textTransform: "uppercase", marginBottom: "4px" }}>
-              Quiz Score
+              Readiness Score
             </p>
-            <p style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 700, color: t.ink(0.75) }}>
-              {quizScore(contact.quiz_answers)}
+            <p style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 700, color: readinessLabel(contact.readiness_score).color }}>
+              {contact.readiness_score ?? "—"} · {readinessLabel(contact.readiness_score).label}
+            </p>
+            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35), marginTop: "2px" }}>
+              {readinessLabel(contact.readiness_score).hint}
             </p>
           </div>
 
