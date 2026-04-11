@@ -220,6 +220,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
 const Deck = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Restore state from sessionStorage — keep it durable until submit
