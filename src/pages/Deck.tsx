@@ -289,8 +289,9 @@ const Deck = () => {
     capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
     ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx]);
 
-  // Scroll to restored frame on mount
+  // Scroll to restored frame on mount (desktop only — mobile uses state)
   useEffect(() => {
+    if (isMobile) return;
     if (restored && restored.currentFrame > 0) {
       setTimeout(() => {
         frameRefs.current[restored.currentFrame]?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
@@ -369,6 +370,7 @@ const Deck = () => {
 
   /* ─── Navigation ─── */
   useEffect(() => {
+    if (isMobile) return; // Mobile uses state-driven nav, no scroll listener
     const el = containerRef.current;
     if (!el) return;
 
@@ -387,7 +389,7 @@ const Deck = () => {
     el.addEventListener("scroll", updateCurrentFrame, { passive: true });
     updateCurrentFrame();
     return () => el.removeEventListener("scroll", updateCurrentFrame);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (currentFrame !== lastFrameRef.current) {
@@ -398,8 +400,12 @@ const Deck = () => {
 
   const scrollToFrame = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(TOTAL_FRAMES - 1, index));
-    frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    if (isMobile) {
+      setCurrentFrame(clamped);
+    } else {
+      frameRefs.current[clamped]?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isMobile]);
 
   const resetQuiz = useCallback(() => {
     scrollToFrame(2);
@@ -436,7 +442,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll on desktop only; mobile uses native scroll */
+  /* Wheel handler — lock deck scroll on desktop only; mobile is state-driven */
   useEffect(() => {
     if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
@@ -468,7 +474,7 @@ const Deck = () => {
     return () => el.removeEventListener("wheel", handler);
   }, [isMobile]);
 
-  /* Touch swipe handler removed — mobile uses native scroll */
+  /* Touch swipe handler removed — mobile uses state-driven nav */
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
@@ -522,13 +528,13 @@ const Deck = () => {
         height: "100dvh",
         width: "100vw",
         overflowX: "hidden",
-        overflowY: isMobile ? "auto" : "hidden",
-        WebkitOverflowScrolling: "touch" as any,
-        overscrollBehaviorY: isMobile ? "contain" : "none",
-        scrollSnapType: isMobile ? "y proximity" : "none",
+        overflowY: isMobile ? "hidden" : "hidden",
+        overscrollBehaviorY: "none",
+        scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
         background: "hsl(var(--background))",
+        position: "relative",
       }}
     >
 
@@ -595,7 +601,7 @@ const Deck = () => {
       )}
 
       {/* ═══ FRAME 1: Hero ═══ */}
-      <DeckFrame ref={setRef(0)} mode="wide">
+      <DeckFrame ref={setRef(0)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 0}>
         <div ref={r1.ref} className="flex flex-col items-start gap-12 min-h-[60vh] justify-center">
           <TypewriterHeading
             text="Find the gaps before your opponents do."
@@ -664,7 +670,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
-      <DeckFrame ref={setRef(1)} mode="wide">
+      <DeckFrame ref={setRef(1)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 1}>
         <div ref={r2.ref} className="flex flex-col gap-8">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
@@ -752,7 +758,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
-      <DeckFrame ref={setRef(2)} mode="wide">
+      <DeckFrame ref={setRef(2)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 2}>
         <div
           ref={r3.ref}
           className="flex flex-col"
@@ -897,7 +903,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 4: Practices ═══ */}
-      <DeckFrame ref={setRef(3)} mode="wide">
+      <DeckFrame ref={setRef(3)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 3}>
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
           {/* Left column */}
           <div style={{ ...r4.stagger(0, 0, "blur-up") }}>
@@ -996,7 +1002,7 @@ const Deck = () => {
 
 
       {/* ═══ FRAME 5: Capabilities — "Which 2 matter most?" ═══ */}
-      <DeckFrame ref={setRef(4)} mode="wide">
+      <DeckFrame ref={setRef(4)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 4}>
         <div ref={r5.ref} className="flex flex-col gap-8">
           <div>
             <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up") }}>
@@ -1045,7 +1051,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 6: Metrics Checklist ═══ */}
-      <DeckFrame ref={setRef(5)} mode="wide">
+      <DeckFrame ref={setRef(5)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 5}>
         <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
           <div style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
@@ -1103,7 +1109,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 7: Working Together ═══ */}
-      <DeckFrame ref={setRef(6)} mode="wide">
+      <DeckFrame ref={setRef(6)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 6}>
         <div ref={r7.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: "80vh", marginTop: "-40px" }}>
           {/* Left column — heading */}
           <div style={r7.stagger(0, 0, "blur-up")}>
@@ -1171,7 +1177,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 8: Sectors ═══ */}
-      <DeckFrame ref={setRef(7)} mode="wide">
+      <DeckFrame ref={setRef(7)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 7}>
         <div ref={r8.ref} className="w-full">
           <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(20px, 3vh, 36px)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
@@ -1227,7 +1233,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 9: Preliminary Results ═══ */}
-      <DeckFrame ref={setRef(8)} mode="wide" align="left">
+      <DeckFrame ref={setRef(8)} mode="wide" align="left" isMobile={isMobile} isVisible={currentFrame === 8}>
         <div ref={r9.ref} style={{ width: "100%" }}>
           {(() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
@@ -1476,7 +1482,7 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 10: CTA — Get Your Diagnostic ═══ */}
-      <DeckFrame ref={setRef(9)} mode="narrow">
+      <DeckFrame ref={setRef(9)} mode="narrow" isMobile={isMobile} isVisible={currentFrame === 9}>
         <div ref={r10.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
