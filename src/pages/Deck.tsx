@@ -872,7 +872,7 @@ const Deck = () => {
               Effective programs do three things.
             </p>
             <p style={{ marginTop: "12px", fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), lineHeight: 1.6 }}>
-              Select the ones you want to work on.
+              Select the ones you're most interested in.
             </p>
           </div>
           {/* Right column — accordion cards */}
