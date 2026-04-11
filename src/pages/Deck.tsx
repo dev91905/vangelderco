@@ -978,7 +978,7 @@ const Deck = () => {
               const isSelected = capabilitiesRanked.includes(cap.id);
               const desc = [
                 "A deep dive into your grantees, past investments, and institutional track record.",
-                "Decision-making frameworks custom-built for how your organization evaluates grants.",
+                "Portfolio strategy custom built for how your organization evaluates impact.",
                 "Cultural operatives across music, film/TV, digital, and news. A 480-member network.",
                 "Co-designed around your objectives. Real indicators of power, not vanity metrics.",
                 "Your team learns to evaluate, strategize, and run multi-sector campaigns on its own.",
