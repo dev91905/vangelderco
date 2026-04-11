@@ -18,6 +18,7 @@ export type CaseStudyData = {
   issue: string;
   outcome: string;
   phases: CasePhase[] | null;
+  link_url?: string | null;
 };
 
 interface Props {
@@ -103,19 +104,42 @@ const CaseTimelineOverlay: React.FC<Props> = ({ study, onClose }) => {
       <div
         className="flex flex-shrink-0 items-center justify-between px-8 py-5 md:px-12"
       >
-        <h2
-          style={{
-            fontFamily: f.sans,
-            fontSize: "clamp(15px, 1.4vw, 18px)",
-            fontWeight: 600,
-            color: f.ink(0.6),
-            letterSpacing: "-0.01em",
-          }}
-        >
-          <span style={{ color: f.ink(0.3) }}>Case Study</span>
-          <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
-          {study.name}
-        </h2>
+        <div>
+          <h2
+            style={{
+              fontFamily: f.sans,
+              fontSize: "clamp(15px, 1.4vw, 18px)",
+              fontWeight: 600,
+              color: f.ink(0.6),
+              letterSpacing: "-0.01em",
+            }}
+          >
+            <span style={{ color: f.ink(0.3) }}>Case Study</span>
+            <span style={{ color: f.ink(0.15), margin: "0 8px" }}>/</span>
+            {study.name}
+          </h2>
+          {study.link_url && (
+            <a
+              href={study.link_url}
+              target={study.link_url.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: f.sans,
+                fontSize: "12px",
+                color: f.ink(0.3),
+                textDecoration: "none",
+                letterSpacing: "0.02em",
+                display: "inline-block",
+                marginTop: "4px",
+                transition: "color 0.2s ease",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = f.ink(0.6); }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = f.ink(0.3); }}
+            >
+              Read the full report →
+            </a>
+          )}
+        </div>
 
         <button
           onClick={onClose}

@@ -1,0 +1,1 @@
+ALTER TABLE public.deck_case_studies ADD COLUMN link_url text;

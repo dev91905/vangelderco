@@ -83,6 +83,7 @@ export type Database = {
           id: string
           is_published: boolean
           issue: string
+          link_url: string | null
           name: string
           outcome: string
           phases: Json | null
@@ -93,6 +94,7 @@ export type Database = {
           id?: string
           is_published?: boolean
           issue?: string
+          link_url?: string | null
           name: string
           outcome?: string
           phases?: Json | null
@@ -103,6 +105,7 @@ export type Database = {
           id?: string
           is_published?: boolean
           issue?: string
+          link_url?: string | null
           name?: string
           outcome?: string
           phases?: Json | null
