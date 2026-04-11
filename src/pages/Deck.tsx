@@ -13,7 +13,7 @@ import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/de
 import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import { useQuery } from "@tanstack/react-query";
 
-const TOTAL_FRAMES = 11; // removed Frame 10 (The Promise) and Frame 5 (Domains)
+const TOTAL_FRAMES = 12; // added preliminary results slide
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -314,9 +314,10 @@ const Deck = () => {
     gates[5] = metricsChecked.length > 0; // metrics
     gates[6] = engagementPath !== null; // working together
     gates[7] = true; // sectors — always passable, selection is optional
-    gates[8] = true; // CTA — always accessible
-    gates[9] = true; // case studies
-    gates[10] = true; // close
+    gates[8] = true; // preliminary results — always accessible
+    gates[9] = true; // CTA — always accessible
+    gates[10] = true; // case studies
+    gates[11] = true; // close
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
 
@@ -470,6 +471,7 @@ const Deck = () => {
   const r9 = useFrameReveal();
   const r10 = useFrameReveal();
   const r11 = useFrameReveal();
+  const r12 = useFrameReveal();
 
   /* ─── Quiz helpers ─── */
   const handleQuizPick = (rowIndex: number, picked: "traditional" | "nextgen") => {
@@ -493,7 +495,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Connect", "Cases", "Close"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases", "Close"];
 
   return (
     <div
@@ -1395,13 +1397,71 @@ const Deck = () => {
           </div>
         </div>
       </DeckFrame>
+
+      {/* ═══ FRAME 9: Preliminary Results ═══ */}
       <DeckFrame ref={setRef(8)} mode="narrow">
-        <div ref={r9.ref}>
+        <div ref={r9.ref} className="flex flex-col items-center text-center max-w-[520px] mx-auto">
+          <p style={{ ...r9.stagger(0, 0, "blur-up"), ...label("10px"), color: f.ink(0.3), marginBottom: "20px" }}>Preliminary results</p>
+          <p style={{ ...r9.stagger(1, 100, "blur-up"), fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+            Here's what we see so far.
+          </p>
+          <p style={{ ...r9.stagger(2, 250, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.5vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "16px", maxWidth: "440px" }}>
+            Based on your answers, here's a snapshot of where your portfolio stands. The full diagnostic goes deeper.
+          </p>
+
+          {/* Score + grade cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full" style={{ ...r9.stagger(3, 400, "blur-scale"), marginTop: "36px" }}>
+            {/* Readiness score */}
+            <div style={{
+              padding: "clamp(20px, 2.5vw, 28px)",
+              borderRadius: "16px",
+              background: "hsl(var(--foreground) / var(--a-bg))",
+              border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+              textAlign: "left",
+            }}>
+              <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "12px" }}>Readiness score</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(36px, 5vw, 52px)", fontWeight: 700, color: f.ink(0.88), lineHeight: 1 }}>
+                {diagnosticScore}
+              </p>
+              <p style={{ fontFamily: f.sans, fontSize: "12px", color: f.ink(0.3), marginTop: "6px" }}>out of 100</p>
+            </div>
+
+            {/* Quiz grade */}
+            <div style={{
+              padding: "clamp(20px, 2.5vw, 28px)",
+              borderRadius: "16px",
+              background: "hsl(var(--foreground) / var(--a-bg))",
+              border: "1px solid hsl(var(--foreground) / var(--a-border-card))",
+              textAlign: "left",
+            }}>
+              <p style={{ ...label("9px"), color: f.ink(0.3), marginBottom: "12px" }}>Strategic approach</p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2vw, 22px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 1.2 }}>
+                {getQuizGrade(nextgenPickCount, QUIZ_ROWS.length).grade}
+              </p>
+              <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.1vw, 13px)", color: f.ink(0.4), lineHeight: 1.6, marginTop: "8px" }}>
+                {nextgenPickCount} of {QUIZ_ROWS.length} next-gen picks
+              </p>
+            </div>
+          </div>
+
+          <p style={{ ...r9.stagger(4, 600, "blur-up"), fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.35), lineHeight: 1.7, marginTop: "28px", maxWidth: "400px" }}>
+            Your full diagnostic includes a detailed breakdown across every dimension — plus recommendations tailored to your portfolio.
+          </p>
+
+          <div style={{ ...r9.stagger(5, 750, "blur-up"), marginTop: "28px" }}>
+            <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
+          </div>
+        </div>
+      </DeckFrame>
+
+      {/* ═══ FRAME 10: CTA — Get Your Diagnostic ═══ */}
+      <DeckFrame ref={setRef(9)} mode="narrow">
+        <div ref={r10.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>Got it.</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "420px", margin: "16px auto 0" }}>
-                We're putting together a custom diagnostic based on your answers. Check your inbox.
+                We're putting together your full diagnostic based on your answers. Check your inbox.
               </p>
               <a href="/" style={{
                 display: "inline-block", marginTop: "32px", fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
@@ -1413,14 +1473,14 @@ const Deck = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center text-center max-w-[460px] mx-auto">
-              <h2 style={{ ...r9.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+              <h2 style={{ ...r10.stagger(0, 0, "blur-up"), fontFamily: f.sans, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em", lineHeight: 1.1 }}>
                 Let's talk.
               </h2>
-              <p style={{ ...r9.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "12px", maxWidth: "420px" }}>
-                Leave your details and we'll send your results — or book a call and walk through them together.
+              <p style={{ ...r10.stagger(1, 300, "blur-up"), fontFamily: f.sans, fontSize: "clamp(14px, 1.6vw, 17px)", color: f.ink(0.45), lineHeight: 1.7, marginTop: "12px", maxWidth: "420px" }}>
+                Fill out your details and we'll send your full diagnostic — plus a link to schedule a call if you'd like to walk through it together.
               </p>
 
-              <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left w-full" style={{ ...r9.stagger(2, 500, "blur-up"), marginTop: "40px" }}>
+              <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left w-full" style={{ ...r10.stagger(2, 500, "blur-up"), marginTop: "40px" }}>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
@@ -1458,7 +1518,7 @@ const Deck = () => {
                     }}
                     onMouseEnter={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground))"; }}
                     onMouseLeave={(e) => { if (ctaForm.firstName.trim() && ctaForm.email.trim()) e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-high))"; }}
-                  >{ctaSubmitting ? "Sending…" : "Submit"}</button>
+                  >{ctaSubmitting ? "Sending…" : "Send me my diagnostic"}</button>
                   {bookingLink && (
                     <button type="button" onClick={() => { handleCtaSubmit(); window.open(bookingLink, "_blank"); }}
                       disabled={ctaSubmitting || !ctaForm.firstName.trim() || !ctaForm.lastName.trim() || !ctaForm.email.trim()}
@@ -1479,10 +1539,10 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 10: Case Studies — Carousel Gallery ═══ */}
-      <DeckFrame ref={setRef(9)} mode="full">
+      {/* ═══ FRAME 11: Case Studies — Carousel Gallery ═══ */}
+      <DeckFrame ref={setRef(10)} mode="full">
         <div
-          ref={r10.ref}
+          ref={r11.ref}
           className="flex w-full flex-col justify-center"
           style={{
             overflow: "hidden",
@@ -1492,7 +1552,7 @@ const Deck = () => {
         >
           <div
             style={{
-              ...r10.stagger(0, 0, "blur-up"),
+              ...r11.stagger(0, 0, "blur-up"),
               paddingLeft: "clamp(24px, 4vw, 80px)",
               paddingRight: "clamp(24px, 4vw, 80px)",
             }}
@@ -1512,24 +1572,24 @@ const Deck = () => {
             </p>
           </div>
 
-          <div style={{ ...r10.stagger(1, 120, "fade-up") }}>
+          <div style={{ ...r11.stagger(1, 120, "fade-up") }}>
             <CaseCarousel
               studies={caseStudies}
-              isActive={r10.isActive}
+              isActive={r11.isActive}
               onSelect={setSelectedCase}
             />
           </div>
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 11: Close ═══ */}
-      <DeckFrame ref={setRef(10)}>
-        <div ref={r11.ref} className="flex flex-col items-center text-center gap-6">
+      {/* ═══ FRAME 12: Close ═══ */}
+      <DeckFrame ref={setRef(11)}>
+        <div ref={r12.ref} className="flex flex-col items-center text-center gap-6">
           {ctaMode === "thanks" ? (
             <>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, color: f.ink(0.9), letterSpacing: "-0.02em" }}>Got it.</p>
               <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.5vw, 16px)", color: f.ink(0.45), lineHeight: 1.7, maxWidth: "400px" }}>
-                We're putting together a custom diagnostic based on your answers. Check your inbox.
+                We're putting together your full diagnostic based on your answers. Check your inbox.
               </p>
               <a href="/" style={{ fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500, color: f.ink(0.35), textDecoration: "none", marginTop: "12px" }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = f.ink(0.7); }}
@@ -1540,7 +1600,7 @@ const Deck = () => {
             <>
               <p style={{ ...label("10px") }}>← Ready to connect?</p>
               <button
-                onClick={() => scrollToFrame(8)}
+                onClick={() => scrollToFrame(9)}
                 style={{
                   fontFamily: f.sans, fontSize: "13px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
                   color: "hsl(var(--foreground))", background: "hsl(var(--foreground) / var(--a-bg))",
