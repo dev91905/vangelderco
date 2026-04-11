@@ -289,6 +289,11 @@ const Deck = () => {
     capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
     ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx]);
 
+  // Auto-save state to sessionStorage on every change
+  useEffect(() => {
+    saveDeckState();
+  }, [saveDeckState]);
+
   // Scroll to restored frame on mount (desktop only — mobile uses state)
   useEffect(() => {
     if (isMobile) return;
@@ -435,7 +440,7 @@ const Deck = () => {
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         e.preventDefault();
         scrollToFrame(currentFrame - 1);
-      } else if (e.key === "Escape") { navigate("/"); }
+      } else if (e.key === "Escape") { sessionStorage.removeItem("deck-state"); navigate("/"); }
     };
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
@@ -545,7 +550,7 @@ const Deck = () => {
             {STEP_LABELS[currentFrame] || ""} · {String(currentFrame + 1).padStart(2, "0")} / {String(TOTAL_FRAMES).padStart(2, "0")}
           </span>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => { sessionStorage.removeItem("deck-state"); navigate("/"); }}
             className="transition-colors duration-200"
             style={{ color: f.ink(0.25), background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 0 }}
             onMouseEnter={(e) => (e.currentTarget.style.color = f.ink(0.6))}
