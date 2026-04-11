@@ -555,7 +555,7 @@ const Deck = () => {
                 }}
               />
             </div>
-            <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />
+            {currentFrame < TOTAL_FRAMES - 1 && <ContinueButton onClick={() => scrollToFrame(currentFrame + 1)} />}
           </div>
         </div>
       )}
