@@ -222,12 +222,11 @@ const Admin = () => {
         <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
       </div>
 
-      <ContactsFeed />
     </div>
   );
 };
 
-const ContactsFeed = () => {
+export default Admin;
   const [open, setOpen] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"date" | "score">("score");
