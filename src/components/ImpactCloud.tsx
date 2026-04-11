@@ -40,46 +40,48 @@ function StatChip({ stat, index }: { stat: AggregatedStat; index: number }) {
         willChange: "opacity, transform",
       }}
     >
-      <div
-        className="flex flex-col px-5 py-4 rounded-xl cursor-pointer"
-        style={{
-          background: "transparent",
-          border: `1px solid hsl(var(--foreground) / 0.08)`,
-          transition: `border-color 0.3s ${EASE_OUT_EXPO}, background 0.3s ${EASE_OUT_EXPO}`,
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.2)";
-          e.currentTarget.style.background = "hsl(var(--foreground) / 0.03)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.08)";
-          e.currentTarget.style.background = "transparent";
-        }}
-      >
-        <span
-          className="text-[20px] md:text-[26px] font-bold leading-tight"
-          style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
-        >
-          {stat.label}
-        </span>
-        <span
-          className="text-[10px] tracking-[0.08em] uppercase mt-1.5"
-          style={{ fontFamily: t.sans, color: t.ink(0.35) }}
-        >
-          {stat.description}
-        </span>
-        <span
-          className="text-[9px] tracking-[0.06em] mt-3 opacity-0 group-hover:opacity-100"
+      <Link to={href} className="group no-underline block">
+        <div
+          className="flex flex-col px-5 py-4 rounded-xl cursor-pointer"
           style={{
-            fontFamily: t.sans,
-            color: t.ink(0.25),
-            transition: `opacity 0.3s ${EASE_OUT_EXPO}`,
+            background: "transparent",
+            border: `1px solid hsl(var(--foreground) / 0.08)`,
+            transition: `border-color 0.3s ${EASE_OUT_EXPO}, background 0.3s ${EASE_OUT_EXPO}`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.2)";
+            e.currentTarget.style.background = "hsl(var(--foreground) / 0.03)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "hsl(var(--foreground) / 0.08)";
+            e.currentTarget.style.background = "transparent";
           }}
         >
-          {stat.sourceTitle} →
-        </span>
-      </div>
-    </Link>
+          <span
+            className="text-[20px] md:text-[26px] font-bold leading-tight"
+            style={{ fontFamily: t.sans, color: "hsl(var(--foreground))" }}
+          >
+            {stat.label}
+          </span>
+          <span
+            className="text-[10px] tracking-[0.08em] uppercase mt-1.5"
+            style={{ fontFamily: t.sans, color: t.ink(0.35) }}
+          >
+            {stat.description}
+          </span>
+          <span
+            className="text-[9px] tracking-[0.06em] mt-3 opacity-0 group-hover:opacity-100"
+            style={{
+              fontFamily: t.sans,
+              color: t.ink(0.25),
+              transition: `opacity 0.3s ${EASE_OUT_EXPO}`,
+            }}
+          >
+            {stat.sourceTitle} →
+          </span>
+        </div>
+      </Link>
+    </div>
   );
 }
 
