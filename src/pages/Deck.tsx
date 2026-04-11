@@ -1108,8 +1108,8 @@ const Deck = () => {
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "start", overflow: "hidden" }}>
-          {/* Left column — pinned */}
-          <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)", alignSelf: "start" }}>
+          {/* Left column — pinned, vertically centered */}
+          <div style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <p style={{ ...heading("clamp(22px, 2.8vw, 34px)"), fontWeight: 700 }}>
               Effective programs do three things.
             </p>
