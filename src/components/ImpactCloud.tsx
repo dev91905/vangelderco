@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { t } from "@/lib/theme";
 import { useAggregatedStats, AggregatedStat } from "@/hooks/useAggregatedStats";
@@ -58,6 +58,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
     >
       <Link
         to={href}
+        state={{ from: location.pathname }}
         className="no-underline block h-full"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
