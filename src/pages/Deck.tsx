@@ -1418,7 +1418,7 @@ const Deck = () => {
           </div>
         </div>
       </DeckFrame>
-      <DeckFrame ref={setRef(8)} mode="wide">
+      <DeckFrame ref={setRef(8)} mode="narrow">
         <div ref={r9.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
