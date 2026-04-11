@@ -6,6 +6,8 @@ import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
+import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 
 const generatePassword = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -72,7 +74,20 @@ const Admin = () => {
   const [capFilter, setCapFilter] = useState("all");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [articlesOpen, setArticlesOpen] = useState(true);
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(true);
   const { data: settings } = useSiteSettings();
+
+  const { data: contacts } = useQuery({
+    queryKey: ["deck-contacts-full"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deck_contacts" as any)
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+  });
   const updateSetting = useUpdateSiteSetting();
   const [globalPw, setGlobalPw] = useState<string>("");
   const [bookingLink, setBookingLink] = useState<string>("");
@@ -108,12 +123,6 @@ const Admin = () => {
           <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link to="/admin/submissions" className="flex items-center gap-2 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
-            style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
-            <Mail className="w-3 h-3" /> Diagnostic Results
-          </Link>
           <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
             className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
             onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
@@ -247,6 +256,80 @@ const Admin = () => {
 
           <div className="py-2">
             <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Collapsible Diagnostic Results section */}
+      <div className="px-4 md:px-8">
+        <button
+          onClick={() => setDiagnosticsOpen(!diagnosticsOpen)}
+          className="flex items-center gap-2 w-full py-4 transition-colors group"
+          style={{ borderBottom: t.border(0.04) }}
+        >
+          <ChevronDown
+            className="w-4 h-4 transition-transform duration-200"
+            style={{
+              color: t.ink(0.3),
+              transform: diagnosticsOpen ? "rotate(0deg)" : "rotate(-90deg)",
+            }}
+          />
+          <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>
+            Diagnostic Results
+          </span>
+          {contacts && contacts.length > 0 && (
+            <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ fontFamily: t.sans, color: t.cream, background: t.ink(0.5) }}>
+              {contacts.length}
+            </span>
+          )}
+        </button>
+
+        <div
+          style={{
+            maxHeight: diagnosticsOpen ? "9999px" : "0",
+            overflow: "hidden",
+            transition: "max-height 0.3s ease-in-out",
+          }}
+        >
+          <div className="py-2">
+            {!contacts || contacts.length === 0 ? (
+              <p className="text-center py-10" style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.3) }}>No submissions yet.</p>
+            ) : (
+              contacts.map((c: any) => (
+                <Link
+                  key={c.id}
+                  to={`/admin/submissions?id=${c.id}`}
+                  className="flex items-center gap-4 p-4 transition-all group rounded-xl"
+                  style={{ background: "transparent", borderBottom: t.border(0.04) }}
+                  onPointerEnter={(e) => { e.currentTarget.style.background = t.ink(0.05); }}
+                  onPointerLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                >
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-[15px] font-bold truncate transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
+                      {c.first_name} {c.last_name}
+                      {c.organization && <span className="font-normal ml-2" style={{ color: t.ink(0.35), fontSize: "13px" }}>· {c.organization}</span>}
+                    </h3>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>{c.email}</span>
+                      <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>
+                        {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className="text-[10px] font-semibold px-2.5 py-1 rounded-full"
+                    style={{
+                      fontFamily: t.sans,
+                      color: c.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.5),
+                      background: c.report_status === "sent" ? "hsl(142 71% 45% / 0.1)" : t.ink(0.04),
+                      border: `1px solid ${c.report_status === "sent" ? "hsl(142 71% 45% / 0.2)" : t.ink(0.08)}`,
+                    }}
+                  >
+                    {c.report_status === "sent" ? "Report sent" : "Pending review"}
+                  </span>
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </div>
