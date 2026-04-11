@@ -8,12 +8,11 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
-import CaseCarousel from "@/components/deck/CaseCarousel";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
 import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import { useQuery } from "@tanstack/react-query";
 
-const TOTAL_FRAMES = 11; // removed Close frame
+const TOTAL_FRAMES = 10;
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -156,18 +155,6 @@ const ALL_METRICS = [
 ];
 
 /* ─── Fallback case studies (used when DB is empty) ─── */
-const FALLBACK_CASE_STUDIES: CaseStudyData[] = [
-  { id: "fb-0", name: "Clean Energy Workforce", issue: "Skilled trades bottleneck threatening federal climate policy", outcome: "40K reached, 4,000 workers registered, model now replicating nationally", phases: null },
-  { id: "fb-1", name: "Facial Recognition Ban", issue: "First-ever ban on facial recognition technology", outcome: "Legislation passed — New York State", phases: null },
-  { id: "fb-2", name: "Faithless Electors", issue: "Constitutional vulnerability in the Electoral College", outcome: "Supreme Court decision", phases: null },
-  { id: "fb-3", name: "Iceland Whaling", issue: "Commercial hunting of endangered fin whales", outcome: "185 fin whales saved", phases: null },
-  { id: "fb-4", name: "Ireland Fracking Ban", issue: "Fracking expansion in Ireland", outcome: "National ban passed", phases: null },
-  { id: "fb-5", name: "Gulf of Mexico Lease Sales", issue: "Fossil fuel lease sales in federal waters", outcome: "Lease sales blocked", phases: null },
-  { id: "fb-6", name: "Brazil Indigenous Rights", issue: "Anti-indigenous legislation in the Brazilian legislature", outcome: "Legislation blocked", phases: null },
-  { id: "fb-7", name: "UN Biodiversity Targets", issue: "Weak international biodiversity framework", outcome: "Stronger targets adopted — 2022", phases: null },
-  { id: "fb-8", name: "Clean Energy Executive Action", issue: "Stalled federal clean energy production", outcome: "Executive action secured — national security framing", phases: null },
-  { id: "fb-9", name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", phases: null },
-];
 
 
 /* ─── Back button component ─── */
@@ -335,7 +322,6 @@ const Deck = () => {
     gates[7] = true; // sectors — always passable, selection is optional
     gates[8] = true; // preliminary results — always accessible
     gates[9] = true; // CTA — always accessible
-    gates[10] = true; // case studies
     
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
@@ -516,7 +502,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect"];
 
   return (
     <div
