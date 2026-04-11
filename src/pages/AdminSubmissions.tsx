@@ -365,6 +365,18 @@ function markdownToHtml(md: string): string {
 const AdminSubmissions = () => {
   const { data: contacts, isLoading } = useContacts();
   const [selected, setSelected] = useState<Contact | null>(null);
+  const [searchParams] = useSearchParams();
+
+  // Auto-select contact from query param
+  useEffect(() => {
+    if (contacts && !selected) {
+      const id = searchParams.get("id");
+      if (id) {
+        const match = contacts.find((c) => c.id === id);
+        if (match) setSelected(match);
+      }
+    }
+  }, [contacts, searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep selected contact in sync with latest data
   useEffect(() => {
