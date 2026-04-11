@@ -5,6 +5,7 @@ import { t } from "@/lib/theme";
 import {
   Plus, X, GripVertical, ChevronDown, ChevronRight,
   Save, Trash2, Eye, EyeOff, ExternalLink, Link as LinkIcon,
+  Check, LayoutList,
 } from "lucide-react";
 import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
 import { useSyncImpactStats } from "@/hooks/useImpactStats";
@@ -39,6 +40,7 @@ const CaseStudyEditor: React.FC = () => {
   const [dirty, setDirty] = useState(false);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [saveFlash, setSaveFlash] = useState(false);
 
   const { data: studies = [], isLoading } = useQuery({
     queryKey: ["deck-case-studies-admin"],
@@ -86,6 +88,8 @@ const CaseStudyEditor: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["deck-case-studies"] });
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
       setDirty(false);
+      setSaveFlash(true);
+      setTimeout(() => setSaveFlash(false), 2000);
     },
   });
 
@@ -479,14 +483,15 @@ const CaseStudyEditor: React.FC = () => {
 
                   {(!ed.phases || ed.phases.length === 0) ? (
                     <div
-                      className="text-center py-12 rounded-2xl"
+                      className="flex flex-col items-center text-center py-14 rounded-2xl"
                       style={{ border: `2px dashed ${t.ink(0.06)}`, background: t.ink(0.01) }}
                     >
-                      <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.3) }}>
-                        No phases yet
+                      <LayoutList className="w-8 h-8 mb-3" style={{ color: t.ink(0.12) }} />
+                      <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.35), fontWeight: 600 }}>
+                        No timeline phases yet
                       </p>
-                      <p className="mt-1" style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.2) }}>
-                        Click "Load Suggested Template" to start with 6 standard phases, or add your own.
+                      <p className="mt-1.5 max-w-[280px]" style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.22), lineHeight: 1.5 }}>
+                        Load the suggested template to start with 6 standard phases, or add your own one by one.
                       </p>
                     </div>
                   ) : (
@@ -552,13 +557,17 @@ const CaseStudyEditor: React.FC = () => {
                                 />
                               </div>
 
-                              <div className="p-4 space-y-3">
+                              <div className="p-5 space-y-4">
                                 {/* Phase header */}
-                                <div className="flex items-center gap-2">
-                                  <GripVertical
-                                    className="w-4 h-4 flex-shrink-0 cursor-grab active:cursor-grabbing"
-                                    style={{ color: t.ink(0.15) }}
-                                  />
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className="flex flex-col items-center gap-0.5 cursor-grab active:cursor-grabbing py-2 px-1 rounded-lg transition-colors"
+                                    style={{ color: t.ink(0.2) }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = t.ink(0.04); }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.2); e.currentTarget.style.background = "transparent"; }}
+                                  >
+                                    <GripVertical className="w-4 h-4 flex-shrink-0" />
+                                  </div>
                                   <span
                                     style={{
                                       fontFamily: t.sans,
@@ -604,14 +613,14 @@ const CaseStudyEditor: React.FC = () => {
                                 </div>
 
                                 {/* Date + Description */}
-                                <div className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-3 pl-6">
+                                <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 pl-8">
                                   <div>
                                     <label style={labelStyle}>Date</label>
                                     <input
                                       value={phase.date || ""}
                                       onChange={(e) => updatePhase(pi, "date", e.target.value)}
                                       placeholder="e.g. Jan–Mar 2023"
-                                      style={{ ...inputStyle, fontSize: "12px" }}
+                                      style={{ ...inputStyle, fontSize: "13px" }}
                                     />
                                   </div>
                                   <div>
@@ -619,58 +628,61 @@ const CaseStudyEditor: React.FC = () => {
                                     <textarea
                                       value={phase.description}
                                       onChange={(e) => updatePhase(pi, "description", e.target.value)}
-                                      rows={2}
+                                      rows={3}
                                       style={{ ...inputStyle, resize: "vertical", lineHeight: "1.65" }}
                                     />
                                   </div>
                                 </div>
 
                                 {/* Stats */}
-                                <div className="pl-6">
-                                  <div className="flex items-center gap-2 mb-2">
+                                <div className="pl-8">
+                                  <div className="flex items-center gap-2 mb-3">
                                     <label style={{ ...labelStyle, marginBottom: 0, fontSize: "9px" }}>Stats (optional)</label>
                                     <button
                                       onClick={() => addStat(pi)}
-                                      className="text-[10px] px-2 py-0.5 rounded-full transition-colors"
-                                      style={{ fontFamily: t.sans, color: t.ink(0.35), border: `1px solid ${t.ink(0.08)}` }}
+                                      className="text-[10px] px-2.5 py-1 rounded-full transition-colors"
+                                      style={{ fontFamily: t.sans, fontWeight: 600, color: t.ink(0.35), border: `1px solid ${t.ink(0.08)}` }}
                                       onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.05); }}
                                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                                     >
-                                      + Stat
+                                      + Add stat
                                     </button>
                                   </div>
                                   {phase.stats && phase.stats.length > 0 && (
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2.5">
                                       {phase.stats.map((stat, si) => (
                                         <div
                                           key={si}
-                                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg"
-                                          style={{ background: t.ink(0.04), border: `1px solid ${t.ink(0.06)}` }}
+                                          className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl"
+                                          style={{ background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}
                                         >
                                           <input
                                             value={stat.value}
                                             onChange={(e) => updateStat(pi, si, "value", e.target.value)}
                                             placeholder="40K"
                                             style={{
-                                              fontFamily: t.sans, width: "70px", padding: "2px 6px",
-                                              fontSize: "14px", fontWeight: 700, color: t.ink(0.8),
+                                              fontFamily: t.sans, width: "90px", padding: "4px 8px",
+                                              fontSize: "15px", fontWeight: 700, color: t.ink(0.8),
                                               background: "transparent", border: "none", outline: "none",
                                             }}
                                           />
+                                          <span style={{ color: t.ink(0.1), fontSize: "10px" }}>·</span>
                                           <input
                                             value={stat.label}
                                             onChange={(e) => updateStat(pi, si, "label", e.target.value)}
-                                            placeholder="Label"
+                                            placeholder="Description"
                                             style={{
-                                              fontFamily: t.sans, width: "90px", padding: "2px 6px",
-                                              fontSize: "12px", color: t.ink(0.5),
+                                              fontFamily: t.sans, width: "120px", padding: "4px 8px",
+                                              fontSize: "13px", color: t.ink(0.5),
                                               background: "transparent", border: "none", outline: "none",
                                             }}
                                           />
                                           <button
                                             onClick={() => removeStat(pi, si)}
-                                            className="p-0.5 opacity-30 hover:opacity-100 transition-opacity"
+                                            className="p-1 opacity-25 hover:opacity-100 transition-opacity rounded-md"
                                             style={{ color: t.ink(0.4) }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.04); }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                                           >
                                             <X className="w-3 h-3" />
                                           </button>
@@ -724,16 +736,17 @@ const CaseStudyEditor: React.FC = () => {
                 <div className="px-6 flex items-center gap-3 pt-2">
                   <button
                     onClick={() => editingStudy && saveMutation.mutate(editingStudy)}
-                    disabled={!dirty || saveMutation.isPending}
+                    disabled={(!dirty && !saveFlash) || saveMutation.isPending}
                     className="flex items-center gap-2 px-6 py-2.5 rounded-full text-sm transition-all disabled:opacity-30"
                     style={{
                       fontFamily: t.sans,
                       color: t.cream,
-                      background: t.ink(1),
+                      background: saveFlash ? "hsl(145 60% 38%)" : t.ink(1),
+                      transition: "background 0.3s ease",
                     }}
                   >
-                    <Save className="w-3.5 h-3.5" />
-                    {saveMutation.isPending ? "Saving…" : "Save Changes"}
+                    {saveFlash ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
+                    {saveMutation.isPending ? "Saving…" : saveFlash ? "Saved" : "Save Changes"}
                   </button>
                   <button
                     onClick={() => {

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import type { CaseStudyData } from "./CaseTimelineOverlay";
 import { caseStudyUi as ui } from "./caseStudyUi";
+import { t } from "@/lib/theme";
 
 interface Props {
   studies: CaseStudyData[];
@@ -24,6 +25,7 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const onEmblaSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -94,70 +96,99 @@ const CaseCarousel: React.FC<Props> = ({ studies, isActive, onSelect }) => {
           {studies.map((cs, index) => {
             const phaseCount = cs.phases?.length ?? 0;
             const hasPhases = phaseCount > 0;
+            const isHovered = hoveredIdx === index;
 
             return (
               <button
                 key={cs.id}
                 onClick={() => onSelect(cs)}
+                onMouseEnter={() => setHoveredIdx(index)}
+                onMouseLeave={() => setHoveredIdx(null)}
                 className="flex-shrink-0 text-left"
                 style={{
                   width: "clamp(320px, 28vw, 420px)",
-                  minHeight: "clamp(210px, 20vh, 250px)",
+                  minHeight: "clamp(220px, 22vh, 270px)",
                   borderRadius: ui.radius,
                   padding: 0,
                   overflow: "hidden",
                   cursor: "pointer",
                   border: "none",
                   background: "transparent",
-                  transition: "transform 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
+                  transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                  transform: isHovered ? "translateY(-3px)" : "translateY(0)",
                 }}
               >
                 <div
-                  className="h-full"
+                  className="h-full flex flex-col"
                   style={{
-                    minHeight: "clamp(210px, 20vh, 250px)",
+                    minHeight: "clamp(220px, 22vh, 270px)",
                     borderRadius: ui.radius,
-                    padding: "24px 24px 22px",
-                    background: ui.cardSurface,
-                    border: ui.cardBorder,
-                    transition: "background 0.2s ease, border-color 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = ui.cardSurfaceHover;
-                    e.currentTarget.style.borderColor = ui.cardBorderStrong.replace("1px solid ", "");
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = ui.cardSurface;
-                    e.currentTarget.style.borderColor = ui.cardBorder.replace("1px solid ", "");
+                    padding: "24px 24px 20px",
+                    background: isHovered ? ui.cardSurfaceHover : ui.cardSurface,
+                    border: `1px solid ${isHovered ? ui.cardBorderStrongColor : ui.cardBorderColor}`,
+                    transition: "all 0.25s ease",
+                    boxShadow: isHovered ? `0 8px 32px ${t.ink(0.06)}` : "none",
                   }}
                 >
+                  {/* Top meta */}
                   <div className="flex items-center justify-between gap-4">
                     <span style={ui.meta}>{String(index + 1).padStart(2, "0")}</span>
                     <span style={ui.meta}>
-                      {hasPhases ? `${phaseCount} ${phaseCount === 1 ? "phase" : "phases"}` : "No timeline"}
+                      {hasPhases ? `${phaseCount} ${phaseCount === 1 ? "phase" : "phases"}` : "Overview"}
                     </span>
                   </div>
 
+                  {/* Title */}
                   <h3 style={{ ...ui.title, marginTop: "18px" }}>{cs.name}</h3>
 
+                  {/* Issue text */}
                   <p
                     style={{
                       ...ui.body,
-                      marginTop: "12px",
+                      marginTop: "10px",
                       display: "-webkit-box",
-                      WebkitLineClamp: 4,
+                      WebkitLineClamp: 2,
                       WebkitBoxOrient: "vertical",
                       overflow: "hidden",
+                      flex: 1,
                     }}
                   >
                     {cs.issue}
                   </p>
+
+                  {/* Bottom: outcome + arrow */}
+                  <div
+                    className="flex items-end justify-between gap-3"
+                    style={{
+                      marginTop: "16px",
+                      paddingTop: "14px",
+                      borderTop: `1px solid ${t.ink(0.05)}`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        ...ui.outcomeBadge,
+                        opacity: isHovered ? 1 : 0.7,
+                        transition: "opacity 0.2s ease",
+                        maxWidth: "80%",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {cs.outcome}
+                    </span>
+                    <ArrowRight
+                      className="flex-shrink-0 transition-all duration-200"
+                      style={{
+                        width: "14px",
+                        height: "14px",
+                        color: t.ink(isHovered ? 0.5 : 0.15),
+                        transform: isHovered ? "translateX(2px)" : "translateX(0)",
+                      }}
+                    />
+                  </div>
                 </div>
               </button>
             );

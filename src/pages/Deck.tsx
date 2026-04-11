@@ -1513,7 +1513,7 @@ const Deck = () => {
                 maxWidth: "440px",
               }}
             >
-              Choose a case to open the timeline.
+              Cross-sector programs, real outcomes.
             </p>
           </div>
 
