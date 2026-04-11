@@ -1360,7 +1360,7 @@ const Deck = () => {
               gridTemplateRows: engagementPath === "fresh" ? "1fr" : "0fr",
               transition: "grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
             }}>
-              <div style={{ overflow: "hidden" }}>
+              <div data-results-scroll="true" style={{ overflowY: "auto", maxHeight: "clamp(300px, calc(100dvh - 400px), 500px)", overscrollBehavior: "contain" }}>
                 <div style={{ paddingTop: "8px" }}>
                   {/* Phase 1 */}
                   <div style={{ padding: "24px 28px", borderRadius: "12px", border: `1px solid ${f.ink(0.06)}`, marginBottom: "12px" }}>
