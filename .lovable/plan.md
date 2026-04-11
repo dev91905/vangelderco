@@ -1,106 +1,48 @@
 
 
-# Copy Overhaul — Implementing Claude's Final Audit
+# Impact Section — Auto-Aggregated Stat Cloud
 
-All changes are text/copy replacements. No structural or layout changes needed — the sections, components, and order are mostly correct already. Here's every change mapped to the document.
+## The Idea
 
----
+Every case study you publish already has stat chips (e.g. "$12M coordinated capital", "14M organic impressions"). Right now those stats live only on the individual case study page. The homepage "Field Notes" section is hardcoded proof points.
 
-## Changes by File
+The move: **make the homepage Impact section a live, auto-aggregated view of every stat chip across all published case studies.** You publish a case study, add stats, and the homepage updates itself. No manual editing.
 
-### 1. `src/pages/Index.tsx`
+## How It Works
 
-**Section 2 — Our Practice (line 379)**
-- Change `"We build next-generation strategic communications portfolios."` → `"We build advanced strategic communications portfolios."`
+1. **Backend: Edge function or direct query** — The `capability_posts` table already stores `stats` as JSONB on each case study. No new tables needed. A simple query pulls all stats from all published case studies where `visible !== false`, flattens them into one array, and returns them. This can be a direct Supabase query from the client — no edge function needed unless you want server-side sorting/deduplication logic later.
 
-**Section 2 — Our Practice (line 392)**
-- Change `"...who want their portfolio to hit harder."` → `"...who want their work to hit harder."`
+2. **New hook: `useAggregatedStats`** — Queries all published case studies, extracts and flattens their `stats` arrays into a single list. Each stat carries its parent case study title/slug for linking back if desired.
 
-**Section 2 — Body copy (line 401)**
-- Change `"Cultural strategy, media-based organizing, and campaign development, so your grants don't just fund content — they build power."` → `"Cultural strategy, media-based organizing, and campaign development — so your grants don't just fund content. They build power."`
+3. **Homepage section redesign** — Replace the hardcoded `PROOF_POINTS` with the live aggregated stats. The section label changes from "Field Notes" to "Impact" (or stays "Field Notes" — your call).
 
-**Section 3 — Capabilities array (lines 27-48)** — Replace all three capability descriptions:
-- Cultural Strategy `sub`: `"We don't just push your message out."` / `detail`: `"We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence."`
-- Cross-Sector `sub`: `"Nothing moves until multiple sectors are pushing on the same thing."` / `detail`: `"We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it."`
-- Deep Organizing `sub`: `"Campaigns create momentum. We make sure it lasts."` / `detail`: `"We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise."`
+## Design Direction: The Stat Cloud
 
-**Section 4 ↔ 6 — Swap Field Notes and Diagnostic CTA positions**
-- Move the Field Notes section (currently lines 631-657) ABOVE the Intake CTA section (currently lines 510-578)
-- This means proof (Field Notes with real numbers) comes before the ask (Diagnostic CTA)
+Instead of a vertical list of proof points, the section becomes a **floating stat field** — stat chips arranged in a loose, organic grid with staggered reveal animations. Think of it like a constellation of proof:
 
-**Section 5 — Network (lines 580-628)** — Major changes:
-- Cut `NETWORK_SECTORS` from 18 items to 9: `"News", "Music", "Film & TV", "Digital Creators", "Sports", "Podcasts & Streaming", "Advertising & Brands", "Tech & Platforms", "Organized Communities"`
-- Change heading from `"Our Network"` → keep as section label but update body
-- Change body from `"We build with a community of over 400+ practitioners..."` → `"We come from the industries your grantees need to reach."`
-- Add sub-body: `"Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside."`
-- Make it a static 3×3 grid with descriptions (matching the doc's card descriptions), NOT interactive/selectable pills
-- Each card gets a short description per the doc
+- Each chip is a standalone unit: bold metric on top, one-line context below (same format as case study stat chips)
+- Chips are arranged in a masonry-like flex wrap with varied spacing — not a rigid grid
+- On scroll, chips fade/float in with staggered timing (like the current proof points but multi-directional)
+- Chips link back to their source case study on click
+- As you publish more case studies, the cloud grows organically
+- On mobile, chips stack into a clean single-column flow
 
-**Section 6 — Hero scroll indicator (line ~340-350)**
-- Add a subtle scroll indicator (down arrow or "Scroll" text) below "By Referral Only"
+This keeps the premium, institutional feel while making the section a living dashboard of your cumulative impact.
 
-**Section 7 — Footer (lines 659-688)**
-- Remove the duplicate `"By Referral Only"` text at the bottom. Keep just "Let's Chat →"
+## Implementation Steps
 
-### 2. `src/pages/CulturalStrategy.tsx` (line 8)
-- Change description to: `"We don't just push your message out. We make sure the right people pick it up — across music, entertainment, news, digital creators, and every cultural sector with reach and influence."`
+1. **Create `useAggregatedStats` hook** — Query `capability_posts` where `type = 'case-study'` and `is_published = true`, extract and flatten all `stats` JSONB arrays, filter out `visible: false` entries, attach source post title/slug to each stat.
 
-### 3. `src/pages/CrossSector.tsx` (line 8)
-- Change description to: `"Nothing moves until multiple sectors are pushing on the same thing. We find where philanthropy, labor, energy, policy, and culture already overlap — then build campaigns around it."`
+2. **Build `ImpactCloud` component** — Renders the aggregated stats as floating chips with scroll-reveal animations, flex-wrap layout with organic spacing, and optional click-through to source case study.
 
-### 4. `src/pages/DeepOrganizing.tsx` (line 8)
-- Change description to: `"Campaigns create momentum. We make sure it lasts. We find the organic leaders on the ground, give them resources, strategy, and amplification, and build movements designed to grow — not just make noise."`
+3. **Update `Index.tsx`** — Replace the Field Notes section content: swap `PROOF_POINTS` and `ProofPoint` for the new `ImpactCloud` component fed by `useAggregatedStats`. Update section label as desired.
 
-### 5. `src/pages/Deck.tsx`
+4. **Remove dead code** — Clean up `PROOF_POINTS` constant and `ProofPoint` component.
 
-**Slide 1 — Intro (lines 557-625)**
-- Change heading from `"Let's diagnose your communications."` → `"Find the gaps before your opponents do."`
-- Change body from the current two-part text → `"A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table."`
-- Change button from `"Get started →"` to `"Get Started →"`
-- Change time estimate from `"~5 minutes"` → `"~3 minutes"`
+## What You Get
 
-**Slide 8 — Sectors (lines 1342-1395)**
-- Update heading: already correct (`"We come from the industries your grantees need to reach."`)
-- Update body: already has `"Select the ones you're interested in."`
-- Add the sub-body line: `"Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside."`
-- Sector cards: Update names and descriptions to match doc exactly:
-  - `"News Media"` → `"News"` with desc `"Local and national — how stories get placed and why"`
-  - `"Music Industry"` → `"Music"` with desc `"Artists, labels, tours, festivals, venues"`
-  - `"Film & TV"` stays, desc `"Production, distribution, cultural impact"`
-  - `"Digital Creators"` stays, desc `"Creator economy — where opinion forms now"`
-  - `"Sports & Recreation"` → `"Sports"` with desc `"Athletes, leagues, the largest captive audiences"`
-  - `"Podcasts & Streaming"` stays, desc `"Long-form audio, gaming, live streaming"` → update to match: `"Long-form audio, gaming, live streaming"` (already matches)
-  - `"Advertising & Brands"` stays, desc `"Commercial partnerships at scale"`
-  - `"Tech Platforms"` → `"Tech & Platforms"` with desc `"The infrastructure that decides what gets seen"`
-  - `"Interest Groups"` → `"Organized Communities"` with desc `"Faith, labor, campuses, veterans, defense"`
-- Also update `ALL_SECTORS_LIST` (line 336) to match the new 9 sector names
-
-**Slide 9 — CTA (lines 1396-1478)**
-- Heading: already `"Let's talk."` ✓
-- Body: already matches ✓
-- Button: already `"Submit"` ✓
-- Confirmation: already matches ✓
-
----
-
-## Summary of All Changes
-
-| # | Change | File |
-|---|--------|------|
-| 1 | "next-generation" → "advanced" | Index.tsx |
-| 2 | "portfolio" → "work" in Our Practice | Index.tsx |
-| 3 | Fix em-dash/period in body copy | Index.tsx |
-| 4 | Replace all 3 capability descriptions | Index.tsx |
-| 5 | Swap Field Notes above Diagnostic CTA | Index.tsx |
-| 6 | Network: 18→9 sectors, new heading/body, static grid with descriptions | Index.tsx |
-| 7 | Add scroll indicator to hero | Index.tsx |
-| 8 | Remove duplicate "By Referral Only" from footer | Index.tsx |
-| 9 | Update Cultural Strategy description | CulturalStrategy.tsx |
-| 10 | Update Cross-Sector description | CrossSector.tsx |
-| 11 | Update Deep Organizing description | DeepOrganizing.tsx |
-| 12 | Deck intro: new heading, body, time estimate | Deck.tsx |
-| 13 | Deck sectors: update card names/descriptions, add sub-body | Deck.tsx |
-| 14 | Update ALL_SECTORS_LIST to match new names | Deck.tsx |
-
-No database changes. No new components. Pure copy update across 5 files.
+- Publish a case study with stats → homepage updates automatically
+- No manual editing of the homepage ever again
+- The section grows richer over time as you accumulate proof
+- Each stat links back to its full case study for depth
 
