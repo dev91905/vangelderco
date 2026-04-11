@@ -1366,21 +1366,14 @@ const Deck = () => {
       {/* ═══ FRAME 8: Sectors ═══ */}
       <DeckFrame ref={setRef(7)} mode="wide">
         <div ref={r8.ref} className="w-full">
-          {/* Compact header */}
-          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(16px, 2.5vh, 28px)" }}>
-            <p style={{ ...label("10px"), marginBottom: "10px" }}>Our sectors</p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 700, color: f.ink(0.85), lineHeight: 1.3, maxWidth: "540px" }}>
+          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(20px, 3vh, 36px)" }}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
               We come from the industries your grantees need to reach.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.2vw, 14px)", color: f.ink(0.4), marginTop: "8px", lineHeight: 1.6, maxWidth: "480px" }}>
-              Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6 }}>
+              Select the ones you're interested in.
             </p>
           </div>
-
-          {/* Instruction */}
-          <p style={{ ...r8.stagger(1, 200, "blur-up"), fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 13px)", color: f.ink(0.35), marginBottom: "clamp(12px, 2vh, 20px)" }}>
-            Select the ones you're interested in.
-          </p>
 
           {/* 3×3 selectable card grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
