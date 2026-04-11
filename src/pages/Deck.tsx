@@ -1272,9 +1272,7 @@ const Deck = () => {
                   data-results-scroll="true"
                   style={{
                     ...r9.stagger(2, 200, "slide-left"),
-                    maxHeight: window.innerWidth >= 1024
-                      ? "clamp(560px, calc(100dvh - 220px), 760px)"
-                      : "clamp(340px, calc(100dvh - 460px), 500px)",
+                    maxHeight: "clamp(320px, calc(100dvh - 460px), 760px)",
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingBottom: "80px",
