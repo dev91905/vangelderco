@@ -48,8 +48,8 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
         {stats.map((stat, i) => {
           const hidden = stat.visible === false;
           return (
-            <div key={stat.id} className="group relative flex flex-col px-4 py-3 min-w-[140px] transition-opacity rounded-xl"
-              style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}`, opacity: hidden ? 0.4 : 1 }}>
+            <div key={stat.id} className="group relative flex flex-col px-4 py-3 transition-opacity rounded-xl"
+              style={{ background: "transparent", border: `1px solid ${t.ink(0.15)}`, opacity: hidden ? 0.4 : 1, minWidth: "fit-content" }}>
               <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => update(i, { visible: !hidden })} className="p-1 rounded transition-colors" style={{ color: t.ink(0.3) }}>
                   {hidden ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
@@ -59,10 +59,11 @@ const StatChipsEditor = ({ stats, onChange }: StatChipsEditorProps) => {
                 </button>
               </div>
               <input ref={(el) => { labelRefs.current[i] = el; }} value={stat.label} onChange={(e) => update(i, { label: e.target.value })} placeholder="$200M"
-                className="bg-transparent outline-none border-none w-full text-[18px] md:text-[22px] font-bold"
-                style={{ fontFamily: t.sans, color: hidden ? t.ink(0.25) : t.ink(0.85), textDecoration: hidden ? "line-through" : "none" }} />
+                className="bg-transparent outline-none border-none text-[18px] md:text-[22px] font-bold"
+                style={{ fontFamily: t.sans, color: hidden ? t.ink(0.25) : t.ink(0.85), textDecoration: hidden ? "line-through" : "none", width: `${Math.max(4, (stat.label?.length || 4) + 1)}ch` }} />
               <input value={stat.description} onChange={(e) => update(i, { description: e.target.value })} placeholder="Description"
-                className="bg-transparent outline-none border-none text-[10px] tracking-[0.08em] uppercase mt-1 w-full" style={{ fontFamily: t.sans, color: t.ink(0.4) }} />
+                className="bg-transparent outline-none border-none text-[10px] tracking-[0.08em] uppercase mt-1"
+                style={{ fontFamily: t.sans, color: t.ink(0.4), width: `${Math.max(8, (stat.description?.length || 8) + 1)}ch` }} />
             </div>
           );
         })}
