@@ -1268,11 +1268,10 @@ const Deck = () => {
 
                 {/* Right column — dimension cards */}
                 <div
-                  className="flex flex-col gap-4 results-scrollbar lg:pr-3"
+                  className="flex flex-col gap-4 results-scrollbar lg:pr-3 max-h-[36vh] lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
                   data-results-scroll="true"
                   style={{
                     ...r9.stagger(2, 200, "slide-left"),
-                    maxHeight: "clamp(240px, 36vh, 760px)",
                     overflowY: "auto",
                     overscrollBehavior: "contain",
                     paddingBottom: "80px",
