@@ -446,33 +446,31 @@ const Deck = () => {
     if (!el) return;
 
     const handler = (e: WheelEvent) => {
-      // Check if wheel is inside the results scroll panel
-      const target = e.target as HTMLElement | null;
-      const resultsPanel = target?.closest("[data-results-scroll='true']") as HTMLElement | null;
+      const frameEl = frameRefs.current[currentFrame];
+      if (!frameEl) return;
 
-      if (resultsPanel) {
-        // Allow scrolling inside the panel only if it can still scroll in that direction
-        const atTop = resultsPanel.scrollTop <= 0;
-        const atBottom = resultsPanel.scrollTop + resultsPanel.clientHeight >= resultsPanel.scrollHeight - 1;
+      const frameTop = frameEl.offsetTop;
+      const frameBottom = frameTop + frameEl.scrollHeight;
+      const frameTallerThanViewport = frameEl.scrollHeight > el.clientHeight + 2;
+
+      if (frameTallerThanViewport) {
+        // Frame is taller than viewport — allow scrolling within frame bounds
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
+        const atFrameTop = el.scrollTop <= frameTop;
+        const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
+        const atFrameBottom = el.scrollTop >= maxScrollTop - 1;
 
-        if ((scrollingDown && atBottom) || (scrollingUp && atTop)) {
-          // Panel hit its limit — kill the event so it doesn't chain to the deck
+        if ((scrollingDown && atFrameBottom) || (scrollingUp && atFrameTop)) {
+          // Hit the edge of the frame — block to prevent sliding to next frame
           e.preventDefault();
-          e.stopPropagation();
         }
-        // Otherwise let the panel scroll normally
+        // Otherwise let it scroll naturally within the frame
         return;
       }
 
-      // Everything else: hard-lock the deck to the current frame
+      // Frame fits in viewport — hard-lock
       e.preventDefault();
-
-      const frameEl = frameRefs.current[currentFrame];
-      if (!frameEl) return;
-      const frameTop = frameEl.offsetTop;
-      const frameBottom = frameTop + frameEl.scrollHeight;
       const maxScrollTop = Math.max(frameTop, frameBottom - el.clientHeight);
       el.scrollTop = Math.min(maxScrollTop, Math.max(frameTop, el.scrollTop));
     };
