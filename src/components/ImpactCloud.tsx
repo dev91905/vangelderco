@@ -35,7 +35,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
   return (
     <div
       ref={ref}
-      className={isHero ? "col-span-2" : "col-span-1"}
+      className={`${isHero ? "col-span-2" : "col-span-1"} h-full`}
       style={{
         opacity: hasRevealed ? 1 : 0,
         transform: hasRevealed
@@ -52,7 +52,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         onMouseLeave={() => setHovered(false)}
       >
         <div
-          className={`flex flex-col justify-center h-full rounded-xl ${isHero ? "px-6 py-5" : "px-5 py-4"}`}
+          className={`flex h-full flex-col justify-center rounded-xl ${isHero ? "px-6 py-5 md:px-7" : "px-5 py-4"}`}
           style={{
             background: "transparent",
             border: `1px solid ${hovered ? t.ink(0.25) : t.ink(0.15)}`,
@@ -63,7 +63,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
             className="font-bold leading-none"
             style={{
               fontFamily: t.sans,
-              fontSize: isHero ? "clamp(36px, 6vw, 56px)" : "clamp(22px, 3vw, 30px)",
+              fontSize: isHero ? "clamp(36px, 5vw, 56px)" : "clamp(22px, 2.2vw, 30px)",
               color: t.ink(0.85),
               letterSpacing: "-0.03em",
             }}
@@ -71,7 +71,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
             {stat.label}
           </span>
           <span
-            className="mt-1.5"
+            className="mt-1.5 max-w-[20ch]"
             style={{
               fontFamily: t.sans,
               fontSize: "10px",
@@ -90,15 +90,16 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
 
 export default function ImpactCloud() {
   const { data: stats, isLoading } = useAggregatedStats();
+  const heroPositions = new Set([0, 4]);
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:grid-rows-2 lg:h-[420px]">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className={`rounded animate-pulse ${i === 0 || i === 3 ? "col-span-2" : "col-span-1"}`}
-            style={{ height: i === 0 || i === 3 ? "88px" : "72px", background: "hsl(var(--foreground) / 0.04)" }}
+            className={`animate-pulse rounded-xl ${heroPositions.has(i) ? "col-span-2" : "col-span-1"} h-24 lg:h-full`}
+            style={{ background: "hsl(var(--foreground) / 0.04)" }}
           />
         ))}
       </div>
@@ -113,12 +114,9 @@ export default function ImpactCloud() {
     );
   }
 
-  // Positions 0 and 3 are hero cards (span 2 cols)
-  const heroPositions = new Set([0, 3]);
-
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 md:gap-x-6 md:gap-y-4">
-      {stats.map((stat, i) => (
+    <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:grid-rows-2 lg:h-[420px]">
+      {stats.slice(0, 6).map((stat, i) => (
         <StatCard
           key={`${stat.sourceSlug}-${stat.label}-${i}`}
           stat={stat}
