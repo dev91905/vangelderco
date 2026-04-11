@@ -89,10 +89,14 @@ export type Database = {
           id: string
           last_name: string
           metrics_checked: string[] | null
+          metrics_unchecked: string[] | null
           organization: string | null
           practice_selections: number[] | null
           quiz_answers: Json | null
           readiness_score: number | null
+          report_cache: string | null
+          report_status: string | null
+          sectors_not_selected: string[] | null
           selected_domains: string[] | null
           selected_pains: string[] | null
         }
@@ -107,10 +111,14 @@ export type Database = {
           id?: string
           last_name: string
           metrics_checked?: string[] | null
+          metrics_unchecked?: string[] | null
           organization?: string | null
           practice_selections?: number[] | null
           quiz_answers?: Json | null
           readiness_score?: number | null
+          report_cache?: string | null
+          report_status?: string | null
+          sectors_not_selected?: string[] | null
           selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
@@ -125,10 +133,14 @@ export type Database = {
           id?: string
           last_name?: string
           metrics_checked?: string[] | null
+          metrics_unchecked?: string[] | null
           organization?: string | null
           practice_selections?: number[] | null
           quiz_answers?: Json | null
           readiness_score?: number | null
+          report_cache?: string | null
+          report_status?: string | null
+          sectors_not_selected?: string[] | null
           selected_domains?: string[] | null
           selected_pains?: string[] | null
         }
