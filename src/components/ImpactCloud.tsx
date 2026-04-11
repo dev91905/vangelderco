@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { t } from "@/lib/theme";
 import { useAggregatedStats, AggregatedStat } from "@/hooks/useAggregatedStats";
@@ -34,6 +34,7 @@ const PLACEMENTS: Array<{ justify: string; items: string; textAlign: "left" | "r
 function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number; isHero: boolean }) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const [hovered, setHovered] = useState(false);
+  const location = useLocation();
   const delay = index * 0.07;
   const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
@@ -58,6 +59,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
     >
       <Link
         to={href}
+        state={{ from: location.pathname }}
         className="no-underline block h-full"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}

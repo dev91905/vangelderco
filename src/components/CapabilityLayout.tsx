@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useBackPath } from "@/hooks/useBackNavigation";
 import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
 import PostCard from "./PostCard";
@@ -18,6 +19,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
   const { data: posts, isLoading } = useCapabilityPosts(capability);
   const { playChitter } = useGlitchSFX();
   const [typewriterActive, setTypewriterActive] = useState(false);
+  const backPath = useBackPath("/");
 
   // Start typewriter after a short mount delay (matches label fade-up timing)
   useEffect(() => {
@@ -36,7 +38,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
       </span>
 
       <Link
-        to="/"
+        to={backPath}
         className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.15em] uppercase transition-colors duration-300"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))}

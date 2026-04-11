@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import TypewriterHeading from "@/components/deck/TypewriterHeading";
@@ -233,6 +233,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
 
 const Deck = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -1531,7 +1532,7 @@ const Deck = () => {
       <CaseTimelineOverlay study={selectedCase} onClose={() => {
         if (deepLinkedCase.current) {
           deepLinkedCase.current = false;
-          navigate("/");
+          navigate((location.state as { from?: string })?.from || "/");
         } else {
           setSelectedCase(null);
         }

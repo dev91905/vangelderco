@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useBackPath } from "@/hooks/useBackNavigation";
 import { supabase } from "@/integrations/supabase/client";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
@@ -59,6 +60,7 @@ export interface PasswordGateWrapperProps {
 
 export const PasswordGateWrapper = ({ slug, title, heroImageUrl, capability, requiresPassword, onUnlock: onUnlockProp, children }: PasswordGateWrapperProps) => {
   const capabilityRoute: Record<string, string> = { "cultural-strategy": "/cultural-strategy", "cross-sector": "/cross-sector", "deep-organizing": "/deep-organizing" };
+  const backPath = useBackPath(capabilityRoute[capability] || "/");
   const sessionKey = `gate:${slug}`;
   const [unlocked, setUnlocked] = useState(() => !requiresPassword ? true : sessionStorage.getItem(sessionKey) === "1");
   const [error, setError] = useState(false);
@@ -85,7 +87,7 @@ export const PasswordGateWrapper = ({ slug, title, heroImageUrl, capability, req
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-y-auto" style={{ background: t.cream }}>
-      <Link to={capabilityRoute[capability] || "/"} className="fixed top-4 left-4 sm:top-6 sm:left-6 z-[60] text-[13px] transition-colors duration-300"
+      <Link to={backPath} className="fixed top-4 left-4 sm:top-6 sm:left-6 z-[60] text-[13px] transition-colors duration-300"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back
