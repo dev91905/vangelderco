@@ -7,6 +7,7 @@ import {
   Save, Trash2, Eye, EyeOff, ExternalLink, Link as LinkIcon,
 } from "lucide-react";
 import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
+import { useSyncImpactStats } from "@/hooks/useImpactStats";
 
 type CaseStudyRow = {
   id: string;
