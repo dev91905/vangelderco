@@ -1,48 +1,80 @@
 
 
-# Impact Section — Auto-Aggregated Stat Cloud
+# Normalized Stats System
 
-## The Idea
+## Problem
+Stats live as JSONB blobs in two places (`capability_posts.stats` and `deck_case_studies.phases[].stats[]`). No shared identity — same stat entered in both places creates duplicates. No way to link or sync them.
 
-Every case study you publish already has stat chips (e.g. "$12M coordinated capital", "14M organic impressions"). Right now those stats live only on the individual case study page. The homepage "Field Notes" section is hardcoded proof points.
+## Solution: `impact_stats` Table
 
-The move: **make the homepage Impact section a live, auto-aggregated view of every stat chip across all published case studies.** You publish a case study, add stats, and the homepage updates itself. No manual editing.
+One table, one source of truth. Every stat chip lives here. Both articles and timelines reference the same rows.
 
-## How It Works
+```text
+impact_stats
+├── id (uuid, PK)
+├── label ("$12M", "40K", "47")
+├── description ("Coordinated capital", "People reached")
+├── post_id (FK → capability_posts, nullable)
+├── case_study_id (FK → deck_case_studies, nullable)
+├── phase_title (text, nullable — e.g. "Results", "Pilots")
+├── visible (boolean, default true)
+├── sort_order (integer, default 0)
+└── created_at (timestamptz)
+```
 
-1. **Backend: Edge function or direct query** — The `capability_posts` table already stores `stats` as JSONB on each case study. No new tables needed. A simple query pulls all stats from all published case studies where `visible !== false`, flattens them into one array, and returns them. This can be a direct Supabase query from the client — no edge function needed unless you want server-side sorting/deduplication logic later.
+**Key relationships:**
+- A stat with only `post_id` → lives on the article
+- A stat with only `case_study_id` + `phase_title` → lives on a specific timeline phase
+- A stat with BOTH `post_id` AND `case_study_id` → shared between article and timeline (single row, no duplication)
 
-2. **New hook: `useAggregatedStats`** — Queries all published case studies, extracts and flattens their `stats` arrays into a single list. Each stat carries its parent case study title/slug for linking back if desired.
+## How Linking Works
 
-3. **Homepage section redesign** — Replace the hardcoded `PROOF_POINTS` with the live aggregated stats. The section label changes from "Field Notes" to "Impact" (or stays "Field Notes" — your call).
-
-## Design Direction: The Stat Cloud
-
-Instead of a vertical list of proof points, the section becomes a **floating stat field** — stat chips arranged in a loose, organic grid with staggered reveal animations. Think of it like a constellation of proof:
-
-- Each chip is a standalone unit: bold metric on top, one-line context below (same format as case study stat chips)
-- Chips are arranged in a masonry-like flex wrap with varied spacing — not a rigid grid
-- On scroll, chips fade/float in with staggered timing (like the current proof points but multi-directional)
-- Chips link back to their source case study on click
-- As you publish more case studies, the cloud grows organically
-- On mobile, chips stack into a clean single-column flow
-
-This keeps the premium, institutional feel while making the section a living dashboard of your cumulative impact.
+When a `deck_case_study` has a `link_url` that matches a `capability_post.slug`, they're "linked." In the editor:
+- Creating a stat on the article side sets `post_id`
+- Creating a stat on the timeline side sets `case_study_id` + `phase_title`
+- You can "share" a stat to the linked entity — this adds the missing FK to the same row
+- The Impact Cloud aggregator just does `SELECT * FROM impact_stats WHERE visible = true` — one query, no dedup needed
 
 ## Implementation Steps
 
-1. **Create `useAggregatedStats` hook** — Query `capability_posts` where `type = 'case-study'` and `is_published = true`, extract and flatten all `stats` JSONB arrays, filter out `visible: false` entries, attach source post title/slug to each stat.
+### 1. Create `impact_stats` table + migration
+- Create table with FKs, RLS policies (public read for visible, authenticated full CRUD)
+- Write a one-time data migration that extracts existing JSONB stats from both tables into the new `impact_stats` rows, setting the correct FKs
 
-2. **Build `ImpactCloud` component** — Renders the aggregated stats as floating chips with scroll-reveal animations, flex-wrap layout with organic spacing, and optional click-through to source case study.
+### 2. Update `useAggregatedStats` hook
+- Replace the dual-query JSONB extraction with a single query: `SELECT * FROM impact_stats WHERE visible = true`
+- Join to `capability_posts` and `deck_case_studies` for source titles/slugs
 
-3. **Update `Index.tsx`** — Replace the Field Notes section content: swap `PROOF_POINTS` and `ProofPoint` for the new `ImpactCloud` component fed by `useAggregatedStats`. Update section label as desired.
+### 3. Update article stat editor (`StatChipsEditor`)
+- Read/write from `impact_stats` table instead of the JSONB column
+- When the article is linked to a timeline case study, show which stats are shared vs article-only
+- Allow "pushing" a stat to the linked timeline (adds `case_study_id` + `phase_title`)
 
-4. **Remove dead code** — Clean up `PROOF_POINTS` constant and `ProofPoint` component.
+### 4. Update timeline stat editor (`CaseStudyEditor` phase stats)
+- Read/write from `impact_stats` table instead of phases JSONB
+- When linked to an article, show shared stats and allow pulling article stats into a phase
+- New stats created here get `case_study_id` + `phase_title` set
 
-## What You Get
+### 5. Update display components
+- `StatChips` component on case study pages reads from `impact_stats` by `post_id`
+- Timeline overlay reads phase stats from `impact_stats` by `case_study_id` + `phase_title`
+- `ImpactCloud` on homepage reads all visible stats (already simplified)
 
-- Publish a case study with stats → homepage updates automatically
-- No manual editing of the homepage ever again
-- The section grows richer over time as you accumulate proof
-- Each stat links back to its full case study for depth
+### 6. Clean up
+- Remove `stats` JSONB reads from `capability_posts` queries
+- Remove `phases[].stats` parsing from timeline rendering (phases still store title/date/description, just not stats)
+
+## What This Gets You
+
+- **One stat, one row.** No duplication ever.
+- **Shared stats between articles and timelines.** Link once, shows in both places.
+- **Phase-level assignment.** A stat knows which timeline phase it belongs to.
+- **Simpler aggregation.** The homepage Impact Cloud is one SELECT query.
+- **No manual sync.** Edit a stat anywhere, it updates everywhere it appears.
+
+## Technical Details
+
+- RLS: anon can SELECT where `visible = true`, authenticated gets full CRUD
+- The JSONB `stats` columns on both tables become legacy — we migrate data out, then the columns can be ignored (no need to drop them immediately)
+- Realtime can be enabled on `impact_stats` later if live updates matter
 
