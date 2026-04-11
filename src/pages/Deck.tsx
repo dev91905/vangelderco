@@ -1361,69 +1361,48 @@ const Deck = () => {
       </DeckFrame>
 
       {/* ═══ FRAME 8: Sectors + Media Experience ═══ */}
-      <DeckFrame ref={setRef(7)} mode="wide">
-        <div ref={r8.ref} className="w-full flex flex-col" style={{ minHeight: "80vh", justifyContent: "center" }}>
-          {/* Header */}
-          <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(32px, 5vh, 56px)" }}>
-            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, maxWidth: "640px" }}>
+      <DeckFrame ref={setRef(7)} mode="narrow" align="center">
+        <div ref={r8.ref} className="flex flex-col items-center text-center">
+          {/* Heading */}
+          <div style={r8.stagger(0, 0, "blur-up")}>
+            <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700, textAlign: "center" }}>
               We come from the industries your grantees need to reach.
             </p>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "12px", lineHeight: 1.6, maxWidth: "520px" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(13px, 1.4vw, 16px)", color: f.ink(0.4), marginTop: "14px", lineHeight: 1.7, textAlign: "center", maxWidth: "460px", margin: "14px auto 0" }}>
               Our team is built from careers in commercial media and entertainment — so we know how these sectors actually work from the inside.
             </p>
           </div>
 
-          {/* 3×3 sector grid — minimal, airy */}
-          <div
-            className="grid grid-cols-3 w-full"
-            style={{
-              ...r8.stagger(1, 300, "blur-up"),
-              maxWidth: "900px",
-            }}
-          >
+          {/* Sectors — typographic flow, no boxes */}
+          <div style={{
+            ...r8.stagger(1, 400, "blur-up"),
+            marginTop: "clamp(40px, 6vh, 64px)",
+            display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0",
+            maxWidth: "600px",
+          }}>
             {[
-              { name: "News", desc: "How stories get placed and why" },
-              { name: "Music", desc: "Artists, labels, tours, festivals" },
-              { name: "Film & TV", desc: "Production, distribution, impact" },
-              { name: "Digital Creators", desc: "Where opinion forms now" },
-              { name: "Sports", desc: "The largest captive audiences" },
-              { name: "Podcasts & Streaming", desc: "Long-form audio, live streaming" },
-              { name: "Advertising & Brands", desc: "Messages carried at scale" },
-              { name: "Tech & Platforms", desc: "What decides what gets seen" },
-              { name: "Organized Communities", desc: "Faith, labor, campuses, veterans" },
-            ].map((sector, i) => {
-              const row = Math.floor(i / 3);
-              const col = i % 3;
-              return (
-                <div
-                  key={sector.name}
-                  style={{
-                    padding: "clamp(18px, 2.5vw, 32px) clamp(12px, 2vw, 24px)",
-                    borderBottom: row < 2 ? `1px solid ${f.ink(0.06)}` : "none",
-                    borderRight: col < 2 ? `1px solid ${f.ink(0.06)}` : "none",
-                    opacity: r8.isActive ? 1 : 0,
-                    transform: r8.isActive ? "translateY(0)" : "translateY(10px)",
-                    filter: r8.isActive ? "blur(0px)" : "blur(3px)",
-                    transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${400 + i * 70}ms`,
-                  }}
-                >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 700, color: f.ink(0.75), lineHeight: 1.3, marginBottom: "4px" }}>
-                    {sector.name}
-                  </p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(11px, 1vw, 12px)", color: f.ink(0.35), lineHeight: 1.5 }}>
-                    {sector.desc}
-                  </p>
-                </div>
-              );
-            })}
+              "News", "Music", "Film & TV", "Digital Creators",
+              "Sports", "Podcasts & Streaming", "Advertising & Brands",
+              "Tech & Platforms", "Organized Communities",
+            ].map((sector, i, arr) => (
+              <span key={sector} style={{
+                fontFamily: f.sans, fontSize: "clamp(15px, 1.6vw, 19px)", fontWeight: 600,
+                color: f.ink(0.6), lineHeight: 2.2,
+                opacity: r8.isActive ? 1 : 0,
+                transform: r8.isActive ? "translateY(0)" : "translateY(6px)",
+                transition: `all 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${500 + i * 60}ms`,
+              }}>
+                {sector}{i < arr.length - 1 && <span style={{ color: f.ink(0.15), margin: "0 clamp(10px, 1.5vw, 18px)", fontWeight: 300 }}>·</span>}
+              </span>
+            ))}
           </div>
 
-          {/* Media experience question — spaced below */}
-          <div style={{ ...r8.stagger(2, 800, "blur-up"), marginTop: "clamp(36px, 6vh, 56px)" }}>
-            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.65), marginBottom: "16px" }}>
+          {/* Media experience question */}
+          <div style={{ ...r8.stagger(2, 900, "blur-up"), marginTop: "clamp(44px, 7vh, 72px)" }}>
+            <p style={{ fontFamily: f.sans, fontSize: "clamp(14px, 1.4vw, 16px)", fontWeight: 600, color: f.ink(0.6), marginBottom: "20px" }}>
               Have you worked with media professionals before?
             </p>
-            <div className="flex gap-3">
+            <div className="flex justify-center gap-3">
               {([
                 { val: true, lbl: "Yes" },
                 { val: false, lbl: "No" },
