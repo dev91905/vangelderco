@@ -1118,7 +1118,7 @@ const Deck = () => {
             </p>
           </div>
           {/* Right column — accordion cards */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3" style={{ justifyContent: "center", minHeight: "100vh" }}>
             {[
               { title: "They activate every cultural lever.", rationale: "They don't just push content out — they work behind the scenes so platforms across different sectors are pulling the message in. Music, faith communities, creator ecosystems, campuses, legal networks. Not just strategic comms.", help: "We maintain a presence across the cultural ecosystem and recruit partners who carry your message before you launch." },
               { title: "They coordinate across sectors.", rationale: "Nothing moves until multiple sectors are pushing on the same thing. The most effective programs leverage cultural engagement to bring policy, industry, labor, grassroots, and other sectors to the table around a shared focal point.", help: "We leverage media and cultural distribution to bring sectors to the table and align them around shared interests." },
