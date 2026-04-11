@@ -61,7 +61,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
           className={`relative z-10 w-full ${modeStyles[mode]}`}
           style={{
             paddingTop: "clamp(80px, 12vh, 140px)",
-            paddingBottom: "clamp(120px, 16vh, 180px)",
+            paddingBottom: "clamp(140px, 18vh, 200px)",
           }}
         >
           {children}

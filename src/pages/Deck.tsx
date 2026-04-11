@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
@@ -219,6 +220,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
 const Deck = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Restore state from sessionStorage — keep it durable until submit
@@ -424,8 +426,9 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll; only internal result panels may scroll */
+  /* Wheel handler — lock deck scroll on desktop only; mobile uses native scroll */
   useEffect(() => {
+    if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
     if (!el) return;
 
@@ -453,49 +456,9 @@ const Deck = () => {
 
     el.addEventListener("wheel", handler, { passive: false });
     return () => el.removeEventListener("wheel", handler);
-  }, []);
+  }, [isMobile]);
 
-  /* Touch swipe handler — navigate between frames on mobile */
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    let touchStartY = 0;
-    let touchStartX = 0;
-    let isSwiping = false;
-
-    const onTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      // Allow native touch scrolling inside results panels
-      if (target?.closest("[data-results-scroll='true']")) return;
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-      isSwiping = true;
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      const dy = touchStartY - e.changedTouches[0].clientY;
-      const dx = touchStartX - e.changedTouches[0].clientX;
-      // Only trigger on vertical swipes (not horizontal), with a minimum threshold
-      if (Math.abs(dy) < 50 || Math.abs(dx) > Math.abs(dy)) return;
-      if (dy > 0) {
-        // Swipe up → next frame
-        if (frameInteracted[currentFrame] !== false) scrollToFrame(currentFrame + 1);
-      } else {
-        // Swipe down → previous frame
-        scrollToFrame(currentFrame - 1);
-      }
-    };
-
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [currentFrame, frameInteracted, scrollToFrame]);
+  /* Touch swipe handler removed — mobile uses native scroll */
 
   const setRef = (i: number) => (el: HTMLDivElement | null) => { frameRefs.current[i] = el; };
 
@@ -549,8 +512,9 @@ const Deck = () => {
         height: "100dvh",
         width: "100vw",
         overflowX: "hidden",
-        overflowY: "hidden",
-        overscrollBehaviorY: "none",
+        overflowY: isMobile ? "auto" : "hidden",
+        WebkitOverflowScrolling: "touch" as any,
+        overscrollBehaviorY: isMobile ? "contain" : "none",
         scrollSnapType: "none",
         display: "flex",
         flexDirection: "column",
@@ -1310,7 +1274,7 @@ const Deck = () => {
 
                 {/* Right column — dimension cards */}
                 <div
-                  className="flex flex-col gap-4 results-scrollbar lg:pr-3 max-h-[36vh] lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
+                  className="flex flex-col gap-4 results-scrollbar lg:pr-3 lg:max-h-[clamp(560px,calc(100dvh-220px),760px)]"
                   data-results-scroll="true"
                   style={{
                     ...r9.stagger(2, 200, "slide-left"),
@@ -1431,7 +1395,7 @@ const Deck = () => {
               </p>
 
               <form onSubmit={handleCtaSubmit} className="flex flex-col gap-4 text-left w-full" style={{ ...r10.stagger(2, 500, "blur-up"), marginTop: "40px" }}>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label style={{ ...label("9px"), display: "block", marginBottom: "6px" }}>First name *</label>
                     <input type="text" required value={ctaForm.firstName} onChange={(e) => setCtaForm(p => ({ ...p, firstName: e.target.value }))}
