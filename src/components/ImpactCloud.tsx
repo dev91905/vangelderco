@@ -34,6 +34,7 @@ const PLACEMENTS: Array<{ justify: string; items: string; textAlign: "left" | "r
 function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number; isHero: boolean }) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const [hovered, setHovered] = useState(false);
+  const location = useLocation();
   const delay = index * 0.07;
   const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
