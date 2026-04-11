@@ -233,6 +233,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
 
 const Deck = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -1531,7 +1532,7 @@ const Deck = () => {
       <CaseTimelineOverlay study={selectedCase} onClose={() => {
         if (deepLinkedCase.current) {
           deepLinkedCase.current = false;
-          navigate("/");
+          navigate((location.state as { from?: string })?.from || "/");
         } else {
           setSelectedCase(null);
         }
