@@ -1106,7 +1106,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 4: Practices ═══ */}
       <DeckFrame ref={setRef(3)} mode="wide">
-        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1.2fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(24px, 3vw, 48px)", alignItems: "start", overflow: "hidden" }}>
+        <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1.2fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "start", overflow: "hidden" }}>
           {/* Left column — pinned */}
           <div className="flex flex-col justify-start" style={{ ...r4.stagger(0, 0, "blur-up"), position: "sticky", top: "clamp(80px, 12vh, 140px)" }}>
             <p style={{ ...heading("clamp(28px, 4vw, 48px)"), fontWeight: 700 }}>
