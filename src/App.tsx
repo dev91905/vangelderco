@@ -20,6 +20,7 @@ import AdminEditor from "./pages/AdminEditor.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import RequireAuth from "./components/admin/RequireAuth.tsx";
 import AdminSubmissions from "./pages/AdminSubmissions.tsx";
+import Work from "./pages/Work.tsx";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,7 @@ const ROUTE_MODE_MAP: Record<string, ConstellationMode> = {
 function AppRoutes() {
   const location = useLocation();
   const mode = ROUTE_MODE_MAP[location.pathname] || "home";
-  const hideConstellation = location.pathname === "/diagnostic" || location.pathname.startsWith("/post/");
+  const hideConstellation = location.pathname === "/diagnostic" || location.pathname.startsWith("/post/") || location.pathname === "/work";
 
   return (
     <>
@@ -46,6 +47,7 @@ function AppRoutes() {
         <Route path="/cross-sector" element={<CrossSector />} />
         <Route path="/deep-organizing" element={<DeepOrganizing />} />
         <Route path="/post/:slug" element={<PostDetail />} />
+        <Route path="/work" element={<Work />} />
         <Route path="/diagnostic" element={<Deck />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />

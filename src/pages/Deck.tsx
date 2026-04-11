@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DeckFrame from "@/components/deck/DeckFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import TypewriterHeading from "@/components/deck/TypewriterHeading";
@@ -8,12 +8,9 @@ import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
-import CaseCarousel from "@/components/deck/CaseCarousel";
 import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
-import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
-import { useQuery } from "@tanstack/react-query";
 
-const TOTAL_FRAMES = 11; // removed Close frame
+const TOTAL_FRAMES = 10;
 
 /* ─── Aliases — pull from centralized theme ─── */
 const f = {
@@ -156,18 +153,6 @@ const ALL_METRICS = [
 ];
 
 /* ─── Fallback case studies (used when DB is empty) ─── */
-const FALLBACK_CASE_STUDIES: CaseStudyData[] = [
-  { id: "fb-0", name: "Clean Energy Workforce", issue: "Skilled trades bottleneck threatening federal climate policy", outcome: "40K reached, 4,000 workers registered, model now replicating nationally", phases: null },
-  { id: "fb-1", name: "Facial Recognition Ban", issue: "First-ever ban on facial recognition technology", outcome: "Legislation passed — New York State", phases: null },
-  { id: "fb-2", name: "Faithless Electors", issue: "Constitutional vulnerability in the Electoral College", outcome: "Supreme Court decision", phases: null },
-  { id: "fb-3", name: "Iceland Whaling", issue: "Commercial hunting of endangered fin whales", outcome: "185 fin whales saved", phases: null },
-  { id: "fb-4", name: "Ireland Fracking Ban", issue: "Fracking expansion in Ireland", outcome: "National ban passed", phases: null },
-  { id: "fb-5", name: "Gulf of Mexico Lease Sales", issue: "Fossil fuel lease sales in federal waters", outcome: "Lease sales blocked", phases: null },
-  { id: "fb-6", name: "Brazil Indigenous Rights", issue: "Anti-indigenous legislation in the Brazilian legislature", outcome: "Legislation blocked", phases: null },
-  { id: "fb-7", name: "UN Biodiversity Targets", issue: "Weak international biodiversity framework", outcome: "Stronger targets adopted — 2022", phases: null },
-  { id: "fb-8", name: "Clean Energy Executive Action", issue: "Stalled federal clean energy production", outcome: "Executive action secured — national security framing", phases: null },
-  { id: "fb-9", name: "Presidential Cabinet", issue: "Key cabinet appointments", outcome: "Appointments influenced", phases: null },
-];
 
 
 /* ─── Back button component ─── */
@@ -274,46 +259,6 @@ const Deck = () => {
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
 
   const [engagementPath, setEngagementPath] = useState<"fresh" | "experienced" | null>(null);
-  const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
-  const deepLinkedCase = useRef(false);
-
-  /* ─── Fetch case studies from DB ─── */
-  const { data: dbCaseStudies } = useQuery({
-    queryKey: ["deck-case-studies"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deck_case_studies")
-        .select("*")
-        .eq("is_published", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return (data || []).map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        issue: row.issue,
-        outcome: row.outcome,
-        phases: row.phases as CaseStudyData["phases"],
-        link_url: row.link_url || null,
-      })) as CaseStudyData[];
-    },
-  });
-  const caseStudies = dbCaseStudies && dbCaseStudies.length > 0 ? dbCaseStudies : FALLBACK_CASE_STUDIES;
-
-  /* ─── Deep-link: auto-open case study from ?case=<id> ─── */
-  const [searchParams, setSearchParams] = useSearchParams();
-  useEffect(() => {
-    const caseId = searchParams.get("case");
-    if (caseId && caseStudies.length > 0) {
-      const match = caseStudies.find((c) => c.id === caseId);
-      if (match) {
-        setSelectedCase(match);
-        deepLinkedCase.current = true;
-        // Clean up the query param
-        searchParams.delete("case");
-        setSearchParams(searchParams, { replace: true });
-      }
-    }
-  }, [searchParams, caseStudies]);
 
   const [practiceSelections, setPracticeSelections] = useState<Record<number, boolean>>({});
   const [expandedPracticeIdx, setExpandedPracticeIdx] = useState<number | null>(null);
@@ -335,7 +280,6 @@ const Deck = () => {
     gates[7] = true; // sectors — always passable, selection is optional
     gates[8] = true; // preliminary results — always accessible
     gates[9] = true; // CTA — always accessible
-    gates[10] = true; // case studies
     
     return gates;
   }, [selectedPains, customSaved, quizAnswers, capabilitiesRanked, metricsChecked, engagementPath, hasMediaExperience]);
@@ -427,7 +371,7 @@ const Deck = () => {
     focusDeck();
     const focusTimer = window.setTimeout(focusDeck, 50);
     const handler = (e: KeyboardEvent) => {
-      if (selectedCase !== null) return;
+      // no-op guard removed (selectedCase moved to /work)
       const target = e.target as HTMLElement | null;
       if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.tagName === "SELECT" || target?.isContentEditable) return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "Enter") {
@@ -443,7 +387,7 @@ const Deck = () => {
     window.addEventListener("keydown", handler);
     window.addEventListener("pointerdown", focusDeck);
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
-  }, [currentFrame, navigate, scrollToFrame, selectedCase, frameInteracted]);
+  }, [currentFrame, navigate, scrollToFrame, frameInteracted]);
 
   /* Wheel handler — lock deck scroll; only internal result panels may scroll */
   useEffect(() => {
@@ -516,7 +460,7 @@ const Deck = () => {
   const isFreshStart = selectedPains.includes("history");
 
   /* ─── Step labels for progress ─── */
-  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect", "Cases"];
+  const STEP_LABELS = ["Start", "Diagnosis", "Strategy", "Practices", "Capabilities", "Metrics", "Path", "Team", "Results", "Connect"];
 
   return (
     <div
@@ -1451,7 +1395,7 @@ const Deck = () => {
                 {/* Link to case studies after form */}
                 <button
                   type="button"
-                  onClick={() => scrollToFrame(10)}
+                  onClick={() => navigate("/work")}
                   style={{
                     ...r10.stagger(3, 700, "blur-up"),
                     fontFamily: f.sans, fontSize: "12px", letterSpacing: "0.06em", textTransform: "uppercase" as const, fontWeight: 500,
@@ -1468,59 +1412,6 @@ const Deck = () => {
         </div>
       </DeckFrame>
 
-      {/* ═══ FRAME 11: Case Studies — Carousel Gallery ═══ */}
-      <DeckFrame ref={setRef(10)} mode="full">
-        <div
-          ref={r11.ref}
-          className="flex w-full flex-col justify-center"
-          style={{
-            overflow: "hidden",
-            minHeight: "min(72vh, 760px)",
-            gap: "clamp(28px, 4vh, 44px)",
-          }}
-        >
-          <div
-            style={{
-              ...r11.stagger(0, 0, "blur-up"),
-              paddingLeft: "clamp(24px, 4vw, 80px)",
-              paddingRight: "clamp(24px, 4vw, 80px)",
-            }}
-          >
-            <p style={{ ...heading("clamp(28px, 3.8vw, 46px)"), fontWeight: 700 }}>Selected work.</p>
-            <p
-              style={{
-                fontFamily: f.sans,
-                fontSize: "clamp(13px, 1.4vw, 15px)",
-                color: f.ink(0.38),
-                marginTop: "10px",
-                lineHeight: 1.6,
-                maxWidth: "440px",
-              }}
-            >
-              Cross-sector programs, real outcomes.
-            </p>
-          </div>
-
-          <div style={{ ...r11.stagger(1, 120, "fade-up") }}>
-            <CaseCarousel
-              studies={caseStudies}
-              isActive={r11.isActive}
-              onSelect={setSelectedCase}
-            />
-          </div>
-        </div>
-      </DeckFrame>
-
-
-      {/* Case Study Timeline Overlay */}
-      <CaseTimelineOverlay study={selectedCase} onClose={() => {
-        if (deepLinkedCase.current) {
-          deepLinkedCase.current = false;
-          navigate((location.state as { from?: string })?.from || "/");
-        } else {
-          setSelectedCase(null);
-        }
-      }} />
     </div>
   );
 };
