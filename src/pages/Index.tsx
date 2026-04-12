@@ -148,7 +148,6 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
 
 /* ── Scroll-driven brand mark ── */
 function ScrollBrandMark({ scrollY }: { scrollY: number }) {
-  const placeholderRef = useRef<HTMLDivElement>(null);
   const [startPos, setStartPos] = useState<{ top: number; left: number; width: number } | null>(null);
 
   // Measure placeholder position on mount and resize
