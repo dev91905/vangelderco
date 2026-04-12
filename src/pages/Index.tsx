@@ -152,8 +152,44 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
+  const [searchParams, setSearchParams] = useSearchParams();
   
-  const [scrollY, setScrollY] = useState(0);
+  const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
+
+  // Open case from ?case= param on mount
+  useEffect(() => {
+    const caseId = searchParams.get("case");
+    if (!caseId) return;
+    supabase
+      .from("deck_case_studies")
+      .select("id, name, issue, outcome, phases, link_url")
+      .eq("id", caseId)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setSelectedCase(data as unknown as CaseStudyData);
+        }
+      });
+  }, []); // only on mount
+
+  const handleCaseClick = useCallback((caseId: string) => {
+    setSearchParams({ case: caseId }, { replace: true });
+    supabase
+      .from("deck_case_studies")
+      .select("id, name, issue, outcome, phases, link_url")
+      .eq("id", caseId)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setSelectedCase(data as unknown as CaseStudyData);
+        }
+      });
+  }, [setSearchParams]);
+
+  const handleCaseClose = useCallback(() => {
+    setSelectedCase(null);
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
   const [glowIndex, setGlowIndex] = useState(0);
 
   // Cycle glow through the 6 sector pills
