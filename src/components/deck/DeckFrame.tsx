@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef, useEffect, useRef } from "react";
+import { ReactNode, forwardRef, useEffect, useRef, useCallback } from "react";
 
 type FrameMode = "narrow" | "wide" | "full";
 type FrameAlign = "center" | "left" | "split";
