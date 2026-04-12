@@ -9,7 +9,7 @@ import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 import { t } from "@/lib/theme";
 
 /* ── Data ── */
-const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "National Security"];
+const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defense"];
 
 const NETWORK_SECTORS = [
   { name: "News", desc: "Local and national — how stories get placed and why" },
