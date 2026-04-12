@@ -309,7 +309,7 @@ const Index = () => {
           }}
         >
           {/* Placeholder for brand mark starting position */}
-          <div ref={brandPlaceholderRef} className="h-[14px]" style={{ animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both" }} />
+          <div data-brand-placeholder className="h-[14px]" style={{ animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both" }} />
 
           <h1 className="flex flex-col gap-2 md:gap-3">
             {HERO_LINKS.map((link, i) => (
