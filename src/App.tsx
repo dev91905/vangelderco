@@ -34,7 +34,7 @@ const ROUTE_MODE_MAP: Record<string, ConstellationMode> = {
 function AppRoutes() {
   const location = useLocation();
   const mode = ROUTE_MODE_MAP[location.pathname] || "home";
-  const hideConstellation = location.pathname === "/diagnostic" || location.pathname.startsWith("/post/") || location.pathname === "/work";
+  const hideConstellation = true;
   const hideDarkToggle = location.pathname === "/diagnostic" || location.pathname === "/work";
 
   return (

@@ -222,19 +222,8 @@ const Index = () => {
 
   return (
     <AtmosphericLayout>
-      {/* HUD: top-right */}
-      <div
-        className="fixed top-6 right-6 z-30 flex flex-col items-end"
-        style={{
-          fontFamily: t.sans,
-          transition: `opacity 0.6s ${EASE_OUT_QUART}`,
-          opacity: heroProgress > 0.8 ? 0.15 : 0.3,
-        }}
-      >
-        <span className="text-[10px] tracking-[0.15em] uppercase" style={{ color: t.ink(0.3) }}>
-          Van Gelder Co.
-        </span>
-      </div>
+      {/* Scroll-driven "Van Gelder Co." — starts in hero, moves to top-right */}
+      <ScrollBrandMark scrollY={scrollY} />
 
       <div
         ref={scrollRef}
