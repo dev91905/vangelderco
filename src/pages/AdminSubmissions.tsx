@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft, RefreshCw } from "lucide-react";
+import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft } from "lucide-react";
 import { generateDiagnosticPdf } from "@/components/admin/DiagnosticPdfDocument";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -255,103 +255,84 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
         </div>
 
         {/* RIGHT: Contact info & actions */}
-        <div className="p-6 flex flex-col gap-5 overflow-y-auto" style={{ background: t.ink(0.015) }}>
-          {/* Contact info */}
+        <div className="p-6 flex flex-col gap-6 overflow-y-auto" style={{ background: t.ink(0.015) }}>
           <div>
             <p style={{ fontFamily: t.sans, fontSize: "16px", fontWeight: 700, color: t.ink(0.85) }}>
               {contact.first_name} {contact.last_name}
             </p>
             {contact.organization && (
-              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4), marginTop: "2px" }}>
+              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.45), marginTop: "2px" }}>
                 {contact.organization}
               </p>
             )}
             <a
               href={`mailto:${contact.email}`}
-              style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.45), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "6px" }}
+              style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.5), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "6px" }}
             >
               {contact.email}
             </a>
-            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25), marginTop: "8px" }}>
+            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.3), marginTop: "8px" }}>
               {format(new Date(contact.created_at), "MMM d, yyyy 'at' h:mm a")}
             </p>
           </div>
 
-          {/* Readiness score card */}
-          <div style={{ padding: "14px 16px", borderRadius: "12px", background: t.ink(0.025), border: t.border(0.05) }}>
-            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.3), textTransform: "uppercase", marginBottom: "6px" }}>
+          <div style={{ padding: "12px 14px", borderRadius: "10px", background: t.ink(0.03), border: t.border(0.06) }}>
+            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.35), textTransform: "uppercase", marginBottom: "4px" }}>
               Readiness Score
             </p>
             <p style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 700, color: readinessLabel(contact.readiness_score).color }}>
               {contact.readiness_score ?? "—"} · {readinessLabel(contact.readiness_score).label}
             </p>
-            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.3), marginTop: "4px" }}>
+            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.35), marginTop: "2px" }}>
               {readinessLabel(contact.readiness_score).hint}
             </p>
           </div>
 
-          {/* Separator */}
-          <div style={{ height: "1px", background: t.ink(0.04) }} />
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={handleExportPdf}
+              disabled={!reportData || exporting}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all disabled:opacity-40"
+              style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream, border: "none", cursor: reportData ? "pointer" : "default" }}
+            >
+              <FileText className="w-4 h-4" />
+              {exporting ? "Exporting…" : "Export as PDF"}
+            </button>
 
-          {/* Actions */}
-          <div>
-            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", color: t.ink(0.25), textTransform: "uppercase", marginBottom: "10px" }}>
-              Actions
-            </p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleExportPdf}
-                disabled={!reportData || exporting}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] font-medium transition-all disabled:opacity-40"
-                style={{ fontFamily: t.sans, background: t.ink(0.85), color: t.cream, border: "none", cursor: reportData ? "pointer" : "default" }}
-              >
-                <FileText className="w-4 h-4" />
-                {exporting ? "Exporting…" : "Export as PDF"}
-              </button>
+            <button
+              onClick={handleCopyEmail}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all"
+              style={{ fontFamily: t.sans, color: t.ink(0.6), background: "transparent", border: t.border(0.1), cursor: "pointer" }}
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied" : "Copy email"}
+            </button>
 
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] transition-all"
-                style={{ fontFamily: t.sans, color: t.ink(0.5), background: "transparent", border: t.border(0.08), cursor: "pointer" }}
-              >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied" : "Copy email"}
-              </button>
-
-              <button
-                onClick={() => markAsSent.mutate()}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] transition-all"
-                style={{
-                  fontFamily: t.sans,
-                  color: contact.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.5),
-                  background: contact.report_status === "sent" ? "hsl(142 71% 45% / 0.06)" : "transparent",
-                  border: contact.report_status === "sent" ? "1px solid hsl(142 71% 45% / 0.15)" : t.border(0.08),
-                  cursor: "pointer",
-                }}
-              >
-                <Mail className="w-4 h-4" />
-                {contact.report_status === "sent" ? "Marked as sent ✓" : "Mark as sent"}
-              </button>
-            </div>
+            <button
+              onClick={() => markAsSent.mutate()}
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-sm transition-all"
+              style={{
+                fontFamily: t.sans,
+                color: contact.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.6),
+                background: contact.report_status === "sent" ? "hsl(142 71% 45% / 0.08)" : "transparent",
+                border: contact.report_status === "sent" ? "1px solid hsl(142 71% 45% / 0.2)" : t.border(0.1),
+                cursor: "pointer",
+              }}
+            >
+              <Mail className="w-4 h-4" />
+              {contact.report_status === "sent" ? "Marked as sent ✓" : "Mark as sent"}
+            </button>
           </div>
 
-          {/* Regenerate */}
           {reportData && (
             <button
               onClick={generateReport}
               disabled={generating}
-              className="flex items-center justify-center gap-2 w-full py-2 rounded-full text-[11px] transition-all mt-auto"
-              style={{
-                fontFamily: t.sans,
-                color: t.ink(0.3),
-                background: "transparent",
-                border: t.border(0.06),
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.025); e.currentTarget.style.color = t.ink(0.5); }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = t.ink(0.3); }}
+              className="text-xs transition-colors"
+              style={{ fontFamily: t.sans, color: t.ink(0.3), background: "none", border: "none", cursor: "pointer", alignSelf: "center", marginTop: "auto" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.6))}
+              onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.3))}
             >
-              <RefreshCw className="w-3 h-3" />
               {generating ? "Regenerating…" : "Regenerate report"}
             </button>
           )}
