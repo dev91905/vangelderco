@@ -597,8 +597,8 @@ const Deck = () => {
         <div
           className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none"
           style={{
-            padding: isMobile ? "16px 20px calc(28px + env(safe-area-inset-bottom, 0px))" : "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))",
-            background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)",
+            padding: isMobile ? "32px 20px calc(28px + env(safe-area-inset-bottom, 0px))" : "16px clamp(16px, 4vw, 32px) calc(28px + env(safe-area-inset-bottom, 0px))",
+            background: isMobile ? "linear-gradient(to top, hsl(var(--background)) 50%, transparent 100%)" : "linear-gradient(to top, hsl(var(--background)) 60%, transparent 100%)",
           }}
         >
           {isMobile ? (
