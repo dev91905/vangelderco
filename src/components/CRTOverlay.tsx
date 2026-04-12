@@ -28,7 +28,7 @@ const CRTOverlay = () => {
           height: "1px",
           background:
             "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.06) 20%, hsl(0 0% 100% / 0.06) 80%, transparent 100%)",
-          animation: "scan-beam 18s linear infinite",
+          animation: "scan-beam 13s linear infinite",
         }}
         aria-hidden="true"
       />
