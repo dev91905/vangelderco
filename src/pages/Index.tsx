@@ -238,12 +238,13 @@ const Index = () => {
 
       <div
         ref={scrollRef}
-        className="snap-scroll-container"
+        className=""
       >
 
       {/* ═══ HERO ═══ */}
       <section
-        className="snap-section flex items-center justify-center w-full relative z-20"
+        className="flex items-center justify-center w-full relative z-20"
+        style={{ minHeight: "100dvh" }}
       >
         <main
           className="flex flex-col items-center text-center px-6 max-w-4xl mx-auto gap-10 md:gap-14"
