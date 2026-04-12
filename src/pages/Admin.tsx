@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import CaseStudyEditor from "@/components/admin/CaseStudyEditor";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, Link as LinkIcon, Mail, ChevronDown, FileText, FolderKanban, Users, Sparkles, type LucideIcon } from "lucide-react";
+import { Plus, Settings, X, Lock, Eye, EyeOff, Copy, RefreshCw, Trash2, Check, LogOut, ArrowLeft, Link as LinkIcon, Mail, ChevronDown } from "lucide-react";
 import PostListTable from "@/components/admin/PostListTable";
 import { useSiteSettings, useUpdateSiteSetting } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,12 +18,10 @@ const generatePassword = () => {
   return Array.from(arr, (b) => chars[b % chars.length]).join("");
 };
 
-const surfaceShadow = `0 32px 84px -52px ${t.ink(0.22)}`;
-
 /* ═══ Collapsible Section ═══ */
 const CollapsibleSection = ({
-  title, description, count, open, onToggle, icon: Icon, children,
-}: { title: string; description: string; count?: number; open: boolean; onToggle: () => void; icon: LucideIcon; children: React.ReactNode }) => {
+  title, count, open, onToggle, children,
+}: { title: string; count?: number; open: boolean; onToggle: () => void; children: React.ReactNode }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>(open ? undefined : 0);
 
@@ -41,46 +39,33 @@ const CollapsibleSection = ({
   }, [open]);
 
   return (
-    <div className="rounded-[30px] border overflow-hidden" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 24px 60px -48px ${t.ink(0.16)}` }}>
+    <div className="px-4 md:px-8">
       <button
         onClick={onToggle}
-        className="group flex w-full items-start justify-between gap-4 px-5 py-5 text-left transition-colors md:px-6 md:py-6"
-        style={{ borderBottom: open ? t.border(0.04) : "none" }}
+        className="flex items-center gap-2.5 w-full py-5 transition-colors group"
+        style={{ borderBottom: t.border(0.04) }}
       >
-        <div className="flex min-w-0 items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px]" style={{ background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}>
-            <Icon className="h-4.5 w-4.5" style={{ color: t.ink(0.42) }} />
-          </div>
-
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="text-[18px] font-semibold tracking-[-0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.78) }}>
-                {title}
-              </span>
-              {count !== undefined && (
-                <span
-                  className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-semibold tracking-[0.08em] tabular-nums"
-                  style={{ fontFamily: t.sans, color: t.ink(0.4), background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}
-                >
-                  {count}
-                </span>
-              )}
-            </div>
-            <p className="mt-2 max-w-[700px] text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
-              {description}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2 rounded-full px-3 py-2" style={{ background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}>
-          <span className="text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
-            {open ? "OPEN" : "CLOSED"}
+        <ChevronDown
+          className="w-3.5 h-3.5 transition-transform duration-200"
+          style={{ color: t.ink(0.25), transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
+        />
+        <span className="text-[13px] font-semibold tracking-[0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.5) }}>
+          {title}
+        </span>
+        {count !== undefined && count > 0 && (
+          <span
+            className="text-[10px] font-semibold tabular-nums"
+            style={{
+              fontFamily: t.sans,
+              color: t.ink(0.35),
+              background: t.ink(0.04),
+              padding: "2px 8px",
+              borderRadius: "999px",
+            }}
+          >
+            {count}
           </span>
-          <ChevronDown
-            className="h-3.5 w-3.5 transition-transform duration-200"
-            style={{ color: t.ink(0.28), transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
-          />
-        </div>
+        )}
       </button>
       <div
         ref={contentRef}
@@ -90,7 +75,7 @@ const CollapsibleSection = ({
           transition: "height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="px-5 pb-5 pt-1 md:px-6 md:pb-6">{children}</div>
+        {children}
       </div>
     </div>
   );
@@ -116,11 +101,11 @@ const SettingsModal = ({
   const handleGen = () => { setGlobalPw(generatePassword()); setShowPw(true); };
 
   const FieldGroup = ({ icon: Icon, label: lbl, children }: { icon: any; label: string; children: React.ReactNode }) => (
-    <div className="rounded-[24px] border p-4 md:p-5" style={{ background: t.ink(0.015), borderColor: t.ink(0.05) }}>
-      <label className="flex items-center gap-2 text-[10px] uppercase tracking-[0.1em]" style={{ fontFamily: t.sans, color: t.ink(0.35), fontWeight: 600 }}>
+    <div className="space-y-2.5">
+      <label className="text-[10px] uppercase tracking-[0.1em] flex items-center gap-2" style={{ fontFamily: t.sans, color: t.ink(0.35), fontWeight: 600 }}>
         <Icon className="w-3 h-3" /> {lbl}
       </label>
-      <div className="mt-3">{children}</div>
+      {children}
     </div>
   );
 
@@ -128,49 +113,45 @@ const SettingsModal = ({
     <>
       <div className="fixed inset-0 z-50" style={{ background: t.ink(0.15), backdropFilter: "blur(4px)" }} onClick={onClose} />
       <div
-        className="fixed left-1/2 top-1/2 z-50 w-full max-w-[560px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px]"
-        style={{ background: t.cream, border: t.border(0.06), boxShadow: `0 36px 90px -36px ${t.ink(0.22)}, 0 0 0 1px ${t.ink(0.04)}` }}
+        className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm rounded-2xl overflow-hidden"
+        style={{ background: t.cream, border: t.border(0.06), boxShadow: `0 24px 48px -12px ${t.ink(0.12)}, 0 0 0 1px ${t.ink(0.04)}` }}
       >
-        <div className="flex items-start justify-between gap-4 px-6 py-5" style={{ borderBottom: t.border(0.06) }}>
-          <div>
-            <p className="text-[10px] font-semibold tracking-[0.09em]" style={{ fontFamily: t.sans, color: t.ink(0.32) }}>SITE SETTINGS</p>
-            <h2 className="mt-2 text-[22px] font-semibold tracking-[-0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.78) }}>Publishing defaults</h2>
-            <p className="mt-2 max-w-[360px] text-[12px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Keep article access, booking links, and contact details in one clean control panel.</p>
-          </div>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: t.border(0.06) }}>
+          <span className="text-[13px] font-semibold" style={{ fontFamily: t.sans, color: t.ink(0.6) }}>Site Settings</span>
           <button onClick={onClose} className="p-1.5 rounded-lg transition-colors" onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.05))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
             <X className="w-4 h-4" style={{ color: t.ink(0.3) }} />
           </button>
         </div>
 
-        <div className="space-y-4 p-6">
+        <div className="p-5 space-y-6">
           {/* Password */}
           <FieldGroup icon={Lock} label="Global Article Password">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-1.5 h-1.5 rounded-full" style={{ background: globalPw ? t.ink(0.72) : t.ink(0.12) }} />
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: globalPw ? "hsl(142 71% 45%)" : t.ink(0.12) }} />
               <span className="text-[11px]" style={{ fontFamily: t.sans, color: globalPw ? t.ink(0.5) : t.ink(0.25) }}>
                 {globalPw ? "Active" : "Not set"}
               </span>
             </div>
-            <div className="overflow-hidden rounded-[20px]" style={{ border: t.border(0.06), background: t.white }}>
+            <div className="rounded-xl overflow-hidden" style={{ border: t.border(0.06), background: t.ink(0.015) }}>
               <input
                 type={showPw ? "text" : "password"} value={globalPw} onChange={(e) => setGlobalPw(e.target.value)} placeholder="No global password"
-                className="w-full bg-transparent px-4 py-3 text-[13px] outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8) }}
+                className="w-full px-3 py-2.5 text-[13px] bg-transparent outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8) }}
               />
-              <div className="flex items-center gap-px border-t px-2 py-2" style={{ borderColor: t.ink(0.05) }}>
+              <div className="flex items-center gap-px px-1 pb-1">
                 {[
                   { onClick: () => setShowPw(!showPw), icon: showPw ? EyeOff : Eye, label: showPw ? "Hide" : "Show" },
                   { onClick: handleGen, icon: RefreshCw, label: "Generate" },
-                  { onClick: handleCopy, icon: copied ? Check : Copy, label: copied ? "Copied" : "Copy", disabled: !globalPw },
+                  { onClick: handleCopy, icon: copied ? Check : Copy, label: copied ? "Copied" : "Copy", disabled: !globalPw, color: copied ? t.success() : undefined },
                 ].map((btn, i) => (
                   <button key={i} onClick={btn.onClick} disabled={btn.disabled}
-                    className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] tracking-[0.04em] transition-colors disabled:opacity-20"
-                    style={{ fontFamily: t.sans, color: t.ink(0.38), background: "transparent" }}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] tracking-[0.04em] transition-colors disabled:opacity-20"
+                    style={{ fontFamily: t.sans, color: btn.color || t.ink(0.35), background: "transparent" }}
                     onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.04))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
                     <btn.icon className="w-3 h-3" /> {btn.label}
                   </button>
                 ))}
                 {globalPw && (
-                  <button onClick={() => setGlobalPw("")} className="ml-auto flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] tracking-[0.04em] transition-colors" style={{ fontFamily: t.sans, color: t.ink(0.38), background: "transparent" }}>
+                  <button onClick={() => setGlobalPw("")} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] tracking-[0.04em] transition-colors ml-auto" style={{ fontFamily: t.sans, color: t.error(0.5), background: "transparent" }}>
                     <Trash2 className="w-3 h-3" /> Remove
                   </button>
                 )}
@@ -181,21 +162,21 @@ const SettingsModal = ({
           {/* Booking Link */}
           <FieldGroup icon={LinkIcon} label="Booking Link">
             <input type="url" value={bookingLink} onChange={(e) => setBookingLink(e.target.value)} placeholder="https://calendly.com/your-link"
-              className="w-full rounded-[18px] bg-transparent px-4 py-3 text-[13px] outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.white }} />
+              className="w-full px-3 py-2.5 text-[13px] bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.ink(0.015) }} />
             <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used for "Schedule a Meeting" on the deck CTA page.</p>
           </FieldGroup>
 
           {/* Contact Email */}
           <FieldGroup icon={Mail} label="Contact Email">
             <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="hello@vangelder.co"
-              className="w-full rounded-[18px] bg-transparent px-4 py-3 text-[13px] outline-none" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.white }} />
+              className="w-full px-3 py-2.5 text-[13px] bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.ink(0.015) }} />
             <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used in the "Next Steps" section of diagnostic reports.</p>
           </FieldGroup>
         </div>
 
         {/* Single save button */}
-        <div className="px-6 pb-6">
-          <button onClick={onSave} className="w-full rounded-full py-3 text-[13px] font-medium transition-all" style={{ fontFamily: t.sans, background: t.ink(0.9), color: t.cream }}>
+        <div className="px-5 pb-5">
+          <button onClick={onSave} className="w-full py-2.5 text-[13px] font-medium transition-all rounded-full" style={{ fontFamily: t.sans, background: t.ink(0.9), color: t.cream }}>
             Save Settings
           </button>
         </div>
@@ -224,12 +205,10 @@ const FilterBar = ({
     { value: "deep-organizing", label: "Deep Organizing" },
   ];
 
-  const hasFilters = typeFilter !== "all" || capFilter !== "all";
-
   const Chip = ({ active, label, onClick, variant = "primary" }: { active: boolean; label: string; onClick: () => void; variant?: "primary" | "secondary" }) => (
     <button
       onClick={() => { onClick(); playHoverGlitch(); }}
-      className="rounded-full px-3 py-2 text-[11px] tracking-[0.02em] transition-all duration-200"
+      className="px-3 py-1.5 text-[11px] tracking-[0.02em] rounded-full transition-all duration-200"
       style={{
         fontFamily: t.sans,
         fontWeight: active ? 600 : 400,
@@ -249,42 +228,14 @@ const FilterBar = ({
   );
 
   return (
-    <div className="rounded-[26px] border p-4 md:p-5" style={{ background: t.ink(0.018), borderColor: t.ink(0.05) }}>
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-[11px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.34) }}>REFINE LIBRARY</p>
-          <p className="mt-1 text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>Filter by format and capability without splitting attention across multiple toolbars.</p>
-        </div>
-        {hasFilters && (
-          <button
-            onClick={() => { setTypeFilter("all"); setCapFilter("all"); playHoverGlitch(); }}
-            className="rounded-full px-3 py-2 text-[11px] font-medium transition-all"
-            style={{ fontFamily: t.sans, color: t.ink(0.45), background: t.white, border: `1px solid ${t.ink(0.08)}` }}
-          >
-            Reset filters
-          </button>
-        )}
-      </div>
-
-      <div className="mt-4 grid gap-4 lg:grid-cols-[auto_1fr]">
-        <div className="space-y-2.5">
-          <p className="text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.28) }}>FORMAT</p>
-          <div className="flex flex-wrap gap-2">
-            {typeChips.map((c) => (
-              <Chip key={c.value} active={typeFilter === c.value} label={c.label} onClick={() => setTypeFilter(c.value)} variant="primary" />
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2.5">
-          <p className="text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.28) }}>CAPABILITY</p>
-          <div className="flex flex-wrap gap-2">
-            {capChips.map((c) => (
-              <Chip key={c.value} active={capFilter === c.value} label={c.label} onClick={() => setCapFilter(c.value)} variant="secondary" />
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="flex flex-wrap items-center gap-1.5 py-3">
+      {typeChips.map((c) => (
+        <Chip key={c.value} active={typeFilter === c.value} label={c.label} onClick={() => setTypeFilter(c.value)} variant="primary" />
+      ))}
+      <div className="w-px h-3.5 mx-1" style={{ background: t.ink(0.06) }} />
+      {capChips.map((c) => (
+        <Chip key={c.value} active={capFilter === c.value} label={c.label} onClick={() => setCapFilter(c.value)} variant="secondary" />
+      ))}
     </div>
   );
 };
@@ -341,17 +292,7 @@ const Admin = () => {
   const [contactEmail, setContactEmail] = useState<string>("");
   const [pwLoaded, setPwLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!settings || pwLoaded) return;
-    setGlobalPw(settings.global_article_password || "");
-    setBookingLink(settings.booking_link || "");
-    setContactEmail(settings.contact_email || "");
-    setPwLoaded(true);
-  }, [settings, pwLoaded]);
-
-  const publishedPosts = (posts || []).filter((post: any) => post.is_published).length;
-  const caseStudyCount = caseStudies?.length || 0;
-  const sentReports = (contacts || []).filter((contact: any) => contact.report_status === "sent").length;
+  if (settings && !pwLoaded) { setGlobalPw(settings.global_article_password || ""); setBookingLink(settings.booking_link || ""); setContactEmail(settings.contact_email || ""); setPwLoaded(true); }
 
   const handleSaveSettings = () => {
     updateSetting.mutate({ key: "global_article_password", value: globalPw || null });
@@ -362,30 +303,35 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
-      <div className="sticky top-0 z-30" style={{ background: t.cream, borderBottom: t.border(0.06), boxShadow: `0 1px 3px 0 ${t.ink(0.03)}` }}>
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-4 py-5 md:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/" className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all" style={{ fontFamily: t.sans, color: t.ink(0.35), border: t.border(0.08), background: t.white }} onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.7); e.currentTarget.style.background = t.ink(0.03); }} onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.35); e.currentTarget.style.background = t.white; }}>
-              <ArrowLeft className="w-3 h-3" /> Site
-            </Link>
-            <div>
-              <p className="text-[10px] font-semibold tracking-[0.09em]" style={{ fontFamily: t.sans, color: t.ink(0.32) }}>CONTENT MANAGER</p>
-              <h1 className="text-[26px] font-semibold tracking-[-0.03em]" style={{ fontFamily: t.sans, color: t.ink(0.82) }}>Admin workspace</h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start lg:self-auto">
-            <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }} className="rounded-full p-2.5 transition-colors" style={{ border: t.border(0.06), background: t.white }} title="Sign out" onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.03))} onMouseLeave={(e) => (e.currentTarget.style.background = t.white)}>
-              <LogOut className="w-4 h-4" style={{ color: t.ink(0.3) }} />
-            </button>
-            <button onClick={() => setSettingsOpen(true)} className="relative rounded-full p-2.5 transition-colors" style={{ border: t.border(0.06), background: t.white }} title="Site settings" onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.03))} onMouseLeave={(e) => (e.currentTarget.style.background = t.white)}>
-              <Settings className="w-4 h-4" style={{ color: t.ink(0.3) }} />
-              {settings?.global_article_password && <div className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full" style={{ background: t.ink(0.8) }} />}
-            </button>
-            <Link to="/admin/new" className="flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-medium transition-colors" style={{ fontFamily: t.sans, color: t.cream, background: t.ink(0.85) }} onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(1))} onMouseLeave={(e) => (e.currentTarget.style.background = t.ink(0.85))}>
-              <Plus className="w-3.5 h-3.5" /> New Post
-            </Link>
-          </div>
+      {/* Header */}
+      <div
+        className="flex items-center justify-between px-4 md:px-8 py-4 sticky top-0 z-30"
+        style={{ background: t.cream, borderBottom: t.border(0.06), boxShadow: `0 1px 3px 0 ${t.ink(0.03)}` }}
+      >
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
+            style={{ fontFamily: t.sans, color: t.ink(0.35), border: t.border(0.08) }}
+            onMouseEnter={(e) => { playHoverGlitch(); e.currentTarget.style.color = t.ink(0.7); e.currentTarget.style.background = t.ink(0.03); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.35); e.currentTarget.style.background = "transparent"; }}>
+            <ArrowLeft className="w-3 h-3" /> Site
+          </Link>
+          <h1 className="text-[17px] font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>Content Manager</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={async () => { await supabase.auth.signOut(); navigate("/admin/login"); }}
+            className="p-2 rounded-xl transition-colors" style={{ border: t.border(0.06) }} title="Sign out"
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.03))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            <LogOut className="w-4 h-4" style={{ color: t.ink(0.25) }} />
+          </button>
+          <button onClick={() => setSettingsOpen(true)} className="p-2 rounded-xl relative transition-colors" style={{ border: t.border(0.06) }} title="Site settings"
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.03))} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+            <Settings className="w-4 h-4" style={{ color: t.ink(0.25) }} />
+            {settings?.global_article_password && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: "hsl(142 71% 45%)" }} />}
+          </button>
+          <Link to="/admin/new" className="flex items-center gap-2 px-4 py-2 text-[13px] font-medium transition-colors rounded-full" style={{ fontFamily: t.sans, color: t.cream, background: t.ink(0.85) }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(1))} onMouseLeave={(e) => (e.currentTarget.style.background = t.ink(0.85))}>
+            <Plus className="w-3.5 h-3.5" /> New Post
+          </Link>
         </div>
       </div>
 
@@ -397,126 +343,75 @@ const Admin = () => {
         onSave={handleSaveSettings}
       />
 
-      <div className="mx-auto max-w-[1440px] space-y-6 px-4 py-6 md:px-8 md:py-8">
-        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-[34px] border px-6 py-6 md:px-8 md:py-8" style={{ background: `linear-gradient(145deg, ${t.white} 0%, ${t.ink(0.03)} 100%)`, borderColor: t.ink(0.06), boxShadow: surfaceShadow }}>
-            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}>
-              <Sparkles className="h-3.5 w-3.5" /> CONTROL ROOM
-            </div>
-            <h2 className="mt-7 max-w-[720px] text-[34px] font-semibold leading-[1.02] tracking-[-0.04em] md:text-[44px]" style={{ fontFamily: t.sans, color: t.ink(0.84) }}>
-              Publishing, case studies, and lead follow-up without the usual admin sludge.
-            </h2>
-            <p className="mt-5 max-w-[620px] text-[15px] leading-7" style={{ fontFamily: t.sans, color: t.ink(0.42) }}>
-              Everything important sits in one visual layer so you can triage, edit, and publish without hunting through dead space or tiny controls.
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            {[
-              { icon: FileText, label: "Library", value: `${posts?.length || 0} posts`, hint: `${publishedPosts} published` },
-              { icon: FolderKanban, label: "Deck case studies", value: `${caseStudyCount} entries`, hint: "Ordered and presentation-ready" },
-              { icon: Users, label: "Lead diagnostics", value: `${contacts?.length || 0} submissions`, hint: `${sentReports} marked sent` },
-            ].map(({ icon: Icon, label, value, hint }) => (
-              <div key={label} className="rounded-[26px] border px-5 py-5" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 18px 44px -40px ${t.ink(0.18)}` }}>
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>{label.toUpperCase()}</p>
-                    <p className="mt-2 text-[22px] font-semibold tracking-[-0.03em]" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>{value}</p>
-                    <p className="mt-1 text-[12px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.38) }}>{hint}</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[18px]" style={{ background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}>
-                    <Icon className="h-4.5 w-4.5" style={{ color: t.ink(0.42) }} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Articles */}
+      <CollapsibleSection title="Articles" count={posts?.length} open={articlesOpen} onToggle={() => setArticlesOpen(!articlesOpen)}>
+        <FilterBar typeFilter={typeFilter} setTypeFilter={setTypeFilter} capFilter={capFilter} setCapFilter={setCapFilter} playHoverGlitch={playHoverGlitch} />
+        <div className="pb-2">
+          <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
         </div>
+      </CollapsibleSection>
 
-        <CollapsibleSection title="Articles" description="Manage the publishing queue, protected articles, and case-study posts in one refined library view." count={posts?.length} open={articlesOpen} onToggle={() => setArticlesOpen(!articlesOpen)} icon={FileText}>
-          <FilterBar typeFilter={typeFilter} setTypeFilter={setTypeFilter} capFilter={capFilter} setCapFilter={setCapFilter} playHoverGlitch={playHoverGlitch} />
-          <div className="pt-4">
-            <PostListTable filter={{ type: typeFilter, capability: capFilter }} />
-          </div>
-        </CollapsibleSection>
+      {/* Case Studies */}
+      <CollapsibleSection title="Deck Case Studies" count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)}>
+        <div className="py-4">
+          <CaseStudyEditor />
+        </div>
+      </CollapsibleSection>
 
-        <CollapsibleSection title="Deck Case Studies" description="Keep the presentation deck case studies ordered, readable, and ready to drop into the client-facing flow." count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)} icon={FolderKanban}>
-          <div className="pt-2">
-            <CaseStudyEditor />
-          </div>
-        </CollapsibleSection>
-
-        <CollapsibleSection title="Leads" description="Review every diagnostic submission with context up front — who it is, when it came in, and how ready they are." count={contacts?.length} open={diagnosticsOpen} onToggle={() => setDiagnosticsOpen(!diagnosticsOpen)} icon={Users}>
+      {/* Leads */}
+      <CollapsibleSection title="Leads" count={contacts?.length} open={diagnosticsOpen} onToggle={() => setDiagnosticsOpen(!diagnosticsOpen)}>
+        <div className="py-2">
           {!contacts || contacts.length === 0 ? (
-            <div className="flex items-center justify-center rounded-[24px] border py-16" style={{ background: t.ink(0.015), borderColor: t.ink(0.05) }}>
-              <p className="text-center" style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.25) }}>No submissions yet.</p>
-            </div>
+            <p className="text-center py-10" style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.25) }}>No submissions yet.</p>
           ) : (
-            <div className="space-y-3">
-              {contacts.map((c: any) => {
-                const readiness = c.readiness_score != null ? getScoreLabel(c.readiness_score) : null;
-                return (
-                  <Link
-                    key={c.id}
-                    to={`/admin/submissions?id=${c.id}`}
-                    className="group block rounded-[26px] border px-5 py-5 transition-all duration-200 md:px-6"
-                    style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 18px 40px -36px ${t.ink(0.18)}` }}
-                    onPointerEnter={(e) => {
-                      e.currentTarget.style.background = t.ink(0.015);
-                      e.currentTarget.style.borderColor = t.ink(0.12);
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onPointerLeave={(e) => {
-                      e.currentTarget.style.background = t.white;
-                      e.currentTarget.style.borderColor = t.ink(0.06);
-                      e.currentTarget.style.transform = "translateY(0)";
+            contacts.map((c: any) => {
+              const readiness = c.readiness_score != null ? getScoreLabel(c.readiness_score) : null;
+              return (
+                <Link
+                  key={c.id}
+                  to={`/admin/submissions?id=${c.id}`}
+                  className="flex items-center gap-4 px-4 py-4 transition-all group rounded-xl"
+                  style={{ background: "transparent", borderBottom: t.border(0.04) }}
+                  onPointerEnter={(e) => { e.currentTarget.style.background = t.ink(0.025); }}
+                  onPointerLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                >
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-[14px] font-semibold truncate transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>
+                      {c.first_name} {c.last_name}
+                      {c.organization && <span className="font-normal ml-2" style={{ color: t.ink(0.3), fontSize: "12px" }}>· {c.organization}</span>}
+                    </h3>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{c.email}</span>
+                      <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.2) }}>
+                        {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+                      </span>
+                    </div>
+                  </div>
+                  {readiness && (
+                    <span className="text-[11px] font-semibold whitespace-nowrap" style={{ fontFamily: t.sans, color: readiness.color }}>
+                      {readiness.label}
+                    </span>
+                  )}
+                  <span
+                    className="text-[10px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
+                    style={{
+                      fontFamily: t.sans,
+                      color: c.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.4),
+                      background: c.report_status === "sent" ? "hsl(142 71% 45% / 0.08)" : t.ink(0.03),
+                      border: `1px solid ${c.report_status === "sent" ? "hsl(142 71% 45% / 0.15)" : t.ink(0.06)}`,
                     }}
                   >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="truncate text-[16px] font-semibold tracking-[-0.02em] transition-transform duration-200 group-hover:translate-x-0.5" style={{ fontFamily: t.sans, color: t.ink(0.82) }}>
-                            {c.first_name} {c.last_name}
-                          </h3>
-                          {c.organization && <span className="rounded-full px-2.5 py-1 text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}>{c.organization}</span>}
-                        </div>
-                        <div className="mt-2 flex flex-wrap items-center gap-3">
-                          <span className="text-[12px]" style={{ fontFamily: t.sans, color: t.ink(0.42) }}>{c.email}</span>
-                          <span className="text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.28) }}>
-                            {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        {readiness && (
-                          <div className="rounded-[18px] px-4 py-3" style={{ background: t.ink(0.02), border: `1px solid ${t.ink(0.05)}` }}>
-                            <p className="text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.28) }}>READINESS</p>
-                            <p className="mt-1 text-[12px] font-semibold" style={{ fontFamily: t.sans, color: readiness.color }}>
-                              {c.readiness_score ?? "—"} · {readiness.label}
-                            </p>
-                          </div>
-                        )}
-                        <span
-                          className="inline-flex items-center rounded-full px-3 py-2 text-[10px] font-semibold tracking-[0.08em] whitespace-nowrap"
-                          style={{
-                            fontFamily: t.sans,
-                            color: c.report_status === "sent" ? t.cream : t.ink(0.4),
-                            background: c.report_status === "sent" ? t.ink(0.82) : t.ink(0.03),
-                            border: `1px solid ${c.report_status === "sent" ? t.ink(0.82) : t.ink(0.06)}`,
-                          }}
-                        >
-                          {c.report_status === "sent" ? "SENT" : "PENDING"}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+                    {c.report_status === "sent" ? "Sent" : "Pending"}
+                  </span>
+                </Link>
+              );
+            })
           )}
-        </CollapsibleSection>
-      </div>
+        </div>
+      </CollapsibleSection>
+
+      {/* Footer breathing room */}
+      <div className="h-16" />
     </div>
   );
 };
