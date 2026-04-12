@@ -30,6 +30,14 @@ const alignStyles: Record<FrameAlign, string> = {
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   ({ children, mode = "narrow", align = "center", onActive, isVisible, isMobile }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Reset scroll position when slide becomes visible on mobile
+    useEffect(() => {
+      if (isMobile && isVisible && scrollRef.current) {
+        scrollRef.current.scrollTop = 0;
+      }
+    }, [isMobile, isVisible]);
 
     const setRefs = (el: HTMLDivElement | null) => {
       (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
