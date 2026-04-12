@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Copy, Check, FileText, Mail, ChevronLeft } from "lucide-react";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
+import { generateDiagnosticPdf } from "@/components/admin/DiagnosticPdfDocument";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
