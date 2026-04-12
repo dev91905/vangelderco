@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { useBackPath } from "@/hooks/useBackNavigation";
+import { useGoBack } from "@/hooks/useBackNavigation";
 import { format } from "date-fns";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ContentBlockRenderer, { ContentBlock } from "@/components/content/ContentBlockRenderer";
