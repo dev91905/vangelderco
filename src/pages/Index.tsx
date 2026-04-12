@@ -695,7 +695,7 @@ const Index = () => {
       {/* ═══ FOOTER — LET'S CHAT ═══ */}
       <section
         className="relative z-10 flex flex-col items-center justify-center px-6"
-        style={{ minHeight: "80dvh" }}
+        style={{ minHeight: "100dvh" }}
       >
         <RevealBlock>
           <div className="flex flex-col items-center gap-6">
