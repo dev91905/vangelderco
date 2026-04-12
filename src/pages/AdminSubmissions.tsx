@@ -197,60 +197,7 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
     if (!reportData) return;
     setExporting(true);
     try {
-      const el = document.getElementById("diagnostic-report-capture");
-      if (!el) throw new Error("Report element not found");
-
-      const sections = el.querySelectorAll("[data-pdf-section]");
-      if (sections.length === 0) throw new Error("No sections found");
-
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfW = pdf.internal.pageSize.getWidth();
-      const pdfH = pdf.internal.pageSize.getHeight();
-      const margin = 12;
-      const contentW = pdfW - margin * 2;
-      const pageContentH = pdfH - margin * 2;
-      let currentY = margin;
-
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i] as HTMLElement;
-        const canvas = await html2canvas(section, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: "#FFFDF9",
-          logging: false,
-        });
-
-        const imgAspect = canvas.height / canvas.width;
-        const imgH = contentW * imgAspect;
-
-        if (currentY + imgH > pageContentH + margin && currentY > margin) {
-          pdf.addPage();
-          currentY = margin;
-        }
-
-        const imgData = canvas.toDataURL("image/png");
-        pdf.addImage(imgData, "PNG", margin, currentY, contentW, imgH);
-
-        // Add clickable link annotations for any <a> elements in this section
-        const links = section.querySelectorAll("a[href]");
-        const sectionRect = section.getBoundingClientRect();
-        const scaleX = contentW / sectionRect.width;
-        const scaleY = imgH / sectionRect.height;
-
-        links.forEach((link) => {
-          const href = link.getAttribute("href");
-          if (!href) return;
-          const linkRect = link.getBoundingClientRect();
-          const x = margin + (linkRect.left - sectionRect.left) * scaleX;
-          const y = currentY + (linkRect.top - sectionRect.top) * scaleY;
-          const w = linkRect.width * scaleX;
-          const h = linkRect.height * scaleY;
-          pdf.link(x, y, w, h, { url: href });
-        });
-
-        currentY += imgH + 3;
-      }
-
+      const pdf = generateDiagnosticPdf(reportData);
       pdf.save(
         `diagnostic-${contact.first_name}-${contact.last_name}.pdf`
           .toLowerCase()
