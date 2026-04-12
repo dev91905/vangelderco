@@ -7,7 +7,7 @@ import { usePostImpactStats, useSyncImpactStats, ImpactStat } from "@/hooks/useI
 import EditorMetaBar from "@/components/admin/EditorMetaBar";
 import BlockCanvas from "@/components/admin/BlockCanvas";
 import StatChipsEditor from "@/components/admin/StatChipsEditor";
-import { ArrowLeft, Trash2, ExternalLink, FileText, BarChart3 } from "lucide-react";
+import { ArrowLeft, Trash2, ExternalLink, FileText, BarChart3, Command, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { t } from "@/lib/theme";
 import {
@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const TYPE_OPTIONS = [
-  { value: "blog-post", label: "Blog Post", desc: "Long-form narrative with hero image", icon: FileText },
-  { value: "case-study", label: "Case Study", desc: "Structured analysis with key metrics", icon: BarChart3 },
+  { value: "blog-post", label: "Blog Post", desc: "Long-form narrative with hero image", detail: "Use for essays, briefs, and protected updates.", icon: FileText },
+  { value: "case-study", label: "Case Study", desc: "Structured analysis with key metrics", detail: "Use when stats, proof points, and sequencing lead the story.", icon: BarChart3 },
 ] as const;
 
 type StatDraft = Omit<ImpactStat, "post_id" | "case_study_id" | "phase_title" | "sort_order"> & { id: string };
@@ -196,33 +196,81 @@ const AdminEditor = () => {
   // Type selector for new posts
   if (isNew && !type) {
     return (
-      <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(var(--background))", colorScheme: "light" }}>
-        <div className="flex items-center px-4 md:px-6 py-2 sticky top-0 z-40" style={{ borderBottom: `1px solid ${t.ink(0.06)}` }}>
-          <button onClick={() => navigate("/admin")} className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
-            <ArrowLeft className="w-4 h-4" style={{ color: t.ink(0.4) }} />
-          </button>
-        </div>
-        <div className="flex-1 flex items-center justify-center px-6">
-          <div className="w-full max-w-[640px]">
-            <div className="text-center mb-12">
-              <h1 className="text-[28px] font-semibold mb-3" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>New Content</h1>
-              <p className="text-[15px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>What are you creating?</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[480px] mx-auto">
-              {TYPE_OPTIONS.map(({ value, label, desc, icon: Icon }) => (
-                <button
-                  key={value}
-                  onClick={() => setType(value)}
-                  className="group text-left p-6 rounded-2xl transition-all duration-200 hover:shadow-sm"
-                  style={{ border: `1px solid ${t.ink(0.06)}`, background: t.ink(0.01) }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.ink(0.15); e.currentTarget.style.background = t.ink(0.025); e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = t.ink(0.06); e.currentTarget.style.background = t.ink(0.01); e.currentTarget.style.transform = "translateY(0)"; }}
-                >
-                  <Icon className="w-5 h-5 mb-4" style={{ color: t.ink(0.3) }} />
-                  <div className="text-[15px] font-medium mb-1.5" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>{label}</div>
-                  <div className="text-[13px] leading-relaxed" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{desc}</div>
-                </button>
-              ))}
+      <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
+        <div className="px-4 pb-8 pt-4 md:px-8 md:pb-12">
+          <div className="mx-auto max-w-[1180px]">
+            <button
+              onClick={() => navigate("/admin")}
+              className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-medium transition-all"
+              style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.white, border: `1px solid ${t.ink(0.08)}` }}
+            >
+              <ArrowLeft className="h-4 w-4" /> Back to admin
+            </button>
+
+            <div
+              className="mt-6 grid overflow-hidden rounded-[36px] border lg:grid-cols-[0.92fr_1.08fr]"
+              style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 36px 84px -52px ${t.ink(0.2)}` }}
+            >
+              <div className="px-8 py-10 md:px-10 md:py-12" style={{ background: `linear-gradient(150deg, ${t.white} 0%, ${t.ink(0.03)} 100%)` }}>
+                <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}>
+                  <Sparkles className="h-3.5 w-3.5" /> NEW ENTRY
+                </div>
+                <h1 className="mt-8 text-[34px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[42px]" style={{ fontFamily: t.sans, color: t.ink(0.86) }}>
+                  Start with the right structure so the edit flow stays clean.
+                </h1>
+                <p className="mt-5 max-w-[420px] text-[15px] leading-7" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>
+                  Pick the format first. The editor will shape itself around the kind of story you’re publishing instead of making you fight extra fields.
+                </p>
+
+                <div className="mt-10 space-y-3">
+                  {[
+                    "Auto-save stays visible instead of hiding in tiny status text.",
+                    "Metadata, blocks, and metrics keep a stable spatial rhythm.",
+                    "Draft/published state stays obvious while you work.",
+                  ].map((item) => (
+                    <div key={item} className="rounded-[20px] px-4 py-3" style={{ background: t.white, border: `1px solid ${t.ink(0.06)}` }}>
+                      <p className="text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.5) }}>{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="px-6 py-8 md:px-8 md:py-10">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  {TYPE_OPTIONS.map(({ value, label, desc, detail, icon: Icon }) => (
+                    <button
+                      key={value}
+                      onClick={() => setType(value)}
+                      className="group text-left rounded-[28px] p-6 transition-all duration-200"
+                      style={{ background: t.ink(0.015), border: `1px solid ${t.ink(0.06)}` }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = t.ink(0.14);
+                        e.currentTarget.style.background = t.white;
+                        e.currentTarget.style.transform = "translateY(-3px)";
+                        e.currentTarget.style.boxShadow = `0 24px 54px -36px ${t.ink(0.2)}`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = t.ink(0.06);
+                        e.currentTarget.style.background = t.ink(0.015);
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: t.ink(0.05) }}>
+                        <Icon className="h-5 w-5" style={{ color: t.ink(0.38) }} />
+                      </div>
+                      <div className="mt-8">
+                        <p className="text-[18px] font-semibold tracking-[-0.02em]" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>{label}</p>
+                        <p className="mt-2 text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.42) }}>{desc}</p>
+                        <p className="mt-5 text-[11px] font-medium uppercase tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>
+                          Best for
+                        </p>
+                        <p className="mt-2 text-[12px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.52) }}>{detail}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -235,81 +283,128 @@ const AdminEditor = () => {
   const TypeIcon = typeInfo?.icon || FileText;
 
   return (
-    <div className="h-screen flex flex-col light" data-theme="light" style={{ background: "hsl(var(--background))", colorScheme: "light" }}>
-      {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 md:px-6 py-2 sticky top-0 z-40 backdrop-blur-xl" style={{ background: "hsl(var(--background) / 0.9)", borderBottom: `1px solid ${t.ink(0.06)}` }}>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => { if (dirty) { setShowLeaveDialog(true); return; } navigate("/admin"); }}
-            className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl"
-          >
-            <ArrowLeft className="w-4 h-4" style={{ color: t.ink(0.4) }} />
-          </button>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: t.ink(0.03) }}>
-            <TypeIcon className="w-3 h-3" style={{ color: t.ink(0.3) }} />
-            <span className="text-[11px] font-medium" style={{ fontFamily: t.sans, color: t.ink(0.4) }}>{typeInfo?.label}</span>
-          </div>
-          <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{title || "Untitled"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          {(saveStatus !== "idle" || dirty) && (
-            <div className="flex items-center gap-1.5 mr-3 px-2.5 py-1 rounded-full" style={{
-              background: saveStatus === "saved" ? "hsl(142 71% 45% / 0.08)" : saveStatus === "saving" ? t.ink(0.04) : dirty ? "hsl(40 90% 55% / 0.08)" : "transparent",
-              border: `1px solid ${saveStatus === "saved" ? "hsl(142 71% 45% / 0.15)" : saveStatus === "saving" ? t.ink(0.06) : dirty ? "hsl(40 90% 55% / 0.15)" : "transparent"}`,
-            }}>
-              <div className="w-1.5 h-1.5 rounded-full" style={{
-                background: saveStatus === "saved" ? "hsl(142 71% 45%)" : saveStatus === "saving" ? t.ink(0.3) : "hsl(40 90% 55%)",
-              }} />
-              <span className="text-[11px] font-medium" style={{
-                fontFamily: t.sans,
-                color: saveStatus === "saved" ? "hsl(142 71% 40%)" : saveStatus === "saving" ? t.ink(0.4) : "hsl(40 80% 35%)",
-              }}>
-                {saveStatus === "saving" ? "Saving…" : saveStatus === "saved" ? "Saved" : "Unsaved"}
-              </span>
+    <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
+      <div className="sticky top-0 z-40 px-4 pb-2 pt-4 md:px-6" style={{ background: `linear-gradient(180deg, ${t.cream} 0%, ${t.cream} 76%, transparent 100%)` }}>
+        <div className="mx-auto max-w-[1360px] rounded-[30px] border" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 30px 76px -54px ${t.ink(0.24)}` }}>
+          <div className="flex flex-col gap-4 px-4 py-4 md:px-6 md:py-5 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex min-w-0 items-start gap-3 md:gap-4">
+              <button
+                onClick={() => { if (dirty) { setShowLeaveDialog(true); return; } navigate("/admin"); }}
+                className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl transition-all"
+                style={{ background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}
+              >
+                <ArrowLeft className="h-4 w-4" style={{ color: t.ink(0.46) }} />
+              </button>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.04), border: `1px solid ${t.ink(0.08)}` }}>
+                    <TypeIcon className="h-3.5 w-3.5" /> {typeInfo?.label}
+                  </span>
+                  <span className="inline-flex items-center rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: isPublished ? t.cream : t.ink(0.42), background: isPublished ? t.ink(0.84) : t.ink(0.03), border: `1px solid ${isPublished ? t.ink(0.84) : t.ink(0.08)}` }}>
+                    {isPublished ? "LIVE" : "DRAFT"}
+                  </span>
+                </div>
+                <h1 className="mt-3 truncate text-[22px] font-semibold tracking-[-0.03em] md:text-[28px]" style={{ fontFamily: t.sans, color: t.ink(0.84) }}>
+                  {title || "Untitled entry"}
+                </h1>
+                <p className="mt-2 truncate text-[12px] leading-6 md:text-[13px]" style={{ fontFamily: t.sans, color: t.ink(0.38) }}>
+                  {slug ? `/post/${slug}` : "Set the title, slug, and metadata first — the rest of the edit flow stays anchored below."}
+                </p>
+              </div>
             </div>
-          )}
-          {slug && isPublished && (
-            <a href={`/post/${slug}`} target="_blank" rel="noopener noreferrer" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
-              <ExternalLink className="w-4 h-4" style={{ color: t.ink(0.3) }} />
-            </a>
-          )}
-          {!isNew && (
-            <button onClick={handleDelete} className="p-2 transition-colors hover:bg-[hsl(0_60%_50%_/_0.06)] rounded-xl">
-              <Trash2 className="w-4 h-4" style={{ color: "hsl(0 60% 45% / 0.4)" }} />
-            </button>
-          )}
-          <button onClick={handleSave} disabled={createPost.isPending || updatePost.isPending}
-            className="px-4 py-2 text-sm transition-all rounded-full"
-            style={{ fontFamily: t.sans, background: dirty ? "hsl(var(--foreground))" : "transparent", color: dirty ? "hsl(var(--background))" : "hsl(var(--foreground) / 0.5)", border: dirty ? "none" : `1px solid ${t.ink(0.15)}`, opacity: (createPost.isPending || updatePost.isPending) ? 0.5 : 1 }}>
-            {createPost.isPending || updatePost.isPending ? "Saving..." : isNew ? "Create" : "Save"}
-          </button>
+
+            <div className="flex flex-wrap items-center gap-2 md:justify-end">
+              <div className="flex items-center gap-2 rounded-full px-3.5 py-2" style={{
+                background: saveStatus === "saved" ? t.ink(0.82) : saveStatus === "saving" ? t.ink(0.06) : dirty ? t.ink(0.1) : t.ink(0.03),
+                border: `1px solid ${saveStatus === "saved" ? t.ink(0.82) : t.ink(0.08)}`,
+              }}>
+                <div className="h-2 w-2 rounded-full" style={{ background: saveStatus === "saved" ? t.cream : saveStatus === "saving" ? t.ink(0.38) : dirty ? t.ink(0.58) : t.ink(0.22) }} />
+                <span className="text-[11px] font-semibold tracking-[0.06em]" style={{ fontFamily: t.sans, color: saveStatus === "saved" ? t.cream : t.ink(0.56) }}>
+                  {saveStatus === "saving" ? "Saving" : saveStatus === "saved" ? "Saved" : dirty ? "Unsaved" : "All clear"}
+                </span>
+              </div>
+
+              {slug && isPublished && (
+                <a
+                  href={`/post/${slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-medium transition-all"
+                  style={{ fontFamily: t.sans, color: t.ink(0.56), background: t.white, border: `1px solid ${t.ink(0.08)}` }}
+                >
+                  <ExternalLink className="h-4 w-4" /> View live
+                </a>
+              )}
+
+              {!isNew && (
+                <button
+                  onClick={handleDelete}
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-medium transition-all"
+                  style={{ fontFamily: t.sans, color: t.ink(0.52), background: t.white, border: `1px solid ${t.ink(0.08)}` }}
+                >
+                  <Trash2 className="h-4 w-4" /> Delete
+                </button>
+              )}
+
+              <button
+                onClick={handleSave}
+                disabled={createPost.isPending || updatePost.isPending}
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-semibold transition-all"
+                style={{
+                  fontFamily: t.sans,
+                  background: dirty ? t.ink(0.84) : t.ink(0.08),
+                  color: dirty ? t.cream : t.ink(0.45),
+                  border: `1px solid ${dirty ? t.ink(0.84) : t.ink(0.08)}`,
+                  opacity: createPost.isPending || updatePost.isPending ? 0.5 : 1,
+                }}
+              >
+                {createPost.isPending || updatePost.isPending ? "Saving..." : isNew ? "Create entry" : "Save now"}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 border-t px-4 py-4 md:px-6" style={{ borderColor: t.ink(0.05) }}>
+            {[
+              { icon: Command, label: "⌘S to save" },
+              { icon: Sparkles, label: "Autosave after 3s" },
+              { icon: Command, label: "⌘⇧P toggles publish" },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}>
+                <Icon className="h-3.5 w-3.5" /> {label}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto">
-        <EditorMetaBar
-          title={title} slug={slug} excerpt={excerpt} type={currentType} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
-          password={password} isFeatured={isFeatured} sectorLabel={sectorLabel} featuredStat={featuredStat}
-          onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onExcerptChange={markDirty(setExcerpt)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
-          onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
-          onPasswordChange={markDirty(setPassword)} onFeaturedChange={markDirty(setIsFeatured)} onSectorLabelChange={markDirty(setSectorLabel)} onFeaturedStatChange={markDirty(setFeaturedStat)}
-        />
+      <div className="flex-1 overflow-y-auto px-4 pb-12 pt-4 md:px-6 md:pb-16 md:pt-6">
+        <div className="mx-auto max-w-[1360px] space-y-6">
+          <EditorMetaBar
+            title={title} slug={slug} excerpt={excerpt} type={currentType} capability={capability} heroImageUrl={heroImageUrl} isPublished={isPublished} publishedAt={publishedAt}
+            password={password} isFeatured={isFeatured} sectorLabel={sectorLabel} featuredStat={featuredStat}
+            onTitleChange={markDirty(setTitle)} onSlugChange={markDirty(setSlug)} onExcerptChange={markDirty(setExcerpt)} onTypeChange={markDirty(setType)} onCapabilityChange={markDirty(setCapability)}
+            onHeroImageChange={markDirty(setHeroImageUrl)} onPublishedChange={markDirty(setIsPublished)} onPublishedAtChange={markDirty(setPublishedAt)}
+            onPasswordChange={markDirty(setPassword)} onFeaturedChange={markDirty(setIsFeatured)} onSectorLabelChange={markDirty(setSectorLabel)} onFeaturedStatChange={markDirty(setFeaturedStat)}
+          />
 
-        {currentType === "case-study" && (
-          <div className="px-4 md:px-8 py-4 max-w-[680px] mx-auto">
-            <StatChipsEditor stats={stats} onChange={markDirty(setStats)} />
+          {currentType === "case-study" && (
+            <div className="rounded-[28px] border px-4 py-4 md:px-6 md:py-5" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 18px 42px -38px ${t.ink(0.18)}` }}>
+              <div className="mb-4">
+                <p className="text-[11px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.34) }}>CASE STUDY METRICS</p>
+                <p className="mt-1 text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.42) }}>Keep the proof points tight and scannable before the main narrative.</p>
+              </div>
+              <StatChipsEditor stats={stats} onChange={markDirty(setStats)} />
+            </div>
+          )}
+
+          <div className="rounded-[30px] border px-4 py-5 md:px-6 md:py-6" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 20px 48px -40px ${t.ink(0.18)}` }}>
+            <div className="mb-5 flex flex-col gap-1">
+              <p className="text-[11px] font-semibold tracking-[0.08em]" style={{ fontFamily: t.sans, color: t.ink(0.34) }}>CONTENT BLOCKS</p>
+              <p className="text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.42) }}>Build the page with a stable reading rhythm — add only the blocks the story needs.</p>
+            </div>
+            <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={currentType === "case-study"} />
           </div>
-        )}
-
-        <div className="px-4 md:px-8 py-6 max-w-[680px] mx-auto">
-          <BlockCanvas blocks={contentBlocks} onChange={markDirty(setContentBlocks)} isCaseStudy={currentType === "case-study"} />
-        </div>
-
-        <div className="flex items-center justify-center gap-4 text-[11px] py-8 mt-12" style={{ fontFamily: t.sans, color: t.ink(0.15) }}>
-          <span>⌘S save</span>
-          <span>/ commands</span>
-          <span>⌘⇧P publish</span>
         </div>
       </div>
 
