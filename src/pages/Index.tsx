@@ -525,7 +525,7 @@ const Index = () => {
             </div>
           </RevealBlock>
 
-          <ImpactCloud />
+          <ImpactCloud onCaseClick={handleCaseClick} />
         </div>
       </section>
 
