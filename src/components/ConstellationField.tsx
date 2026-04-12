@@ -58,6 +58,21 @@ const MOBILE_EXTRA: { nx: number; ny: number; tier: Node["tier"] }[] = [
 const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
+
+// Segment intersection test (returns true if AB crosses CD)
+function segmentsIntersect(
+  ax: number, ay: number, bx: number, by: number,
+  cx: number, cy: number, dx: number, dy: number,
+): boolean {
+  const dxAB = bx - ax, dyAB = by - ay;
+  const dxCD = dx - cx, dyCD = dy - cy;
+  const denom = dxAB * dyCD - dyAB * dxCD;
+  if (Math.abs(denom) < 1e-10) return false;
+  const t = ((cx - ax) * dyCD - (cy - ay) * dxCD) / denom;
+  const u = ((cx - ax) * dyAB - (cy - ay) * dxAB) / denom;
+  // Strict interior intersection only (not at shared endpoints)
+  return t > 0.01 && t < 0.99 && u > 0.01 && u < 0.99;
+}
 const LERP_SPEED = 0.025;
 
 // Oversize factor: canvas extends 20% beyond viewport in each direction
