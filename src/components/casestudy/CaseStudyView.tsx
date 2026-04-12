@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useBackPath } from "@/hooks/useBackNavigation";
+import { useGoBack } from "@/hooks/useBackNavigation";
 import { format } from "date-fns";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ContentBlockRenderer, { ContentBlock } from "@/components/content/ContentBlockRenderer";
@@ -28,7 +27,7 @@ const capabilityLabel: Record<string, string> = { "cultural-strategy": "Cultural
 const CaseStudyView = ({ post }: CaseStudyViewProps) => {
   const [showStats, setShowStats] = useState(true);
   const { data: impactStats } = usePostImpactStats(post.id);
-  const backPath = useBackPath(capabilityRoute[post.capability] || "/");
+  const goBack = useGoBack(capabilityRoute[post.capability] || "/");
   const visibleStats = (impactStats ?? [])
     .filter(s => s.visible)
     .map(s => ({ label: s.label, description: s.description }));
@@ -42,11 +41,11 @@ const CaseStudyView = ({ post }: CaseStudyViewProps) => {
 
   return (
     <AtmosphericLayout>
-      <Link to={backPath} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+      <button onClick={goBack} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300 bg-transparent border-none cursor-pointer"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back
-      </Link>
+      </button>
 
       <div className="relative z-20 h-dvh overflow-y-auto" style={{ animation: "fade-up 0.5s ease-out both" }}>
         <div className="w-full flex flex-col items-center justify-end px-6 pb-8" style={{ minHeight: "40vh" }}>

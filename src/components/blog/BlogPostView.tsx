@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { useBackPath } from "@/hooks/useBackNavigation";
+import { useGoBack } from "@/hooks/useBackNavigation";
 import { format } from "date-fns";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ContentBlockRenderer, { ContentBlock } from "@/components/content/ContentBlockRenderer";
@@ -29,14 +28,14 @@ const capabilityLabel: Record<string, string> = {
 };
 
 const BlogPostView = ({ post }: BlogPostViewProps) => {
-  const backPath = useBackPath(capabilityRoute[post.capability] || "/");
+  const goBack = useGoBack(capabilityRoute[post.capability] || "/");
   return (
     <AtmosphericLayout>
-      <Link to={backPath} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300"
+      <button onClick={goBack} className="fixed top-6 left-6 z-30 text-[13px] transition-colors duration-300 bg-transparent border-none cursor-pointer"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))} onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}>
         ← Back
-      </Link>
+      </button>
 
       <div className="relative z-20 h-dvh overflow-y-auto" style={{ animation: "fade-up 0.5s ease-out both" }}>
         {post.hero_image_url ? (
