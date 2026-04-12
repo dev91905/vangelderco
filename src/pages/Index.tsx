@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ImpactCloud from "@/components/ImpactCloud";
+import CaseTimelineOverlay, { CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
+import { supabase } from "@/integrations/supabase/client";
 
 import { t } from "@/lib/theme";
 
