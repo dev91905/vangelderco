@@ -658,7 +658,7 @@ const Deck = () => {
 
       {/* ═══ FRAME 1: Hero ═══ */}
       <DeckFrame ref={setRef(0)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 0}>
-        <div ref={r1.ref} className={`flex flex-col items-start gap-12 ${isMobile ? "" : "min-h-[60vh] justify-center"}`}>
+        <div ref={r1.ref} className={`flex flex-col items-start gap-12 ${isMobile ? "min-h-full justify-center" : "min-h-[60vh] justify-center"}`}>
           <TypewriterHeading
             text="Find the gaps before your opponents do."
             active={currentFrame === 0 || r1.isActive}
