@@ -692,6 +692,9 @@ const Index = () => {
         </RevealBlock>
       </section>
       </div>
+
+      {/* Case study overlay — opens in-place, no navigation */}
+      <CaseTimelineOverlay study={selectedCase} onClose={handleCaseClose} />
     </AtmosphericLayout>
   );
 };
