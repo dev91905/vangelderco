@@ -95,6 +95,14 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
               {children}
             </div>
           </div>
+          {/* Bottom fade — signals more content below */}
+          <div
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-20"
+            style={{
+              height: "120px",
+              background: "linear-gradient(to top, hsl(var(--background)) 0%, transparent 100%)",
+            }}
+          />
         </section>
       );
     }
