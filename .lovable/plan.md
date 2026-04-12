@@ -1,38 +1,26 @@
 
 
-## Fix case study deep-link flow and scroll restoration
+## Fix scroll restoration when navigating back from articles
 
-### Two problems
+### The problem
 
-1. **Clicking a stat opens /work carousel first, then auto-opens the case** — user sees the carousel flash before the overlay appears. When the link is a direct deep-link to a specific case, the carousel page should never be visible. Skip it entirely.
+When you click a stat chip linking to an article (`/post/:slug`), read it, then click the back link, it navigates **forward** to `"/"` using `<Link to={backPath}>`. This mounts the homepage fresh, scroll at top. The browser's native back button would restore scroll, but the in-app back link doesn't use `history.back()`.
 
-2. **Closing a deep-linked case goes to "/" but scroll resets to top** — the homepage loses scroll position because `navigate("/")` triggers a fresh route mount.
+### The fix
 
-### Solution
+Replace the `<Link to={backPath}>` back links with an `onClick` handler that calls `window.history.back()` when the referrer is the homepage. This uses the browser's native scroll restoration, which preserves exact scroll position.
 
-**Problem 1: Skip the /work page entirely for deep-linked cases**
+**Files to change:**
 
-Instead of navigating to `/work?case=<id>`, open the case study timeline as a modal overlay directly on the homepage. This means:
+1. **`src/hooks/useBackNavigation.ts`** — Add a `useGoBack()` hook that returns a click handler. If `location.state?.from` exists (meaning the user came from within the app), call `navigate(-1)` (browser back). Otherwise fall back to navigating to the fallback path.
 
-- In `ImpactCloud.tsx`: change the `href` for deck stats from `/work?case=${stat.sourceId}` to just `#`, and instead use an `onClick` handler that sets state (or dispatches an event/uses a lightweight context) to open the timeline overlay on the current page.
-- Add `CaseTimelineOverlay` to `Index.tsx` (the homepage), controlled by a state variable for which case to show.
-- When the overlay closes, the user is still on the homepage at their exact scroll position. No navigation happened.
+2. **`src/components/blog/BlogPostView.tsx`** — Replace the `<Link to={backPath}>` with a `<button>` or `<a>` using the new `useGoBack()` handler.
 
-**Problem 2: Scroll preservation is automatic**
+3. **`src/components/casestudy/CaseStudyView.tsx`** — Same change.
 
-Since we're no longer navigating away from the homepage, scroll position is preserved by default. No `ScrollToTop` or scroll restoration logic needed.
+4. **`src/components/PasswordGate.tsx`** — Same change for the back link on the password gate screen.
 
-### Implementation details
+5. **`src/components/CapabilityLayout.tsx`** — Same change for capability page back links.
 
-- Create a small context or just use URL search params on the homepage itself (`/?case=<id>`) to support direct links/sharing.
-- `Index.tsx` reads `?case=` param on mount, fetches the case study data, and opens the overlay if found.
-- The overlay's `onClose` just clears the selected case and removes the search param. User stays on homepage, scroll untouched.
-- Keep `/work` page as-is for direct browsing of the carousel — it still works independently.
-- The case study data fetch can be shared via a small hook or fetched inline.
-
-### Files to change
-
-- `src/components/ImpactCloud.tsx` — change deck stat links from `/work?case=` to `onClick` that sets homepage overlay state
-- `src/pages/Index.tsx` — add `CaseTimelineOverlay`, state for selected case, read `?case=` param on mount
-- No changes to `Work.tsx` — it continues to work as a standalone page
+This is a small, surgical fix. The `from` state is already being passed in `ImpactCloud.tsx` and other link sources, so the plumbing is in place — the back links just need to use `navigate(-1)` instead of `navigate(backPath)`.
 
