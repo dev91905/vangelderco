@@ -268,8 +268,22 @@ const Index = () => {
             willChange: "transform, opacity, filter",
           }}
         >
-          {/* Placeholder for brand mark starting position */}
-          <div data-brand-placeholder className="h-[14px]" style={{ animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both" }} />
+          {/* Hero brand mark — fades out as corner version fades in */}
+          <div
+            className="uppercase"
+            style={{
+              fontFamily: t.sans,
+              fontSize: "11px",
+              letterSpacing: "0.25em",
+              color: t.ink(0.6),
+              opacity: Math.max(0, 1 - scrollY / 120),
+              transform: `translateY(${Math.min(scrollY * 0.15, 12)}px)`,
+              transition: "opacity 0.3s ease, transform 0.3s ease",
+              animation: "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
+            }}
+          >
+            Van Gelder Co.
+          </div>
 
           <h1 className="flex flex-col gap-2 md:gap-3">
             {HERO_LINKS.map((link, i) => (
