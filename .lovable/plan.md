@@ -1,26 +1,30 @@
 
 
-## Fix scroll restoration when navigating back from articles
+## Constellation Field: No-crossing edges + 10% fainter
 
-### The problem
+### What's happening now
+The current code connects any two nodes within `MAX_EDGE_DIST` distance, which creates a dense proximity graph. Since nodes are scattered across the canvas, many edges cross each other without a node at the intersection — creating a messy web effect.
 
-When you click a stat chip linking to an article (`/post/:slug`), read it, then click the back link, it navigates **forward** to `"/"` using `<Link to={backPath}>`. This mounts the homepage fresh, scroll at top. The browser's native back button would restore scroll, but the in-app back link doesn't use `history.back()`.
+### Plan
 
-### The fix
+**1. Eliminate crossing edges**
 
-Replace the `<Link to={backPath}>` back links with an `onClick` handler that calls `window.history.back()` when the referrer is the homepage. This uses the browser's native scroll restoration, which preserves exact scroll position.
+After building the candidate edge list (all pairs within `maxDist`), add a crossing-detection pass that removes edges that intersect other edges. For each pair of edges (A-B) and (C-D), use a standard segment-intersection test. When two edges cross, remove the longer one (it's less structurally important). This produces a cleaner, more planar-like graph where lines only meet at nodes.
 
-**Files to change:**
+The algorithm:
+- Collect all candidate edges as an array of `{i, j, dist}`
+- Sort by distance (shortest first — these are highest priority)
+- Greedily add edges: for each candidate, check if it crosses any already-accepted edge. If it does, skip it. This is O(e²) but with ~16 nodes and ~20-30 candidate edges, it's negligible per frame.
 
-1. **`src/hooks/useBackNavigation.ts`** — Add a `useGoBack()` hook that returns a click handler. If `location.state?.from` exists (meaning the user came from within the app), call `navigate(-1)` (browser back). Otherwise fall back to navigating to the fallback path.
+**2. Reduce all opacities by 10%**
 
-2. **`src/components/blog/BlogPostView.tsx`** — Replace the `<Link to={backPath}>` with a `<button>` or `<a>` using the new `useGoBack()` handler.
+Multiply all alpha values by 0.9:
+- Edge alpha: `0.018 → 0.016`, `0.015 → 0.0135`, boost `0.012 → 0.011`
+- Triangle fill: `0.003 → 0.0027`
+- Northstar pulse: `0.06 → 0.054`, `0.03 → 0.027`, glow multiplier `0.25 → 0.225`
+- Anchor dot: `0.055 → 0.05`
+- Field dot: `0.035 → 0.032`
 
-3. **`src/components/casestudy/CaseStudyView.tsx`** — Same change.
-
-4. **`src/components/PasswordGate.tsx`** — Same change for the back link on the password gate screen.
-
-5. **`src/components/CapabilityLayout.tsx`** — Same change for capability page back links.
-
-This is a small, surgical fix. The `from` state is already being passed in `ImpactCloud.tsx` and other link sources, so the plumbing is in place — the back links just need to use `navigate(-1)` instead of `navigate(backPath)`.
+### File changes
+- `src/components/ConstellationField.tsx` — add segment intersection helper function, add edge-filtering pass in the `draw` loop between candidate collection and rendering, reduce all alpha constants by 10%
 
