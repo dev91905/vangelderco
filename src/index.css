@@ -232,24 +232,6 @@
   background: hsl(var(--foreground) / 0.03) !important;
 }
 
-/* Smooth scroll container */
-.snap-scroll-container {
-  -webkit-overflow-scrolling: touch;
-}
-.snap-section {
-  min-height: 100dvh;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-/* Allow sections with lots of content to scroll internally */
-.snap-section-scroll {
-  min-height: 100dvh;
-  height: auto;
-  overflow-y: visible;
-  padding-top: 8vh;
-  padding-bottom: 8vh;
-}
 
 /* Dense flow sections — no viewport enforcement */
 .section-flow {
