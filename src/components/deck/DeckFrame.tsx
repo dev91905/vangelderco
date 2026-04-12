@@ -84,6 +84,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
         >
           {/* Internal scrollable content area */}
           <div
+            ref={scrollRef}
             className={`deck-mobile-content relative z-10 w-full ${modeStyles[mode]} mx-auto`}
             style={{
               flex: "1 1 0%",
