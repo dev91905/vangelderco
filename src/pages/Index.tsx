@@ -246,8 +246,8 @@ const Index = () => {
 
   return (
     <AtmosphericLayout>
-      {/* Scroll-driven "Van Gelder Co." — starts in hero, moves to top-right */}
-      <ScrollBrandMark scrollY={scrollY} />
+      {/* Fixed corner brand — fades in on scroll */}
+      <FixedBrandMark scrollY={scrollY} />
 
       <div
         ref={scrollRef}
