@@ -58,6 +58,7 @@ export interface PasswordGateWrapperProps {
 }
 
 export const PasswordGateWrapper = ({ slug, title, heroImageUrl, capability, requiresPassword, onUnlock: onUnlockProp, children }: PasswordGateWrapperProps) => {
+  const capabilityRoute: Record<string, string> = { "cultural-strategy": "/cultural-strategy", "cross-sector": "/cross-sector", "deep-organizing": "/deep-organizing" };
   const goBack = useGoBack(capabilityRoute[capability] || "/");
   const sessionKey = `gate:${slug}`;
   const [unlocked, setUnlocked] = useState(() => !requiresPassword ? true : sessionStorage.getItem(sessionKey) === "1");
