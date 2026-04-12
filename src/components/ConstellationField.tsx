@@ -58,6 +58,21 @@ const MOBILE_EXTRA: { nx: number; ny: number; tier: Node["tier"] }[] = [
 const MAX_EDGE_DIST = 0.22;
 const MOUSE_RADIUS = 120;
 const MOUSE_FORCE = 1.5;
+
+// Segment intersection test (returns true if AB crosses CD)
+function segmentsIntersect(
+  ax: number, ay: number, bx: number, by: number,
+  cx: number, cy: number, dx: number, dy: number,
+): boolean {
+  const dxAB = bx - ax, dyAB = by - ay;
+  const dxCD = dx - cx, dyCD = dy - cy;
+  const denom = dxAB * dyCD - dyAB * dxCD;
+  if (Math.abs(denom) < 1e-10) return false;
+  const t = ((cx - ax) * dyCD - (cy - ay) * dxCD) / denom;
+  const u = ((cx - ax) * dyAB - (cy - ay) * dxAB) / denom;
+  // Strict interior intersection only (not at shared endpoints)
+  return t > 0.01 && t < 0.99 && u > 0.01 && u < 0.99;
+}
 const LERP_SPEED = 0.025;
 
 // Oversize factor: canvas extends 20% beyond viewport in each direction
@@ -219,37 +234,61 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
         n.y = ny;
       }
 
-      const connected: boolean[][] = Array.from({ length: nodes.length }, () =>
-        new Array(nodes.length).fill(false)
-      );
-
+      // Collect candidate edges
+      const candidates: { i: number; j: number; dist: number }[] = [];
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < maxDist) {
-            connected[i][j] = true;
-            connected[j][i] = true;
-
-            const edgeMidX = (nodes[i].x + nodes[j].x) / 2;
-            const edgeMidY = (nodes[i].y + nodes[j].y) / 2;
-            const eDist = Math.sqrt(
-              (edgeMidX - mouse.x) ** 2 + (edgeMidY - mouse.y) ** 2
-            );
-            const boost = eDist < MOUSE_RADIUS * 1.5
-              ? 0.012 * (1 - eDist / (MOUSE_RADIUS * 1.5))
-              : 0;
-
-            const alpha = 0.018 + 0.015 * (1 - dist / maxDist) + boost;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `hsla(0, 0%, 100%, ${alpha})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            candidates.push({ i, j, dist });
           }
         }
+      }
+      candidates.sort((a, b) => a.dist - b.dist);
+
+      // Greedy non-crossing filter
+      const accepted: { i: number; j: number; dist: number }[] = [];
+      for (const edge of candidates) {
+        let crosses = false;
+        for (const kept of accepted) {
+          if (edge.i === kept.i || edge.i === kept.j || edge.j === kept.i || edge.j === kept.j) continue;
+          if (segmentsIntersect(
+            nodes[edge.i].x, nodes[edge.i].y, nodes[edge.j].x, nodes[edge.j].y,
+            nodes[kept.i].x, nodes[kept.i].y, nodes[kept.j].x, nodes[kept.j].y,
+          )) {
+            crosses = true;
+            break;
+          }
+        }
+        if (!crosses) accepted.push(edge);
+      }
+
+      const connected: boolean[][] = Array.from({ length: nodes.length }, () =>
+        new Array(nodes.length).fill(false)
+      );
+
+      for (const edge of accepted) {
+        connected[edge.i][edge.j] = true;
+        connected[edge.j][edge.i] = true;
+
+        const edgeMidX = (nodes[edge.i].x + nodes[edge.j].x) / 2;
+        const edgeMidY = (nodes[edge.i].y + nodes[edge.j].y) / 2;
+        const eDist = Math.sqrt(
+          (edgeMidX - mouse.x) ** 2 + (edgeMidY - mouse.y) ** 2
+        );
+        const boost = eDist < MOUSE_RADIUS * 1.5
+          ? 0.011 * (1 - eDist / (MOUSE_RADIUS * 1.5))
+          : 0;
+
+        const alpha = 0.016 + 0.0135 * (1 - edge.dist / maxDist) + boost;
+        ctx.beginPath();
+        ctx.moveTo(nodes[edge.i].x, nodes[edge.i].y);
+        ctx.lineTo(nodes[edge.j].x, nodes[edge.j].y);
+        ctx.strokeStyle = `hsla(0, 0%, 100%, ${alpha})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
       }
 
       for (let i = 0; i < nodes.length; i++) {
@@ -262,7 +301,7 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
               ctx.lineTo(nodes[j].x, nodes[j].y);
               ctx.lineTo(nodes[k].x, nodes[k].y);
               ctx.closePath();
-              ctx.fillStyle = `hsla(0, 0%, 100%, 0.003)`;
+              ctx.fillStyle = `hsla(0, 0%, 100%, 0.0027)`;
               ctx.fill();
             }
           }
@@ -271,24 +310,24 @@ const ConstellationField = ({ mode = "home" }: ConstellationFieldProps) => {
 
       for (const n of nodes) {
         if (n.tier === "northstar") {
-          const pulse = 0.06 + 0.03 * Math.sin(t * 0.0008);
+          const pulse = 0.054 + 0.027 * Math.sin(t * 0.0008);
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse})`;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.25})`;
+          ctx.fillStyle = `hsla(0, 80%, 48%, ${pulse * 0.225})`;
           ctx.fill();
         } else if (n.tier === "anchor") {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.055)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.05)`;
           ctx.fill();
         } else {
           ctx.beginPath();
           ctx.arc(n.x, n.y, 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.035)`;
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.032)`;
           ctx.fill();
         }
       }
