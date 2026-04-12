@@ -1350,7 +1350,7 @@ const Deck = () => {
 
             const renderActionRow = (compact = false) => (
               <div style={{ ...r9.stagger(3, 450, "blur-up"), display: "flex", flexWrap: "wrap", gap: compact ? "8px" : "10px", alignItems: "center" }}>
-                <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" />
+                <ContinueButton onClick={() => scrollToFrame(9)} label="Get your full diagnostic →" solid />
                 <button
                   onClick={resetQuiz}
                   style={{
