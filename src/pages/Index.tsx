@@ -190,6 +190,7 @@ const Index = () => {
     setSelectedCase(null);
     setSearchParams({}, { replace: true });
   }, [setSearchParams]);
+  const [scrollY, setScrollY] = useState(0);
   const [glowIndex, setGlowIndex] = useState(0);
 
   // Cycle glow through the 6 sector pills
