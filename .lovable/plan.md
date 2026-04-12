@@ -1,30 +1,18 @@
 
 
-## Constellation Field: No-crossing edges + 10% fainter
+## Fix: Reset scroll position when changing slides on mobile
 
-### What's happening now
-The current code connects any two nodes within `MAX_EDGE_DIST` distance, which creates a dense proximity graph. Since nodes are scattered across the canvas, many edges cross each other without a node at the intersection — creating a messy web effect.
+### Problem
+When navigating between slides on mobile, the internal scrollable container (`deck-mobile-content`) retains its previous scroll position. So if you scrolled down on slide 2, then went back to slide 1, then forward to slide 2 again — it starts mid-page. More importantly, slide 2 content appears starting in the middle because the scroll container doesn't reset to top.
 
-### Plan
-
-**1. Eliminate crossing edges**
-
-After building the candidate edge list (all pairs within `maxDist`), add a crossing-detection pass that removes edges that intersect other edges. For each pair of edges (A-B) and (C-D), use a standard segment-intersection test. When two edges cross, remove the longer one (it's less structurally important). This produces a cleaner, more planar-like graph where lines only meet at nodes.
-
-The algorithm:
-- Collect all candidate edges as an array of `{i, j, dist}`
-- Sort by distance (shortest first — these are highest priority)
-- Greedily add edges: for each candidate, check if it crosses any already-accepted edge. If it does, skip it. This is O(e²) but with ~16 nodes and ~20-30 candidate edges, it's negligible per frame.
-
-**2. Reduce all opacities by 10%**
-
-Multiply all alpha values by 0.9:
-- Edge alpha: `0.018 → 0.016`, `0.015 → 0.0135`, boost `0.012 → 0.011`
-- Triangle fill: `0.003 → 0.0027`
-- Northstar pulse: `0.06 → 0.054`, `0.03 → 0.027`, glow multiplier `0.25 → 0.225`
-- Anchor dot: `0.055 → 0.05`
-- Field dot: `0.035 → 0.032`
+### Solution
+Reset the scroll position of the `deck-mobile-content` div to `scrollTop = 0` whenever the visible frame changes. This ensures every slide (except slide 1, which is centered) starts at the top.
 
 ### File changes
-- `src/components/ConstellationField.tsx` — add segment intersection helper function, add edge-filtering pass in the `draw` loop between candidate collection and rendering, reduce all alpha constants by 10%
+
+**`src/components/deck/DeckFrame.tsx`**
+- Add a `useEffect` that watches `isVisible` — when a frame becomes visible on mobile, reset the internal scrollable div's `scrollTop` to `0`.
+- Add a ref to the scrollable `deck-mobile-content` div to target it for scroll reset.
+
+This is a small, surgical fix — roughly 8 lines added. Slide 1 keeps `justify-content: center` so it stays vertically centered. All other slides start at top as expected.
 
