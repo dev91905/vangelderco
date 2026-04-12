@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ImpactCloud from "@/components/ImpactCloud";
+import CaseTimelineOverlay, { CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
+import { supabase } from "@/integrations/supabase/client";
 
 import { t } from "@/lib/theme";
 
@@ -150,7 +152,44 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
 const Index = () => {
   const { playHoverGlitch, playClickGlitch } = useGlitchSFX();
   const { data: featuredPosts } = useFeaturedPosts();
+  const [searchParams, setSearchParams] = useSearchParams();
   
+  const [selectedCase, setSelectedCase] = useState<CaseStudyData | null>(null);
+
+  // Open case from ?case= param on mount
+  useEffect(() => {
+    const caseId = searchParams.get("case");
+    if (!caseId) return;
+    supabase
+      .from("deck_case_studies")
+      .select("id, name, issue, outcome, phases, link_url")
+      .eq("id", caseId)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setSelectedCase(data as unknown as CaseStudyData);
+        }
+      });
+  }, []); // only on mount
+
+  const handleCaseClick = useCallback((caseId: string) => {
+    setSearchParams({ case: caseId }, { replace: true });
+    supabase
+      .from("deck_case_studies")
+      .select("id, name, issue, outcome, phases, link_url")
+      .eq("id", caseId)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setSelectedCase(data as unknown as CaseStudyData);
+        }
+      });
+  }, [setSearchParams]);
+
+  const handleCaseClose = useCallback(() => {
+    setSelectedCase(null);
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
   const [scrollY, setScrollY] = useState(0);
   const [glowIndex, setGlowIndex] = useState(0);
 
@@ -486,7 +525,7 @@ const Index = () => {
             </div>
           </RevealBlock>
 
-          <ImpactCloud />
+          <ImpactCloud onCaseClick={handleCaseClick} />
         </div>
       </section>
 
@@ -653,6 +692,9 @@ const Index = () => {
         </RevealBlock>
       </section>
       </div>
+
+      {/* Case study overlay — opens in-place, no navigation */}
+      <CaseTimelineOverlay study={selectedCase} onClose={handleCaseClose} />
     </AtmosphericLayout>
   );
 };

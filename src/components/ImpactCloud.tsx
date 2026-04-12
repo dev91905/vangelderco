@@ -23,26 +23,44 @@ function useScrollReveal(threshold = 0.15) {
 
 // Diagonal flow: even indices top-left, odd indices bottom-right
 const PLACEMENTS: Array<{ justify: string; items: string; textAlign: "left" | "right" }> = [
-  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 0: top-left
-  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 1: bottom-right
-  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 2: top-left
-  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 3: bottom-right
-  { justify: "flex-start", items: "flex-start", textAlign: "left" },   // 4: top-left
-  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },  // 5: bottom-right
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },
+  { justify: "flex-start", items: "flex-start", textAlign: "left" },
+  { justify: "flex-end",   items: "flex-end",   textAlign: "right" },
 ];
 
-function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number; isHero: boolean }) {
+function StatCard({
+  stat,
+  index,
+  isHero,
+  onCaseClick,
+}: {
+  stat: AggregatedStat;
+  index: number;
+  isHero: boolean;
+  onCaseClick?: (caseId: string) => void;
+}) {
   const { ref, hasRevealed } = useScrollReveal(0.1);
   const [hovered, setHovered] = useState(false);
   const location = useLocation();
   const delay = index * 0.07;
   const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
-  const href = stat.sourceCapability === "deck"
-    ? `/work?case=${stat.sourceId}`
+  const isDeck = stat.sourceCapability === "deck";
+  const href = isDeck
+    ? "#"
     : stat.sourceSlug
       ? `/post/${stat.sourceSlug}`
       : "#";
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isDeck && onCaseClick) {
+      e.preventDefault();
+      onCaseClick(stat.sourceId);
+    }
+  };
 
   return (
     <div
@@ -61,6 +79,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
         to={href}
         state={{ from: location.pathname }}
         className="no-underline block h-full"
+        onClick={handleClick}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
@@ -104,7 +123,11 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
   );
 }
 
-export default function ImpactCloud() {
+interface ImpactCloudProps {
+  onCaseClick?: (caseId: string) => void;
+}
+
+export default function ImpactCloud({ onCaseClick }: ImpactCloudProps) {
   const { data: stats, isLoading } = useAggregatedStats();
   const heroPositions = new Set([0, 4]);
 
@@ -138,6 +161,7 @@ export default function ImpactCloud() {
           stat={stat}
           index={i}
           isHero={heroPositions.has(i)}
+          onCaseClick={onCaseClick}
         />
       ))}
     </div>
