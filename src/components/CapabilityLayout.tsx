@@ -18,7 +18,7 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
   const { data: posts, isLoading } = useCapabilityPosts(capability);
   const { playChitter } = useGlitchSFX();
   const [typewriterActive, setTypewriterActive] = useState(false);
-  const backPath = useBackPath("/");
+  const goBack = useGoBack("/");
 
   // Start typewriter after a short mount delay (matches label fade-up timing)
   useEffect(() => {
@@ -36,15 +36,15 @@ const CapabilityLayout = ({ capability, label, title, description }: CapabilityL
         Van Gelder Co.
       </span>
 
-      <Link
-        to={backPath}
-        className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.15em] uppercase transition-colors duration-300"
+      <button
+        onClick={goBack}
+        className="fixed top-6 left-6 z-30 text-[10px] tracking-[0.15em] uppercase transition-colors duration-300 bg-transparent border-none cursor-pointer"
         style={{ fontFamily: t.sans, color: t.ink(0.35) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.8))}
         onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.35))}
       >
         ← Return
-      </Link>
+      </button>
 
       <div className="relative z-20 h-dvh overflow-y-auto" style={{ animation: "fade-up 0.5s ease-out both" }}>
         <main className="flex flex-col items-center px-6 pt-20 pb-16 max-w-3xl mx-auto gap-8 md:gap-12">
