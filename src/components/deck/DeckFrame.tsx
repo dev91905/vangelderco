@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef, useEffect, useRef } from "react";
+import { ReactNode, forwardRef, useEffect, useRef, useCallback } from "react";
 
 type FrameMode = "narrow" | "wide" | "full";
 type FrameAlign = "center" | "left" | "split";
@@ -30,6 +30,14 @@ const alignStyles: Record<FrameAlign, string> = {
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   ({ children, mode = "narrow", align = "center", onActive, isVisible, isMobile }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Reset scroll position when slide becomes visible on mobile
+    useEffect(() => {
+      if (isMobile && isVisible && scrollRef.current) {
+        scrollRef.current.scrollTop = 0;
+      }
+    }, [isMobile, isVisible]);
 
     const setRefs = (el: HTMLDivElement | null) => {
       (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
@@ -76,6 +84,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
         >
           {/* Internal scrollable content area */}
           <div
+            ref={scrollRef}
             className={`deck-mobile-content relative z-10 w-full ${modeStyles[mode]} mx-auto`}
             style={{
               flex: "1 1 0%",
