@@ -1,7 +1,8 @@
-import { ReactNode, forwardRef, useEffect, useRef, useCallback } from "react";
+import { ReactNode, forwardRef, useEffect, useRef } from "react";
 
 type FrameMode = "narrow" | "wide" | "full";
 type FrameAlign = "center" | "left" | "split";
+type MobileVerticalAlign = "top" | "center";
 
 interface DeckFrameProps {
   children: ReactNode;
@@ -13,6 +14,8 @@ interface DeckFrameProps {
   isVisible?: boolean;
   /** Whether the viewport is mobile */
   isMobile?: boolean;
+  /** Mobile-only vertical alignment */
+  mobileVerticalAlign?: MobileVerticalAlign;
 }
 
 const modeStyles: Record<FrameMode, string> = {
@@ -28,16 +31,20 @@ const alignStyles: Record<FrameAlign, string> = {
 };
 
 const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
-  ({ children, mode = "narrow", align = "center", onActive, isVisible, isMobile }, ref) => {
+  (
+    {
+      children,
+      mode = "narrow",
+      align = "center",
+      onActive,
+      isVisible,
+      isMobile,
+      mobileVerticalAlign = "top",
+    },
+    ref
+  ) => {
     const internalRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
-
-    // Reset scroll position when slide becomes visible on mobile
-    useEffect(() => {
-      if (isMobile && isVisible && scrollRef.current) {
-        scrollRef.current.scrollTop = 0;
-      }
-    }, [isMobile, isVisible]);
 
     const setRefs = (el: HTMLDivElement | null) => {
       (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
@@ -45,9 +52,13 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
       else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
     };
 
-    // Desktop: use IntersectionObserver for onActive
     useEffect(() => {
-      if (isMobile) return; // Mobile uses isVisible prop instead
+      if (!isMobile || !isVisible || !scrollRef.current) return;
+      scrollRef.current.scrollTop = 0;
+    }, [isMobile, isVisible]);
+
+    useEffect(() => {
+      if (isMobile) return;
       const el = internalRef.current;
       if (!el) return;
       const obs = new IntersectionObserver(
@@ -60,13 +71,11 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
       return () => obs.disconnect();
     }, [onActive, isMobile]);
 
-    // Mobile: fire onActive based on isVisible prop
     useEffect(() => {
       if (!isMobile) return;
       onActive?.(!!isVisible);
     }, [isMobile, isVisible, onActive]);
 
-    // Mobile: locked viewport shell with internal scroll
     if (isMobile) {
       return (
         <section
@@ -82,7 +91,6 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
             overflow: "hidden",
           }}
         >
-          {/* Internal scrollable content area */}
           <div
             ref={scrollRef}
             className={`deck-mobile-content relative z-10 w-full ${modeStyles[mode]} mx-auto`}
@@ -96,15 +104,12 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
               flexDirection: "column",
               paddingTop: "88px",
               paddingBottom: "100px",
-              justifyContent: align === "center" ? "center" : "flex-start",
+              justifyContent: mobileVerticalAlign === "center" ? "center" : "flex-start",
               alignItems: align === "left" ? "flex-start" : "center",
             }}
           >
-            <div className="w-full">
-              {children}
-            </div>
+            <div className="w-full">{children}</div>
           </div>
-          {/* Bottom fade — signals more content below */}
           <div
             className="pointer-events-none absolute bottom-0 left-0 right-0 z-20"
             style={{
@@ -116,7 +121,6 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
       );
     }
 
-    // Desktop: original layout
     return (
       <section
         ref={setRefs}
