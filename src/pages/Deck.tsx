@@ -679,6 +679,7 @@ const Deck = () => {
               fontFamily: f.serif,
               fontSize: "clamp(18px, 2.8vw, 32px)",
               fontWeight: 400,
+              fontStyle: "italic",
               maxWidth: "700px",
               lineHeight: 1.4,
             }}
