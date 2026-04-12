@@ -85,7 +85,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
               overscrollBehaviorY: "contain",
               display: "flex",
               flexDirection: "column",
-              paddingTop: "72px",
+              paddingTop: "88px",
               paddingBottom: "100px",
               justifyContent: "flex-start",
               alignItems: align === "left" ? "flex-start" : "center",
