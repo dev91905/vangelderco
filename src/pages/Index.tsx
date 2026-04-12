@@ -146,62 +146,23 @@ function AnimatedLine({ width = 60 }: { width?: number }) {
   );
 }
 
-/* ── Scroll-driven brand mark ── */
-function ScrollBrandMark({ scrollY }: { scrollY: number }) {
-  const [startPos, setStartPos] = useState<{ top: number; left: number; width: number } | null>(null);
-
-  // Measure placeholder position on mount and resize
-  useEffect(() => {
-    const measure = () => {
-      // Find the placeholder by looking for the data attribute
-      const el = document.querySelector('[data-brand-placeholder]') as HTMLElement;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      setStartPos({ top: rect.top + window.scrollY, left: rect.left + rect.width / 2, width: rect.width });
-    };
-    // Wait for hero animations to settle
-    const timer = setTimeout(measure, 1200);
-    window.addEventListener('resize', measure);
-    return () => { clearTimeout(timer); window.removeEventListener('resize', measure); };
-  }, []);
-
-  const SCROLL_START = 50;
-  const SCROLL_END = 350;
-  const progress = Math.min(1, Math.max(0, (scrollY - SCROLL_START) / (SCROLL_END - SCROLL_START)));
-  // Smooth easing
-  const ease = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-  // End position (fixed top-right corner)
-  const endTop = 24;
-  const endRight = 24;
-
-  // Start position (where placeholder is in the hero)
-  const startTop = startPos ? startPos.top - scrollY : window.innerHeight / 2 - 120;
-  const startCenterX = startPos ? startPos.left : window.innerWidth / 2;
-  const endLeft = window.innerWidth - endRight;
-
-  // Interpolate
-  const currentTop = startTop + (endTop - startTop) * ease;
-  const currentLeft = startCenterX + (endLeft - startCenterX) * ease;
-  const currentFontSize = 11 - ease * 1; // 11px → 10px
-  const currentTracking = 0.25 - ease * 0.1; // 0.25em → 0.15em
-  const currentOpacity = progress < 0.1
-    ? 0.6  // at hero position
-    : 0.3; // transitioning/settled
+/* ── Fixed corner brand mark — fades in as hero brand fades out ── */
+function FixedBrandMark({ scrollY }: { scrollY: number }) {
+  // Fade in between 80-250px scroll
+  const progress = Math.min(1, Math.max(0, (scrollY - 80) / 170));
 
   return (
     <div
-      className="fixed z-30 pointer-events-none uppercase"
+      className="fixed top-6 right-6 z-30 pointer-events-none uppercase"
       style={{
-        top: currentTop,
-        left: progress < 0.01 ? '50%' : currentLeft,
-        transform: progress < 0.01 ? 'translateX(-50%)' : 'translateX(-100%)',
         fontFamily: t.sans,
-        fontSize: `${currentFontSize}px`,
-        letterSpacing: `${currentTracking}em`,
-        color: t.ink(currentOpacity),
-        transition: scrollY < 5 ? 'none' : undefined,
-        willChange: 'top, left, transform',
+        fontSize: "10px",
+        letterSpacing: "0.15em",
+        color: t.ink(0.3),
+        opacity: progress,
+        transform: `translateY(${(1 - progress) * 8}px)`,
+        transition: "opacity 0.4s ease, transform 0.4s ease",
+        willChange: "opacity, transform",
       }}
     >
       Van Gelder Co.
