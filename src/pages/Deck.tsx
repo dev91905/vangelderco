@@ -736,7 +736,7 @@ const Deck = () => {
               Select all that apply. This helps us tailor what comes next.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style={r2.stagger(2, 300, "blur-scale")}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" style={r2.stagger(2, 300, "blur-scale")}>
             {PAIN_POINTS.map((pain, i) => {
               const isSelected = selectedPains.includes(pain.id);
               return (
@@ -745,7 +745,7 @@ const Deck = () => {
                   onClick={() => setSelectedPains(prev => isSelected ? prev.filter(p => p !== pain.id) : [...prev, pain.id])}
                   className="text-left"
                   style={{
-                    display: "flex", flexDirection: "column", padding: "28px 24px",
+                    display: "flex", flexDirection: "column", padding: isMobile ? "18px 20px" : "28px 24px",
                     border: isSelected ? `1px solid hsl(var(--foreground) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
                     background: isSelected ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
                     boxShadow: isSelected ? "0 0 24px hsl(var(--foreground) / 0.15), inset 0 1px 0 hsl(var(--foreground) / 0.1)" : "none",
@@ -754,18 +754,18 @@ const Deck = () => {
                     transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                     filter: r2.isActive ? "blur(0px)" : "blur(4px)",
                     transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${300 + i * 80}ms, background 0.2s ease, border 0.2s ease, box-shadow 0.3s ease`,
-                    minHeight: "180px",
+                    minHeight: isMobile ? "auto" : "180px",
                   }}
                 >
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px" }}>{pain.short}</p>
-                  <p style={{ fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, flex: "1 1 auto" }}>{pain.detail}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: isMobile ? "15px" : "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: isMobile ? "6px" : "12px" }}>{pain.short}</p>
+                  <p style={{ fontFamily: f.sans, fontSize: isMobile ? "13px" : "clamp(12px, 1.3vw, 14px)", color: f.ink(0.45), lineHeight: 1.6, flex: "1 1 auto" }}>{pain.detail}</p>
                 </button>
               );
             })}
             {/* 6th card — Something else */}
             <div
               style={{
-                display: "flex", flexDirection: "column", padding: "28px 24px",
+                display: "flex", flexDirection: "column", padding: isMobile ? "18px 20px" : "28px 24px",
                 border: customSaved ? `1px solid hsl(var(--foreground) / var(--a-high))` : `1px solid ${f.ink(0.1)}`,
                 background: customSaved ? "hsl(var(--foreground) / var(--a-bg))" : "transparent",
                 boxShadow: customSaved ? "0 0 24px hsl(var(--foreground) / 0.15), inset 0 1px 0 hsl(var(--foreground) / 0.1)" : "none",
@@ -774,10 +774,10 @@ const Deck = () => {
                 transform: r2.isActive ? "scale(1) translateY(0)" : "scale(0.95) translateY(10px)",
                 filter: r2.isActive ? "blur(0px)" : "blur(4px)",
                 transition: "opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 700ms, background 0.2s ease, border 0.2s ease, box-shadow 0.3s ease",
-                minHeight: "180px",
+                minHeight: isMobile ? "auto" : "180px",
               }}
             >
-              <p style={{ fontFamily: f.sans, fontSize: "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: "12px" }}>Something else</p>
+              <p style={{ fontFamily: f.sans, fontSize: isMobile ? "15px" : "clamp(15px, 1.8vw, 19px)", fontWeight: 700, color: f.ink(0.85), marginBottom: isMobile ? "6px" : "12px" }}>Something else</p>
               <form onSubmit={(e) => { e.preventDefault(); if (customMessage.trim()) { setCustomSaved(true); } }} style={{ display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
                 <textarea
                   value={customMessage}
@@ -788,7 +788,7 @@ const Deck = () => {
                   onClick={() => { if (customSaved) setCustomSaved(false); }}
                   rows={2}
                   style={{
-                    fontFamily: f.sans, fontSize: "clamp(12px, 1.3vw, 14px)", color: customSaved ? f.ink(0.6) : f.ink(0.8),
+                    fontFamily: f.sans, fontSize: isMobile ? "13px" : "clamp(12px, 1.3vw, 14px)", color: customSaved ? f.ink(0.6) : f.ink(0.8),
                     background: customSaved ? "transparent" : `${f.ink(0.03)}`,
                     border: customSaved ? `1px solid transparent` : `1px solid ${f.ink(0.08)}`,
                     borderRadius: "6px", padding: "10px 12px", resize: "none", outline: "none", width: "100%",
