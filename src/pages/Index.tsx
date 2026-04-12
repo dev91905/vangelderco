@@ -673,23 +673,47 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══ FOOTER ═══ */}
-      <section className="section-flow-tight relative z-10 flex flex-col items-center justify-center px-6">
+      {/* ═══ FOOTER — LET'S CHAT ═══ */}
+      <section
+        className="relative z-10 flex flex-col items-center justify-center px-6"
+        style={{ minHeight: "80dvh" }}
+      >
         <RevealBlock>
-          <Link
-            to="/diagnostic"
-            className="inline-flex items-center gap-2 no-underline text-[11px] tracking-[0.18em] uppercase"
-            style={{
-              fontFamily: t.sans,
-              color: t.ink(0.4),
-              transition: `color 0.4s ${EASE_OUT_QUART}`,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "hsl(var(--foreground))")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.4))}
-          >
-            Let's Chat
-            <span style={{ fontSize: "14px", lineHeight: 1 }}>→</span>
-          </Link>
+          <div className="flex flex-col items-center gap-6">
+            <h2
+              className="text-[32px] md:text-[48px] lg:text-[56px] font-bold text-center"
+              style={{ fontFamily: t.sans, color: "hsl(var(--foreground))", lineHeight: 1.1 }}
+            >
+              Let's Chat
+            </h2>
+            <p
+              className="text-[14px] md:text-[16px] text-center max-w-md"
+              style={{ fontFamily: t.sans, color: t.ink(0.4), lineHeight: 1.6 }}
+            >
+              Ready to build a strategic communications portfolio that actually moves?
+            </p>
+            <Link
+              to="/diagnostic"
+              className="inline-flex items-center gap-2 no-underline text-[12px] tracking-[0.18em] uppercase mt-4 px-8 py-4 rounded-full"
+              style={{
+                fontFamily: t.sans,
+                color: "hsl(var(--background))",
+                background: "hsl(var(--foreground))",
+                transition: `transform 0.4s ${EASE_OUT_EXPO}, box-shadow 0.4s ${EASE_OUT_QUART}`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = `0 12px 40px -8px hsl(var(--foreground) / 0.3)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              Take the Diagnostic
+              <span>→</span>
+            </Link>
+          </div>
         </RevealBlock>
       </section>
       </div>
