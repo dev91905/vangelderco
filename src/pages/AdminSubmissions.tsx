@@ -81,7 +81,7 @@ const StatusPill = ({ status }: { status: string | null }) => {
 
 /* ═══ LIST VIEW ═══ */
 const SubmissionsList = ({ contacts, onSelect }: { contacts: Contact[]; onSelect: (c: Contact) => void }) => (
-  <div className="flex flex-col">
+  <div className="space-y-3 p-4 md:p-6">
     {contacts.length === 0 && (
       <p style={{ fontFamily: t.sans, fontSize: "14px", color: t.ink(0.35), padding: "40px 0", textAlign: "center" }}>
         No submissions yet.
@@ -91,41 +91,59 @@ const SubmissionsList = ({ contacts, onSelect }: { contacts: Contact[]; onSelect
       <button
         key={c.id}
         onClick={() => onSelect(c)}
-        className="text-left w-full transition-colors"
+        className="w-full rounded-[26px] border text-left transition-all duration-200"
         style={{
-          padding: "16px 20px",
-          borderBottom: t.border(0.04),
-          background: "transparent",
-          border: "none",
+          padding: "20px 22px",
+          background: t.white,
+          borderColor: t.ink(0.06),
           cursor: "pointer",
-          display: "grid",
-          gridTemplateColumns: "1fr auto auto",
-          gap: "16px",
-          alignItems: "center",
+          boxShadow: `0 18px 40px -34px ${t.ink(0.18)}`,
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = t.ink(0.02))}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = t.ink(0.015);
+          e.currentTarget.style.borderColor = t.ink(0.12);
+          e.currentTarget.style.transform = "translateY(-2px)";
+          e.currentTarget.style.boxShadow = `0 28px 56px -40px ${t.ink(0.18)}`;
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = t.white;
+          e.currentTarget.style.borderColor = t.ink(0.06);
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = `0 18px 40px -34px ${t.ink(0.18)}`;
+        }}
       >
-        <div className="flex flex-col gap-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span style={{ fontFamily: t.sans, fontSize: "14px", fontWeight: 600, color: t.ink(0.8) }}>
-              {c.first_name} {c.last_name}
-            </span>
-            {c.organization && (
-              <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.35) }}>· {c.organization}</span>
-            )}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 600, color: t.ink(0.82) }}>
+                {c.first_name} {c.last_name}
+              </span>
+              {c.organization && (
+                <span className="rounded-full px-2.5 py-1 text-[11px]" style={{ fontFamily: t.sans, color: t.ink(0.42), background: t.ink(0.03), border: `1px solid ${t.ink(0.06)}` }}>
+                  {c.organization}
+                </span>
+              )}
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.44) }}>{c.email}</span>
+              <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.28) }}>
+                {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.4) }}>{c.email}</span>
-            <span style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25) }}>
-              {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
-            </span>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="rounded-[18px] px-4 py-3" style={{ background: t.ink(0.02), border: `1px solid ${t.ink(0.05)}` }}>
+              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.28), textTransform: "uppercase" }}>
+                Readiness
+              </p>
+              <p style={{ fontFamily: t.sans, fontSize: "13px", fontWeight: 600, color: readinessLabel(c.readiness_score).color, marginTop: "4px" }}>
+                {c.readiness_score ?? "—"} · {readinessLabel(c.readiness_score).label}
+              </p>
+            </div>
+            <StatusPill status={c.report_status} />
           </div>
         </div>
-        <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: readinessLabel(c.readiness_score).color, whiteSpace: "nowrap" }}>
-          {readinessLabel(c.readiness_score).label}
-        </span>
-        <StatusPill status={c.report_status} />
       </button>
     ))}
   </div>
@@ -216,28 +234,62 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const ActionButton = ({
+    onClick,
+    disabled,
+    icon: Icon,
+    label,
+    primary = false,
+    active = false,
+  }: {
+    onClick: () => void;
+    disabled?: boolean;
+    icon: typeof FileText;
+    label: string;
+    primary?: boolean;
+    active?: boolean;
+  }) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-[13px] font-medium transition-all disabled:opacity-40"
+      style={{
+        fontFamily: t.sans,
+        background: primary ? t.ink(0.84) : active ? t.ink(0.08) : t.white,
+        color: primary ? t.cream : t.ink(0.56),
+        border: `1px solid ${primary ? t.ink(0.84) : active ? t.ink(0.12) : t.ink(0.08)}`,
+        cursor: disabled ? "default" : "pointer",
+      }}
+    >
+      <Icon className="h-4 w-4" />
+      {label}
+    </button>
+  );
+
   return (
     <div className="flex flex-col h-full">
       <button
         onClick={onBack}
-        className="flex items-center gap-2 px-4 py-3 transition-colors"
-        style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.4), background: "none", border: "none", cursor: "pointer", borderBottom: t.border(0.04) }}
+        className="flex items-center gap-2 px-5 py-4 transition-colors md:px-6"
+        style={{ fontFamily: t.sans, fontSize: "12px", color: t.ink(0.42), background: "none", border: "none", cursor: "pointer", borderBottom: t.border(0.04) }}
         onMouseEnter={(e) => (e.currentTarget.style.color = t.ink(0.7))}
-        onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.4))}
+        onMouseLeave={(e) => (e.currentTarget.style.color = t.ink(0.42))}
       >
         <ChevronLeft className="w-3.5 h-3.5" /> All submissions
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] flex-1 overflow-hidden">
         {/* LEFT: Diagnostic report */}
-        <div className="overflow-y-auto p-6 lg:p-8" style={{ borderRight: t.border(0.04) }}>
+        <div className="overflow-y-auto p-5 lg:p-8" style={{ borderRight: t.border(0.04), background: t.white }}>
           {generating ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: t.ink(0.1), borderTopColor: t.ink(0.5) }} />
               <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>Generating diagnostic report…</p>
             </div>
           ) : reportData ? (
-            <DiagnosticReport data={reportData} />
+            <div className="rounded-[28px] border px-3 py-3 md:px-4 md:py-4" style={{ background: t.ink(0.01), borderColor: t.ink(0.05) }}>
+              <DiagnosticReport data={reportData} />
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4) }}>No report generated yet.</p>
@@ -255,106 +307,60 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
         </div>
 
         {/* RIGHT: Contact info & actions */}
-        <div className="p-6 flex flex-col gap-5 overflow-y-auto" style={{ background: t.ink(0.015) }}>
-          {/* Contact info */}
-          <div>
-            <p style={{ fontFamily: t.sans, fontSize: "16px", fontWeight: 700, color: t.ink(0.85) }}>
-              {contact.first_name} {contact.last_name}
-            </p>
-            {contact.organization && (
-              <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4), marginTop: "2px" }}>
-                {contact.organization}
+        <div className="overflow-y-auto p-5 md:p-6" style={{ background: t.ink(0.018) }}>
+          <div className="space-y-4">
+            <div className="rounded-[24px] border px-5 py-5" style={{ background: t.white, borderColor: t.ink(0.06) }}>
+              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.09em", color: t.ink(0.28), textTransform: "uppercase", marginBottom: "10px" }}>
+                Contact
               </p>
-            )}
-            <a
-              href={`mailto:${contact.email}`}
-              style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.45), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "6px" }}
-            >
-              {contact.email}
-            </a>
-            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25), marginTop: "8px" }}>
-              {format(new Date(contact.created_at), "MMM d, yyyy 'at' h:mm a")}
-            </p>
-          </div>
-
-          {/* Readiness score card */}
-          <div style={{ padding: "14px 16px", borderRadius: "12px", background: t.ink(0.025), border: t.border(0.05) }}>
-            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.3), textTransform: "uppercase", marginBottom: "6px" }}>
-              Readiness Score
-            </p>
-            <p style={{ fontFamily: t.sans, fontSize: "15px", fontWeight: 700, color: readinessLabel(contact.readiness_score).color }}>
-              {contact.readiness_score ?? "—"} · {readinessLabel(contact.readiness_score).label}
-            </p>
-            <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.3), marginTop: "4px" }}>
-              {readinessLabel(contact.readiness_score).hint}
-            </p>
-          </div>
-
-          {/* Separator */}
-          <div style={{ height: "1px", background: t.ink(0.04) }} />
-
-          {/* Actions */}
-          <div>
-            <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", color: t.ink(0.25), textTransform: "uppercase", marginBottom: "10px" }}>
-              Actions
-            </p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleExportPdf}
-                disabled={!reportData || exporting}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] font-medium transition-all disabled:opacity-40"
-                style={{ fontFamily: t.sans, background: t.ink(0.85), color: t.cream, border: "none", cursor: reportData ? "pointer" : "default" }}
+              <p style={{ fontFamily: t.sans, fontSize: "18px", fontWeight: 700, color: t.ink(0.85) }}>
+                {contact.first_name} {contact.last_name}
+              </p>
+              {contact.organization && (
+                <p style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.4), marginTop: "4px" }}>
+                  {contact.organization}
+                </p>
+              )}
+              <a
+                href={`mailto:${contact.email}`}
+                style={{ fontFamily: t.sans, fontSize: "13px", color: t.ink(0.52), textDecoration: "underline", textUnderlineOffset: "2px", display: "block", marginTop: "10px" }}
               >
-                <FileText className="w-4 h-4" />
-                {exporting ? "Exporting…" : "Export as PDF"}
-              </button>
+                {contact.email}
+              </a>
+              <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.25), marginTop: "10px" }}>
+                {format(new Date(contact.created_at), "MMM d, yyyy 'at' h:mm a")}
+              </p>
+            </div>
 
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] transition-all"
-                style={{ fontFamily: t.sans, color: t.ink(0.5), background: "transparent", border: t.border(0.08), cursor: "pointer" }}
-              >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied" : "Copy email"}
-              </button>
+            <div className="rounded-[24px] border px-5 py-5" style={{ background: t.white, borderColor: t.ink(0.06) }}>
+              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.3), textTransform: "uppercase", marginBottom: "8px" }}>
+                Readiness Score
+              </p>
+              <p style={{ fontFamily: t.sans, fontSize: "16px", fontWeight: 700, color: readinessLabel(contact.readiness_score).color }}>
+                {contact.readiness_score ?? "—"} · {readinessLabel(contact.readiness_score).label}
+              </p>
+              <p style={{ fontFamily: t.sans, fontSize: "11px", color: t.ink(0.32), marginTop: "6px" }}>
+                {readinessLabel(contact.readiness_score).hint}
+              </p>
+              <div className="mt-4 inline-flex">
+                <StatusPill status={contact.report_status} />
+              </div>
+            </div>
 
-              <button
-                onClick={() => markAsSent.mutate()}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full text-[13px] transition-all"
-                style={{
-                  fontFamily: t.sans,
-                  color: contact.report_status === "sent" ? "hsl(142 71% 35%)" : t.ink(0.5),
-                  background: contact.report_status === "sent" ? "hsl(142 71% 45% / 0.06)" : "transparent",
-                  border: contact.report_status === "sent" ? "1px solid hsl(142 71% 45% / 0.15)" : t.border(0.08),
-                  cursor: "pointer",
-                }}
-              >
-                <Mail className="w-4 h-4" />
-                {contact.report_status === "sent" ? "Marked as sent ✓" : "Mark as sent"}
-              </button>
+            <div className="rounded-[24px] border px-5 py-5" style={{ background: t.white, borderColor: t.ink(0.06) }}>
+              <p style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", color: t.ink(0.25), textTransform: "uppercase", marginBottom: "12px" }}>
+                Actions
+              </p>
+              <div className="flex flex-col gap-2.5">
+                <ActionButton onClick={handleExportPdf} disabled={!reportData || exporting} icon={FileText} label={exporting ? "Exporting…" : "Export PDF"} primary />
+                <ActionButton onClick={handleCopyEmail} icon={copied ? Check : Copy} label={copied ? "Copied" : "Copy email"} />
+                <ActionButton onClick={() => markAsSent.mutate()} icon={Mail} label={contact.report_status === "sent" ? "Marked as sent" : "Mark as sent"} active={contact.report_status === "sent"} />
+                {reportData && (
+                  <ActionButton onClick={generateReport} disabled={generating} icon={RefreshCw} label={generating ? "Regenerating…" : "Regenerate report"} />
+                )}
+              </div>
             </div>
           </div>
-
-          {/* Regenerate */}
-          {reportData && (
-            <button
-              onClick={generateReport}
-              disabled={generating}
-              className="flex items-center justify-center gap-2 w-full py-2 rounded-full text-[11px] transition-all mt-auto"
-              style={{
-                fontFamily: t.sans,
-                color: t.ink(0.3),
-                background: "transparent",
-                border: t.border(0.06),
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = t.ink(0.025); e.currentTarget.style.color = t.ink(0.5); }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = t.ink(0.3); }}
-            >
-              <RefreshCw className="w-3 h-3" />
-              {generating ? "Regenerating…" : "Regenerate report"}
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -386,29 +392,39 @@ const AdminSubmissions = () => {
 
   return (
     <div className="min-h-screen light" data-theme="light" style={{ background: t.cream, colorScheme: "light" }}>
-      <div className="flex items-center justify-between px-4 md:px-8 py-4" style={{ borderBottom: t.border(0.06) }}>
-        <div className="flex items-center gap-4">
-          <Link
-            to="/admin"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all rounded-full"
-            style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}
-          >
-            <ArrowLeft className="w-3 h-3" /> Admin
-          </Link>
-          <h1 className="text-lg font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
-            Diagnostic Results
-          </h1>
+      <div className="sticky top-0 z-30" style={{ background: t.cream, borderBottom: t.border(0.06), boxShadow: `0 1px 3px 0 ${t.ink(0.03)}` }}>
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-4 py-5 md:px-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <Link
+              to="/admin"
+              className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] tracking-[0.05em] transition-all"
+              style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1), background: t.white }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.ink(0.05); }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = t.white; }}
+            >
+              <ArrowLeft className="w-3 h-3" /> Admin
+            </Link>
+            <div>
+              <h1 className="text-[24px] font-semibold tracking-[-0.03em]" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>
+                Diagnostic results
+              </h1>
+              <p className="text-[13px] leading-6" style={{ fontFamily: t.sans, color: t.ink(0.38) }}>
+                Review each lead with the report, readiness score, and next actions in one stable workspace.
+              </p>
+            </div>
+          </div>
+
           {contacts && (
-            <span style={{ fontFamily: t.sans, fontSize: "11px", fontWeight: 600, color: t.cream, background: t.ink(0.7), padding: "1px 8px", borderRadius: "999px" }}>
-              {contacts.length}
-            </span>
+            <div className="inline-flex items-center gap-3 self-start rounded-full px-4 py-2.5 lg:self-auto" style={{ background: t.white, border: `1px solid ${t.ink(0.08)}` }}>
+              <span style={{ fontFamily: t.sans, fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", color: t.ink(0.32), textTransform: "uppercase" }}>Open queue</span>
+              <span style={{ fontFamily: t.sans, fontSize: "13px", fontWeight: 700, color: t.ink(0.72) }}>{contacts.length}</span>
+            </div>
           )}
         </div>
       </div>
 
-      <div style={{ height: "calc(100vh - 57px)", overflow: "hidden" }}>
+      <div className="mx-auto max-w-[1440px] px-4 py-6 md:px-8" style={{ height: "calc(100vh - 112px)" }}>
+        <div className="h-full overflow-hidden rounded-[32px] border" style={{ background: t.white, borderColor: t.ink(0.06), boxShadow: `0 32px 84px -52px ${t.ink(0.22)}` }}>
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: t.ink(0.1), borderTopColor: t.ink(0.5) }} />
@@ -423,6 +439,7 @@ const AdminSubmissions = () => {
             <SubmissionsList contacts={contacts || []} onSelect={setSelected} />
           </div>
         )}
+        </div>
       </div>
     </div>
   );
