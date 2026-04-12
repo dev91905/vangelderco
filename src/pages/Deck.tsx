@@ -179,7 +179,7 @@ const BackButton = ({ onClick }: { onClick: () => void }) => (
 );
 
 /* ─── Continue button component ─── */
-const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () => void; disabled?: boolean; label?: string }) => (
+const ContinueButton = ({ onClick, disabled, label: btnLabel, solid }: { onClick: () => void; disabled?: boolean; label?: string; solid?: boolean }) => (
   <button
     onClick={onClick}
     disabled={disabled}
@@ -189,17 +189,17 @@ const ContinueButton = ({ onClick, disabled, label: btnLabel }: { onClick: () =>
       letterSpacing: "0.06em",
       textTransform: "uppercase",
       fontWeight: 500,
-      color: disabled ? f.ink(0.2) : "hsl(var(--foreground))",
-      background: disabled ? f.ink(0.04) : "hsl(var(--foreground) / var(--a-bg))",
-      border: `1px solid ${disabled ? f.ink(0.06) : "hsl(var(--foreground) / var(--a-border))"}`,
+      color: disabled ? f.ink(0.2) : solid ? "hsl(var(--background))" : "hsl(var(--foreground))",
+      background: disabled ? f.ink(0.04) : solid ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-bg))",
+      border: `1px solid ${disabled ? f.ink(0.06) : solid ? "hsl(var(--foreground))" : "hsl(var(--foreground) / var(--a-border))"}`,
       padding: "14px 32px",
       borderRadius: "999px",
       cursor: disabled ? "default" : "pointer",
       transition: "all 200ms ease",
       opacity: disabled ? 0.5 : 1,
     }}
-    onMouseEnter={(e) => { if (!disabled) { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-high))"; e.currentTarget.style.transform = "translateY(-2px)"; } }}
-    onMouseLeave={(e) => { e.currentTarget.style.background = disabled ? f.ink(0.04) : "hsl(var(--foreground) / var(--a-bg))"; e.currentTarget.style.borderColor = disabled ? f.ink(0.06) : "hsl(var(--foreground) / var(--a-border))"; e.currentTarget.style.transform = "translateY(0)"; }}
+    onMouseEnter={(e) => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; if (solid) { e.currentTarget.style.boxShadow = "0 8px 30px -6px hsl(var(--foreground) / 0.3)"; } else { e.currentTarget.style.background = "hsl(var(--foreground) / var(--a-low))"; e.currentTarget.style.borderColor = "hsl(var(--foreground) / var(--a-high))"; } } }}
+    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; if (!solid) { e.currentTarget.style.background = disabled ? f.ink(0.04) : "hsl(var(--foreground) / var(--a-bg))"; e.currentTarget.style.borderColor = disabled ? f.ink(0.06) : "hsl(var(--foreground) / var(--a-border))"; } }}
   >
     {btnLabel || "Continue →"}
   </button>
