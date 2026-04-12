@@ -39,7 +39,7 @@ function StatCard({ stat, index, isHero }: { stat: AggregatedStat; index: number
   const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
   const href = stat.sourceCapability === "deck"
-    ? (stat.sourceSlug || `/diagnostic?case=${stat.sourceId}`)
+    ? `/work?case=${stat.sourceId}`
     : stat.sourceSlug
       ? `/post/${stat.sourceSlug}`
       : "#";
