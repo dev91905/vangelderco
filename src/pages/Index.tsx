@@ -703,7 +703,7 @@ const Index = () => {
               className="text-[32px] md:text-[48px] lg:text-[56px] font-bold text-center"
               style={{ fontFamily: t.sans, color: "hsl(var(--foreground))", lineHeight: 1.1 }}
             >
-              Let's Chat
+              Let's chat.
             </h2>
             <p
               className="text-[14px] md:text-[16px] text-center max-w-md"
