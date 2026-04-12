@@ -1,79 +1,73 @@
 
-Replace the PDF pipeline entirely. The current export is still built on `html2canvas` screenshots of DOM sections, and that is the real reason the score ring, pills, buttons, and measurement gap blocks keep drifting. You can polish CSS forever and it will still be janky because the export is rasterizing browser layout, transforms, fonts, and subpixel spacing into images.
 
-What I would build:
+## Admin design polish — premium content manager experience
 
-1. Stop exporting the admin DOM
-- Remove the screenshot-based PDF export path from `src/pages/AdminSubmissions.tsx`.
-- Do not capture `#diagnostic-report-capture` or `[data-pdf-section]` with `html2canvas` anymore.
-- Generate a real PDF from structured data instead of turning HTML into images.
+### What's wrong now
 
-2. Create a dedicated PDF document component
-- Add a new PDF-only component, separate from the admin preview, e.g. `src/components/admin/DiagnosticPdfDocument.tsx`.
-- Build it with a real PDF renderer so layout is deterministic and vector-based.
-- Keep the existing `DiagnosticReport.tsx` for on-screen preview if needed, but stop using it as the export source.
+After reviewing all admin pages (`Admin.tsx`, `AdminEditor.tsx`, `AdminSubmissions.tsx`, `AdminLogin.tsx`, `PostListTable.tsx`, `EditorMetaBar.tsx`, `CaseStudyEditor.tsx`, `BlockCanvas.tsx`, `BlockEditor.tsx`):
 
-3. Rebuild the design as PDF-native primitives
-- Score ring: draw it with actual SVG/circle primitives and center the score text by coordinates, not CSS transforms.
-- Pills: rebuild as fixed-height pill rows with explicit padding, vertical centering, and margin-based wrapping.
-- Buttons: rebuild as true PDF link buttons with exact height, padding, border radius, centered text, and live links.
-- Measurement gaps: replace browser grid behavior with explicit two-column PDF layout using fixed column widths and row spacing so both cards line up perfectly every time.
-- Gap cards and section headers: use consistent spacing tokens and fixed vertical rhythm across pages.
+1. **Dashboard (Admin.tsx)**: Collapsible sections use a janky `maxHeight: 9999px` animation that snaps instead of easing. Header is flat and utilitarian. Filter chips feel like an afterthought — two groups jammed together with a thin divider. The leads section rows lack the readiness score/label that the submissions page shows, so you lose context. No section counts on Articles or Case Studies.
 
-4. Make the PDF A4-first instead of browser-first
-- Design to the actual PDF page size from the start.
-- Set a fixed page grid, margins, column widths, and section spacing for A4.
-- Use explicit page structure so nothing important splits awkwardly:
-  - Page 1: header, score, strategic analysis, dimension assessment, challenges/sectors
-  - Page 2: where to move + gap cards
-  - Page 3: measurement gaps, priority practices, CTA
-- Mark critical blocks as non-breakable so the measurement section and CTA never tear apart.
+2. **Post list rows (PostListTable.tsx)**: Rows are cramped. The type badge and capability label are tiny inline spans with no visual weight. Published/draft state is a bare eye icon with no label context. No readiness at a glance for what's published vs draft.
 
-5. Embed proper typography for client-facing output
-- Register the actual font family/weights used in the report instead of relying on browser-loaded Google fonts during capture.
-- Use fixed font sizes, line heights, and weight mapping in the PDF renderer.
-- This removes font-load timing drift and text reflow issues.
+3. **Type selector (AdminEditor.tsx)**: Two cards in a `grid-cols-3` layout, leaving a weird empty third column. The cards themselves are plain bordered boxes.
 
-6. Preserve working links properly
-- Render “Book a call” and “Get in touch” as real PDF links, not invisible overlays on screenshots.
-- That keeps the links clickable while also keeping the buttons visually precise.
+4. **Editor toolbar (AdminEditor.tsx)**: Save status text is tiny and low-contrast. The unsaved/saved states blend into the background.
 
-7. Refactor shared report data, not shared rendering
-- Reuse the same `DiagnosticData` shape.
-- If needed, extract small helpers for score labels/colors so the preview and PDF stay consistent.
-- Do not try to share layout code between DOM and PDF components if it compromises fidelity.
+5. **Login page (AdminLogin.tsx)**: Minimal but the form feels disconnected — no visual container, floating in space.
 
-Files I would change
-- `src/pages/AdminSubmissions.tsx`
-  - Replace screenshot export logic with true PDF generation/download logic.
-- `src/components/admin/DiagnosticPdfDocument.tsx`
-  - New dedicated client-facing PDF document.
-- `src/components/admin/DiagnosticReport.tsx`
-  - Likely keep for preview only, possibly simplify/remove PDF-specific hacks that no longer matter.
-- `package.json`
-  - Add the PDF renderer dependency if not already present.
+6. **Submissions detail (AdminSubmissions.tsx)**: The sidebar action buttons stack with no visual grouping. The "Regenerate report" link at the bottom is nearly invisible.
 
-Why this is the right fix
-- The problem is not “more inline CSS.”
-- The problem is exporting HTML screenshots and expecting print-grade alignment.
-- If you want pixel-perfect, premium, client-facing output, the PDF has to be designed as a PDF, not as a screenshot of a web page.
+7. **Settings modal (Admin.tsx)**: Three separate save buttons (password, booking link, contact email) — each section has its own full-width save button, which is redundant and adds visual noise.
 
-Technical details
-```text
-Current pipeline:
-DOM -> html2canvas -> PNG sections -> jsPDF image placement
-Result: transform drift, font drift, spacing drift, blurry text, inconsistent alignment
+### The redesign
 
-Target pipeline:
-DiagnosticData -> PDF component -> vector/text PDF
-Result: exact coordinates, embedded fonts, crisp text, stable alignment, real links
-```
+**Dashboard (Admin.tsx)**
+- Replace `maxHeight` animation with proper height transitions or just use CSS `details`/`summary` or a clean accordion pattern
+- Add item counts to Articles and Case Studies section headers (like Leads already has)
+- Redesign filter chips: unified pill bar with a subtle active indicator, not two separate chip groups with a divider
+- Give the header more breathing room and a subtle bottom shadow instead of a hairline border
+- Add readiness score labels to the leads rows on the dashboard
 
-Acceptance standard for implementation
-- Score numeral and label visually centered in the ring.
-- Pills vertically centered and evenly spaced.
-- Buttons perfectly centered and proportioned.
-- Measurement gap columns aligned to the same top edge, internal rows spaced consistently.
-- No raster fuzziness from screenshot scaling.
-- “Book a call” and “Get in touch” remain clickable in the final PDF.
-- Final PDF reviewed page by page against the premium client-facing standard before delivery.
+**Post list (PostListTable.tsx)**
+- Increase row padding and add more breathing room
+- Make the type badge more prominent — slightly larger, consistent pill sizing
+- Add a subtle published/draft text label next to the eye icon
+- Show the published date more prominently
+
+**Type selector (AdminEditor.tsx)**
+- Switch from `grid-cols-3` to `grid-cols-2` so the two cards fill the space properly
+- Add a subtle hover lift effect
+
+**Editor toolbar (AdminEditor.tsx)**
+- Make save status more visible — use a subtle colored dot or pill instead of tiny text
+- Better visual separation between left nav and right actions
+
+**Login (AdminLogin.tsx)**
+- Wrap the form in a subtle card container with soft shadow
+- Add a thin divider between header and form fields
+
+**Submissions detail (AdminSubmissions.tsx)**
+- Group the action buttons with a section label ("Actions")
+- Make "Regenerate report" a proper ghost button instead of a barely-visible text link
+- Add visual separator between contact info and actions
+
+**Settings modal (Admin.tsx)**
+- Consolidate to a single save button at the bottom instead of one per section
+- Add subtle section dividers with proper spacing
+
+### Files to change
+
+- `src/pages/Admin.tsx` — dashboard layout, section animations, filter bar, settings modal, leads rows
+- `src/components/admin/PostListTable.tsx` — row spacing, badge sizing, published state
+- `src/pages/AdminEditor.tsx` — type selector grid, toolbar status, save button states
+- `src/pages/AdminLogin.tsx` — card wrapper for form
+- `src/pages/AdminSubmissions.tsx` — sidebar action grouping, regenerate button, section labels
+
+### What stays the same
+
+- `EditorMetaBar.tsx` — the content editing experience (title, excerpt, settings drawer) is already solid
+- `BlockCanvas.tsx` / `BlockEditor.tsx` — the block editing UX is clean
+- `CaseStudyEditor.tsx` — functional, dense by nature, not the priority
+- All theme tokens and color system — no changes to `theme.ts`
+

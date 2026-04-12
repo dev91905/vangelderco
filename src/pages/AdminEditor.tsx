@@ -208,15 +208,15 @@ const AdminEditor = () => {
               <h1 className="text-[28px] font-semibold mb-3" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>New Content</h1>
               <p className="text-[15px]" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>What are you creating?</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[480px] mx-auto">
               {TYPE_OPTIONS.map(({ value, label, desc, icon: Icon }) => (
                 <button
                   key={value}
                   onClick={() => setType(value)}
-                  className="group text-left p-6 rounded-2xl transition-all duration-200"
-                  style={{ border: `1px solid ${t.ink(0.08)}`, background: "transparent" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.ink(0.2); e.currentTarget.style.background = t.ink(0.02); }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = t.ink(0.08); e.currentTarget.style.background = "transparent"; }}
+                  className="group text-left p-6 rounded-2xl transition-all duration-200 hover:shadow-sm"
+                  style={{ border: `1px solid ${t.ink(0.06)}`, background: t.ink(0.01) }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.ink(0.15); e.currentTarget.style.background = t.ink(0.025); e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = t.ink(0.06); e.currentTarget.style.background = t.ink(0.01); e.currentTarget.style.transform = "translateY(0)"; }}
                 >
                   <Icon className="w-5 h-5 mb-4" style={{ color: t.ink(0.3) }} />
                   <div className="text-[15px] font-medium mb-1.5" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>{label}</div>
@@ -252,9 +252,22 @@ const AdminEditor = () => {
           <span className="text-sm truncate max-w-[200px] hidden md:block" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>{title || "Untitled"}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[12px] mr-2" style={{ fontFamily: t.sans, color: saveStatus === "saving" ? t.ink(0.5) : saveStatus === "saved" ? "hsl(150 40% 40% / 0.7)" : dirty ? t.ink(0.4) : t.ink(0.15) }}>
-            {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved" : dirty ? "Unsaved" : ""}
-          </span>
+          {(saveStatus !== "idle" || dirty) && (
+            <div className="flex items-center gap-1.5 mr-3 px-2.5 py-1 rounded-full" style={{
+              background: saveStatus === "saved" ? "hsl(142 71% 45% / 0.08)" : saveStatus === "saving" ? t.ink(0.04) : dirty ? "hsl(40 90% 55% / 0.08)" : "transparent",
+              border: `1px solid ${saveStatus === "saved" ? "hsl(142 71% 45% / 0.15)" : saveStatus === "saving" ? t.ink(0.06) : dirty ? "hsl(40 90% 55% / 0.15)" : "transparent"}`,
+            }}>
+              <div className="w-1.5 h-1.5 rounded-full" style={{
+                background: saveStatus === "saved" ? "hsl(142 71% 45%)" : saveStatus === "saving" ? t.ink(0.3) : "hsl(40 90% 55%)",
+              }} />
+              <span className="text-[11px] font-medium" style={{
+                fontFamily: t.sans,
+                color: saveStatus === "saved" ? "hsl(142 71% 40%)" : saveStatus === "saving" ? t.ink(0.4) : "hsl(40 80% 35%)",
+              }}>
+                {saveStatus === "saving" ? "Saving…" : saveStatus === "saved" ? "Saved" : "Unsaved"}
+              </span>
+            </div>
+          )}
           {slug && isPublished && (
             <a href={`/post/${slug}`} target="_blank" rel="noopener noreferrer" className="p-2 transition-colors hover:bg-[hsl(30_10%_12%_/_0.04)] rounded-xl">
               <ExternalLink className="w-4 h-4" style={{ color: t.ink(0.3) }} />

@@ -28,28 +28,36 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative" style={{ background: t.cream }}>
-      <Link to="/" className="fixed top-4 left-4 md:left-8 z-30 flex items-center gap-1.5 px-3 py-1.5 text-[12px] rounded-full transition-all duration-300"
-        style={{ fontFamily: t.sans, color: t.ink(0.4), border: t.border(0.1) }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.8); e.currentTarget.style.background = t.white; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.4); e.currentTarget.style.background = "transparent"; }}>
+      <Link to="/" className="fixed top-4 left-4 md:left-8 z-30 flex items-center gap-1.5 px-3 py-1.5 text-[11px] tracking-[0.05em] rounded-full transition-all duration-300"
+        style={{ fontFamily: t.sans, color: t.ink(0.35), border: t.border(0.08) }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = t.ink(0.7); e.currentTarget.style.background = t.ink(0.03); }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = t.ink(0.35); e.currentTarget.style.background = "transparent"; }}>
         <ArrowLeft className="w-3 h-3" /> Back to Site
       </Link>
-      <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-5">
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.85) }}>Content Manager</h1>
-          <p className="text-sm" style={{ fontFamily: t.sans, color: t.ink(0.35) }}>Sign in</p>
+
+      <div
+        className="w-full max-w-[340px] rounded-2xl overflow-hidden"
+        style={{ background: t.white, border: t.border(0.06), boxShadow: `0 16px 40px -12px ${t.ink(0.08)}, 0 0 0 1px ${t.ink(0.03)}` }}
+      >
+        <div className="px-8 pt-8 pb-5 text-center" style={{ borderBottom: t.border(0.04) }}>
+          <h1 className="text-xl font-bold tracking-tight" style={{ fontFamily: t.sans, color: t.ink(0.8) }}>Content Manager</h1>
+          <p className="text-[12px] mt-1" style={{ fontFamily: t.sans, color: t.ink(0.3) }}>Sign in to continue</p>
         </div>
-        <div className="space-y-3">
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required
-            className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.1), background: t.white }} />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required minLength={6}
-            className="w-full px-4 py-3 text-sm bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.1), background: t.white }} />
-        </div>
-        {error && <p className="text-sm" style={{ fontFamily: t.sans, color: t.error() }}>{error}</p>}
-        <button type="submit" disabled={loading} className="w-full px-4 py-3 text-sm transition-all rounded-full disabled:opacity-50" style={{ fontFamily: t.sans, background: t.ink(1), color: t.cream }}>
-          {loading ? "..." : "Sign In"}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="px-8 py-6 space-y-4">
+          <div className="space-y-3">
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required
+              className="w-full px-4 py-3 text-[13px] bg-transparent outline-none rounded-xl transition-colors focus:ring-1"
+              style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.015) }} />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required minLength={6}
+              className="w-full px-4 py-3 text-[13px] bg-transparent outline-none rounded-xl transition-colors focus:ring-1"
+              style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.08), background: t.ink(0.015) }} />
+          </div>
+          {error && <p className="text-[12px]" style={{ fontFamily: t.sans, color: t.error() }}>{error}</p>}
+          <button type="submit" disabled={loading} className="w-full px-4 py-3 text-[13px] font-medium transition-all rounded-full disabled:opacity-50" style={{ fontFamily: t.sans, background: t.ink(0.85), color: t.cream }}>
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
