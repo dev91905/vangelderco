@@ -224,7 +224,6 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
         const imgAspect = canvas.height / canvas.width;
         const imgH = contentW * imgAspect;
 
-        // If this section won't fit on the current page, start a new one
         if (currentY + imgH > pageContentH + margin && currentY > margin) {
           pdf.addPage();
           currentY = margin;
@@ -232,7 +231,25 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
 
         const imgData = canvas.toDataURL("image/png");
         pdf.addImage(imgData, "PNG", margin, currentY, contentW, imgH);
-        currentY += imgH + 3; // small gap between sections
+
+        // Add clickable link annotations for any <a> elements in this section
+        const links = section.querySelectorAll("a[href]");
+        const sectionRect = section.getBoundingClientRect();
+        const scaleX = contentW / sectionRect.width;
+        const scaleY = imgH / sectionRect.height;
+
+        links.forEach((link) => {
+          const href = link.getAttribute("href");
+          if (!href) return;
+          const linkRect = link.getBoundingClientRect();
+          const x = margin + (linkRect.left - sectionRect.left) * scaleX;
+          const y = currentY + (linkRect.top - sectionRect.top) * scaleY;
+          const w = linkRect.width * scaleX;
+          const h = linkRect.height * scaleY;
+          pdf.link(x, y, w, h, { url: href });
+        });
+
+        currentY += imgH + 3;
       }
 
       pdf.save(
