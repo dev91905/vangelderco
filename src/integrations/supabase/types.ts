@@ -77,7 +77,7 @@ export type Database = {
         }
         Relationships: []
       }
-      deck_case_studies: {
+      diagnostic_case_studies: {
         Row: {
           created_at: string
           id: string
@@ -113,7 +113,7 @@ export type Database = {
         }
         Relationships: []
       }
-      deck_contacts: {
+      diagnostic_contacts: {
         Row: {
           capabilities_ranked: string[] | null
           created_at: string
@@ -182,7 +182,7 @@ export type Database = {
         }
         Relationships: []
       }
-      deck_submissions: {
+      diagnostic_submissions: {
         Row: {
           created_at: string
           id: string
@@ -239,7 +239,7 @@ export type Database = {
             foreignKeyName: "impact_stats_case_study_id_fkey"
             columns: ["case_study_id"]
             isOneToOne: false
-            referencedRelation: "deck_case_studies"
+            referencedRelation: "diagnostic_case_studies"
             referencedColumns: ["id"]
           },
           {
