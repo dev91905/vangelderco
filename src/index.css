@@ -165,32 +165,32 @@
   }
 
   /* Hide native scrollbar — custom progress bar handles it */
-  .deck-scroll::-webkit-scrollbar {
+  .diagnostic-scroll::-webkit-scrollbar {
     display: none;
   }
-  .deck-scroll {
+  .diagnostic-scroll {
     scrollbar-width: none;
   }
 }
 
 /* Deck reveal animations */
-@keyframes deck-fade-up {
+@keyframes diagnostic-fade-up {
   0% { opacity: 0; transform: translateY(18px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes deck-clip-reveal {
+@keyframes diagnostic-clip-reveal {
   0% { clip-path: inset(0 100% 0 0); opacity: 0; }
   15% { opacity: 1; }
   100% { clip-path: inset(0 0% 0 0); opacity: 1; }
 }
 
-@keyframes deck-row-slide {
+@keyframes diagnostic-row-slide {
   0% { opacity: 0; transform: translateX(12px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes deck-scroll-hint-h {
+@keyframes diagnostic-scroll-hint-h {
   0%, 100% { opacity: 0.3; transform: translateX(0); }
   50% { opacity: 0.6; transform: translateX(6px); }
 }
@@ -312,9 +312,9 @@
 }
 
 /* Mobile deck frame internal scroll */
-.deck-mobile-content::-webkit-scrollbar {
+.diagnostic-mobile-content::-webkit-scrollbar {
   display: none;
 }
-.deck-mobile-content {
+.diagnostic-mobile-content {
   scrollbar-width: none;
 }
