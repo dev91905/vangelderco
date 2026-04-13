@@ -1,43 +1,28 @@
 
 
-## Rename all "deck" references to "diagnostic"
+## Fix: Diagnostic notification email not sending
 
-### Summary
-Full rename of every "deck" reference across the codebase — files, folders, components, query keys, DB tables, comments, and UI text.
+### Root cause
 
-### Database migration
-Rename three tables via a single migration:
-- `deck_contacts` → `diagnostic_contacts`
-- `deck_case_studies` → `diagnostic_case_studies`
-- `deck_submissions` → `diagnostic_submissions`
+The notification depends on `siteSettings?.contact_email` being loaded client-side before the user submits. If the site settings query hasn't resolved yet (race condition), or if the user submitted from the published site before the latest code was deployed, `notifyEmail` is `undefined` and the entire notification block is silently skipped. Zero edge function logs confirm the function was never invoked.
 
-This uses `ALTER TABLE ... RENAME TO`, which preserves all data, RLS policies, and foreign key references.
+### Fix
 
-### File & folder renames
-| Old | New |
-|-----|-----|
-| `src/pages/Deck.tsx` | `src/pages/Diagnostic.tsx` |
-| `src/lib/deckScoring.ts` | `src/lib/diagnosticScoring.ts` |
-| `src/components/deck/` | `src/components/diagnostic/` |
-| `src/components/deck/DeckFrame.tsx` | `src/components/diagnostic/DiagnosticFrame.tsx` |
+1. **Remove dependency on client-side settings** — Hardcode the recipient email directly in the edge function instead of passing it from the client. The edge function will read `contact_email` from the `site_settings` table server-side using the service role key. This eliminates the race condition entirely.
 
-### Code changes (all files)
-1. **`src/App.tsx`** — Import `Diagnostic` from `./pages/Diagnostic.tsx`, update route element
-2. **`src/pages/Diagnostic.tsx`** — Rename component export from `Deck` to `Diagnostic`, update import of `deckScoring` → `diagnosticScoring`, update `DeckFrame` → `DiagnosticFrame`
-3. **`src/lib/diagnosticScoring.ts`** — Update type name `DeckDiagnosticInput` → `DiagnosticInput` (keep scoring logic identical)
-4. **`src/components/diagnostic/DiagnosticFrame.tsx`** — Rename component and display name
-5. **`src/components/diagnostic/CaseCarousel.tsx`**, **`CaseTimelineOverlay.tsx`**, **`TypewriterHeading.tsx`**, **`caseStudyUi.ts`** — Update imports only (no component renames needed)
-6. **`src/pages/Admin.tsx`** — Update import path to `diagnosticScoring`, update query keys from `deck-*` to `diagnostic-*`, update table references, update UI text ("deck CTA page" → "diagnostic CTA page")
-7. **`src/pages/AdminSubmissions.tsx`** — Same: import path, query keys, table references
-8. **`src/pages/Work.tsx`** — Update imports from `deck/` → `diagnostic/`, query keys
-9. **`src/pages/Index.tsx`** — Update imports from `deck/` → `diagnostic/`, table references
-10. **`src/components/admin/CaseStudyEditor.tsx`** — Update imports and table/query key references
-11. **`src/hooks/useAggregatedStats.ts`** — Update table reference and `sourceCapability: "deck"` → `"diagnostic"`
-12. **`src/hooks/useImpactStats.ts`** — Update comment
-13. **`src/components/ImpactCloud.tsx`** — Update `isDeck` variable name to `isDiagnostic`, check for `"diagnostic"` capability
-14. **`supabase/functions/generate-diagnostic/index.ts`** — Update `deck_contacts` → `diagnostic_contacts`
-15. **Edge functions redeployed** after changes
+2. **Always invoke the edge function** — Remove the `if (notifyEmail)` guard in `Diagnostic.tsx`. The function will always be called after a successful insert, and the edge function itself will look up the recipient.
 
-### Memory update
-Update `mem://constraint/deck-horizontal-frame` to reference "diagnostic" instead of "deck".
+3. **Add console logging** — Add a `console.warn` if the invocation fails so future issues are visible in the browser console.
+
+### Files changed
+
+- **`supabase/functions/send-diagnostic-notification/index.ts`** — Add Supabase client initialization with service role key. Read `contact_email` from `site_settings` table. If no recipient is configured, return early with a logged warning. Remove `recipientEmail` from the required request body.
+
+- **`src/pages/Diagnostic.tsx`** — Remove the `if (notifyEmail)` guard. Always invoke `send-diagnostic-notification` after insert. Remove `recipientEmail` from the body. Add `.catch` with `console.warn`.
+
+- **Redeploy** the edge function after changes.
+
+### Why this is better
+
+The notification is no longer dependent on a client-side query resolving before submit. The edge function owns its own recipient lookup, making it reliable regardless of client state, page load timing, or which version of the frontend the user is on.
 
