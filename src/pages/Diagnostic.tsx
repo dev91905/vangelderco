@@ -497,7 +497,7 @@ const Diagnostic = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, handleExitDiagnostic, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll on desktop only; mobile is state-driven */
+  /* Wheel handler — lock diagnostic scroll on desktop only; mobile is state-driven */
   useEffect(() => {
     if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
@@ -577,7 +577,7 @@ const Diagnostic = () => {
     <div
       ref={containerRef}
       tabIndex={0}
-      aria-label="Interactive deck"
+      aria-label="Interactive diagnostic"
       className="relative diagnostic-scroll outline-none"
       style={{
         height: "100dvh",

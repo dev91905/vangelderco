@@ -163,7 +163,7 @@ const SettingsModal = ({
           <FieldGroup icon={LinkIcon} label="Booking Link">
             <input type="url" value={bookingLink} onChange={(e) => setBookingLink(e.target.value)} placeholder="https://calendly.com/your-link"
               className="w-full px-3 py-2.5 text-[13px] bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.ink(0.015) }} />
-            <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used for "Schedule a Meeting" on the deck CTA page.</p>
+            <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used for "Schedule a Meeting" on the diagnostic CTA page.</p>
           </FieldGroup>
 
           {/* Contact Email */}
