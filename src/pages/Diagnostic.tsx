@@ -388,32 +388,28 @@ const Diagnostic = () => {
     };
     await supabase.from("diagnostic_contacts" as any).insert(contactPayload as any);
 
-    // Send notification email (fire-and-forget)
-    const notifyEmail = siteSettings?.contact_email;
-    if (notifyEmail) {
-      supabase.functions.invoke('send-diagnostic-notification', {
-        body: {
-          recipientEmail: notifyEmail,
-          firstName: contactPayload.first_name,
-          lastName: contactPayload.last_name,
-          organization: contactPayload.organization,
-          email: contactPayload.email,
-          readinessScore: contactPayload.readiness_score,
-          selectedPains: contactPayload.selected_pains,
-          selectedDomains: contactPayload.selected_domains,
-          quizAnswers: contactPayload.quiz_answers,
-          metricsChecked: contactPayload.metrics_checked,
-          metricsUnchecked: contactPayload.metrics_unchecked,
-          capabilitiesRanked: contactPayload.capabilities_ranked,
-          engagementPath: contactPayload.engagement_path,
-          customChallenge: contactPayload.custom_challenge,
-          hasMediaExperience: contactPayload.has_media_experience,
-          practiceSelections: contactPayload.practice_selections,
-          sectorsNotSelected: contactPayload.sectors_not_selected,
-          createdAt: new Date().toISOString(),
-        },
-      }).catch(err => console.error('Notification email failed:', err));
-    }
+    // Send notification email (fire-and-forget — recipient looked up server-side)
+    supabase.functions.invoke('send-diagnostic-notification', {
+      body: {
+        firstName: contactPayload.first_name,
+        lastName: contactPayload.last_name,
+        organization: contactPayload.organization,
+        email: contactPayload.email,
+        readinessScore: contactPayload.readiness_score,
+        selectedPains: contactPayload.selected_pains,
+        selectedDomains: contactPayload.selected_domains,
+        quizAnswers: contactPayload.quiz_answers,
+        metricsChecked: contactPayload.metrics_checked,
+        metricsUnchecked: contactPayload.metrics_unchecked,
+        capabilitiesRanked: contactPayload.capabilities_ranked,
+        engagementPath: contactPayload.engagement_path,
+        customChallenge: contactPayload.custom_challenge,
+        hasMediaExperience: contactPayload.has_media_experience,
+        practiceSelections: contactPayload.practice_selections,
+        sectorsNotSelected: contactPayload.sectors_not_selected,
+        createdAt: new Date().toISOString(),
+      },
+    }).catch(err => console.warn('Notification email failed:', err));
 
     clearDeckState();
     setCtaSubmitting(false);

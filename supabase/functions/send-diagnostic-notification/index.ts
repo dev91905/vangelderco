@@ -1,3 +1,5 @@
+import { createClient } from "npm:@supabase/supabase-js@2"
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -25,9 +27,27 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Look up recipient email server-side from site_settings
+    const adminClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    )
+    const { data: setting } = await adminClient
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'contact_email')
+      .single()
+
+    const recipientEmail = setting?.value
+    if (!recipientEmail) {
+      console.warn('No contact_email configured in site_settings — skipping notification')
+      return new Response(JSON.stringify({ skipped: true, reason: 'no contact_email configured' }), {
+        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
     const body = await req.json()
     const {
-      recipientEmail,
       firstName, lastName, organization, email,
       readinessScore, selectedPains, selectedDomains,
       quizAnswers, metricsChecked, metricsUnchecked,
@@ -35,12 +55,6 @@ Deno.serve(async (req) => {
       hasMediaExperience, practiceSelections, sectorsNotSelected,
       createdAt,
     } = body
-
-    if (!recipientEmail) {
-      return new Response(JSON.stringify({ error: 'recipientEmail required' }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
-    }
 
     // Format quiz answers for display
     const quizSummary = (quizAnswers || [])
@@ -124,7 +138,7 @@ Deno.serve(async (req) => {
         'X-Connection-Api-Key': RESEND_API_KEY,
       },
       body: JSON.stringify({
-        from: 'Diagnostic Notification <notifications@vangelder.co>',
+        from: 'Diagnostic <hello@vangelder.co>',
         to: [recipientEmail],
         subject: `Diagnostic: ${firstName} ${lastName}${organization ? ` (${organization})` : ''} — Score ${readinessScore ?? '?'}/100`,
         html: htmlContent,
