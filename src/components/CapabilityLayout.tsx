@@ -4,7 +4,7 @@ import AtmosphericLayout from "./AtmosphericLayout";
 import { useCapabilityPosts } from "@/hooks/useCapabilityPosts";
 import PostCard from "./PostCard";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
-import TypewriterHeading from "./deck/TypewriterHeading";
+import TypewriterHeading from "./diagnostic/TypewriterHeading";
 import { t } from "@/lib/theme";
 
 interface CapabilityLayoutProps {
