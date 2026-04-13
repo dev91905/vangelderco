@@ -35,7 +35,7 @@ export function useAggregatedStats() {
           ? supabase.from("capability_posts").select("id, title, slug, capability, type, created_at").in("id", postIds)
           : Promise.resolve({ data: [], error: null }),
         csIds.length > 0
-          ? supabase.from("deck_case_studies").select("id, name, link_url, created_at").in("id", csIds)
+          ? supabase.from("diagnostic_case_studies").select("id, name, link_url, created_at").in("id", csIds)
           : Promise.resolve({ data: [], error: null }),
       ]);
 
@@ -68,7 +68,7 @@ export function useAggregatedStats() {
             description: stat.description,
             sourceTitle: cs.name,
             sourceSlug: cs.link_url,
-            sourceCapability: "deck",
+            sourceCapability: "diagnostic",
             sourceType: "case_study",
             sourceCreatedAt: cs.created_at,
             sourceId: cs.id,

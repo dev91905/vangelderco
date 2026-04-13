@@ -29,7 +29,7 @@ export function usePostImpactStats(postId: string | undefined) {
   });
 }
 
-/** Fetch stats for a deck_case_study */
+/** Fetch stats for a diagnostic_case_study */
 export function useCaseStudyImpactStats(caseStudyId: string | undefined) {
   return useQuery({
     queryKey: ["impact-stats", "case-study", caseStudyId],

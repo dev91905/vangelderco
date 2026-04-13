@@ -48,15 +48,15 @@ function StatCard({
   const delay = index * 0.07;
   const placement = PLACEMENTS[index] ?? PLACEMENTS[0];
 
-  const isDeck = stat.sourceCapability === "deck";
-  const href = isDeck
+  const isDiagnostic = stat.sourceCapability === "diagnostic";
+  const href = isDiagnostic
     ? "#"
     : stat.sourceSlug
       ? `/post/${stat.sourceSlug}`
       : "#";
 
   const handleClick = (e: React.MouseEvent) => {
-    if (isDeck && onCaseClick) {
+    if (isDiagnostic && onCaseClick) {
       e.preventDefault();
       onCaseClick(stat.sourceId);
     }

@@ -30,7 +30,7 @@ const alignStyles: Record<FrameAlign, string> = {
   split: "items-center justify-center",
 };
 
-const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
+const DiagnosticFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   (
     {
       children,
@@ -146,6 +146,6 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   }
 );
 
-DeckFrame.displayName = "DeckFrame";
+DiagnosticFrame.displayName = "DiagnosticFrame";
 
-export default DeckFrame;
+export default DiagnosticFrame;

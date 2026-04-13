@@ -7,7 +7,7 @@ import {
   Save, Trash2, Eye, EyeOff, ExternalLink, Link as LinkIcon,
   Check, LayoutList,
 } from "lucide-react";
-import type { CasePhase } from "@/components/deck/CaseTimelineOverlay";
+import type { CasePhase } from "@/components/diagnostic/CaseTimelineOverlay";
 import { useSyncImpactStats } from "@/hooks/useImpactStats";
 import ArticlePicker from "@/components/admin/ArticlePicker";
 
@@ -43,10 +43,10 @@ const CaseStudyEditor: React.FC = () => {
   const [saveFlash, setSaveFlash] = useState(false);
 
   const { data: studies = [], isLoading } = useQuery({
-    queryKey: ["deck-case-studies-admin"],
+    queryKey: ["diagnostic-case-studies-admin"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .select("*")
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -58,7 +58,7 @@ const CaseStudyEditor: React.FC = () => {
     mutationFn: async (study: CaseStudyRow) => {
       const { id, created_at, ...rest } = study;
       const { error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .update(rest)
         .eq("id", id);
       if (error) throw error;
@@ -84,8 +84,8 @@ const CaseStudyEditor: React.FC = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deck-case-studies-admin"] });
-      queryClient.invalidateQueries({ queryKey: ["deck-case-studies"] });
+      queryClient.invalidateQueries({ queryKey: ["diagnostic-case-studies-admin"] });
+      queryClient.invalidateQueries({ queryKey: ["diagnostic-case-studies"] });
       queryClient.invalidateQueries({ queryKey: ["impact-stats"] });
       setDirty(false);
       setSaveFlash(true);
@@ -96,7 +96,7 @@ const CaseStudyEditor: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .insert({
           name: "New Case Study",
           issue: "",
@@ -108,21 +108,21 @@ const CaseStudyEditor: React.FC = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deck-case-studies-admin"] });
+      queryClient.invalidateQueries({ queryKey: ["diagnostic-case-studies-admin"] });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .delete()
         .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deck-case-studies-admin"] });
-      queryClient.invalidateQueries({ queryKey: ["deck-case-studies"] });
+      queryClient.invalidateQueries({ queryKey: ["diagnostic-case-studies-admin"] });
+      queryClient.invalidateQueries({ queryKey: ["diagnostic-case-studies"] });
       setExpandedId(null);
       setEditingStudy(null);
     },

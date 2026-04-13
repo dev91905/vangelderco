@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } f
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
-import DeckFrame from "@/components/deck/DeckFrame";
+import DiagnosticFrame from "@/components/diagnostic/DiagnosticFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
-import TypewriterHeading from "@/components/deck/TypewriterHeading";
+import TypewriterHeading from "@/components/diagnostic/TypewriterHeading";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
-import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
+import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/diagnosticScoring";
 
 const TOTAL_FRAMES = 10;
 
@@ -217,7 +217,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
    DECK COMPONENT — Interactive Quiz + Diagnostic Flow
    ═══════════════════════════════════════════════════════════════ */
 
-const Deck = () => {
+const Diagnostic = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
@@ -1657,4 +1657,4 @@ const Deck = () => {
   );
 };
 
-export default Deck;
+export default Diagnostic;
