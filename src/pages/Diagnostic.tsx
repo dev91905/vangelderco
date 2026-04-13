@@ -226,12 +226,12 @@ const Diagnostic = () => {
   // Restore state from sessionStorage — keep it durable until submit
   const restored = useMemo(() => {
     try {
-      const raw = sessionStorage.getItem("deck-state");
+      const raw = sessionStorage.getItem("diagnostic-state");
       if (!raw) return null;
 
       const parsed = JSON.parse(raw);
       if (parsed?.ctaMode === "thanks") {
-        sessionStorage.removeItem("deck-state");
+        sessionStorage.removeItem("diagnostic-state");
         return null;
       }
 
@@ -294,7 +294,7 @@ const Diagnostic = () => {
       capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
       ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx,
     };
-    sessionStorage.setItem("deck-state", JSON.stringify(state));
+    sessionStorage.setItem("diagnostic-state", JSON.stringify(state));
   }, [currentFrame, selectedPains, customOpen, customMessage, customSaved,
     quizAnswers, quizStep, quizRevealed, expandedDimension, quizOrder,
     capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
@@ -307,7 +307,7 @@ const Diagnostic = () => {
 
   const clearDeckState = useCallback(() => {
     shouldPersistRef.current = false;
-    sessionStorage.removeItem("deck-state");
+    sessionStorage.removeItem("diagnostic-state");
   }, []);
 
   const handleExitDiagnostic = useCallback(() => {
@@ -386,7 +386,7 @@ const Diagnostic = () => {
       practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
       sectors_not_selected: sectorsNotSelected.length > 0 ? sectorsNotSelected : null,
     };
-    await supabase.from("deck_contacts" as any).insert(contactPayload as any);
+    await supabase.from("diagnostic_contacts" as any).insert(contactPayload as any);
 
     // Send notification email (fire-and-forget)
     const notifyEmail = siteSettings?.contact_email;
@@ -578,7 +578,7 @@ const Diagnostic = () => {
       ref={containerRef}
       tabIndex={0}
       aria-label="Interactive deck"
-      className="relative deck-scroll outline-none"
+      className="relative diagnostic-scroll outline-none"
       style={{
         height: "100dvh",
         width: "100vw",
