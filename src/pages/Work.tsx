@@ -66,7 +66,7 @@ const Work: React.FC = () => {
   }, [searchParams, caseStudies]);
 
   const handleBack = () => {
-    const hasDeckSession = !!sessionStorage.getItem("deck-state");
+    const hasDeckSession = !!sessionStorage.getItem("diagnostic-state");
     if (cameFromDiagnostic && hasDeckSession) {
       navigate("/diagnostic");
     } else {
