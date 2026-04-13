@@ -71,7 +71,7 @@ serve(async (req) => {
     const sb = createClient(supabaseUrl, serviceKey);
 
     const { data: contact, error: cErr } = await sb
-      .from("deck_contacts")
+      .from("diagnostic_contacts")
       .select("*")
       .eq("id", contactId)
       .single();

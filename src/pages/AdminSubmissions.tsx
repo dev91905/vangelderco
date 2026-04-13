@@ -5,7 +5,7 @@ import { generateDiagnosticPdf } from "@/components/admin/DiagnosticPdfDocument"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { t } from "@/lib/theme";
-import { getScoreLabel } from "@/lib/deckScoring";
+import { getScoreLabel } from "@/lib/diagnosticScoring";
 import { formatDistanceToNow, format } from "date-fns";
 import { toast } from "sonner";
 import DiagnosticReport, { type DiagnosticData } from "@/components/admin/DiagnosticReport";
@@ -35,10 +35,10 @@ type Contact = {
 
 const useContacts = () =>
   useQuery({
-    queryKey: ["deck-contacts-full"],
+    queryKey: ["diagnostic-contacts-full"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("deck_contacts" as any)
+        .from("diagnostic_contacts")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -168,7 +168,7 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
       setReportData(structured as DiagnosticData);
       // Cache it
       await supabase
-        .from("deck_contacts" as any)
+        .from("diagnostic_contacts")
         .update({ report_cache: JSON.stringify(structured) } as any)
         .eq("id", contact.id);
     } catch (err: any) {
@@ -182,13 +182,13 @@ const SubmissionDetail = ({ contact, onBack }: { contact: Contact; onBack: () =>
     mutationFn: async () => {
       const newStatus = contact.report_status === "sent" ? "pending" : "sent";
       await supabase
-        .from("deck_contacts" as any)
+        .from("diagnostic_contacts")
         .update({ report_status: newStatus } as any)
         .eq("id", contact.id);
       return newStatus;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["deck-contacts-full"] });
+      qc.invalidateQueries({ queryKey: ["diagnostic-contacts-full"] });
       toast.success("Status updated");
     },
   });

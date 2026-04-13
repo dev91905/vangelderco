@@ -16,7 +16,7 @@ export interface QuizAnswer {
   picked: "traditional" | "nextgen";
 }
 
-export interface DeckDiagnosticInput {
+export interface DiagnosticInput {
   selectedPains: string[];
   hasCustomChallenge: boolean;
   quizAnswers: QuizAnswer[];
@@ -36,7 +36,7 @@ const VANITY_METRICS = [
   '"Awareness"',
 ];
 
-export function calculateReadinessScore(input: DeckDiagnosticInput): number {
+export function calculateReadinessScore(input: DiagnosticInput): number {
   let score = 100;
 
   // Pain points: -5 each, max -25

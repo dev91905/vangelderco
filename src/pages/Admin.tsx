@@ -9,7 +9,7 @@ import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { t } from "@/lib/theme";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import { getScoreLabel } from "@/lib/deckScoring";
+import { getScoreLabel } from "@/lib/diagnosticScoring";
 
 const generatePassword = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -163,7 +163,7 @@ const SettingsModal = ({
           <FieldGroup icon={LinkIcon} label="Booking Link">
             <input type="url" value={bookingLink} onChange={(e) => setBookingLink(e.target.value)} placeholder="https://calendly.com/your-link"
               className="w-full px-3 py-2.5 text-[13px] bg-transparent outline-none rounded-xl" style={{ fontFamily: t.sans, color: t.ink(0.8), border: t.border(0.06), background: t.ink(0.015) }} />
-            <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used for "Schedule a Meeting" on the deck CTA page.</p>
+            <p className="text-[10px]" style={{ fontFamily: t.sans, color: t.ink(0.25) }}>Used for "Schedule a Meeting" on the diagnostic CTA page.</p>
           </FieldGroup>
 
           {/* Contact Email */}
@@ -253,10 +253,10 @@ const Admin = () => {
   const { data: settings } = useSiteSettings();
 
   const { data: contacts } = useQuery({
-    queryKey: ["deck-contacts-full"],
+    queryKey: ["diagnostic-contacts-full"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("deck_contacts" as any)
+        .from("diagnostic_contacts")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -276,10 +276,10 @@ const Admin = () => {
   });
 
   const { data: caseStudies } = useQuery({
-    queryKey: ["deck-case-studies-count"],
+    queryKey: ["diagnostic-case-studies-count"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .select("id");
       if (error) throw error;
       return data;
@@ -352,7 +352,7 @@ const Admin = () => {
       </CollapsibleSection>
 
       {/* Case Studies */}
-      <CollapsibleSection title="Deck Case Studies" count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)}>
+      <CollapsibleSection title="Case Studies" count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)}>
         <div className="py-4">
           <CaseStudyEditor />
         </div>

@@ -12,7 +12,7 @@ import Index from "./pages/Index.tsx";
 import CulturalStrategy from "./pages/CulturalStrategy.tsx";
 import CrossSector from "./pages/CrossSector.tsx";
 import DeepOrganizing from "./pages/DeepOrganizing.tsx";
-import Deck from "./pages/Deck.tsx";
+import Diagnostic from "./pages/Diagnostic.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import PostDetail from "./pages/PostDetail.tsx";
 import Admin from "./pages/Admin.tsx";
@@ -49,7 +49,7 @@ function AppRoutes() {
         <Route path="/deep-organizing" element={<DeepOrganizing />} />
         <Route path="/post/:slug" element={<PostDetail />} />
         <Route path="/work" element={<Work />} />
-        <Route path="/diagnostic" element={<Deck />} />
+        <Route path="/diagnostic" element={<Diagnostic />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<RequireAuth><Admin /></RequireAuth>} />
         <Route path="/admin/new" element={<RequireAuth><AdminEditor /></RequireAuth>} />

@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState, useCallback, useMemo, FormEvent } f
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
-import DeckFrame from "@/components/deck/DeckFrame";
+import DiagnosticFrame from "@/components/diagnostic/DiagnosticFrame";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
-import TypewriterHeading from "@/components/deck/TypewriterHeading";
+import TypewriterHeading from "@/components/diagnostic/TypewriterHeading";
 import { useFrameReveal } from "@/hooks/useFrameReveal";
 import { t } from "@/lib/theme";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { ChevronDown, RotateCcw } from "lucide-react";
-import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/deckScoring";
+import { calculateReadinessScore, getQuizGrade, type QuizAnswer } from "@/lib/diagnosticScoring";
 
 const TOTAL_FRAMES = 10;
 
@@ -217,7 +217,7 @@ const NavRow = ({ onBack, onNext, disabled, nextLabel, justifyEnd }: { onBack?: 
    DECK COMPONENT — Interactive Quiz + Diagnostic Flow
    ═══════════════════════════════════════════════════════════════ */
 
-const Deck = () => {
+const Diagnostic = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
@@ -226,12 +226,12 @@ const Deck = () => {
   // Restore state from sessionStorage — keep it durable until submit
   const restored = useMemo(() => {
     try {
-      const raw = sessionStorage.getItem("deck-state");
+      const raw = sessionStorage.getItem("diagnostic-state");
       if (!raw) return null;
 
       const parsed = JSON.parse(raw);
       if (parsed?.ctaMode === "thanks") {
-        sessionStorage.removeItem("deck-state");
+        sessionStorage.removeItem("diagnostic-state");
         return null;
       }
 
@@ -294,7 +294,7 @@ const Deck = () => {
       capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
       ctaMode, ctaForm, engagementPath, practiceSelections, expandedPracticeIdx,
     };
-    sessionStorage.setItem("deck-state", JSON.stringify(state));
+    sessionStorage.setItem("diagnostic-state", JSON.stringify(state));
   }, [currentFrame, selectedPains, customOpen, customMessage, customSaved,
     quizAnswers, quizStep, quizRevealed, expandedDimension, quizOrder,
     capabilitiesRanked, metricsChecked, selectedSectors, hasMediaExperience,
@@ -307,7 +307,7 @@ const Deck = () => {
 
   const clearDeckState = useCallback(() => {
     shouldPersistRef.current = false;
-    sessionStorage.removeItem("deck-state");
+    sessionStorage.removeItem("diagnostic-state");
   }, []);
 
   const handleExitDiagnostic = useCallback(() => {
@@ -386,7 +386,7 @@ const Deck = () => {
       practice_selections: Object.entries(practiceSelections).filter(([, v]) => v).map(([k]) => parseInt(k)),
       sectors_not_selected: sectorsNotSelected.length > 0 ? sectorsNotSelected : null,
     };
-    await supabase.from("deck_contacts" as any).insert(contactPayload as any);
+    await supabase.from("diagnostic_contacts" as any).insert(contactPayload as any);
 
     // Send notification email (fire-and-forget)
     const notifyEmail = siteSettings?.contact_email;
@@ -497,7 +497,7 @@ const Deck = () => {
     return () => { window.removeEventListener("keydown", handler); window.removeEventListener("pointerdown", focusDeck); window.clearTimeout(focusTimer); };
   }, [currentFrame, handleExitDiagnostic, scrollToFrame, frameInteracted]);
 
-  /* Wheel handler — lock deck scroll on desktop only; mobile is state-driven */
+  /* Wheel handler — lock diagnostic scroll on desktop only; mobile is state-driven */
   useEffect(() => {
     if (isMobile) return; // Let mobile scroll natively
     const el = containerRef.current;
@@ -577,8 +577,8 @@ const Deck = () => {
     <div
       ref={containerRef}
       tabIndex={0}
-      aria-label="Interactive deck"
-      className="relative deck-scroll outline-none"
+      aria-label="Interactive diagnostic"
+      className="relative diagnostic-scroll outline-none"
       style={{
         height: "100dvh",
         width: "100vw",
@@ -686,7 +686,7 @@ const Deck = () => {
       )}
 
       {/* ═══ FRAME 1: Hero ═══ */}
-      <DeckFrame ref={setRef(0)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 0} mobileVerticalAlign="center">
+      <DiagnosticFrame ref={setRef(0)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 0} mobileVerticalAlign="center">
         <div ref={r1.ref} className={`flex flex-col items-start gap-12 ${isMobile ? "min-h-full justify-center" : "min-h-[60vh] justify-center"}`}>
           <TypewriterHeading
             text="Find the gaps before your opponents do."
@@ -753,10 +753,10 @@ const Deck = () => {
             </span>
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 2: Self-Diagnosis ═══ */}
-      <DeckFrame ref={setRef(1)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 1}>
+      <DiagnosticFrame ref={setRef(1)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 1}>
         <div ref={r2.ref} className={`flex flex-col gap-8 ${isMobile ? "" : "min-h-[70vh] justify-center"}`}>
           <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-24">
             <p style={{ ...heading("clamp(28px, 4vw, 52px)"), fontWeight: 700, ...r2.stagger(0, 0, "blur-up"), flex: "0 0 auto", maxWidth: "560px" }}>
@@ -841,10 +841,10 @@ const Deck = () => {
           </div>
           
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 3: Quiz — "Which sounds more effective?" ═══ */}
-      <DeckFrame ref={setRef(2)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 2}>
+      <DiagnosticFrame ref={setRef(2)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 2}>
         <div
           ref={r3.ref}
           className="flex flex-col"
@@ -986,10 +986,10 @@ const Deck = () => {
             </div>
           )}
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 4: Practices ═══ */}
-      <DeckFrame ref={setRef(3)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 3}>
+      <DiagnosticFrame ref={setRef(3)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 3}>
         <div ref={r4.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           {/* Left column */}
           <div style={{ ...r4.stagger(0, 0, "blur-up") }}>
@@ -1084,11 +1084,11 @@ const Deck = () => {
             })}
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
 
       {/* ═══ FRAME 5: Capabilities — "Which 2 matter most?" ═══ */}
-      <DeckFrame ref={setRef(4)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 4}>
+      <DiagnosticFrame ref={setRef(4)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 4}>
         <div ref={r5.ref} className="flex flex-col gap-8">
           <div>
             <p style={{ ...heading("clamp(24px, 3vw, 40px)"), fontWeight: 700, ...r5.stagger(0, 0, "blur-up") }}>
@@ -1134,10 +1134,10 @@ const Deck = () => {
             })}
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 6: Metrics Checklist ═══ */}
-      <DeckFrame ref={setRef(5)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 5}>
+      <DiagnosticFrame ref={setRef(5)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 5}>
         <div ref={r6.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           <div style={r6.stagger(0, 0, "blur-up")}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
@@ -1192,10 +1192,10 @@ const Deck = () => {
             })}
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 7: Working Together ═══ */}
-      <DeckFrame ref={setRef(6)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 6}>
+      <DiagnosticFrame ref={setRef(6)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 6}>
         <div ref={r7.ref} className="grid grid-cols-1 lg:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.5fr)] w-full" style={{ gap: "clamp(40px, 5vw, 72px)", alignItems: "center", overflow: "hidden", minHeight: isMobile ? "auto" : "80vh", marginTop: isMobile ? "0" : "-40px" }}>
           {/* Left column — heading */}
           <div style={r7.stagger(0, 0, "blur-up")}>
@@ -1260,10 +1260,10 @@ const Deck = () => {
             </button>
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 8: Sectors ═══ */}
-      <DeckFrame ref={setRef(7)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 7}>
+      <DiagnosticFrame ref={setRef(7)} mode="wide" isMobile={isMobile} isVisible={currentFrame === 7}>
         <div ref={r8.ref} className="w-full">
           <div style={{ ...r8.stagger(0, 0, "blur-up"), marginBottom: "clamp(20px, 3vh, 36px)" }}>
             <p style={{ ...heading("clamp(26px, 3.5vw, 44px)"), fontWeight: 700 }}>
@@ -1316,10 +1316,10 @@ const Deck = () => {
             })}
           </div>
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 9: Preliminary Results ═══ */}
-      <DeckFrame ref={setRef(8)} mode="wide" align="left" isMobile={isMobile} isVisible={currentFrame === 8}>
+      <DiagnosticFrame ref={setRef(8)} mode="wide" align="left" isMobile={isMobile} isVisible={currentFrame === 8}>
         <div ref={r9.ref} style={{ width: "100%" }}>
           {(() => {
             const grade = getQuizGrade(nextgenPickCount, QUIZ_ROWS.length);
@@ -1565,10 +1565,10 @@ const Deck = () => {
             );
           })()}
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
       {/* ═══ FRAME 10: CTA — Get Your Diagnostic ═══ */}
-      <DeckFrame ref={setRef(9)} mode="narrow" isMobile={isMobile} isVisible={currentFrame === 9}>
+      <DiagnosticFrame ref={setRef(9)} mode="narrow" isMobile={isMobile} isVisible={currentFrame === 9}>
         <div ref={r10.ref}>
           {ctaMode === "thanks" ? (
             <div className="flex flex-col items-center text-center" style={{ animation: "fade-in 0.5s ease-out" }}>
@@ -1651,10 +1651,10 @@ const Deck = () => {
             </div>
           )}
         </div>
-      </DeckFrame>
+      </DiagnosticFrame>
 
     </div>
   );
 };
 
-export default Deck;
+export default Diagnostic;

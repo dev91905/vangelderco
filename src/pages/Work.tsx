@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { t } from "@/lib/theme";
-import CaseCarousel from "@/components/deck/CaseCarousel";
-import CaseTimelineOverlay, { type CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
+import CaseCarousel from "@/components/diagnostic/CaseCarousel";
+import CaseTimelineOverlay, { type CaseStudyData } from "@/components/diagnostic/CaseTimelineOverlay";
 
 const f = { sans: t.sans, ink: t.ink };
 const heading = t.heading;
@@ -31,10 +31,10 @@ const Work: React.FC = () => {
   const cameFromDiagnostic = (location.state as { from?: string })?.from === "/diagnostic";
 
   const { data: dbCaseStudies } = useQuery({
-    queryKey: ["deck-case-studies"],
+    queryKey: ["diagnostic-case-studies"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("deck_case_studies")
+        .from("diagnostic_case_studies")
         .select("*")
         .eq("is_published", true)
         .order("sort_order", { ascending: true });
@@ -66,7 +66,7 @@ const Work: React.FC = () => {
   }, [searchParams, caseStudies]);
 
   const handleBack = () => {
-    const hasDeckSession = !!sessionStorage.getItem("deck-state");
+    const hasDeckSession = !!sessionStorage.getItem("diagnostic-state");
     if (cameFromDiagnostic && hasDeckSession) {
       navigate("/diagnostic");
     } else {

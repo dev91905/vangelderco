@@ -30,7 +30,7 @@ const alignStyles: Record<FrameAlign, string> = {
   split: "items-center justify-center",
 };
 
-const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
+const DiagnosticFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   (
     {
       children,
@@ -80,7 +80,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
       return (
         <section
           ref={setRefs}
-          className="deck-mobile-frame"
+          className="diagnostic-mobile-frame"
           style={{
             position: "absolute",
             inset: 0,
@@ -93,7 +93,7 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
         >
           <div
             ref={scrollRef}
-            className={`deck-mobile-content relative z-10 w-full ${modeStyles[mode]} mx-auto`}
+            className={`diagnostic-mobile-content relative z-10 w-full ${modeStyles[mode]} mx-auto`}
             style={{
               flex: "1 1 0%",
               overflowY: "auto",
@@ -146,6 +146,6 @@ const DeckFrame = forwardRef<HTMLDivElement, DeckFrameProps>(
   }
 );
 
-DeckFrame.displayName = "DeckFrame";
+DiagnosticFrame.displayName = "DiagnosticFrame";
 
-export default DeckFrame;
+export default DiagnosticFrame;

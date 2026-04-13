@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback, CSSProperties } from "react";
 import AtmosphericLayout from "@/components/AtmosphericLayout";
 import ImpactCloud from "@/components/ImpactCloud";
-import CaseTimelineOverlay, { CaseStudyData } from "@/components/deck/CaseTimelineOverlay";
+import CaseTimelineOverlay, { CaseStudyData } from "@/components/diagnostic/CaseTimelineOverlay";
 import useGlitchSFX from "@/hooks/useGlitchSFX";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 import { supabase } from "@/integrations/supabase/client";
@@ -185,7 +185,7 @@ const Index = () => {
     const caseId = searchParams.get("case");
     if (!caseId) return;
     supabase
-      .from("deck_case_studies")
+      .from("diagnostic_case_studies")
       .select("id, name, issue, outcome, phases, link_url")
       .eq("id", caseId)
       .single()
@@ -199,7 +199,7 @@ const Index = () => {
   const handleCaseClick = useCallback((caseId: string) => {
     setSearchParams({ case: caseId }, { replace: true });
     supabase
-      .from("deck_case_studies")
+      .from("diagnostic_case_studies")
       .select("id, name, issue, outcome, phases, link_url")
       .eq("id", caseId)
       .single()
