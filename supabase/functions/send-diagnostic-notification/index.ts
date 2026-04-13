@@ -124,7 +124,7 @@ Deno.serve(async (req) => {
         'X-Connection-Api-Key': RESEND_API_KEY,
       },
       body: JSON.stringify({
-        from: 'Van Gelder & Co Diagnostic <notifications@vangelderco.com>',
+        from: 'Diagnostic Notification <notifications@vangelder.co>',
         to: [recipientEmail],
         subject: `Diagnostic: ${firstName} ${lastName}${organization ? ` (${organization})` : ''} — Score ${readinessScore ?? '?'}/100`,
         html: htmlContent,
