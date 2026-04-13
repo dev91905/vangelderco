@@ -352,7 +352,7 @@ const Admin = () => {
       </CollapsibleSection>
 
       {/* Case Studies */}
-      <CollapsibleSection title="Case Studies" count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)}>
+      <CollapsibleSection title={"Case Studies"} count={caseStudies?.length} open={caseStudiesOpen} onToggle={() => setCaseStudiesOpen(!caseStudiesOpen)}>
         <div className="py-4">
           <CaseStudyEditor />
         </div>
