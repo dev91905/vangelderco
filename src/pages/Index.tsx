@@ -24,14 +24,6 @@ const NETWORK_SECTORS = [
   { name: "Platforms", desc: "The infrastructure that gates attention" },
   { name: "Networks", desc: "Labor, industry, faith, youth, policy, and capital" },
 ];
-  { name: "Film & TV", desc: "Studios and screens that shape perception" },
-  { name: "Digital Creators", desc: "Influencers where opinion actually forms" },
-  { name: "Sports & Outdoors", desc: "Leagues and athletes with captive reach" },
-  { name: "Podcasts & Streaming", desc: "Long-form trust in audio and live media" },
-  { name: "Advertising & Brands", desc: "Partnerships that move markets at scale" },
-  { name: "Platforms", desc: "Infrastructure deciding what gets seen" },
-  { name: "Networks", desc: "Labor, faith, and policy power brokers" },
-];
 
 const HERO_LINKS = [
   { label: "Cultural Strategy", to: "/cultural-strategy" },
