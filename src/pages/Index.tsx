@@ -14,15 +14,15 @@ import { t } from "@/lib/theme";
 const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defense"];
 
 const NETWORK_SECTORS = [
-  { name: "News", desc: "Local and national — how stories get placed and why" },
-  { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
+  { name: "News", desc: "How stories get placed and why they land" },
+  { name: "Music Industry", desc: "Artists, labels, tours, festivals, venues" },
   { name: "Film & TV", desc: "Production, distribution, cultural impact" },
-  { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
-  { name: "Sports & Outdoors", desc: "Athletes, leagues, the largest captive audiences" },
+  { name: "Digital Creators", desc: "Where opinion forms in the creator economy" },
+  { name: "Sports & Outdoors", desc: "Athletes, leagues, and captive audiences" },
   { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
-  { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
-  { name: "Platforms", desc: "The infrastructure that decides what gets seen" },
-  { name: "Networks", desc: "Labor, industry, faith, policy, defense, and capital." },
+  { name: "Advertising & Brands", desc: "Commercial partnerships deployed at scale" },
+  { name: "Platforms", desc: "Infrastructure that decides what gets seen" },
+  { name: "Networks", desc: "Labor, industry, faith, policy, and capital" },
 ];
 
 const HERO_LINKS = [
