@@ -21,7 +21,7 @@ const NETWORK_SECTORS = [
   { name: "Sports & Outdoors", desc: "Athletes, leagues, the largest captive audiences" },
   { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
   { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
-  { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
+  { name: "Platforms", desc: "The infrastructure that decides what gets seen" },
   { name: "Networks", desc: "Labor, industry, faith, policy, defense, and capital." },
 ];
 
