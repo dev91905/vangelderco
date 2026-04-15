@@ -14,15 +14,15 @@ import { t } from "@/lib/theme";
 const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defense"];
 
 const NETWORK_SECTORS = [
-  { name: "News", desc: "How stories get placed and why they land" },
-  { name: "Music Industry", desc: "Field power through artists, labels, and live events" },
-  { name: "Film & TV", desc: "Production, distribution, and cultural impact" },
-  { name: "Digital Creators", desc: "Where opinion forms in the creator economy" },
-  { name: "Sports & Outdoors", desc: "Athletes, leagues, and the largest audiences" },
-  { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, and live streaming" },
-  { name: "Advertising & Brands", desc: "Commercial partnerships deployed at scale" },
-  { name: "Platforms", desc: "Infrastructure that decides what gets seen" },
-  { name: "Networks", desc: "Labor, industry, faith, policy, and capital" },
+  { name: "News", desc: "Outlets and editors that set the narrative" },
+  { name: "Music Industry", desc: "Field power through artists, labels, tours" },
+  { name: "Film & TV", desc: "Studios and screens that shape perception" },
+  { name: "Digital Creators", desc: "Influencers where opinion actually forms" },
+  { name: "Sports & Outdoors", desc: "Leagues and athletes with captive reach" },
+  { name: "Podcasts & Streaming", desc: "Long-form trust in audio and live media" },
+  { name: "Advertising & Brands", desc: "Partnerships that move markets at scale" },
+  { name: "Platforms", desc: "Infrastructure deciding what gets seen" },
+  { name: "Networks", desc: "Labor, faith, and policy power brokers" },
 ];
 
 const HERO_LINKS = [
