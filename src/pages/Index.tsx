@@ -22,7 +22,7 @@ const NETWORK_SECTORS = [
   { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
   { name: "Advertising & Brands", desc: "Commercial partnerships at scale" },
   { name: "Tech & Platforms", desc: "The infrastructure that decides what gets seen" },
-  { name: "Communities", desc: "Faith, labor, campuses, veterans, defense" },
+  { name: "Communities", desc: "Labor, industry, faith, policy, defense, and capital." },
 ];
 
 const HERO_LINKS = [
