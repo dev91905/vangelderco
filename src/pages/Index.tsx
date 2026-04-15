@@ -14,8 +14,16 @@ import { t } from "@/lib/theme";
 const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defense"];
 
 const NETWORK_SECTORS = [
-  { name: "News", desc: "Outlets and editors that set the narrative" },
-  { name: "Music Industry", desc: "Field power through artists, labels, tours" },
+  { name: "News", desc: "Accountability that shapes local and national opinion" },
+  { name: "Music Industry", desc: "Field infrastructure no one's organizing" },
+  { name: "Film & TV", desc: "Talent and stories that shift norms" },
+  { name: "Digital Creators", desc: "Where culture and opinion actually form" },
+  { name: "Sports & Outdoors", desc: "Captive audiences and trusted voices" },
+  { name: "Podcasts & Streaming", desc: "Long-form trust built at intimate scale" },
+  { name: "Advertising & Brands", desc: "Market power deployed as cultural leverage" },
+  { name: "Platforms", desc: "The infrastructure that gates attention" },
+  { name: "Networks", desc: "Labor, industry, faith, youth, policy, and capital" },
+];
   { name: "Film & TV", desc: "Studios and screens that shape perception" },
   { name: "Digital Creators", desc: "Influencers where opinion actually forms" },
   { name: "Sports & Outdoors", desc: "Leagues and athletes with captive reach" },
