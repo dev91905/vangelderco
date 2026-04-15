@@ -14,15 +14,15 @@ import { t } from "@/lib/theme";
 const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defense"];
 
 const NETWORK_SECTORS = [
-  { name: "News", desc: "Editors and investigators shaping public reality" },
-  { name: "Music Industry", desc: "Field infrastructure no one is organizing yet" },
-  { name: "Film & TV", desc: "Talent and stories that shift cultural norms" },
-  { name: "Digital Creators", desc: "The channels where opinion actually forms now" },
-  { name: "Sports & Outdoors", desc: "Captive audiences built around trusted voices" },
-  { name: "Podcasts & Streaming", desc: "Long-form trust and credibility at deep scale" },
-  { name: "Advertising & Brands", desc: "Partnerships that deploy market power at scale" },
-  { name: "Platforms", desc: "The gatekeeping infrastructure deciding reach" },
-  { name: "Networks", desc: "Labor, faith, policy, capital, and campus power" },
+  { name: "News", desc: "Reporters and outlets that hold power accountable" },
+  { name: "Music Industry", desc: "Artists, venues, and radio with organizing reach" },
+  { name: "Film & TV", desc: "Writers and creators who shape what people believe" },
+  { name: "Digital Creators", desc: "Influencers who reach audiences no one else can" },
+  { name: "Sports & Outdoors", desc: "Athletes and leagues with massive built-in reach" },
+  { name: "Podcasts & Streaming", desc: "Hosts who build deep trust with loyal audiences" },
+  { name: "Advertising & Brands", desc: "Corporate partners who move markets and culture" },
+  { name: "Platforms", desc: "Tech companies that control distribution and reach" },
+  { name: "Networks", desc: "Labor, industry, faith, youth, policy, and capital" },
 ];
 
 const HERO_LINKS = [
