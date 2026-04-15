@@ -15,11 +15,11 @@ const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defe
 
 const NETWORK_SECTORS = [
   { name: "News", desc: "How stories get placed and why they land" },
-  { name: "Music Industry", desc: "Artists, labels, tours, festivals, venues" },
-  { name: "Film & TV", desc: "Production, distribution, cultural impact" },
+  { name: "Music Industry", desc: "Field power through artists, labels, and live events" },
+  { name: "Film & TV", desc: "Production, distribution, and cultural impact" },
   { name: "Digital Creators", desc: "Where opinion forms in the creator economy" },
-  { name: "Sports & Outdoors", desc: "Athletes, leagues, and captive audiences" },
-  { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, live streaming" },
+  { name: "Sports & Outdoors", desc: "Athletes, leagues, and the largest audiences" },
+  { name: "Podcasts & Streaming", desc: "Long-form audio, gaming, and live streaming" },
   { name: "Advertising & Brands", desc: "Commercial partnerships deployed at scale" },
   { name: "Platforms", desc: "Infrastructure that decides what gets seen" },
   { name: "Networks", desc: "Labor, industry, faith, policy, and capital" },
