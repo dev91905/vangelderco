@@ -15,7 +15,7 @@ const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defe
 
 const NETWORK_SECTORS = [
   { name: "News", desc: "Local and national — how stories get placed and why" },
-  { name: "Music", desc: "Artists, labels, tours, festivals, venues" },
+  { name: "Music Industry", desc: "Artists, labels, tours, festivals, venues" },
   { name: "Film & TV", desc: "Production, distribution, cultural impact" },
   { name: "Digital Creators", desc: "Creator economy — where opinion forms now" },
   { name: "Sports & Outdoors", desc: "Athletes, leagues, the largest captive audiences" },
