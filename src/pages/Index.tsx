@@ -594,7 +594,7 @@ const Index = () => {
                   className="text-[13px] md:text-[14px] leading-[1.7] max-w-sm mb-10"
                   style={{ fontFamily: t.sans, color: "hsl(var(--background) / 0.35)" }}
                 >
-                  A quick assessment of how your approach compares to the most effective operators in the field — and where you might be leaving leverage on the table.
+                  A quick assessment of how your comms strategy compares to the most effective operators in the field — and where you might be leaving leverage on the table.
                 </p>
 
                 <Link
