@@ -15,10 +15,10 @@ const SECTORS = ["Industry", "Labor", "Philanthropy", "Culture", "Policy", "Defe
 
 const NETWORK_SECTORS = [
   { name: "News", desc: "Reporters and outlets that hold power accountable" },
-  { name: "Music Industry", desc: "Artists, venues, and radio with organizing reach" },
-  { name: "Film & TV", desc: "Writers and creators who shape what people believe" },
-  { name: "Digital Creators", desc: "Influencers who reach audiences no one else can" },
-  { name: "Sports & Outdoors", desc: "Athletes and leagues with massive built-in reach" },
+  { name: "Music Industry", desc: "Artists, venues, and radio with convening power" },
+  { name: "Film & TV", desc: "Writers and creators who reinforce our best values" },
+  { name: "Digital Creators", desc: "Influencers who shape public opinion at scale" },
+  { name: "Sports & Outdoors", desc: "Athletes and leagues with deep in-person reach" },
   { name: "Podcasts & Streaming", desc: "Hosts who build deep trust with loyal audiences" },
   { name: "Advertising & Brands", desc: "Corporate partners who move markets and culture" },
   { name: "Platforms", desc: "Tech companies that control distribution and reach" },
